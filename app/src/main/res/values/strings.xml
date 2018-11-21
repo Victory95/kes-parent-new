@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">KES</string>
+    <string name="action_settings">Settings</string>
+    
+    ///////// opsi_masuk.xml
+    <string name="btn_masuk">Masuk</string>
+    <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
+    <string name="btn_daftar">Daftar</string>
+
+    //////// daftar_public.xml
+    <string name="et_nama_lengkap">Nama Lengkap</string>
+    <string name="et_email">Alamat Email</string>
+    <string name="et_number_handphone">Nomor Handphone</string>
+    <string name="et_kata_sandi">Kata Sandi</string>
+    <string name="et_ulangi_kata_sandi">Ulangi Kata Sandi</string>
+    <string name="btn_buat_akun">Buat Akun</string>
+    <string name="cb_persetujuan">Saya setuju dengan syarat dan ketentuan yang di berikan</string>
+</resources>

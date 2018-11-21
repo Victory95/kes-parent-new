@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:id="@+id/lay_masuk"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Masuk">
+
+    <ScrollView
+        android:layout_weight="1"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_email"
+                        android:hint="E-mail"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector"
+                        android:paddingBottom="5dp"
+                        android:textColor="@color/default_textColor"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />E-mail
+                </android.support.design.widget.TextInputLayout>Email
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/til_kata_sandi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_kata_sandi"
+                        android:hint="Kata Sandi"
+                        android:textSize="16dp"
+                        android:inputType="textPassword"
+                        android:background="@drawable/edt_bg_selector"
+                        android:textColor="@color/default_textColor"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Kata Sandi
+                </android.support.design.widget.TextInputLayout>Kata Sandi
+
+                <TextView
+                    android:id="@+id/tvb_lupa_pass"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Lupa Kata Sandi?"
+                    android:gravity="right"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />Lupa kata sandi?
+                <Button
+                    android:id="@+id/btn_Masuk"
+                    android:text="Masuk"
+                    android:textSize="17dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/rectangle"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="@android:color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />Button Masuk
+                <TextView
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="Atau"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />Atau
+            </LinearLayout>---- EditText and Button
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="70dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:background="@drawable/rectangle_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <ImageView
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_google"
+                        android:layout_width="25dp"
+                        android:layout_height="match_parent" />
+                    <Button
+                        android:id="@+id/btn_Google"
+                        android:text="google"
+                        android:textColor="@color/default_textColor"
+                        android:background="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>Google
+                <RelativeLayout
+                    android:layout_marginTop="25dp"
+                    android:background="@drawable/rectangle_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+                    <ImageView
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/ic_facebook"
+                        android:layout_width="25dp"
+                        android:layout_height="match_parent" />
+                    <Button
+                        android:id="@+id/btn_Facebook"
+                        android:text="facebook"
+                        android:textColor="@color/default_textColor"
+                        android:background="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </RelativeLayout>Facebook
+            </LinearLayout>---- List Opsi Masuk
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_weight="10"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:background="@color/default_background"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:gravity="right"
+                android:text="Sudah punya akun?"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:textColor="@color/colorPrimary"
+                android:gravity="left"
+                android:id="@+id/tvb_daftar"
+                android:layout_weight="1"
+                android:layout_alignParentBottom="true"
+                android:text="Daftar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>Bottombar
+
+    </LinearLayout>
+</LinearLayout>

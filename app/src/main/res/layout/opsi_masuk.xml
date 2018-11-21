@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".Activity.OpsiMasuk">
+
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_kes" />
+
+        <TextView
+            android:layout_marginTop="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#b3b2b2"
+            android:layout_marginBottom="60dp"
+            android:text="Temukan Sekolahmu Disini" />
+
+        <Button
+            android:id="@+id/btn_Masuk"
+            android:textAllCaps="false"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rectangle"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/btn_masuk"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_Masuk_tamu"
+            android:textAllCaps="false"
+            android:textSize="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rectangle"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/btn_masuk_sebagai_tamu"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/tv_Daftar"
+            android:gravity="center"
+            android:layout_width="70dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:text="@string/btn_daftar"
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_weight="17"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="12dp"
+        android:textColor="#c9c8c8"
+        android:gravity="center"
+        android:text="© 2018 Kids Education System" />
+</LinearLayout>
