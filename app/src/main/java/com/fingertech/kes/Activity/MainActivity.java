@@ -6,16 +6,21 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 import com.fingertech.kes.R;
+import com.fingertech.kes.Util.JWTUtils;
+
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btn_logout;
-    TextView tv_memberid, tv_email, tv_device_id,tv_token;
+    TextView tv_memberid, tv_email, tv_device_id,tv_token,tv_token_decode;
     String memberid, email, device_id, authtoken;
     SharedPreferences sharedpreferences;
 
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         tv_email     = (TextView) findViewById(R.id.tv_email);
         tv_device_id = (TextView) findViewById(R.id.tv_device_id);
         tv_token     = (TextView) findViewById(R.id.tv_token);
+        tv_token_decode    = (TextView) findViewById(R.id.tv_token_decode);
         btn_logout   = (Button) findViewById(R.id.btn_logout);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
@@ -68,5 +74,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(JWTUtils.decoded(authtoken));
+            tv_token_decode.setText("member_id : " +jsonObject.get("member_id"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getDecodeToken() {
+        try {
+            JWTUtils.decoded(authtoken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

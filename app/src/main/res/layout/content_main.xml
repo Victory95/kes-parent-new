@@ -51,6 +51,14 @@
             android:layout_margin="10dp"
             android:text="Token"/>
 
+        <TextView
+            android:id="@+id/tv_token_decode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="Token Decode" />
+
         <Button
             android:layout_marginTop="50dp"
             android:layout_marginRight="50dp"

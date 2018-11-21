@@ -340,19 +340,6 @@ public class DaftarPublic extends AppCompatActivity {
             pDialog.dismiss();
     }
 
-//    public void showDialog(Activity activity){
-//        final Dialog dialog = new Dialog(activity);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setCancelable(false);
-//        ImageView iv_kes_loader = (ImageView)
-//        dialog.setContentView(R.layout.progress_dialog);
-//        Glide.with(DaftarPublic.this)
-//                .load(R.drawable.kes_loader)
-//                .
-//
-//        dialog.show();
-//    }
-
     @Override
     public void onBackPressed() {
         intent = new Intent(DaftarPublic.this, Masuk.class);

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -46,8 +47,7 @@ public class Masuk extends AppCompatActivity {
     private EditText et_email, et_kata_sandi;
     private TextInputLayout til_email, til_kata_sandi;
 
-    ProgressDialog pDialog;
-    private Context context = this;
+    private ProgressDialog dialog;
 
     int status;
     String code;
@@ -65,8 +65,8 @@ public class Masuk extends AppCompatActivity {
     private static final String TAG_CODE = "code";
     private static final String TAG_DATA = "data";
 
-    public final static String TAG_EMAIL     = "email";
     public final static String TAG_MEMBERID  = "memberid";
+    public final static String TAG_EMAIL     = "email";
     public final static String TAG_DEVICE_ID = "device_id";
     public final static String TAG_TOKEN = "token";
 
@@ -132,7 +132,6 @@ public class Masuk extends AppCompatActivity {
         deviceid = tm.getDeviceId();
 
         btn_masuk.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 submitForm();
@@ -232,11 +231,8 @@ public class Masuk extends AppCompatActivity {
     }
 
     private void checkLogin(final String email, final String password, final String device_id) {
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-        pDialog.setMessage("Logging in ...");
+        progressBar();
         showDialog();
-
         StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 
             @Override
@@ -258,7 +254,7 @@ public class Masuk extends AppCompatActivity {
                     String LP_ERR_0006 = getResources().getString(R.string.LP_ERR_0006);
                     String LP_ERR_0007 = getResources().getString(R.string.LP_ERR_0007);
 
-                    if (status == 1 && code.equals("LP_SCS_0001")) {
+                    if (status == 1 && code.equals("LP_SCS_0001")){
                         Map<String, Object> token_map = JSONToMap.jsonToMap(jObj.getJSONObject(TAG_DATA));
                         authtoken = (String)token_map.get("token");
                         /// save session
@@ -307,7 +303,6 @@ public class Masuk extends AppCompatActivity {
 //                Log.e(TAG, "Login Error: " + error.getMessage());
 //                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(), "Time out : koneksi bermasalah!", Toast.LENGTH_LONG).show();
-
                 hideDialog();
             }
         }) {
@@ -326,12 +321,22 @@ public class Masuk extends AppCompatActivity {
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+        if (!dialog.isShowing())
+            dialog.show();
+            dialog.setContentView(R.layout.progressbar);
     }
+
     private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        if (dialog.isShowing())
+            dialog.dismiss();
+            dialog.setContentView(R.layout.progressbar);
+    }
+
+    public void progressBar(){
+        dialog = new ProgressDialog(Masuk.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
     }
 
     @Override
