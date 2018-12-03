@@ -13,7 +13,8 @@ import android.widget.TextView;
 
 
 import com.fingertech.kes.R;
-import com.fingertech.kes.Util.JWTUtils;
+import com.fingertech.kes.Service.Common;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -21,13 +22,13 @@ public class MainActivity extends AppCompatActivity {
 
     Button btn_logout;
     TextView tv_memberid, tv_email, tv_device_id,tv_token,tv_token_decode;
-    String memberid, email, device_id, authtoken;
+    String email, member_id, fullname, member_type;
     SharedPreferences sharedpreferences;
 
-    public static final String TAG_MEMBERID   = "memberid";
-    public static final String TAG_EMAIL      = "email";
-    public static final String TAG_DEVICE_ID  = "device_id";
-    private static final String TAG_TOKEN     = "token";
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_MEMBER_ID     = "member_id";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_MEMBER_TYPE  = "member_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +38,33 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
 
-        tv_memberid  = (TextView) findViewById(R.id.tv_memberid);
-        tv_email     = (TextView) findViewById(R.id.tv_email);
+        ///////////////////// Message Firebase
+//        Common.currentToken = FirebaseInstanceId.getInstance().getToken();
+//        Log.d("Token", Common.currentToken);
+
+        tv_memberid = (TextView) findViewById(R.id.tv_memberid);
+        tv_email = (TextView) findViewById(R.id.tv_email);
         tv_device_id = (TextView) findViewById(R.id.tv_device_id);
-        tv_token     = (TextView) findViewById(R.id.tv_token);
-        tv_token_decode    = (TextView) findViewById(R.id.tv_token_decode);
-        btn_logout   = (Button) findViewById(R.id.btn_logout);
+        tv_token = (TextView) findViewById(R.id.tv_token);
+        tv_token_decode = (TextView) findViewById(R.id.tv_token_decode);
+        btn_logout = (Button) findViewById(R.id.btn_logout);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
 
-        memberid = getIntent().getStringExtra(TAG_MEMBERID);
-        email = getIntent().getStringExtra(TAG_EMAIL);
-        device_id = getIntent().getStringExtra(TAG_DEVICE_ID);
-        authtoken = getIntent().getStringExtra(TAG_TOKEN);
+//        email = sharedpreferences.getString(TAG_EMAIL,"");
+//        member_id = sharedpreferences.getString(TAG_MEMBER_ID,"");
+//        fullname = sharedpreferences.getString(TAG_FULLNAME,"");
+//        member_type = sharedpreferences.getString(TAG_MEMBER_TYPE,"");
 
-        tv_memberid.setText("MEMBERID : " + memberid);
+        email = getIntent().getStringExtra(TAG_EMAIL);
+        member_id = getIntent().getStringExtra(TAG_MEMBER_ID);
+        fullname = getIntent().getStringExtra(TAG_FULLNAME);
+        member_type = getIntent().getStringExtra(TAG_MEMBER_TYPE);
+
         tv_email.setText("EMAIL : " + email);
-        tv_device_id.setText("DEVICEID : " + device_id);
-        tv_token.setText("TOKEN : " + authtoken);
+        tv_memberid.setText("MEMBERID : " + member_id);
+        tv_device_id.setText("FULLNAME : " + fullname);
+        tv_token.setText("MEMBER_TYPE : " + member_type);
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
 
@@ -63,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 // update login session ke FALSE dan mengosongkan nilai id dan username
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putBoolean(Masuk.session_status, false);
-                editor.putString(TAG_MEMBERID, null);
                 editor.putString(TAG_EMAIL, null);
-                editor.putString(TAG_DEVICE_ID, null);
-                editor.putString(TAG_TOKEN, null);
+                editor.putString(TAG_MEMBER_ID, null);
+                editor.putString(TAG_FULLNAME, null);
+                editor.putString(TAG_MEMBER_TYPE, null);
                 editor.commit();
 
                 Intent intent = new Intent(MainActivity.this, OpsiMasuk.class);
@@ -74,22 +84,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = new JSONObject(JWTUtils.decoded(authtoken));
-            tv_token_decode.setText("member_id : " +jsonObject.get("member_id"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void getDecodeToken() {
-        try {
-            JWTUtils.decoded(authtoken);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

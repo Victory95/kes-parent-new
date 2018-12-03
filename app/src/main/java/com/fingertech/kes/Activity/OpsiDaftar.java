@@ -29,6 +29,15 @@ public class OpsiDaftar extends AppCompatActivity {
         btn_email     =(Button)findViewById(R.id.btn_Email);
         btn_orang_tua =(Button)findViewById(R.id.btn_Orangtua);
 
+
+        btn_orang_tua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DaftarParent.class);
+                startActivity(intent);
+            }
+        });
+
         btn_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TextInputLayout;
@@ -25,6 +26,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Model.JSONResponse;
@@ -38,50 +42,129 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DaftarPublic extends AppCompatActivity {
-
-    private Button btn_buat_akun;
-    private TextInputLayout til_fullname, til_email, til_mobile_phone, til_password, til_ulangi_password;
-    private EditText et_fullname,et_email,et_mobile_phone,et_password,et_ulangi_password;
+public class DaftarParent extends AppCompatActivity {
+    private Button btn_buat_akun, btn_ayah, btn_ibu, btn_wali;
+    private TextInputLayout til_fullname, til_nik, til_email, til_mobile_phone, til_password, til_ulangi_password;
+    private EditText et_fullname,et_nik,et_email,et_mobile_phone,et_password,et_ulangi_password;
     private CheckBox cb_ketentuan;
+    private RadioButton rb_laki_laki,rb_perempuan;
+    private RadioGroup rg_hubungan;
+    private TextView tv_line_boundaryLeft, tv_line_boundaryRight, tv_hubungan_validate;
     private ProgressDialog dialog;
     private String deviceid;
     int status;
-    String code;
+    String code, hubungan = "";
     private static final int PERMISSION_REQUEST_CODE = 1;
     ApiInterface mApiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.daftar_public);
+        setContentView(R.layout.daftar_parent);
         getSupportActionBar().setElevation(0);
 
-        btn_buat_akun        =(Button)findViewById(R.id.btn_buat_akun);
-        cb_ketentuan         =(CheckBox)findViewById(R.id.cb_ketentuan);
-        et_fullname          =(EditText)findViewById(R.id.et_nama_lengkap);
-        et_email             =(EditText)findViewById(R.id.et_email);
-        et_mobile_phone      =(EditText)findViewById(R.id.et_number_phone);
-        et_password          =(EditText)findViewById(R.id.et_kata_sandi);
-        et_ulangi_password   =(EditText)findViewById(R.id.et_ulangi_kata_sandi);
-        til_fullname         =(TextInputLayout)findViewById(R.id.til_nama_lengkap);
-        til_email            =(TextInputLayout)findViewById(R.id.til_email);
-        til_mobile_phone     =(TextInputLayout)findViewById(R.id.til_number_phone);
-        til_password         =(TextInputLayout)findViewById(R.id.til_kata_sandi);
-        til_ulangi_password  =(TextInputLayout)findViewById(R.id.til_ulangi_kata_sandi);;
+        btn_buat_akun         =(Button)findViewById(R.id.btn_buat_akun);
+        btn_ayah              =(Button)findViewById(R.id.btn_ayah);
+        btn_ibu               =(Button)findViewById(R.id.btn_ibu);
+        btn_wali              =(Button)findViewById(R.id.btn_wali);
+        rg_hubungan           =(RadioGroup) findViewById(R.id.rg_hubungan);
+        rb_laki_laki          =(RadioButton)findViewById(R.id.rb_laki_laki);
+        rb_perempuan          =(RadioButton)findViewById(R.id.rb_perempuan);
+        cb_ketentuan          =(CheckBox)findViewById(R.id.cb_ketentuan);
+        et_fullname           =(EditText)findViewById(R.id.et_nama_lengkap);
+        et_nik                =(EditText)findViewById(R.id.et_nik);
+        et_email              =(EditText)findViewById(R.id.et_email);
+        et_mobile_phone       =(EditText)findViewById(R.id.et_number_phone);
+        et_password           =(EditText)findViewById(R.id.et_kata_sandi);
+        et_ulangi_password    =(EditText)findViewById(R.id.et_ulangi_kata_sandi);
+        til_fullname          =(TextInputLayout)findViewById(R.id.til_nama_lengkap);
+        til_nik               =(TextInputLayout)findViewById(R.id.til_nik);
+        til_email             =(TextInputLayout)findViewById(R.id.til_email);
+        til_mobile_phone      =(TextInputLayout)findViewById(R.id.til_number_phone);
+        til_password          =(TextInputLayout)findViewById(R.id.til_kata_sandi);
+        til_ulangi_password   =(TextInputLayout)findViewById(R.id.til_ulangi_kata_sandi);
+        tv_line_boundaryLeft  =(TextView) findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight =(TextView) findViewById(R.id.tv_line_boundaryRight);
+        tv_hubungan_validate  =(TextView) findViewById(R.id.tv_hubungan_validate);
         //// Caps Text in First Alfabet
         et_fullname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
-        if (ContextCompat.checkSelfPermission(DaftarPublic.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(DaftarPublic.this, Manifest.permission.READ_PHONE_STATE)) {
+        if (ContextCompat.checkSelfPermission(DaftarParent.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(DaftarParent.this, Manifest.permission.READ_PHONE_STATE)) {
             } else {
-                ActivityCompat.requestPermissions(DaftarPublic.this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
+                ActivityCompat.requestPermissions(DaftarParent.this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
             }
         }
 
         //// CheckBox persetujuan
         getCb_ketentuan();
+
+        btn_ayah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////// active
+                btn_ayah.setBackground(ContextCompat.getDrawable(DaftarParent.this, R.drawable.rectangle_line));
+                btn_ayah.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.default_background));
+
+                ////// deactive
+                btn_ibu.setBackgroundColor(Color.TRANSPARENT);
+                btn_ibu.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+                btn_wali.setBackgroundColor(Color.TRANSPARENT);
+                btn_wali.setTextColor(getResources().getColor(R.color.textColor_Grey));
+                rg_hubungan.setVisibility(View.GONE);
+                hubungan = getResources().getString(R.string.hub_ayah);
+                tv_hubungan_validate.setVisibility(View.GONE);
+            }
+        });
+
+        btn_ibu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////// active
+                btn_ibu.setBackground(ContextCompat.getDrawable(DaftarParent.this, R.drawable.rectangle_line));
+                btn_ibu.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.default_background));
+
+                ////// deactive
+                btn_ayah.setBackgroundColor(Color.TRANSPARENT);
+                btn_ayah.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.default_background));
+
+                btn_wali.setBackgroundColor(Color.TRANSPARENT);
+                btn_wali.setTextColor(getResources().getColor(R.color.textColor_Grey));
+                rg_hubungan.setVisibility(View.GONE);
+                hubungan = getResources().getString(R.string.hub_ibu);
+                tv_hubungan_validate.setVisibility(View.GONE);
+            }
+        });
+
+        btn_wali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////// active
+                btn_wali.setBackground(ContextCompat.getDrawable(DaftarParent.this, R.drawable.rectangle_line));
+                btn_wali.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+                ////// deactive
+                btn_ayah.setBackgroundColor(Color.TRANSPARENT);
+                btn_ayah.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.default_background));
+
+                btn_ibu.setBackgroundColor(Color.TRANSPARENT);
+                btn_ibu.setTextColor(getResources().getColor(R.color.textColor_Grey));
+                rg_hubungan.setVisibility(View.VISIBLE);
+                hubungan = getResources().getString(R.string.hub_wali);
+                tv_hubungan_validate.setVisibility(View.GONE);
+            }
+        });
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_buat_akun.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +179,9 @@ public class DaftarPublic extends AppCompatActivity {
         if (!validateNamaLengkap()) {
             return;
         }
+        if (!validateNik()) {
+            return;
+        }
         if (!validateEmail()) {
             return;
         }
@@ -108,15 +194,21 @@ public class DaftarPublic extends AppCompatActivity {
         if (!validateUlangiKataSandi()) {
             return;
         }
+        if(hubungan.isEmpty()){
+            tv_hubungan_validate.setVisibility(View.VISIBLE);
+        }else {
+            tv_hubungan_validate.setVisibility(View.GONE);
+        }
         if(cb_ketentuan.isChecked()) {
             TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(DaftarPublic.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(DaftarParent.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             deviceid = tm.getDeviceId();
-            register_post();
+            getRefreshHub();
+//            register_orangtua_post();
         }else{
-            Toast.makeText(DaftarPublic.this, getResources().getString(R.string.tcb_ketentuan), Toast.LENGTH_SHORT).show();
+            Toast.makeText(DaftarParent.this, getResources().getString(R.string.tcb_ketentuan), Toast.LENGTH_SHORT).show();
         }
     }
     private boolean validateNamaLengkap() {
@@ -126,6 +218,17 @@ public class DaftarPublic extends AppCompatActivity {
             return false;
         } else {
             til_fullname.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNik() {
+        if (et_nik.getText().toString().trim().isEmpty()) {
+            til_nik.setError(getResources().getString(R.string.validate_nik));
+            requestFocus(et_nik);
+            return false;
+        } else {
+            til_nik.setErrorEnabled(false);
         }
 
         return true;
@@ -177,7 +280,6 @@ public class DaftarPublic extends AppCompatActivity {
 
         return true;
     }
-
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
@@ -214,23 +316,21 @@ public class DaftarPublic extends AppCompatActivity {
         dialog.setContentView(R.layout.progressbar);
     }
     public void progressBar(){
-        dialog = new ProgressDialog(DaftarPublic.this);
+        dialog = new ProgressDialog(DaftarParent.this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
-
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(DaftarPublic.this, Masuk.class);
+        Intent intent = new Intent(DaftarParent.this, Masuk.class);
         finish();
         startActivity(intent);
     }
-
-    public void register_post(){
+    public void register_orangtua_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_post(et_fullname.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), deviceid.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -303,4 +403,20 @@ public class DaftarPublic extends AppCompatActivity {
             cb_ketentuan.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
+    public void getRefreshHub(){
+        ////// deactive
+        btn_ayah.setBackgroundColor(Color.TRANSPARENT);
+        btn_ayah.setTextColor(getResources().getColor(R.color.textColor_Grey));
+        tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+        btn_ibu.setBackgroundColor(Color.TRANSPARENT);
+        btn_ibu.setTextColor(getResources().getColor(R.color.textColor_Grey));
+
+        tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.textColor_Grey));
+        btn_wali.setBackgroundColor(Color.TRANSPARENT);
+        btn_wali.setTextColor(getResources().getColor(R.color.textColor_Grey));
+        rg_hubungan.setVisibility(View.GONE);
+        hubungan = "";
+    }
 }
+

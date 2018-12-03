@@ -1,18 +1,36 @@
 <resources>
     <string name="app_name">KES</string>
     <string name="action_settings">Settings</string>
-    
+
     ///////// opsi_masuk.xml
     <string name="btn_masuk">Masuk</string>
     <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
     <string name="btn_daftar">Daftar</string>
 
-    //////// daftar_public.xml
+    //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
+    <string name="et_nik">NIK</string>
     <string name="et_email">Alamat Email</string>
     <string name="et_number_handphone">Nomor Handphone</string>
     <string name="et_kata_sandi">Kata Sandi</string>
     <string name="et_ulangi_kata_sandi">Ulangi Kata Sandi</string>
+    <string name="et_hubungan">Hubungan</string>
+    <string name="btn_ayah">Ayah</string>
+    <string name="btn_ibu">Ibu</string>
+    <string name="btn_wali">Wali</string>
+    <string name="rb_laki_laki">Laki - Laki</string>
+    <string name="rb_perempuan">Perempuan</string>
     <string name="btn_buat_akun">Buat Akun</string>
-    <string name="cb_persetujuan">Saya setuju dengan syarat dan ketentuan yang di berikan</string>
+    <string name="hub_ayah">Ayah</string>
+    <string name="hub_ibu">Ibu</string>
+    <string name="hub_wali">Wali</string>
+    <string name="validate_fullname">* Mohon isi nama lengkap anda</string>
+    <string name="validate_nik">* Masukan NIK anda</string>
+    <string name="validate_email">* Email tidak sesuai</string>
+    <string name="validate_mobile_phone">* Masukan nomor handphone anda</string>
+    <string name="validate_pass">* Masukan kata sandi anda</string>
+    <string name="validate_cpass">* Kata sandi sama, periksa kembali</string>
+    <string name="validate_hubungan">* Mohon Pilih Hubungan Anda</string>
+    <string name="tcb_ketentuan">* Mohon, Disetujui terlebih dahulu</string>
+
 </resources>

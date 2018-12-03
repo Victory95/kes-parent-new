@@ -6,7 +6,7 @@
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.DaftarPublic">
+    tools:context=".Activity.DaftarParent">
 
     <ScrollView
         android:scrollbars="none"
@@ -30,7 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_nama_lengkap"
                         android:layout_marginTop="40dp"
@@ -50,6 +49,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Nama Lengkap
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_nik"
+                        android:paddingTop="28dp"
+                        android:textColorHint="@color/default_textHint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/et_nik"
+                            android:paddingBottom="6dp"
+                            android:paddingTop="10dp"
+                            android:textSize="16dp"
+                            android:background="@drawable/edt_bg_selector"
+                            android:textColor="@color/default_textColor"
+                            android:inputType="number"
+                            android:hint="@string/et_nik"
+                            android:maxLength="16"
+                            android:theme="@style/TextLabel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>Alamat Email
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_email"
                         android:paddingTop="28dp"
@@ -91,7 +111,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Number Handphone
-
                     <android.support.design.widget.TextInputLayout
                         android:layout_weight="1"
                         android:id="@+id/til_kata_sandi"
@@ -118,7 +137,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Kata Sandi
-
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_ulangi_kata_sandi"
                         android:paddingTop="15dp"
@@ -143,23 +161,128 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Ulangi Kata Sandi
+
+                    <TextView
+                        android:layout_marginTop="40dp"
+                        android:textSize="16dp"
+                        android:textColor="@color/default_textHint"
+                        android:text="@string/et_hubungan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:background="@drawable/rectangle_line"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="70dp"
+                        android:orientation="horizontal"
+                        android:layout_height="38dp">
+                        <Button
+                            android:textSize="16dp"
+                            android:id="@+id/btn_ayah"
+                            android:layout_weight="1"
+                            android:text="@string/btn_ayah"
+                            android:textAllCaps="false"
+                            android:textColor="@color/textColor_Grey"
+                            android:background="@android:color/transparent"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/tv_line_boundaryLeft"
+                            android:gravity="center"
+                            android:textSize="15dp"
+                            android:text="|"
+                            android:textColor="@color/textColor_Grey"
+                            android:layout_weight="1.48"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:paddingBottom="2dp"
+                            android:layout_height="match_parent" />
+                        <Button
+                            android:textSize="16dp"
+                            android:id="@+id/btn_ibu"
+                            android:layout_weight="1"
+                            android:textAllCaps="false"
+                            android:text="@string/btn_ibu"
+                            android:textColor="@color/textColor_Grey"
+                            android:background="@android:color/transparent"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                        <TextView
+                            android:id="@+id/tv_line_boundaryRight"
+                            android:gravity="center"
+                            android:textSize="15dp"
+                            android:text="|"
+                            android:textColor="@color/textColor_Grey"
+                            android:layout_weight="1.48"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"
+                            android:paddingBottom="2dp"
+                            android:layout_height="match_parent" />
+                        <Button
+                            android:textSize="16dp"
+                            android:id="@+id/btn_wali"
+                            android:layout_weight="1"
+                            android:textAllCaps="false"
+                            android:text="@string/btn_wali"
+                            android:textColor="@color/textColor_Grey"
+                            android:background="@android:color/transparent"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_hubungan_validate"
+                        android:textColor="@android:color/holo_red_light"
+                        android:textSize="12dp"
+                        android:text="@string/validate_hubungan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
+                <RadioGroup
+                    android:id="@+id/rg_hubungan"
+                    android:visibility="gone"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginLeft="35dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:textColor="@color/default_textHint"
+                        android:id="@+id/rb_laki_laki"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/rb_laki_laki" />
+                    <RadioButton
+                        android:textColor="@color/default_textHint"
+                        android:id="@+id/rb_perempuan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/rb_perempuan" />
+                </RadioGroup>
                 <CheckBox
                     android:id="@+id/cb_ketentuan"
                     android:layout_marginTop="30dp"
-                    android:layout_marginLeft="33dp"
+                    android:layout_marginLeft="35dp"
                     android:layout_marginRight="40dp"
                     android:paddingTop="5dp"
                     android:lineSpacingExtra="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
-                    android:textColor="@color/default_textHint"/>
-
+                    android:textColor="@color/default_textHint" />
                 <Button
                     android:id="@+id/btn_buat_akun"
-                    android:layout_marginBottom="100dp"
+                    android:layout_marginBottom="50dp"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:layout_marginTop="50dp"

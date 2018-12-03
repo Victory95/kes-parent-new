@@ -23,11 +23,5 @@
     <string name="RP_ERR_0006">hanya boleh daftar pada hp yang sama dan satu akun email</string>
     <string name="RP_ERR_0007">Gagal Register</string>
     <string name="RP_ERR_0008">Email sudah digunakan</string>
-    <string name="tcb_ketentuan">Mohon, Disetujui terlebih dahulu</string>
-    <string name="validate_fullname">Mohon isi nama lengkap anda</string>
-    <string name="validate_email">Email tidak sesuai</string>
-    <string name="validate_mobile_phone">Masukan nomor handphone anda</string>
-    <string name="validate_pass">Masukan kata sandi anda</string>
-    <string name="validate_cpass">Kata sandi sama, periksa kembali</string>
 
 </resources>

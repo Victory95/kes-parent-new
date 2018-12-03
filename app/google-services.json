@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "238640789322",
+    "firebase_url": "https://kes-app-1538992577763.firebaseio.com",
+    "project_id": "kes-app-1538992577763",
+    "storage_bucket": "kes-app-1538992577763.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238640789322:android:1ff667e16d1d8914",
+        "android_client_info": {
+          "package_name": "com.fingertech.kes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238640789322-earh6ev5tp1nn7pflfi4gr4l35jc44hv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fingertech.kes",
+            "certificate_hash": "479e89e5f3d765f60452703d469016ab51997121"
+          }
+        },
+        {
+          "client_id": "238640789322-04s2pm29u7brk4tqtkvdm2smqoh7ibck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCATixJoj8ft-lBZc1BAw3cy-XYOY0ehMM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238640789322-04s2pm29u7brk4tqtkvdm2smqoh7ibck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

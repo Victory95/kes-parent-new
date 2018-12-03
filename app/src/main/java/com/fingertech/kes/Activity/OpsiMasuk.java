@@ -17,12 +17,11 @@ public class OpsiMasuk extends AppCompatActivity {
     private TextView tv_daftar;
 
     Boolean session = false;
-    public final static String TAG_EMAIL     = "email";
-    public final static String TAG_MEMBERID  = "memberid";
-    public final static String TAG_DEVICE_ID = "device_id";
-    public final static String TAG_TOKEN = "token";
-    String memberid, email, device_id;
-    private String authtoken;
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_MEMBER_ID     = "member_id";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_MEMBER_TYPE  = "member_type";
+    String email, memberid, fullname, member_type;
 
     SharedPreferences sharedpreferences;
     public static final String my_shared_preferences = "my_shared_preferences";
@@ -38,17 +37,17 @@ public class OpsiMasuk extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
         session = sharedpreferences.getBoolean(session_status, false);
-        memberid = sharedpreferences.getString(TAG_MEMBERID, null);
         email = sharedpreferences.getString(TAG_EMAIL, null);
-        device_id = sharedpreferences.getString(TAG_DEVICE_ID, null);
-        authtoken = sharedpreferences.getString(TAG_TOKEN, null);
+        memberid = sharedpreferences.getString(TAG_MEMBER_ID, null);
+        fullname = sharedpreferences.getString(TAG_FULLNAME, null);
+        member_type = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
 
         if (session) {
             Intent intent = new Intent(OpsiMasuk.this, MainActivity.class);
-            intent.putExtra(TAG_MEMBERID, memberid);
             intent.putExtra(TAG_EMAIL, email);
-            intent.putExtra(TAG_DEVICE_ID, device_id);
-            intent.putExtra(TAG_TOKEN, authtoken);
+            intent.putExtra(TAG_MEMBER_ID, memberid);
+            intent.putExtra(TAG_FULLNAME, fullname);
+            intent.putExtra(TAG_MEMBER_TYPE, member_type);
             finish();
             startActivity(intent);
         }
