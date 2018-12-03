@@ -24,4 +24,17 @@
     <string name="RP_ERR_0007">Gagal Register</string>
     <string name="RP_ERR_0008">Email sudah digunakan</string>
 
+    /////// Register Orangtua
+    <string name="RO_SCS_0001">Berhasil daftar</string>
+    <string name="RO_ERR_0001">Email kosong</string>
+    <string name="RO_ERR_0002">FullName kosong</string>
+    <string name="RO_ERR_0003">No HP kosong</string>
+    <string name="RO_ERR_0004">Password kosong</string>
+    <string name="RO_ERR_0005">Jenis Kelamin Kosong</string>
+    <string name="RO_ERR_0006">Hubungan kosong</string>
+    <string name="RO_ERR_0007">NIK kosong</string>
+    <string name="RO_ERR_0008">Devices tidak dikenal</string>
+    <string name="RO_ERR_0009">Email sudah digunakan</string>
+    <string name="RO_ERR_0010">Gagal Daftar</string>
+
 </resources>

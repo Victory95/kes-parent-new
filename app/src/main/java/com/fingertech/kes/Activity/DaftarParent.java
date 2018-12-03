@@ -53,7 +53,7 @@ public class DaftarParent extends AppCompatActivity {
     private ProgressDialog dialog;
     private String deviceid;
     int status;
-    String code, hubungan = "";
+    String code, hubungan = "", jenis_kelamin = "";
     private static final int PERMISSION_REQUEST_CODE = 1;
     ApiInterface mApiInterface;
 
@@ -166,11 +166,25 @@ public class DaftarParent extends AppCompatActivity {
             }
         });
 
+        rb_laki_laki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jenis_kelamin = getResources().getString(R.string.rb_laki_laki);
+            }
+        });
+
+        rb_perempuan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                jenis_kelamin = getResources().getString(R.string.rb_perempuan);
+            }
+        });
+
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_buat_akun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+//                submitForm();
             }
         });
     }
@@ -198,17 +212,17 @@ public class DaftarParent extends AppCompatActivity {
             tv_hubungan_validate.setVisibility(View.VISIBLE);
         }else {
             tv_hubungan_validate.setVisibility(View.GONE);
-        }
-        if(cb_ketentuan.isChecked()) {
-            TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(DaftarParent.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                return;
+            if(cb_ketentuan.isChecked()) {
+                TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                if (ActivityCompat.checkSelfPermission(DaftarParent.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                deviceid = tm.getDeviceId();
+                getRefreshHub();
+                register_orangtua_post();
+            }else{
+                Toast.makeText(DaftarParent.this, getResources().getString(R.string.tcb_ketentuan), Toast.LENGTH_SHORT).show();
             }
-            deviceid = tm.getDeviceId();
-            getRefreshHub();
-//            register_orangtua_post();
-        }else{
-            Toast.makeText(DaftarParent.this, getResources().getString(R.string.tcb_ketentuan), Toast.LENGTH_SHORT).show();
         }
     }
     private boolean validateNamaLengkap() {
@@ -330,7 +344,7 @@ public class DaftarParent extends AppCompatActivity {
     public void register_orangtua_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_nik.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), hubungan.toString(), jenis_kelamin.toString(), deviceid.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -341,18 +355,20 @@ public class DaftarParent extends AppCompatActivity {
                 status = resource.status;
                 code = resource.code;
 
-                String RP_SCS_0001 = getResources().getString(R.string.RP_SCS_0001);
-                String RP_ERR_0001 = getResources().getString(R.string.RP_ERR_0001);
-                String RP_ERR_0002 = getResources().getString(R.string.RP_ERR_0002);
-                String RP_ERR_0003 = getResources().getString(R.string.RP_ERR_0003);
-                String RP_ERR_0004 = getResources().getString(R.string.RP_ERR_0004);
-                String RP_ERR_0005 = getResources().getString(R.string.RP_ERR_0005);
-                String RP_ERR_0006 = getResources().getString(R.string.RP_ERR_0006);
-                String RP_ERR_0007 = getResources().getString(R.string.RP_ERR_0007);
-                String RP_ERR_0008 = getResources().getString(R.string.RP_ERR_0008);
+                String RO_SCS_0001 = getResources().getString(R.string.RO_SCS_0001);
+                String RO_ERR_0001 = getResources().getString(R.string.RO_ERR_0001);
+                String RO_ERR_0002 = getResources().getString(R.string.RO_ERR_0002);
+                String RO_ERR_0003 = getResources().getString(R.string.RO_ERR_0003);
+                String RO_ERR_0004 = getResources().getString(R.string.RO_ERR_0004);
+                String RO_ERR_0005 = getResources().getString(R.string.RO_ERR_0005);
+                String RO_ERR_0006 = getResources().getString(R.string.RO_ERR_0006);
+                String RO_ERR_0007 = getResources().getString(R.string.RO_ERR_0007);
+                String RO_ERR_0008 = getResources().getString(R.string.RO_ERR_0008);
+                String RO_ERR_0009 = getResources().getString(R.string.RO_ERR_0009);
+                String RO_ERR_0010 = getResources().getString(R.string.RO_ERR_0010);
 
-                if (status == 1 && code.equals("RP_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), RP_SCS_0001, Toast.LENGTH_LONG).show();
+                if (status == 1 && code.equals("RO_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), RO_SCS_0001, Toast.LENGTH_LONG).show();
                     et_fullname.setText("");
                     et_email.setText("");
                     et_mobile_phone.setText("");
@@ -362,22 +378,26 @@ public class DaftarParent extends AppCompatActivity {
                         cb_ketentuan.toggle();
                     }
                 } else {
-                    if(status == 0 && code.equals("RP_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0006, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0007, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0008")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0008, Toast.LENGTH_LONG).show();
+                    if(status == 0 && code.equals("RO_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0002, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0003")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0003, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0004")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0004, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0005")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0005, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0006")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0006, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0007")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0007, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0008")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0008, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0009")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0009, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RO_ERR_0010")){
+                        Toast.makeText(getApplicationContext(), RO_ERR_0010, Toast.LENGTH_LONG).show();
                     }
                 }
             }

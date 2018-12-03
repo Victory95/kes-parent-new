@@ -31,10 +31,13 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("auth/register")
     Call<JSONResponse>register_orangtua_post(@Field("fullname") String fullname,
-                                   @Field("email") String email,
-                                   @Field("mobile_phone") String mobile_phone,
-                                   @Field("password") String password,
-                                   @Field("device_id") String device_id);
+                                             @Field("nik") String nik,
+                                             @Field("email") String email,
+                                             @Field("mobile_phone") String mobile_phone,
+                                             @Field("password") String password,
+                                             @Field("hubungan") String hubungan,
+                                             @Field("jenis_kelamin") String jenis_kelamin,
+                                             @Field("device_id") String device_id);
 
     //////// Login Parent
     @FormUrlEncoded
