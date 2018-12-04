@@ -31,6 +31,15 @@
     <string name="validate_pass">* Masukan kata sandi anda</string>
     <string name="validate_cpass">* Kata sandi sama, periksa kembali</string>
     <string name="validate_hubungan">* Mohon Pilih Hubungan Anda</string>
+    <string name="validate_name_depan">* Mohon isi nama depan anda</string>
+    <string name="validate_name_belakang">* Mohon isi nama belakang anda</string>
+    <string name="validate_tempat_lahir">* Masukan tempat lahir anda</string>
+    <string name="validate_tanggal_lahir">* Masukan tanggal lahir anda</string>
+    <string name="validate_negara">* Masukkan negara asal anda</string>
     <string name="tcb_ketentuan">* Mohon, Disetujui terlebih dahulu</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="datadiri">Data diri<u>Underline</u></string>
 </resources>

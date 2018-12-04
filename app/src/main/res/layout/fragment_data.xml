@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#46bfee"
+    tools:context=".Activity.Fragment.DataFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:text="Data diri"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="30dp" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nama_depan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_nama_depan"
+                android:hint="Nama Depan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Nama Depan
+        </android.support.design.widget.TextInputLayout>Nama Depan
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nama_belakang"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_nama_belakang"
+                android:hint="Nama Belakang"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Nama Belakang
+        </android.support.design.widget.TextInputLayout>Nama Belakang
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_NIK"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_NIK"
+                android:hint="NIK/NOIRA"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />NIK/NOIRA
+        </android.support.design.widget.TextInputLayout>NIK/NOIRA
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_hubungan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_hubungan"
+                android:hint="Hubungan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Hubungan
+        </android.support.design.widget.TextInputLayout>Hubungan
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Jenis Kelamin"
+            android:textColor="#ffff"
+            android:layout_marginTop="10dp"/>
+        <RadioGroup
+            android:id="@+id/jenis_kelamin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/rb_laki_laki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Laki Laki"
+                android:textColor="#ffff"
+                android:textSize="20dp"/>
+
+            <RadioButton
+                android:id="@+id/rb_perempuan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Perempuan"
+                android:textColor="#ffff"
+                android:textSize="20dp" />
+
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_tempatlahir"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_tempatlahir"
+                android:hint="Tempat Lahir"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Tempat Lahir
+        </android.support.design.widget.TextInputLayout>Tempat Lahir
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_tanggallahir"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_tanggallahir"
+                android:hint="Tanggal Lahir"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Tanggal Lahir
+        </android.support.design.widget.TextInputLayout>Tanggal Lahir
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Kewarganegaraan"
+            android:textColor="#ffff"/>
+        <RadioGroup
+            android:id="@+id/kewarganegaraan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <RadioButton
+                android:id="@+id/rb_wni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="WNI"
+                android:textColor="#ffff"
+                android:textSize="18dp"/>
+
+            <RadioButton
+                android:id="@+id/rb_wna"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WNA"
+                android:textColor="#ffff"
+                android:textSize="18dp" />
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_negara"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_negara"
+                android:hint="Negara Asal"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Negara Asal
+        </android.support.design.widget.TextInputLayout>Negara Asal
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/rectangel_line"
+            android:text="Demi kepentingan sekolah dan keselamatan anak anda
+            mohon di isi dengan benar"
+            android:textColor="#f00000"
+            android:textSize="10dp"/>
+    </LinearLayout></LinearLayout>
