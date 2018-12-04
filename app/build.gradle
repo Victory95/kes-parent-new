@@ -18,8 +18,10 @@ android {
     }
 }
 
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:support-v4:28.0.0'
     testImplementation 'junit:junit:4.12'
     //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -45,6 +47,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:15.0.2'
     //////// Camera Scan Text and number
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
-
+    // Google MAPS
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    // Auto Complete Place & location
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
 }
 apply plugin: 'com.google.gms.google-services'
