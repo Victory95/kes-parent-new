@@ -156,7 +156,6 @@ public class Masuk extends AppCompatActivity {
     //////// validate Editext
     private boolean validateEmail() {
         String email = et_email.getText().toString().trim();
-
         if (email.isEmpty() || !isValidEmail(email)) {
             til_email.setError("Enter valid email address");
             requestFocus(et_email);
