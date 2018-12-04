@@ -38,7 +38,7 @@
         </activity>
         <activity
             android:name=".Activity.Masuk"
-            android:label="Masuk"
+            android:label="@string/label_masuk"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
@@ -47,7 +47,7 @@
         </activity>
         <activity
             android:name=".Activity.OpsiDaftar"
-            android:label="Registrasi"
+            android:label="@string/label_registrasi"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
@@ -56,7 +56,7 @@
         </activity>
         <activity
             android:name=".Activity.DaftarPublic"
-            android:label="Daftar"
+            android:label="@string/label_daftar_public"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
@@ -88,7 +88,7 @@
 
         <activity
             android:name=".Activity.DaftarParent"
-            android:label="Daftar Orangtua"
+            android:label="@string/label_daftar_orangtua"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
@@ -102,7 +102,7 @@
 
         <activity
             android:name=".Activity.CameraScanning"
-            android:label="Scan NIK"
+            android:label="@string/label_pemindaian_nik"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data

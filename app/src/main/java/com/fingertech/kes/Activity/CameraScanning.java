@@ -78,6 +78,7 @@ public class CameraScanning extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_scanning);
+        getSupportActionBar().setElevation(0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -150,9 +151,9 @@ public class CameraScanning extends AppCompatActivity{
                                 isi = stringBuilder.toString().replaceAll("[^\\d.]", "");
                                       stringBuilder.toString().replaceAll(":", "");
                                 if(isi.length()==16){
+                                    iv_eye.setVisibility(View.VISIBLE);
                                     result = isi;
                                     tv_result.setText(result);
-                                    iv_eye.setVisibility(View.VISIBLE);
                                 }else{
                                     iv_eye.setVisibility(View.VISIBLE);
                                     if(result.toString().isEmpty()){
@@ -216,7 +217,9 @@ public class CameraScanning extends AppCompatActivity{
         iv_oke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CameraScanning.this, "OKE Bro", Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(CameraScanning.this, DaftarParent.class);
+                myIntent.putExtra("key_nik", result);
+                startActivity(myIntent);
             }
         });
     }

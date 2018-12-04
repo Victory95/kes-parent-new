@@ -1,8 +1,18 @@
 <resources>
+    ///////// Manifest
     <string name="app_name">KES</string>
+    <string name="label_masuk">Masuk</string>
+    <string name="label_registrasi">Registrasi</string>
+    <string name="label_daftar_public">Daftar</string>
+    <string name="label_daftar_orangtua">Daftar Orangtua</string>
+    <string name="label_pemindaian_nik">Pemindaian NIK</string>
     <string name="action_settings">Settings</string>
 
-    ///////// opsi_masuk.xml
+    ///////// Toast show
+    <string name="error_resp_json">Internet bermasalah, coba lagi</string>
+    <string name="error_resp_internet_con">Tidak ada koneksi internet, periksa dan hubungkan kembali</string>
+
+    ///////// opsi_masuk
     <string name="btn_masuk">Masuk</string>
     <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
     <string name="btn_daftar">Daftar</string>
@@ -36,10 +46,9 @@
     <string name="validate_tempat_lahir">* Masukan tempat lahir anda</string>
     <string name="validate_tanggal_lahir">* Masukan tanggal lahir anda</string>
     <string name="validate_negara">* Masukkan negara asal anda</string>
-    <string name="tcb_ketentuan">* Mohon, Disetujui terlebih dahulu</string>
+    <string name="tcb_ketentuan">Mohon, Disetujui terlebih dahulu</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="datadiri">Data diri<u>Underline</u></string>
 </resources>
