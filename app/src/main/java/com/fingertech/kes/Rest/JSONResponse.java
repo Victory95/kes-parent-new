@@ -1,4 +1,4 @@
-package com.fingertech.kes.Model;
+package com.fingertech.kes.Rest;
 
 import com.google.gson.annotations.SerializedName;
 

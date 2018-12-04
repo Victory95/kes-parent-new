@@ -36,15 +36,15 @@ dependencies {
     runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.10.5') {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
-
     ///////// Retrofit
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
-
     //////// Frebase
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
     implementation 'com.google.firebase:firebase-core:15.0.2'
+    //////// Camera Scan Text and number
+    implementation 'com.google.android.gms:play-services-vision:17.0.2'
 
 }
 apply plugin: 'com.google.gms.google-services'

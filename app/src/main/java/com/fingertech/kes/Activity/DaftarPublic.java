@@ -27,10 +27,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fingertech.kes.Model.JSONResponse;
+import com.fingertech.kes.Controller.Auth;
+import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
-import com.fingertech.kes.Rest.ApiInterface;
 
 import java.util.Locale;
 
@@ -49,7 +49,7 @@ public class DaftarPublic extends AppCompatActivity {
     int status;
     String code;
     private static final int PERMISSION_REQUEST_CODE = 1;
-    ApiInterface mApiInterface;
+    Auth mApiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,7 @@ public class DaftarPublic extends AppCompatActivity {
         //// CheckBox persetujuan
         getCb_ketentuan();
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
+        mApiInterface = ApiClient.getClient().create(Auth.class);
         btn_buat_akun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,7 +222,7 @@ public class DaftarPublic extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(DaftarPublic.this, Masuk.class);
+        Intent intent = new Intent(DaftarPublic.this, OpsiDaftar.class);
         finish();
         startActivity(intent);
     }

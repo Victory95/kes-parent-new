@@ -1,6 +1,7 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -20,22 +21,28 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Model.JSONResponse;
+import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
-import com.fingertech.kes.Rest.ApiInterface;
+import com.fingertech.kes.Controller.Auth;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.text.TextRecognizer;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -45,47 +52,50 @@ import retrofit2.Response;
 public class DaftarParent extends AppCompatActivity {
     private Button btn_buat_akun, btn_ayah, btn_ibu, btn_wali;
     private TextInputLayout til_fullname, til_nik, til_email, til_mobile_phone, til_password, til_ulangi_password;
-    private EditText et_fullname,et_nik,et_email,et_mobile_phone,et_password,et_ulangi_password;
+    private EditText et_fullname, et_nik, et_email, et_mobile_phone, et_password, et_ulangi_password;
     private CheckBox cb_ketentuan;
-    private RadioButton rb_laki_laki,rb_perempuan;
+    private RadioButton rb_laki_laki, rb_perempuan;
     private RadioGroup rg_hubungan;
+    private ImageView iv_camera;
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight, tv_hubungan_validate;
     private ProgressDialog dialog;
     private String deviceid;
     int status;
     String code, hubungan = "", jenis_kelamin = "";
     private static final int PERMISSION_REQUEST_CODE = 1;
-    ApiInterface mApiInterface;
+    Auth mApiInterface;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.daftar_parent);
         getSupportActionBar().setElevation(0);
 
-        btn_buat_akun         =(Button)findViewById(R.id.btn_buat_akun);
-        btn_ayah              =(Button)findViewById(R.id.btn_ayah);
-        btn_ibu               =(Button)findViewById(R.id.btn_ibu);
-        btn_wali              =(Button)findViewById(R.id.btn_wali);
-        rg_hubungan           =(RadioGroup) findViewById(R.id.rg_hubungan);
-        rb_laki_laki          =(RadioButton)findViewById(R.id.rb_laki_laki);
-        rb_perempuan          =(RadioButton)findViewById(R.id.rb_perempuan);
-        cb_ketentuan          =(CheckBox)findViewById(R.id.cb_ketentuan);
-        et_fullname           =(EditText)findViewById(R.id.et_nama_lengkap);
-        et_nik                =(EditText)findViewById(R.id.et_nik);
-        et_email              =(EditText)findViewById(R.id.et_email);
-        et_mobile_phone       =(EditText)findViewById(R.id.et_number_phone);
-        et_password           =(EditText)findViewById(R.id.et_kata_sandi);
-        et_ulangi_password    =(EditText)findViewById(R.id.et_ulangi_kata_sandi);
-        til_fullname          =(TextInputLayout)findViewById(R.id.til_nama_lengkap);
-        til_nik               =(TextInputLayout)findViewById(R.id.til_nik);
-        til_email             =(TextInputLayout)findViewById(R.id.til_email);
-        til_mobile_phone      =(TextInputLayout)findViewById(R.id.til_number_phone);
-        til_password          =(TextInputLayout)findViewById(R.id.til_kata_sandi);
-        til_ulangi_password   =(TextInputLayout)findViewById(R.id.til_ulangi_kata_sandi);
-        tv_line_boundaryLeft  =(TextView) findViewById(R.id.tv_line_boundaryLeft);
-        tv_line_boundaryRight =(TextView) findViewById(R.id.tv_line_boundaryRight);
-        tv_hubungan_validate  =(TextView) findViewById(R.id.tv_hubungan_validate);
+        btn_buat_akun = (Button) findViewById(R.id.btn_buat_akun);
+        btn_ayah = (Button) findViewById(R.id.btn_ayah);
+        btn_ibu = (Button) findViewById(R.id.btn_ibu);
+        btn_wali = (Button) findViewById(R.id.btn_wali);
+        rg_hubungan = (RadioGroup) findViewById(R.id.rg_hubungan);
+        rb_laki_laki = (RadioButton) findViewById(R.id.rb_laki_laki);
+        rb_perempuan = (RadioButton) findViewById(R.id.rb_perempuan);
+        cb_ketentuan = (CheckBox) findViewById(R.id.cb_ketentuan);
+        et_fullname = (EditText) findViewById(R.id.et_nama_lengkap);
+        et_nik = (EditText) findViewById(R.id.et_nik);
+        et_email = (EditText) findViewById(R.id.et_email);
+        et_mobile_phone = (EditText) findViewById(R.id.et_number_phone);
+        et_password = (EditText) findViewById(R.id.et_kata_sandi);
+        et_ulangi_password = (EditText) findViewById(R.id.et_ulangi_kata_sandi);
+        til_fullname = (TextInputLayout) findViewById(R.id.til_nama_lengkap);
+        til_nik = (TextInputLayout) findViewById(R.id.til_nik);
+        til_email = (TextInputLayout) findViewById(R.id.til_email);
+        til_mobile_phone = (TextInputLayout) findViewById(R.id.til_number_phone);
+        til_password = (TextInputLayout) findViewById(R.id.til_kata_sandi);
+        til_ulangi_password = (TextInputLayout) findViewById(R.id.til_ulangi_kata_sandi);
+        tv_line_boundaryLeft = (TextView) findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight = (TextView) findViewById(R.id.tv_line_boundaryRight);
+        tv_hubungan_validate = (TextView) findViewById(R.id.tv_hubungan_validate);
+        iv_camera = (ImageView) findViewById(R.id.iv_camera);
         //// Caps Text in First Alfabet
         et_fullname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
@@ -99,6 +109,14 @@ public class DaftarParent extends AppCompatActivity {
 
         //// CheckBox persetujuan
         getCb_ketentuan();
+
+        iv_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DaftarParent.this, CameraScanning.class);
+                startActivity(intent);
+            }
+        });
 
         btn_ayah.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,11 +198,11 @@ public class DaftarParent extends AppCompatActivity {
             }
         });
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
+        mApiInterface = ApiClient.getClient().create(Auth.class);
         btn_buat_akun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                submitForm();
+                submitForm();
             }
         });
     }
@@ -218,7 +236,6 @@ public class DaftarParent extends AppCompatActivity {
                     return;
                 }
                 deviceid = tm.getDeviceId();
-                getRefreshHub();
                 register_orangtua_post();
             }else{
                 Toast.makeText(DaftarParent.this, getResources().getString(R.string.tcb_ketentuan), Toast.LENGTH_SHORT).show();
@@ -337,7 +354,7 @@ public class DaftarParent extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(DaftarParent.this, Masuk.class);
+        Intent intent = new Intent(DaftarParent.this, OpsiDaftar.class);
         finish();
         startActivity(intent);
     }
@@ -370,10 +387,13 @@ public class DaftarParent extends AppCompatActivity {
                 if (status == 1 && code.equals("RO_SCS_0001")) {
                     Toast.makeText(getApplicationContext(), RO_SCS_0001, Toast.LENGTH_LONG).show();
                     et_fullname.setText("");
+                    et_nik.setText("");
                     et_email.setText("");
                     et_mobile_phone.setText("");
                     et_password.setText("");
                     et_ulangi_password.setText("");
+                    getRefreshHub();
+                    jenis_kelamin = "";
                     if(cb_ketentuan.isChecked()){
                         cb_ketentuan.toggle();
                     }

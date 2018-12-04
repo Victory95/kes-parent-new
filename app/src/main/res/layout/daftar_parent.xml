@@ -25,14 +25,14 @@
                 <LinearLayout
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_nama_lengkap"
                         android:layout_marginTop="40dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -49,30 +49,63 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Nama Lengkap
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/til_nik"
-                        android:paddingTop="28dp"
-                        android:textColorHint="@color/default_textHint"
+
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <EditText
-                            android:id="@+id/et_nik"
-                            android:paddingBottom="6dp"
-                            android:paddingTop="10dp"
-                            android:textSize="16dp"
-                            android:background="@drawable/edt_bg_selector"
-                            android:textColor="@color/default_textColor"
-                            android:inputType="number"
-                            android:hint="@string/et_nik"
-                            android:maxLength="16"
-                            android:theme="@style/TextLabel"
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/til_nik"
+                            android:paddingTop="28dp"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:textColorHint="@color/default_textHint"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Alamat Email
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/et_nik"
+                                android:paddingBottom="6dp"
+                                android:paddingTop="10dp"
+                                android:textSize="16dp"
+                                android:background="@drawable/edt_bg_selector"
+                                android:textColor="@color/default_textColor"
+                                android:inputType="number"
+                                android:hint="@string/et_nik"
+                                android:maxLength="16"
+                                android:theme="@style/TextLabel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </android.support.design.widget.TextInputLayout>Alamat Email
+
+                        <android.support.v7.widget.CardView
+                            app:cardCornerRadius="30dp"
+                            android:layout_marginRight="33dp"
+                            android:layout_marginTop="25dp"
+                            android:layout_alignParentRight="true"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="@android:color/transparent"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp">
+
+                            <ImageView
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:id="@+id/iv_camera"
+                                android:background="?attr/selectableItemBackground"
+                                android:src="@drawable/ic_camera"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                        </android.support.v7.widget.CardView>
+
+                    </RelativeLayout>
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_email"
                         android:paddingTop="28dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -93,6 +126,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_number_phone"
                         android:paddingTop="28dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -115,6 +150,8 @@
                         android:layout_weight="1"
                         android:id="@+id/til_kata_sandi"
                         android:paddingTop="15dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         app:passwordToggleTint="@color/colorPrimary"
                         android:textColorHint="@color/default_textHint"
                         app:passwordToggleEnabled="true"
@@ -140,6 +177,8 @@
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_ulangi_kata_sandi"
                         android:paddingTop="15dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         app:passwordToggleTint="@color/colorPrimary"
                         android:textColorHint="@color/default_textHint"
                         app:passwordToggleEnabled="true"
@@ -165,6 +204,8 @@
                     <TextView
                         android:layout_marginTop="40dp"
                         android:textSize="16dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
                         android:textColor="@color/default_textHint"
                         android:text="@string/et_hubungan"
                         android:layout_width="match_parent"
@@ -173,8 +214,9 @@
                     <LinearLayout
                         android:background="@drawable/rectangle_line"
                         android:layout_marginTop="10dp"
+                        android:layout_marginLeft="40dp"
                         android:layout_width="match_parent"
-                        android:layout_marginRight="70dp"
+                        android:layout_marginRight="110dp"
                         android:orientation="horizontal"
                         android:layout_height="38dp">
                         <Button

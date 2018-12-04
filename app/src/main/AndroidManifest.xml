@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        SplashScreen
         <activity
             android:name=".Activity.Masuk"
             android:label="Masuk"
@@ -36,7 +38,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.OpsiMasuk" />
         </activity>
-        Masuk
         <activity
             android:name=".Activity.OpsiDaftar"
             android:label="Registrasi"
@@ -46,7 +47,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.OpsiMasuk" />
         </activity>
-        OpsiDaftar
         <activity
             android:name=".Activity.DaftarPublic"
             android:label="Daftar"
@@ -56,34 +56,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.OpsiDaftar" />
         </activity>
-        DaftarPublic
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        MainActivity
         <activity
             android:name=".Activity.OpsiMasuk"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DarkStatusBar" />
-        OpsiMasuk
-        <activity android:name=".Activity.UpdateProfile" />
-        UpdateProfile
-        <service android:name=".Service.FirebaseMessaging">
+        <activity
+            android:name=".Activity.UpdateProfile" />
+        <service
+            android:name=".Service.FirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        FirebaseMessaging
-        <service android:name=".Service.FirebaseIdService">
+        <service
+            android:name=".Service.FirebaseIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        FirebaseIdService
-
         <activity
             android:name=".Activity.DaftarParent"
             android:label="Daftar Orangtua"
@@ -93,7 +89,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.OpsiDaftar" />
         </activity>
-        DaftarParent
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="ocr" />
+
+        <activity
+            android:name=".Activity.CameraScanning"
+            android:label="Scan NIK"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.DaftarParent" />
+        </activity>
     </application>
 
 </manifest>

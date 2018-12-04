@@ -14,11 +14,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="186" />
-                            <entry key="outputName" value="ic_parent_bg" />
-                            <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\banih\OneDrive\Pictures\KES ICON\parent_bg.svg" />
-                            <entry key="width" value="437" />
+                            <entry key="outputName" value="ic_reload" />
+                            <entry key="sourceFile" value="D:\Download\reload.svg" />
                           </map>
                         </option>
                       </PersistentState>

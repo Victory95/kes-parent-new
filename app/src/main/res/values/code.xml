@@ -31,7 +31,7 @@
     <string name="RO_ERR_0003">No HP kosong</string>
     <string name="RO_ERR_0004">Password kosong</string>
     <string name="RO_ERR_0005">Jenis Kelamin Kosong</string>
-    <string name="RO_ERR_0006">Hubungan kosong</string>
+    <string name="RO_ERR_0006">hanya boleh daftar pada hp yang sama dan satu akun email</string>
     <string name="RO_ERR_0007">NIK kosong</string>
     <string name="RO_ERR_0008">Devices tidak dikenal</string>
     <string name="RO_ERR_0009">Email sudah digunakan</string>

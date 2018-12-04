@@ -26,10 +26,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Model.JSONResponse;
+import com.fingertech.kes.Controller.Auth;
+import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
-import com.fingertech.kes.Rest.ApiInterface;
 import com.fingertech.kes.Util.JWTUtils;
 
 import org.json.JSONObject;
@@ -63,14 +63,14 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_MEMBER_TYPE  = "member_type";
 
-    ApiInterface mApiInterface;
+    Auth mApiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.masuk);
         getSupportActionBar().setElevation(0);
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
+        mApiInterface = ApiClient.getClient().create(Auth.class);
 
         ///// checking internet connection
         checkInternetCon();
