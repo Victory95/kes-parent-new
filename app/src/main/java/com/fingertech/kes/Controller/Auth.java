@@ -48,6 +48,13 @@ public interface Auth {
                                           @Field("device_id") String device_id);
 
 
+    //////// Register Sosmed
+    @FormUrlEncoded
+    @POST("auth/register_sosmed")
+    Call<JSONResponse>register_sosmed_post(@Field("email") String email,
+                                           @Field("fullname") String fullname,
+                                           @Field("fg_code") String fg_code,
+                                           @Field("device_id") String device_id);
 
 
     @FormUrlEncoded

@@ -129,6 +129,24 @@
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:backgroundTint="@color/default_background"
+                        android:layout_centerVertical="true"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="15dp"
+                        android:layout_height="match_parent"/>
+                    <View
+                        android:background="@color/default_background"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_height="match_parent"/>
                     <ImageView
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/ic_facebook"

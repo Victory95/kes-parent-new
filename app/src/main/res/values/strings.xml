@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id">1955989994447935</string>
+    <string name="fb_login_protocol_scheme">fb1955989994447935</string>
+
     ///////// Manifest
     <string name="app_name">KES</string>
     <string name="label_masuk">Masuk</string>

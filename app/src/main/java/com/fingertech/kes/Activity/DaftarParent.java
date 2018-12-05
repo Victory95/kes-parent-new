@@ -430,6 +430,7 @@ public class DaftarParent extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });

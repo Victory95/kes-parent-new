@@ -26,13 +26,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Util.JWTUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,13 +56,13 @@ public class Masuk extends AppCompatActivity {
     private TextView tvb_lupa_pass, tvb_daftar;
     private EditText et_email, et_kata_sandi;
     private TextInputLayout til_email, til_kata_sandi;
-
+    private LoginButton loginButton;
     private ProgressDialog dialog;
 
     int status;
     String code;
     String deviceid;
-    String email, member_id, fullname, member_type;
+    String email, member_id, fullname, member_type, token;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -64,6 +77,7 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_MEMBER_TYPE  = "member_type";
 
     Auth mApiInterface;
+    CallbackManager callbackManager = CallbackManager.Factory.create();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +98,22 @@ public class Masuk extends AppCompatActivity {
         et_kata_sandi  = (EditText) findViewById(R.id.et_kata_sandi);
         til_email      = (TextInputLayout) findViewById(R.id.til_email);
         til_kata_sandi = (TextInputLayout) findViewById(R.id.til_kata_sandi);
+        loginButton    = (LoginButton) findViewById(R.id.login_button);
 
+        ////// sharedpreferences
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
-        session = sharedpreferences.getBoolean(session_status, false);
+        session      = sharedpreferences.getBoolean(session_status, false);
+        email        = sharedpreferences.getString(TAG_EMAIL, null);
+        member_id    = sharedpreferences.getString(TAG_MEMBER_ID, null);
+        fullname     = sharedpreferences.getString(TAG_FULLNAME, null);
+        member_type  = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
 
-        email       = sharedpreferences.getString(TAG_EMAIL, null);
-        member_id   = sharedpreferences.getString(TAG_MEMBER_ID, null);
-        fullname    = sharedpreferences.getString(TAG_FULLNAME, null);
-        member_type = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
-
+        /////// Get Token
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        if (accessToken != null && !accessToken.isExpired()) {
+            token = accessToken.getToken();
+//            Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
+        }
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -106,9 +127,7 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ////// get Deviceid
-                TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
-                deviceid = tm.getDeviceId();
+                getDeviceID();
                 submitForm();
             }
         });
@@ -124,15 +143,21 @@ public class Masuk extends AppCompatActivity {
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//                Toast.makeText(Masuk.this, fullname, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Masuk.this, email, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Masuk.this, token, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Masuk.this, deviceid, Toast.LENGTH_SHORT).show();
             }
         });
+
         btn_facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                LoginManager.getInstance().logInWithReadPermissions(Masuk.this, Arrays.asList("public_profile"));
+                loginFacebook();
             }
         });
+
         tvb_daftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -319,6 +344,157 @@ public class Masuk extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         }
+    }
+    public void loginFacebook(){
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+//                                if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
+                                // Application code
+                                try {
+                                    email = object.getString("email");
+                                    fullname = object.getString("name");
+                                    getDeviceID();
+                                    register_sosmed_post();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+                Toast.makeText(Masuk.this, "Batalkan euyyyyy", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.d("FB Response :", "Error" + exception);
+                Toast.makeText(Masuk.this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void register_sosmed_post(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(fullname.toString(), email.toString(), token.toString(), deviceid.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                hideDialog();
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                JSONResponse.Token_Data tokendata = resource.token_data;
+
+
+//                JSONObject jsonObject = null;
+//                try {
+//                    jsonObject = new JSONObject(JWTUtils.decoded(token));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+
+
+//                JSONResponse.Token_Data tokendata = resource.token;
+                Log.v("JSONObject", tokendata.toString());
+//                Toast.makeText(Masuk.this, (CharSequence) jsonObject, Toast.LENGTH_SHORT).show();
+
+                String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
+                String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
+                String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
+                String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0003);
+                String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
+                String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
+                String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
+                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
+
+//                if (status == 1 && code.equals("RO_SCS_0001")) {
+//                    JSONResponse.Token_Data tokendata = resource.token_data;
+//                    token = tokendata;
+//                    JSONObject jsonObject = null;
+//                    try {
+//                        jsonObject = new JSONObject(JWTUtils.decoded(tokendata));
+//                        /// save session
+//                        Toast.makeText(Masuk.this, (CharSequence) jsonObject, Toast.LENGTH_SHORT).show();
+////                        SharedPreferences.Editor editor = sharedpreferences.edit();
+////                        editor.putBoolean(session_status, true);
+////                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+////                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+////                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+////                        editor.putString(TAG_MEMBER_TYPE, "6");
+////                        editor.commit();
+////                        /// call session
+////                        Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
+////                        Intent intent = new Intent(Masuk.this, MainActivity.class);
+////                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+////                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+////                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+////                        intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+////                        finish();
+////                        startActivity(intent);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+////                    fullname.equals("");
+////                    email.equals("");
+////                    token.equals("");
+//
+//                } else {
+//                    if(status == 0 && code.equals("RS_ERR_0001")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0002")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0003")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0004")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0005")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0006")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+//                    }if(status == 0 && code.equals("RS_ERR_0007")){
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+//                    }
+//                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public  void getDeviceID(){
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
+        deviceid = tm.getDeviceId();
     }
 }
 
