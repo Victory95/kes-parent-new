@@ -156,7 +156,6 @@ public class Masuk extends AppCompatActivity {
     //////// validate Editext
     private boolean validateEmail() {
         String email = et_email.getText().toString().trim();
-
         if (email.isEmpty() || !isValidEmail(email)) {
             til_email.setError("Enter valid email address");
             requestFocus(et_email);
@@ -305,7 +304,7 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
                 hideDialog();
-                Toast.makeText(getApplicationContext(), "Error Responding", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -316,7 +315,7 @@ public class Masuk extends AppCompatActivity {
                     && conMgr.getActiveNetworkInfo().isAvailable()
                     && conMgr.getActiveNetworkInfo().isConnected()) {
             } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection",
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con),
                         Toast.LENGTH_LONG).show();
             }
         }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -50,6 +51,7 @@ public class DaftarPublic extends AppCompatActivity {
     String code;
     private static final int PERMISSION_REQUEST_CODE = 1;
     Auth mApiInterface;
+    ConnectivityManager conMgr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class DaftarPublic extends AppCompatActivity {
         til_ulangi_password  =(TextInputLayout)findViewById(R.id.til_ulangi_kata_sandi);;
         //// Caps Text in First Alfabet
         et_fullname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+        checkInternetCon();
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(DaftarPublic.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -219,14 +223,12 @@ public class DaftarPublic extends AppCompatActivity {
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
-
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(DaftarPublic.this, OpsiDaftar.class);
         finish();
         startActivity(intent);
     }
-
     public void register_post(){
         progressBar();
         showDialog();
@@ -283,11 +285,23 @@ public class DaftarPublic extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error Responding", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    public void checkInternetCon(){
+        conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        {
+            if (conMgr.getActiveNetworkInfo() != null
+                    && conMgr.getActiveNetworkInfo().isAvailable()
+                    && conMgr.getActiveNetworkInfo().isConnected()) {
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     public void getCb_ketentuan(){
         String language = Locale.getDefault().getLanguage();
         if (language.equals("en")) {

@@ -15,6 +15,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -25,12 +26,9 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,20 +44,16 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class CameraScanning extends AppCompatActivity implements SurfaceHolder.Callback{
-    private SurfaceView cameraView, cameraTransparent;
-    SurfaceHolder holder,holderTransparent;
+public class CameraScanning extends AppCompatActivity{
+    private SurfaceView cameraView;
     private CameraSource cameraSource;
     private TextView tv_result;
-    private ImageView iv_flashlight, iv_photo_camera, iv_reload;
+    private ImageView iv_flashlight, iv_photo_camera, iv_reload, iv_eye, iv_oke;
     final int RequestCameraPermissionID = 1001;
 
+    String result = "";
     private Camera camera = null;
     boolean flashmode = false;
-
-    private float RectLeft, RectTop,RectRight,RectBottom ;
-
-    int  deviceHeight,deviceWidth;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -84,35 +78,17 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera_scanning);
+        getSupportActionBar().setElevation(0);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tv_result         = (TextView) findViewById(R.id.tv_result);
         cameraView        = (SurfaceView) findViewById(R.id.sv_camera_scan);
-//        cameraTransparent = (SurfaceView) findViewById(R.id.sv_transparent_camera);
         iv_flashlight     = (ImageView) findViewById(R.id.iv_flashlight);
-        iv_photo_camera   = (ImageView) findViewById(R.id.iv_photo_camera);
+        iv_eye            = (ImageView) findViewById(R.id.iv_eye);
         iv_reload         = (ImageView) findViewById(R.id.iv_reload);
-
-
-        holder = cameraView.getHolder();
-        holder.addCallback((SurfaceHolder.Callback) this);
-        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        cameraView.setSecure(true);
-
-
-        // Create second surface with another holder (holderTransparent)
-        cameraTransparent = (SurfaceView)findViewById(R.id.sv_transparent_camera);
-        holderTransparent = cameraTransparent.getHolder();
-        holderTransparent.addCallback((SurfaceHolder.Callback) this);
-        holderTransparent.setFormat(PixelFormat.TRANSLUCENT);
-        cameraTransparent.setZOrderMediaOverlay(true);
-
-        //getting the device heigth and width
-        deviceWidth=getScreenWidth();
-        deviceHeight=getScreenHeight();
-
-
+        iv_photo_camera   = (ImageView) findViewById(R.id.iv_photo_camera);
+        iv_oke            = (ImageView) findViewById(R.id.iv_oke);
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
@@ -120,7 +96,7 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
         } else {
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(300, 100)
+                    .setRequestedPreviewSize(1280, 1024)
                     .setRequestedFps(2.0f)
                     .setAutoFocusEnabled(true)
                     .build();
@@ -128,10 +104,6 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
                     try {
-                        synchronized (holder)
-                        {
-                            Draw();
-                        }
                         if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
                             ActivityCompat.requestPermissions(CameraScanning.this,
@@ -142,16 +114,6 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
                         cameraSource.start(cameraView.getHolder());
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
-
-                    Camera.Parameters param;
-                    param = camera.getParameters();
-                    camera.setParameters(param);
-                    try {
-                        camera.setPreviewDisplay(holder);
-                        camera.startPreview();
-                    } catch (Exception e) {
-                        return;
                     }
                 }
 
@@ -184,15 +146,29 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
                                 int i = 0;
                                 TextBlock item = items.valueAt(i);
                                 stringBuilder.append(item.getValue());
-//                                for (int i =0;i<items.size();++i)
-//                                {
-//                                    TextBlock item = items.valueAt(i);
-//                                    stringBuilder.append(item.getValue());
-//                                    stringBuilder.append(".\n");
-//                                }
+
                                 String isi;
                                 isi = stringBuilder.toString().replaceAll("[^\\d.]", "");
-                                tv_result.setText(isi);
+                                      stringBuilder.toString().replaceAll(":", "");
+                                if(isi.length()==16){
+                                    iv_eye.setVisibility(View.VISIBLE);
+                                    result = isi;
+                                    tv_result.setText(result);
+                                }else{
+                                    iv_eye.setVisibility(View.VISIBLE);
+                                    if(result.toString().isEmpty()){
+                                        final Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                iv_eye.setVisibility(View.GONE);
+                                            }
+
+                                        }, 1000);
+                                    }else{
+                                        iv_eye.setVisibility(View.VISIBLE);
+                                    }
+                                }
                             }
                         });
                     }
@@ -210,7 +186,12 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
         iv_photo_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraSource.stop();
+                if(result.toString().isEmpty()){
+                }else{
+                    iv_reload.setVisibility(View.VISIBLE);
+                    iv_oke.setVisibility(View.VISIBLE);
+                    cameraSource.stop();
+                }
             }
         });
 
@@ -222,9 +203,23 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
                 }
                 try {
                     cameraSource.start(cameraView.getHolder());
+                    tv_result.setText("");
+                    result = "";
+                    iv_reload.setVisibility(View.GONE);
+                    iv_oke.setVisibility(View.GONE);
+                    iv_eye.setVisibility(View.GONE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        iv_oke.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(CameraScanning.this, DaftarParent.class);
+                myIntent.putExtra("key_nik", result);
+                startActivity(myIntent);
             }
         });
     }
@@ -272,93 +267,6 @@ public class CameraScanning extends AppCompatActivity implements SurfaceHolder.C
             }
         }
         return null;
-    }
-
-
-    public static int getScreenWidth() {
-        return Resources.getSystem().getDisplayMetrics().widthPixels;
-    }
-    public static int getScreenHeight() {
-        return Resources.getSystem().getDisplayMetrics().heightPixels;
-    }
-
-    private void Draw()
-    {
-        Canvas canvas = holderTransparent.lockCanvas(null);
-        Paint  paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.GREEN);
-        paint.setStrokeWidth(3);
-        RectLeft = 50;
-        RectTop = 500 ;
-        RectRight = RectLeft+ deviceWidth-100;
-        RectBottom =RectTop+ 200;
-        Rect rec=new Rect((int) RectLeft,(int)RectTop,(int)RectRight,(int)RectBottom);
-        canvas.drawRect(rec,paint);
-        holderTransparent.unlockCanvasAndPost(canvas);
-    }
-
-
-    @Override
-
-    public void surfaceCreated(SurfaceHolder holder) {
-        try {
-            synchronized (holder)
-            {Draw();}   //call a draw method
-            camera = Camera.open(); //open a camera
-        } catch (Exception e) {
-            Log.i("Exception", e.toString());
-            return;
-        }
-
-        Camera.Parameters param;
-        param = camera.getParameters();
-
-//        param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-//        Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-//        if(display.getRotation() == Surface.ROTATION_0) {
-//            camera.setDisplayOrientation(90);
-//        }
-
-        camera.setParameters(param);
-        try {
-            camera.setPreviewDisplay(holder);
-            camera.startPreview();
-        } catch (Exception e) {
-            return;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        refreshCamera(); //call method for refress camera
-    }
-
-    public void refreshCamera() {
-        if (holder.getSurface() == null) {
-            return;
-        }
-
-        try {
-            camera.stopPreview();
-        } catch (Exception e) {
-        }
-
-        try {
-            camera.setPreviewDisplay(holder);
-            camera.startPreview();
-        } catch (Exception e) {
-        }
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        camera.release(); //for release a camera
     }
 
 }
