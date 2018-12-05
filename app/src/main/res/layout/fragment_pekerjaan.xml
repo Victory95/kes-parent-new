@@ -1,14 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#46bfee"
     tools:context=".Activity.Fragment.PekerjaanFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:text="Pekerjaan"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="25dp" />
 
-</FrameLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_pendidikan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_pendidikan"
+                android:hint="Pendidikan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Pendidikan
+        </android.support.design.widget.TextInputLayout>Pendidikan
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nama_perusahaan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_nama_perusahaan"
+                android:hint="Nama Perusahaan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Nama Perusahaan
+        </android.support.design.widget.TextInputLayout>Nama Perusahaan
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_jabatan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_jabatan"
+                android:hint="Jabatan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/> Jabatan
+        </android.support.design.widget.TextInputLayout>Jabatan
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_penghasilan"
+            android:textColorHint="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp">
+
+            <EditText
+                android:theme="@style/TextLabel"
+                android:id="@+id/et_penghasilan"
+                android:hint="Penghasilan"
+                android:textSize="16dp"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/edt_bg_selector_white"
+                android:paddingBottom="6dp"
+                android:textColor="#e6e6e6"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />Penghasilan
+        </android.support.design.widget.TextInputLayout>Penghasilan
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_maps"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nama_kerja"
+                android:text="Lokasi Tempat Kerja"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="12dp">
+
+            <fragment
+                android:id="@+id/mapKerja"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp" />
+        </android.support.v7.widget.CardView>
+
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="103dp"
+            android:background="@drawable/rectangel"
+            android:text="Pastikan semua yang anda isi adalah benar.
+Agar kami bisa membantu menemukan sekolah yang cocok
+utuk anak anda, dan memudahkan kami untuk memberi info
+seputar beasiswa"
+            android:textAllCaps="false"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="12dp" />
+    </LinearLayout>
+</LinearLayout>

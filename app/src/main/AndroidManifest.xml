@@ -23,7 +23,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOU_KEY"/>
+            android:value="AIzaSyDrAndTEV3Su0_TER-heCkbve-ORsKBAgY"/>
 
         <activity
             android:name=".Activity.SplashScreen"
