@@ -21,9 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOU_KEY"/>
+            android:value="AIzaSyDHYRKRG9O7OvM9-nUgIAmEZY_7-apvKkg"/>
 
         <activity
             android:name=".Activity.SplashScreen"
