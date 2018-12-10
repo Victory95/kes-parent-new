@@ -19,6 +19,8 @@
     <string name="btn_masuk">Masuk</string>
     <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
     <string name="btn_daftar">Daftar</string>
+    <string name="btn_google">Masuk dengan Google</string>
+    <string name="btn_facebook">Lanjutkan dengan Facebook</string>
 
     //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
@@ -42,6 +44,9 @@
     <string name="validate_email">* Email tidak sesuai</string>
     <string name="validate_mobile_phone">* Masukan nomor handphone anda</string>
     <string name="validate_pass">* Masukan kata sandi anda</string>
+    <string name="validate_pass_lengh">* Minimal 8 karakter</string>
+    <string name="validate_number_lengh">* Minimal 10 karakter</string>
+    <string name="validate_nik_lengh">* Harus dalam 16 karakter</string>
     <string name="validate_cpass">* Kata sandi sama, periksa kembali</string>
     <string name="validate_hubungan">* Mohon Pilih Hubungan Anda</string>
     <string name="validate_name_depan">* Mohon isi nama depan anda</string>

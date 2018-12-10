@@ -36,28 +36,28 @@
             android:text="Email"/>
 
         <TextView
-            android:id="@+id/tv_device_id"
+            android:id="@+id/tv_fullname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Device id"/>
+            android:text="Fullname"/>
+
+        <TextView
+            android:id="@+id/tv_member_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="Member Type"/>
 
         <TextView
             android:id="@+id/tv_token"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="Token"/>
-
-        <TextView
-            android:id="@+id/tv_token_decode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Token Decode" />
+            android:text="Token" />
 
         <Button
             android:layout_marginTop="50dp"

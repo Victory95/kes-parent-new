@@ -41,10 +41,17 @@
     <string name="RS_SCS_0001">Berhasil Masuk</string>
     <string name="RS_ERR_0001">Email kosong</string>
     <string name="RS_ERR_0002">Facebook/Google kosong</string>
-    <string name="RS_ERR_0003">Kesalahan Device ID kosong</string>
-    <string name="RS_ERR_0004">Email sudah digunakan</string>
-    <string name="RS_ERR_0005">Facebook/Google tidak sesuai sudah terdaftar sebelumnya</string>
-    <string name="RS_ERR_0006">hanya boleh daftar pada hp yang sama dan satu akun email</string>
-    <string name="RS_ERR_0007">Gagal Masuk</string>
+    <string name="RS_ERR_0007">Kesalahan Device ID kosong</string>
+    <string name="RS_ERR_0003">Email sudah digunakan</string>
+    <string name="RS_ERR_0004">ID Facebook tidak sesuai atau sudah terdaftar sebelumnya</string>
+    <string name="RS_ERR_0004b">ID Google tidak sesuai atau sudah terdaftar sebelumnya</string>
+    <string name="RS_ERR_0005">hanya boleh daftar pada hp yang sama dan satu akun email</string>
+    <string name="RS_ERR_0006">Gagal Masuk</string>
+
+    /////// Login Sosmed
+    <string name="LS_SCS_0001">Berhasil Masuk</string>
+    <string name="LS_ERR_0001">Device dan ID facebook tidak ditemukan</string>
+    <string name="LS_ERR_0001b">Device dan ID Google tidak ditemukan</string>
+    <string name="LS_ERR_0002">Devices tidak sesuai dan Hanya boleh masuk pada hp yang sama</string>
 
 </resources>

@@ -12,8 +12,8 @@ public class JSONResponse {
     @SerializedName("data")
     public Login_Data login_data;
 
-    @SerializedName("token_data")
-    public Token_Data token_data;
+    @SerializedName("token")
+    public String token;
 
     //////// Data Response - Login Public
     public class Login_Data {
@@ -29,13 +29,4 @@ public class JSONResponse {
         public String token;
     }
 
-    //////// Data Response - Register Sosmed
-    public class Token_Data {
-        @SerializedName("email")
-        public String email;
-        @SerializedName("memberid")
-        public String memberid;
-        @SerializedName("fullname")
-        public String fullname;
-    }
 }

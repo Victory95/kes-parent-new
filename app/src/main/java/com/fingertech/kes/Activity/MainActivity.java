@@ -21,14 +21,15 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     Button btn_logout;
-    TextView tv_memberid, tv_email, tv_device_id,tv_token,tv_token_decode;
-    String email, member_id, fullname, member_type;
+    TextView tv_memberid, tv_email, tv_fullname,tv_member_type,tv_token;
+    String email, member_id, fullname, member_type,token;
     SharedPreferences sharedpreferences;
 
     public static final String TAG_EMAIL        = "email";
-    public static final String TAG_MEMBER_ID     = "member_id";
+    public static final String TAG_MEMBER_ID    = "member_id";
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_MEMBER_TYPE  = "member_type";
+    public static final String TAG_TOKEN        = "token";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +43,25 @@ public class MainActivity extends AppCompatActivity {
 //        Common.currentToken = FirebaseInstanceId.getInstance().getToken();
 //        Log.d("Token", Common.currentToken);
 
-        tv_memberid = (TextView) findViewById(R.id.tv_memberid);
-        tv_email = (TextView) findViewById(R.id.tv_email);
-        tv_device_id = (TextView) findViewById(R.id.tv_device_id);
-        tv_token = (TextView) findViewById(R.id.tv_token);
-        tv_token_decode = (TextView) findViewById(R.id.tv_token_decode);
-        btn_logout = (Button) findViewById(R.id.btn_logout);
+        tv_email       = (TextView) findViewById(R.id.tv_email);
+        tv_memberid    = (TextView) findViewById(R.id.tv_memberid);
+        tv_fullname    = (TextView) findViewById(R.id.tv_fullname);
+        tv_member_type = (TextView) findViewById(R.id.tv_member_type);
+        tv_token       = (TextView) findViewById(R.id.tv_token);
+        btn_logout     = (Button) findViewById(R.id.btn_logout);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-
-//        email = sharedpreferences.getString(TAG_EMAIL,"");
-//        member_id = sharedpreferences.getString(TAG_MEMBER_ID,"");
-//        fullname = sharedpreferences.getString(TAG_FULLNAME,"");
-//        member_type = sharedpreferences.getString(TAG_MEMBER_TYPE,"");
-
-        email = getIntent().getStringExtra(TAG_EMAIL);
-        member_id = getIntent().getStringExtra(TAG_MEMBER_ID);
-        fullname = getIntent().getStringExtra(TAG_FULLNAME);
+        email       = getIntent().getStringExtra(TAG_EMAIL);
+        member_id   = getIntent().getStringExtra(TAG_MEMBER_ID);
+        fullname    = getIntent().getStringExtra(TAG_FULLNAME);
         member_type = getIntent().getStringExtra(TAG_MEMBER_TYPE);
+        token       = getIntent().getStringExtra(TAG_TOKEN);
 
         tv_email.setText("EMAIL : " + email);
         tv_memberid.setText("MEMBERID : " + member_id);
-        tv_device_id.setText("FULLNAME : " + fullname);
-        tv_token.setText("MEMBER_TYPE : " + member_type);
+        tv_fullname.setText("FULLNAME : " + fullname);
+        tv_member_type.setText("MEMBER_TYPE : " + member_type);
+        tv_token.setText("Token : " + token);
 
         btn_logout.setOnClickListener(new View.OnClickListener() {
 

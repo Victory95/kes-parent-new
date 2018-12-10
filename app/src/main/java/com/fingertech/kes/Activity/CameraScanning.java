@@ -217,9 +217,10 @@ public class CameraScanning extends AppCompatActivity{
         iv_oke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(CameraScanning.this, DaftarParent.class);
-                myIntent.putExtra("key_nik", result);
-                startActivity(myIntent);
+                Intent intent = new Intent();
+                intent.putExtra("key_nik", result);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }
