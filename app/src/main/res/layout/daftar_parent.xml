@@ -279,6 +279,8 @@
                     </LinearLayout>
                     <TextView
                         android:visibility="gone"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginLeft="40dp"
                         android:id="@+id/tv_hubungan_validate"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="12dp"

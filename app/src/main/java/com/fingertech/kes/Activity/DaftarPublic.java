@@ -151,6 +151,10 @@ public class DaftarPublic extends AppCompatActivity {
             til_mobile_phone.setError(getResources().getString(R.string.validate_mobile_phone));
             requestFocus(et_mobile_phone);
             return false;
+        }else if(et_mobile_phone.length()<10) {
+            til_mobile_phone.setError(getResources().getString(R.string.validate_number_lengh));
+            requestFocus(et_mobile_phone);
+            return false;
         } else {
             til_mobile_phone.setErrorEnabled(false);
         }
@@ -160,6 +164,10 @@ public class DaftarPublic extends AppCompatActivity {
     private boolean validateKataSandi() {
         if (et_password.getText().toString().trim().isEmpty()) {
             til_password.setError(getResources().getString(R.string.validate_pass));
+            requestFocus(et_password);
+            return false;
+        }else if(et_password.length()<8) {
+            til_password.setError(getResources().getString(R.string.validate_pass_lengh));
             requestFocus(et_password);
             return false;
         } else {

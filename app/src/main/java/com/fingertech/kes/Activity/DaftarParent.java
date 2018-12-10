@@ -114,14 +114,11 @@ public class DaftarParent extends AppCompatActivity {
         //// CheckBox persetujuan
         getCb_ketentuan();
 
-        String nik = getIntent().getStringExtra("key_nik");
-        et_nik.setText(nik);
-
         iv_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DaftarParent.this, CameraScanning.class);
-                startActivity(intent);
+                Intent i = new Intent(DaftarParent.this, CameraScanning.class);
+                startActivityForResult(i, 1);
             }
         });
 
@@ -265,6 +262,10 @@ public class DaftarParent extends AppCompatActivity {
             til_nik.setError(getResources().getString(R.string.validate_nik));
             requestFocus(et_nik);
             return false;
+        }else if(et_nik.length()<16) {
+            til_nik.setError(getResources().getString(R.string.validate_nik_lengh));
+            requestFocus(et_nik);
+            return false;
         } else {
             til_nik.setErrorEnabled(false);
         }
@@ -288,6 +289,10 @@ public class DaftarParent extends AppCompatActivity {
             til_mobile_phone.setError(getResources().getString(R.string.validate_mobile_phone));
             requestFocus(et_mobile_phone);
             return false;
+        }else if(et_mobile_phone.length()<10) {
+            til_mobile_phone.setError(getResources().getString(R.string.validate_number_lengh));
+            requestFocus(et_mobile_phone);
+            return false;
         } else {
             til_mobile_phone.setErrorEnabled(false);
         }
@@ -297,6 +302,10 @@ public class DaftarParent extends AppCompatActivity {
     private boolean validateKataSandi() {
         if (et_password.getText().toString().trim().isEmpty()) {
             til_password.setError(getResources().getString(R.string.validate_pass));
+            requestFocus(et_password);
+            return false;
+        }else if(et_password.length()<8) {
+            til_password.setError(getResources().getString(R.string.validate_pass_lengh));
             requestFocus(et_password);
             return false;
         } else {
@@ -477,6 +486,16 @@ public class DaftarParent extends AppCompatActivity {
         btn_wali.setTextColor(getResources().getColor(R.color.textColor_Grey));
         rg_hubungan.setVisibility(View.GONE);
         hubungan = "";
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                String strEditText = data.getStringExtra("key_nik");
+                et_nik.setText(strEditText);
+            }
+        }
     }
 }
 

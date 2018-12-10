@@ -25,8 +25,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -62,7 +60,7 @@ public class Masuk extends AppCompatActivity {
     int status;
     String code;
     String deviceid;
-    String email, member_id, fullname, member_type, token;
+    String id, email, member_id, fullname, member_type, token;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -75,6 +73,7 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_MEMBER_ID    = "member_id";
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_MEMBER_TYPE  = "member_type";
+    public static final String TAG_TOKEN        = "token";
 
     Auth mApiInterface;
     CallbackManager callbackManager = CallbackManager.Factory.create();
@@ -107,13 +106,7 @@ public class Masuk extends AppCompatActivity {
         member_id    = sharedpreferences.getString(TAG_MEMBER_ID, null);
         fullname     = sharedpreferences.getString(TAG_FULLNAME, null);
         member_type  = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
-
-        /////// Get Token
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if (accessToken != null && !accessToken.isExpired()) {
-            token = accessToken.getToken();
-//            Toast.makeText(this, token, Toast.LENGTH_SHORT).show();
-        }
+        token        = sharedpreferences.getString(TAG_TOKEN, null);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -126,7 +119,6 @@ public class Masuk extends AppCompatActivity {
         btn_masuk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ////// get Deviceid
                 getDeviceID();
                 submitForm();
             }
@@ -143,10 +135,7 @@ public class Masuk extends AppCompatActivity {
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(Masuk.this, fullname, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(Masuk.this, email, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(Masuk.this, token, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(Masuk.this, deviceid, Toast.LENGTH_SHORT).show();
+                register_sosmed_post();
             }
         });
 
@@ -294,6 +283,7 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                        editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
                         Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
@@ -302,6 +292,7 @@ public class Masuk extends AppCompatActivity {
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                        intent.putExtra(TAG_TOKEN, token);
                         finish();
                         startActivity(intent);
 
@@ -340,8 +331,7 @@ public class Masuk extends AppCompatActivity {
                     && conMgr.getActiveNetworkInfo().isAvailable()
                     && conMgr.getActiveNetworkInfo().isConnected()) {
             } else {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con),
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -356,9 +346,10 @@ public class Masuk extends AppCompatActivity {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.v("LoginActivity", response.toString());
-//                                if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
+                                //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
                                 // Application code
                                 try {
+                                    id = object.getString("id");
                                     email = object.getString("email");
                                     fullname = object.getString("name");
                                     getDeviceID();
@@ -393,11 +384,16 @@ public class Masuk extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
+    public void getDeviceID(){
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
+        deviceid = tm.getDeviceId();
+    }
 
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(fullname.toString(), email.toString(), token.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -407,81 +403,62 @@ public class Masuk extends AppCompatActivity {
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
-
-                JSONResponse.Token_Data tokendata = resource.token_data;
-
-
-//                JSONObject jsonObject = null;
-//                try {
-//                    jsonObject = new JSONObject(JWTUtils.decoded(token));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-
-
-//                JSONResponse.Token_Data tokendata = resource.token;
-                Log.v("JSONObject", tokendata.toString());
-//                Toast.makeText(Masuk.this, (CharSequence) jsonObject, Toast.LENGTH_SHORT).show();
+                token = resource.token;
 
                 String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
                 String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
                 String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
+                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
                 String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0003);
                 String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
                 String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
                 String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
-                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
 
-//                if (status == 1 && code.equals("RO_SCS_0001")) {
-//                    JSONResponse.Token_Data tokendata = resource.token_data;
-//                    token = tokendata;
-//                    JSONObject jsonObject = null;
-//                    try {
-//                        jsonObject = new JSONObject(JWTUtils.decoded(tokendata));
-//                        /// save session
-//                        Toast.makeText(Masuk.this, (CharSequence) jsonObject, Toast.LENGTH_SHORT).show();
-////                        SharedPreferences.Editor editor = sharedpreferences.edit();
-////                        editor.putBoolean(session_status, true);
-////                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-////                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-////                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-////                        editor.putString(TAG_MEMBER_TYPE, "6");
-////                        editor.commit();
-////                        /// call session
-////                        Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-////                        Intent intent = new Intent(Masuk.this, MainActivity.class);
-////                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-////                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-////                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-////                        intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-////                        finish();
-////                        startActivity(intent);
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-////                    fullname.equals("");
-////                    email.equals("");
-////                    token.equals("");
-//
-//                } else {
-//                    if(status == 0 && code.equals("RS_ERR_0001")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0002")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0003")){
+                if (status == 1 && code.equals("RS_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(JWTUtils.decoded(token));
+                        //// save session
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putBoolean(session_status, true);
+                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                        editor.putString(TAG_MEMBER_TYPE, "6");
+                        editor.putString(TAG_TOKEN, token);
+                        editor.commit();
+                        /// call session
+                        Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                        intent.putExtra(TAG_MEMBER_TYPE, "6");
+                        intent.putExtra(TAG_TOKEN, token);
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if(status == 0 && code.equals("RS_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0007")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0003")){
+                        login_sosmed_post();
 //                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0004")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0005")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0006")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
-//                    }if(status == 0 && code.equals("RS_ERR_0007")){
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
-//                    }
-//                }
+                    }if(status == 0 && code.equals("RS_ERR_0004")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0005")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0006")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+                    }
+                }
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
@@ -490,11 +467,63 @@ public class Masuk extends AppCompatActivity {
             }
         });
     }
+    public void login_sosmed_post(){
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                Log.d("TAG",response.code()+"");
 
-    public  void getDeviceID(){
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
-        deviceid = tm.getDeviceId();
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+                token = resource.token;
+
+                String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
+                String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
+                String LS_ERR_0002 = getResources().getString(R.string.LS_ERR_0002);
+
+                if (status == 1 && code.equals("LS_SCS_0001")) {
+                    JSONObject jsonObject = null;
+                    Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
+                    try {
+                        jsonObject = new JSONObject(JWTUtils.decoded(token));
+                        //// save session
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putBoolean(session_status, true);
+                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                        editor.putString(TAG_MEMBER_TYPE, "6");
+                        editor.putString(TAG_TOKEN, token);
+                        editor.commit();
+                        /// call session
+                        Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                        intent.putExtra(TAG_MEMBER_TYPE, "6");
+                        intent.putExtra(TAG_TOKEN, token);
+                        startActivity(intent);
+                        finish();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if(status == 0 && code.equals("LS_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), LS_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("LS_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), LS_ERR_0002, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
     }
+
 }
 

@@ -11,6 +11,7 @@ import retrofit2.http.PUT;
 
 public interface Auth {
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
     //////// Register Public
     @FormUrlEncoded
     @POST("auth/register")
@@ -28,6 +29,7 @@ public interface Auth {
                                  @Field("device_id") String device_id);
 
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
     //////// Register Parent
     @FormUrlEncoded
     @POST("auth/register_orangtua")
@@ -48,6 +50,7 @@ public interface Auth {
                                           @Field("device_id") String device_id);
 
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
     //////// Register Sosmed
     @FormUrlEncoded
     @POST("auth/register_sosmed")
@@ -56,7 +59,13 @@ public interface Auth {
                                            @Field("fg_code") String fg_code,
                                            @Field("device_id") String device_id);
 
+    //////// Login Sosmed
+    @FormUrlEncoded
+    @POST("auth/login_sosmed")
+    Call<JSONResponse>login_sosmed_post(@Field("fg_code") String fg_code,
+                                        @Field("device_id") String device_id);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
     @PUT("update")
     Call<JSONResponse> putPublic(@Field("memberid") String memberid,

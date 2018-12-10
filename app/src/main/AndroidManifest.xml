@@ -21,6 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="YOU_KEY"/>
@@ -73,7 +74,28 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DarkStatusBar" />
-        <activity android:name=".Activity.UpdateProfile" />
+        <activity
+            android:name=".Activity.DaftarParent"
+            android:label="@string/label_daftar_orangtua"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.OpsiDaftar" />
+        </activity>
+        <activity
+            android:name=".Activity.CameraScanning"
+            android:label="@string/label_pemindaian_nik"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.DaftarParent" />
+        </activity>
+        <activity
+            android:name=".Activity.ParentMain"></activity>
+        <activity
+            android:name=".Activity.UpdateProfile" />
 
         <service android:name=".Service.FirebaseMessaging">
             <intent-filter>
@@ -86,30 +108,27 @@
             </intent-filter>
         </service>
 
-        <activity
-            android:name=".Activity.DaftarParent"
-            android:label="@string/label_daftar_orangtua"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fingertech.kes.Activity.OpsiDaftar" />
-        </activity>
-
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="ocr" />
 
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
         <activity
-            android:name=".Activity.CameraScanning"
-            android:label="@string/label_pemindaian_nik"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fingertech.kes.Activity.DaftarParent" />
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Activity.ParentMain"></activity>
     </application>
 
 </manifest>
