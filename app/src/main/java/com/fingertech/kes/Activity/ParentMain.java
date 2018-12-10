@@ -1,8 +1,11 @@
 package com.fingertech.kes.Activity;
 
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,6 +59,8 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
                 ParentPager.setCurrentItem(getItem(-1), true);
             }
         });
+
+        checkLocationPermission();
         setUiPageViewController();
     }
 
@@ -137,7 +142,27 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
         }
     }
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
 
