@@ -1,14 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     android:layout_height="match_parent"
+    android:background="#46bfee"
     tools:context=".Activity.Fragment.KontakAnakFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:text="Kontak"
+            android:textAlignment="center"
+            android:textColor="#ffffff"
+            android:textSize="28dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_nomor_Rumah"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_nomor_Rumah"
+            android:hint="Nomor Rumah"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />Nomor Rumah
+    </android.support.design.widget.TextInputLayout>Nomor Rumah
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_nomor_Ponsel"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_nomor_Ponsel"
+            android:hint="Nomor Ponsel"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />Nomor Ponsel
+    </android.support.design.widget.TextInputLayout>Nomor Ponsel
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_e-mail"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_e-mail"
+            android:hint="E-Mail"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />E-Mail
+    </android.support.design.widget.TextInputLayout>E-Mail
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_skun"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_skun"
+            android:hint="Surat Keterangan Ujian Negara"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />Surat Keterangan Negara
+    </android.support.design.widget.TextInputLayout>Surat Keterangan Negara
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_kps"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_kps"
+            android:hint="Nomor KPS"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />Nomor KPS
+    </android.support.design.widget.TextInputLayout>Nomor KPS
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_PKPS"
+        android:textColorHint="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp">
+
+        <EditText
+            android:theme="@style/TextLabel"
+            android:id="@+id/et_PKPS"
+            android:hint="Penerimaan KPS"
+            android:textSize="16dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/edt_bg_selector_white"
+            android:paddingBottom="6dp"
+            android:textColor="#e6e6e6"
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />Penerimaan KPS
+    </android.support.design.widget.TextInputLayout>Penerimaan KPS
+    </LinearLayout></LinearLayout>
