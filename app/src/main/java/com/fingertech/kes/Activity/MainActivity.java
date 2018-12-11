@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.fingertech.kes.R;
@@ -51,11 +52,11 @@ public class MainActivity extends AppCompatActivity {
         btn_logout     = (Button) findViewById(R.id.btn_logout);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        email       = getIntent().getStringExtra(TAG_EMAIL);
-        member_id   = getIntent().getStringExtra(TAG_MEMBER_ID);
-        fullname    = getIntent().getStringExtra(TAG_FULLNAME);
-        member_type = getIntent().getStringExtra(TAG_MEMBER_TYPE);
-        token       = getIntent().getStringExtra(TAG_TOKEN);
+        email       = sharedpreferences.getString(TAG_EMAIL,"email");
+        member_id   = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        fullname    = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        member_type = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
+        token       = sharedpreferences.getString(TAG_TOKEN,"token");
 
         tv_email.setText("EMAIL : " + email);
         tv_memberid.setText("MEMBERID : " + member_id);
@@ -67,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // update login session ke FALSE dan mengosongkan nilai id dan username
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putBoolean(Masuk.session_status, false);
                 editor.putString(TAG_EMAIL, null);
                 editor.putString(TAG_MEMBER_ID, null);
                 editor.putString(TAG_FULLNAME, null);
                 editor.putString(TAG_MEMBER_TYPE, null);
+                editor.putString(TAG_TOKEN, null);
                 editor.commit();
 
                 Intent intent = new Intent(MainActivity.this, OpsiMasuk.class);

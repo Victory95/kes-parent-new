@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,8 +25,11 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -39,6 +44,19 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Util.JWTUtils;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,6 +95,14 @@ public class Masuk extends AppCompatActivity {
 
     Auth mApiInterface;
     CallbackManager callbackManager = CallbackManager.Factory.create();
+
+    private static final String TAG = "MainActivity";
+    private static final int RC_SIGN_IN = 9001;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private SignInButton sign_in_button;
+    private Button sign_out_button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +124,8 @@ public class Masuk extends AppCompatActivity {
         til_email      = (TextInputLayout) findViewById(R.id.til_email);
         til_kata_sandi = (TextInputLayout) findViewById(R.id.til_kata_sandi);
         loginButton    = (LoginButton) findViewById(R.id.login_button);
+        sign_in_button = (SignInButton) findViewById(R.id.sign_in_button);
+        sign_out_button = (Button) findViewById(R.id.sign_out_button);
 
         ////// sharedpreferences
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
@@ -115,6 +143,15 @@ public class Masuk extends AppCompatActivity {
                 ActivityCompat.requestPermissions(Masuk.this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
             }
         }
+
+        ////// Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
 
         btn_masuk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +172,14 @@ public class Masuk extends AppCompatActivity {
         btn_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                register_sosmed_post();
+                signIn();
+            }
+        });
+
+        sign_out_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
             }
         });
 
@@ -171,7 +215,7 @@ public class Masuk extends AppCompatActivity {
     private boolean validateEmail() {
         String email = et_email.getText().toString().trim();
         if (email.isEmpty() || !isValidEmail(email)) {
-            til_email.setError("Enter valid email address");
+            til_email.setError(getResources().getString(R.string.validate_email));
             requestFocus(et_email);
             return false;
         } else {
@@ -181,13 +225,16 @@ public class Masuk extends AppCompatActivity {
     }
     private boolean validatePassword() {
         if (et_kata_sandi.getText().toString().trim().isEmpty()) {
-            til_kata_sandi.setError("Enter the password");
+            til_kata_sandi.setError(getResources().getString(R.string.validate_pass));
+            requestFocus(et_kata_sandi);
+            return false;
+        }else if(et_kata_sandi.length()<6) {
+            til_kata_sandi.setError(getResources().getString(R.string.validate_pass_lengh));
             requestFocus(et_kata_sandi);
             return false;
         } else {
             til_kata_sandi.setErrorEnabled(false);
         }
-
         return true;
     }
     private static boolean isValidEmail(String email) {
@@ -275,7 +322,8 @@ public class Masuk extends AppCompatActivity {
                     JSONResponse.Login_Data data = resource.login_data;
                     JSONObject jsonObject = null;
                     try {
-                        jsonObject = new JSONObject(JWTUtils.decoded(data.token));
+                        token = data.token;
+                        jsonObject = new JSONObject(JWTUtils.decoded(token));
                         /// save session
                         SharedPreferences.Editor editor = sharedpreferences.edit();
                         editor.putBoolean(session_status, true);
@@ -368,7 +416,7 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onCancel() {
                 // App code
-                Toast.makeText(Masuk.this, "Batalkan euyyyyy", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Masuk.this, getResources().getString(R.string.toast_cancel), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -383,6 +431,20 @@ public class Masuk extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                // ...
+            }
+        }
     }
     public void getDeviceID(){
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -408,8 +470,8 @@ public class Masuk extends AppCompatActivity {
                 String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
                 String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
                 String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
-                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
                 String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0003);
+                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
                 String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
                 String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
                 String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
@@ -446,11 +508,11 @@ public class Masuk extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0002")){
                         Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0003")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0007")){
                         login_sosmed_post();
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0004")){
                         Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0005")){
@@ -523,6 +585,77 @@ public class Masuk extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    ///// Login Google
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        progressBar();
+        showDialog();
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
+                        }
+                        hideDialog();
+                    }
+                });
+    }
+    private void updateUI(FirebaseUser user) {
+        TextView displayName = findViewById(R.id.displayName);
+        ImageView profileImage = findViewById(R.id.profilePic);
+        if (user != null) {
+            displayName.setText(user.getDisplayName());
+            displayName.setVisibility(View.VISIBLE);
+            // Loading profile image
+            Uri profilePicUrl = user.getPhotoUrl();
+            if (profilePicUrl != null) {
+                Glide.with(this).load(profilePicUrl)
+                        .into(profileImage);
+            }
+            profileImage.setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+        } else {
+            displayName.setVisibility(View.GONE);
+            profileImage.setVisibility(View.GONE);
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+        }
+    }
+    private void signOut() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this,
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+                    }
+                });
     }
 
 }

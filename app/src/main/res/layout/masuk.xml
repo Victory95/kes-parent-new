@@ -111,55 +111,78 @@
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+                    \\\\ Skip this
+                    <com.google.android.gms.common.SignInButton
+                        android:id="@+id/sign_in_button"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:visibility="visible" />
+
+                    \\\\ custom Login Google
                     <ImageView
                         android:layout_marginLeft="20dp"
-                        android:src="@drawable/ic_google"
-                        android:layout_width="25dp"
+                        android:src="@drawable/ic_google_original"
+                        android:layout_width="18dp"
                         android:layout_height="match_parent" />
                     <Button
                         android:id="@+id/btn_Google"
-                        android:text="google"
-                        android:textColor="@color/default_textColor"
+                        android:text="Masuk dengan Google"
+                        android:textAllCaps="false"
+                        android:textColor="#6b6b6b"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
                 </RelativeLayout>Google
                 <RelativeLayout
                     android:layout_marginTop="25dp"
                     android:background="@drawable/rectangle_line"
+                    android:backgroundTint="#3b5998"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+
+                    /// Skip This
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/login_button"
-                        android:backgroundTint="@color/default_background"
-                        android:layout_centerVertical="true"
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="2dp"
-                        android:paddingTop="15dp"
-                        android:paddingBottom="15dp"
-                        android:layout_height="match_parent"/>
-                    <View
-                        android:background="@color/default_background"
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginRight="2dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginBottom="2dp"
-                        android:layout_height="match_parent"/>
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+
+                    ////// Here Custom Login Facebook
                     <ImageView
                         android:layout_marginLeft="20dp"
-                        android:src="@drawable/ic_facebook"
-                        android:layout_width="25dp"
+                        android:src="@drawable/ic_facebook_original"
+                        android:layout_width="18dp"
                         android:layout_height="match_parent" />
                     <Button
                         android:id="@+id/btn_Facebook"
-                        android:text="facebook"
-                        android:textColor="@color/default_textColor"
+                        android:textAllCaps="false"
+                        android:text="Masuk dengan Facebook"
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/white"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </RelativeLayout>Facebook
+
+                <ImageView
+                    android:id="@+id/profilePic"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:src="@drawable/ic_google_original"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/displayName"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/sign_out_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Logout" />
             </LinearLayout>---- List Opsi Masuk
         </LinearLayout>
     </ScrollView>

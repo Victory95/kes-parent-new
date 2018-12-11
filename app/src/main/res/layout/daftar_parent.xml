@@ -55,30 +55,44 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/til_nik"
-                            android:paddingTop="28dp"
-                            android:layout_marginLeft="40dp"
-                            android:layout_marginRight="40dp"
-                            android:textColorHint="@color/default_textHint"
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <EditText
-                                android:id="@+id/et_nik"
-                                android:paddingBottom="6dp"
-                                android:paddingTop="10dp"
-                                android:textSize="16dp"
-                                android:background="@drawable/edt_bg_selector"
-                                android:textColor="@color/default_textColor"
-                                android:inputType="number"
-                                android:hint="@string/et_nik"
-                                android:maxLength="16"
-                                android:theme="@style/TextLabel"
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/til_nik"
+                                android:paddingTop="28dp"
+                                android:layout_marginLeft="40dp"
+                                android:layout_marginRight="40dp"
+                                android:textColorHint="@color/default_textHint"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <EditText
+                                    android:id="@+id/et_nik"
+                                    android:paddingBottom="6dp"
+                                    android:paddingTop="10dp"
+                                    android:textSize="16dp"
+                                    android:background="@drawable/edt_bg_selector"
+                                    android:textColor="@color/default_textColor"
+                                    android:inputType="number"
+                                    android:hint="@string/et_nik"
+                                    android:maxLength="16"
+                                    android:theme="@style/TextLabel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                            </android.support.design.widget.TextInputLayout>NIK
+
+                            <TextView
+                                android:layout_marginLeft="40dp"
+                                android:layout_marginRight="40dp"
+                                android:textColor="@color/textColor_Grey"
+                                android:textSize="12dp"
+                                android:text="@string/validate2_nik"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content" />
-                        </android.support.design.widget.TextInputLayout>Alamat Email
-
+                        </LinearLayout>
                         <android.support.v7.widget.CardView
                             app:cardCornerRadius="30dp"
                             android:layout_marginRight="33dp"
@@ -146,6 +160,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Number Handphone
+                    <TextView
+                        android:textColor="@color/textColor_Grey"
+                        android:textSize="12dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:text="@string/validate2_mobile_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                     <android.support.design.widget.TextInputLayout
                         android:layout_weight="1"
                         android:id="@+id/til_kata_sandi"
@@ -174,6 +196,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
                     </android.support.design.widget.TextInputLayout>Kata Sandi
+                    <TextView
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:textColor="@color/textColor_Grey"
+                        android:textSize="12dp"
+                        android:text="@string/validate2_pass_lengh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_ulangi_kata_sandi"
                         android:paddingTop="15dp"

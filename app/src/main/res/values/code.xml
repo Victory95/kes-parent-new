@@ -38,11 +38,11 @@
     <string name="RO_ERR_0010">Gagal Daftar</string>
 
     /////// Register Sosmed
-    <string name="RS_SCS_0001">Berhasil Masuk</string>
+    <string name="RS_SCS_0001">Berhasil Daftar</string>
     <string name="RS_ERR_0001">Email kosong</string>
-    <string name="RS_ERR_0002">Facebook/Google kosong</string>
-    <string name="RS_ERR_0007">Kesalahan Device ID kosong</string>
-    <string name="RS_ERR_0003">Email sudah digunakan</string>
+    <string name="RS_ERR_0002">Fullname kosong</string>
+    <string name="RS_ERR_0003">Device ID kosong</string>
+    <string name="RS_ERR_0007">Email sudah digunakan</string>
     <string name="RS_ERR_0004">ID Facebook tidak sesuai atau sudah terdaftar sebelumnya</string>
     <string name="RS_ERR_0004b">ID Google tidak sesuai atau sudah terdaftar sebelumnya</string>
     <string name="RS_ERR_0005">hanya boleh daftar pada hp yang sama dan satu akun email</string>

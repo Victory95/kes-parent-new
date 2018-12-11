@@ -166,7 +166,7 @@ public class DaftarPublic extends AppCompatActivity {
             til_password.setError(getResources().getString(R.string.validate_pass));
             requestFocus(et_password);
             return false;
-        }else if(et_password.length()<8) {
+        }else if(et_password.length()<6) {
             til_password.setError(getResources().getString(R.string.validate_pass_lengh));
             requestFocus(et_password);
             return false;
@@ -320,8 +320,8 @@ public class DaftarPublic extends AppCompatActivity {
             cb_ketentuan.setMovementMethod(LinkMovementMethod.getInstance());
         }
         else if (language.equals("in")) {
-            cb_ketentuan.setText(Html.fromHtml("Saya setuju dengan " +
-                    "<a href='http://www.google.com'>Syarat Dan Ketentuan</a>" + " yang di berikan"));
+            cb_ketentuan.setText(Html.fromHtml("Setuju dengan " +
+                    "<a href='http://www.google.com'>Ketentuan Penggunaan</a>" + " dari KES untuk membuat akun baru"));
             cb_ketentuan.setClickable(true);
             cb_ketentuan.setMovementMethod(LinkMovementMethod.getInstance());
         }

@@ -8,13 +8,13 @@
     <string name="label_registrasi">Registrasi</string>
     <string name="label_daftar_public">Daftar</string>
     <string name="label_daftar_orangtua">Daftar Orangtua</string>
-    <string name="label_pemindaian_nik">Pemindaian NIK</string>
+    <string name="label_pemindaian_nik">Pemindaian Scan NIK</string>
     <string name="action_settings">Settings</string>
 
     ///////// Toast show
     <string name="error_resp_json">Internet bermasalah, coba lagi</string>
     <string name="error_resp_internet_con">Tidak ada koneksi internet, periksa dan hubungkan kembali</string>
-
+    <string name="toast_cancel">Batalkan</string>
     ///////// opsi_masuk
     <string name="btn_masuk">Masuk</string>
     <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
@@ -24,7 +24,7 @@
 
     //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
-    <string name="et_nik">NIK</string>
+    <string name="et_nik">NIK / NIORA</string>
     <string name="et_email">Alamat Email</string>
     <string name="et_number_handphone">Nomor Handphone</string>
     <string name="et_kata_sandi">Kata Sandi</string>
@@ -44,7 +44,7 @@
     <string name="validate_email">* Email tidak sesuai</string>
     <string name="validate_mobile_phone">* Masukan nomor handphone anda</string>
     <string name="validate_pass">* Masukan kata sandi anda</string>
-    <string name="validate_pass_lengh">* Minimal 8 karakter</string>
+    <string name="validate_pass_lengh">* Minimal 6 karakter</string>
     <string name="validate_number_lengh">* Minimal 10 karakter</string>
     <string name="validate_nik_lengh">* Harus dalam 16 karakter</string>
     <string name="validate_cpass">* Kata sandi sama, periksa kembali</string>
@@ -54,6 +54,9 @@
     <string name="validate_tempat_lahir">* Masukan tempat lahir anda</string>
     <string name="validate_tanggal_lahir">* Masukan tanggal lahir anda</string>
     <string name="validate_negara">* Masukkan negara asal anda</string>
+    <string name="validate2_nik">Pastikan NIK / NIORA benar, agar dapat mengaskses anak anda. Bisa dengan Scan NIK dari KTP/KK</string>
+    <string name="validate2_mobile_phone">Pasikan nomor ponsel anda aktif untuk keamanan dan kemudahan akses</string>
+    <string name="validate2_pass_lengh">Minimal 6 karakter</string>
     <string name="tcb_ketentuan">Mohon, Disetujui terlebih dahulu</string>
 
     <!-- TODO: Remove or change this placeholder text -->
