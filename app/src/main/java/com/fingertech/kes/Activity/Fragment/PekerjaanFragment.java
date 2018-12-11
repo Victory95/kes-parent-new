@@ -2,18 +2,26 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +40,15 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,19 +57,25 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnInfoWindowClickListener {
 
-    private static final Object Location = null;
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
     private Marker mCurrLocationMarker;
-    private Location mLastLocation;
     private LocationManager lm;
-    private double latitude = -6.110880;
-    private double longitude = 106.776701;
     private TextView namakerja;
     final Marker[] marker = new Marker[1];
+    private static final float DEFAULT_ZOOM = 15;
+    private static final String TAG= "KES";
+    private LocationRequest mlocationRequest;
+    private Location mlastLocation;
+    Double CurrentLatitude;
+    Double CurrentLongitude;
+    private ImageView arro;
 
-    private boolean needsInit=false;
+    String location;
+
+
+    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
+            new LatLng(-40, -168), new LatLng(71, 136));
 
     public static PekerjaanFragment newInstance() {
         // Required empty public constructor
@@ -68,12 +89,18 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pekerjaan, container, false);
-        TextView namakerja = (TextView) view.findViewById(R.id.nama_kerja);
+        namakerja = (TextView) view.findViewById(R.id.nama_kerja);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapKerja);
         mapFragment.getMapAsync(this);
-
-
+        arro = (ImageView)view.findViewById(R.id.arrow);
+        arro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), maps_kerja.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
@@ -86,15 +113,32 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         mMap.setOnCameraMoveListener(this);
         mMap.setOnCameraMoveCanceledListener(this);
 
-        // Show Sydney on the map.
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return;
+        //Initialize Google Play Services
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                buildGoogleApiClient();
+                mMap.setMyLocationEnabled(true);
+            }
         }
-        mMap.setMyLocationEnabled(true);
+        else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
+        }
 
+    }
 
-
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
     }
 
 
@@ -107,6 +151,24 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
+
+        LatLng LatLng = mMap.getCameraPosition().target;
+        Geocoder geocode1 = new Geocoder(getContext(), Locale.getDefault());
+        try {
+            List<Address> addressList = geocode1.getFromLocation(LatLng.latitude, LatLng.longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                String address1 = addressList.get(0).getThoroughfare();
+                String number1 = addressList.get(0).getFeatureName();
+                String city1 = addressList.get(0).getLocality();
+                String state1 = addressList.get(0).getAdminArea();
+                String country1 = addressList.get(0).getCountryName();
+                String postalCode1 = addressList.get(0).getPostalCode();
+                namakerja.setText(address1 + " No. " + number1 + ", "+ city1 +", "+ state1 +", "+ country1 +", "+ postalCode1 +"\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -140,6 +202,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         if(mCurrLocationMarker!= null){
            mCurrLocationMarker.remove();}
         mCurrLocationMarker = mMap.addMarker(options);
+
     }
 
 
@@ -157,35 +220,77 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onLocationChanged(Location location) {
-        double lattitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        mlastLocation = location;
+        if (mCurrLocationMarker != null) {
+            mCurrLocationMarker.remove();
 
-        //Place current location marker
-        LatLng latLng = new LatLng(lattitude, longitude);
-
-
-        if(mCurrLocationMarker!=null){
-            mCurrLocationMarker.setPosition(latLng);
-        }else{
-            mCurrLocationMarker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                    .title("I am here"));
         }
 
-        namakerja.append("Lattitude: " + lattitude + "  Longitude: " + longitude);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        //Place current location marker
+        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+        final MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Position");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+
+        //move map camera
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onMarkerDragEnd(final Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+                mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                    @Override
+                    public boolean onMyLocationButtonClick() {
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
+                        Toast.makeText(getContext(), "The camera is moving.",
+                                Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onMarkerDrag(Marker arg0) {
+                // TODO Auto-generated method stub
+                Log.i("System out", "onMarkerDrag...");
+            }
+        });
 
         //stop location updates
         if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
+            mGoogleApiClient.connect();
         }
+
+        updateLocation(location);
+        getAddress();
     }
 
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        mlocationRequest = new LocationRequest();
+        mlocationRequest.setInterval(1000);
+        mlocationRequest.setFastestInterval(1000);
+        mlocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mlocationRequest, this);
+        }
     }
 
     @Override
@@ -197,10 +302,106 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
+                    // permission was granted. Do the
+                    // contacts-related task you need to do.
+                    if (ContextCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        if (mGoogleApiClient == null) {
+                            buildGoogleApiClient();
+                        }
+                        mMap.setMyLocationEnabled(true);
+                    }
+
+                } else {
+
+                    // Permission denied, Disable the functionality that depends on this permission.
+                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other permissions this app might request.
+            // You can add here other case statements according to your requirement.
+        }
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
 
     }
+
+    void getAddress() {
+
+        try {
+
+            Geocoder gcd = new Geocoder(getContext()
+                    , Locale.getDefault());
+
+            List<Address> addresses = gcd.getFromLocation(CurrentLatitude,
+
+                    CurrentLongitude, 100);
+
+            StringBuilder result = new StringBuilder();
+
+
+
+            if (addresses.size() > 0) {
+
+
+
+                Address address = addresses.get(1);
+
+                int maxIndex = address.getMaxAddressLineIndex();
+
+                for (int x = 0; x <= maxIndex; x++) {
+
+                    result.append(address.getAddressLine(x));
+
+                    result.append(",");
+
+                }
+
+
+
+            }
+
+            location = result.toString();
+
+        } catch (IOException ex) {
+
+            Toast.makeText(getContext(), ex.getMessage(),
+
+                    Toast.LENGTH_LONG).show();
+
+
+
+        }
+
+    }
+
+
+
+    void updateLocation(Location location) {
+
+        mlastLocation = location;
+
+        CurrentLatitude = mlastLocation.getLatitude();
+
+        CurrentLongitude = mlastLocation.getLongitude();
+
+
+
+    }
+
 }
