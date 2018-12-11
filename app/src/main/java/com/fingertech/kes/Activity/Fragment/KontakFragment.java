@@ -58,6 +58,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.facebook.share.internal.DeviceShareDialogFragment.TAG;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
@@ -82,6 +83,10 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     GoogleApiClient mGoogleApiClient,mGoogleApiClient2;
     private TextView namakontak,namaalamat;
     private AutoCompleteTextView et_alamat;
+    Double currentLatitude;
+    Double currentLongitude;
+
+    String location;
 
 
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
@@ -205,6 +210,9 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
             mGoogleApiClient.connect();
         }
+
+        updateLocation(location);
+        getAddress();
 
     }
 
@@ -417,8 +425,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCameraMoveStarted(int i) {
         CameraPosition position=mmap.getCameraPosition();
-
-        Log.d("onCameraIdle",
+        Log.d("onCameraStarted",
                 String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
                         position.target.latitude,
                         position.target.longitude, position.zoom,
@@ -464,28 +471,86 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
-        mPlace = new PlaceInfo();
-        Geocoder geocoder = new Geocoder(getContext());
-
-        List<Address> addresses = null;
-        String addressText="";
-
-
+        LatLng latLng = mmap.getCameraPosition().target;
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
-            addresses = geocoder.getFromLocation(mlastLocation.getLatitude(), mlastLocation.getLongitude(),1);
+            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                String address = addressList.get(0).getThoroughfare();
+                String number = addressList.get(0).getFeatureName();
+                String city = addressList.get(0).getLocality();
+                String state = addressList.get(0).getAdminArea();
+                String country = addressList.get(0).getCountryName();
+                String postalCode = addressList.get(0).getPostalCode();
+                namaalamat.setText(address + " No. " + number + ", "+city+", "+state+", "+country+", "+postalCode+"\n");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(addresses != null && addresses.size() > 0 ){
-            Address address = addresses.get(0);
+    }
+    void getAddress() {
 
-            addressText = String.format("%s, %s, %s",
-                    address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                    address.getLocality(),
-                    address.getCountryName());
+        try {
+
+            Geocoder gcd = new Geocoder(getContext()
+                    , Locale.getDefault());
+
+            List<Address> addresses = gcd.getFromLocation(currentLatitude,
+
+                    currentLongitude, 100);
+
+            StringBuilder result = new StringBuilder();
+
+
+
+            if (addresses.size() > 0) {
+
+
+
+                Address address = addresses.get(1);
+
+                int maxIndex = address.getMaxAddressLineIndex();
+
+                for (int x = 0; x <= maxIndex; x++) {
+
+                    result.append(address.getAddressLine(x));
+
+                    result.append(",");
+
+                }
+
+
+
+            }
+
+            location = result.toString();
+
+        } catch (IOException ex) {
+
+            Toast.makeText(getContext(), ex.getMessage(),
+
+                    Toast.LENGTH_LONG).show();
+
+
+
         }
-        namaalamat.setText(formatPlaceDetails(getResources(),addressText));
 
     }
+
+
+
+    void updateLocation(Location location) {
+
+        mlastLocation = location;
+
+        currentLatitude = mlastLocation.getLatitude();
+
+        currentLongitude = mlastLocation.getLongitude();
+
+
+
+    }
+
 }
