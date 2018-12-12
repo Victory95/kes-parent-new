@@ -91,7 +91,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.DaftarParent" />
         </activity>
-        <activity android:name=".Activity.ParentMain" />
+        <activity
+            android:name=".Activity.ParentMain"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".Activity.UpdateProfile" />
 
         <service android:name=".Service.FirebaseMessaging">

@@ -19,6 +19,7 @@
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
             android:text="Kontak"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:textColor="#ffffff"
             android:textSize="28dp" />

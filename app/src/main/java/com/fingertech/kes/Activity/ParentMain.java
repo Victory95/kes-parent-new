@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.fingertech.kes.Activity.Fragment.KontakFragment;
 import com.fingertech.kes.Activity.Fragment.ParentFragment;
 import com.fingertech.kes.Activity.Fragment.PekerjaanFragment;
 import com.fingertech.kes.Activity.Fragment.TempatTinggalFragment;
+import com.fingertech.kes.Activity.Fragment.maps_kerja;
 import com.fingertech.kes.R;
 
 
@@ -49,14 +51,24 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParentPager.setCurrentItem(getItem(+1), true);
+                if(ParentPager.getCurrentItem() == 7){
+                    Intent intent = new Intent(ParentMain.this, maps_kerja.class);
+                    startActivity(intent);
+                }else {
+                    ParentPager.setCurrentItem(getItem(+1), true);
+                }
+
             }
         });
         buttonKembali = (Button)findViewById(R.id.btn_kembali);
         buttonKembali.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            if(ParentPager.getCurrentItem() == 0){
+                finish();
+            }else {
                 ParentPager.setCurrentItem(getItem(-1), true);
+            }
             }
         });
 
@@ -90,6 +102,16 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        if (ParentPager.getCurrentItem() == 0) {
+            buttonKembali.setText("Batal");
+        } else {
+            buttonKembali.setText("Kembali");
+        }
+        if (ParentPager.getCurrentItem() == 7) {
+            buttonBerikutnya.setText("Submit");
+        } else {
+            buttonBerikutnya.setText("Berikutnya");
+        }
 
     }
 
@@ -123,6 +145,7 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
                 case 2:
                     return new KontakFragment();
                 case 3:
+
                     return new PekerjaanFragment();
                 case 4:
                     return new AnakFragment();
@@ -163,8 +186,6 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
             return true;
         }
     }
-
-
 
 }
 

@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Address;
@@ -29,6 +30,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,11 +62,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.facebook.share.internal.DeviceShareDialogFragment.TAG;
+import static android.app.Activity.RESULT_OK;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
-import com.fingertech.kes.Activity.Fragment.PlaceInfo;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,26 +73,19 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener {
 
 
-    private static final float DEFAULT_ZOOM = 15;
-    private static final String TAG= "KES";
     private GoogleMap mmap;
     private LocationRequest mlocationRequest;
     private Marker mcurrLocationMarker;
     private Location mlastLocation;
-    GoogleApiClient mGoogleApiClient,mGoogleApiClient2;
-    private TextView namakontak,namaalamat;
-    private AutoCompleteTextView et_alamat;
+    private TextView namaalamat;
+    private ImageView arros;
+    GoogleApiClient mGoogleApiClient;
+
     Double currentLatitude;
     Double currentLongitude;
 
     String location;
 
-
-    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
-    private PlaceInfo mPlace;
-
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(-40, -168), new LatLng(71, 136));
 
     public static KontakFragment newInstance(){
         // Required empty public constructor
@@ -109,11 +101,16 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         View view = inflater.inflate(R.layout.fragment_kontak, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKontak);
         mapFragment.getMapAsync(this);
-        namakontak = (TextView)view.findViewById(R.id.nama_alamat);
-        et_alamat = (AutoCompleteTextView) view.findViewById(R.id.et_alamaT);
         namaalamat = (TextView)view.findViewById(R.id.nama_alamat);
+        arros = (ImageView)view.findViewById(R.id.arroW);
+        arros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), maps_kerja.class);
+                startActivityForResult(intent,1);
+            }
+        });
 
-        init();
         return view;
     }
 
@@ -241,188 +238,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
     }
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted. Do the
-                    // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mmap.setMyLocationEnabled(true);
-                    }
-
-                } else {
-
-                    // Permission denied, Disable the functionality that depends on this permission.
-                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other permissions this app might request.
-            // You can add here other case statements according to your requirement.
-        }
-    }
-    private void init(){
-        Log.d(TAG, "init: initializing");
-        mGoogleApiClient2 = new GoogleApiClient
-                .Builder(getContext())
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage((FragmentActivity) getContext(), this)
-                .build();
-
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient2,
-                LAT_LNG_BOUNDS, null);
-
-        et_alamat.setAdapter(mPlaceAutocompleteAdapter);
-        et_alamat.setOnItemClickListener(mAutocompleteClickListener);
-        et_alamat.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-
-                    //execute our method for searching
-                    geoLocate();
-                }
-
-                return false;
-            }
-        });
-    }
-
-    private void geoLocate(){
-        Log.d(TAG, "geoLocate: geolocating");
-
-        String searchString = et_alamat.getText().toString();
-
-        Geocoder geocoder = new Geocoder(getContext());
-        List<Address> list = new ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
-        }
-
-        if(list.size() > 0){
-            Address address = list.get(0);
-
-            Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-                    address.getAddressLine(0));
-        }
-    }
-
-
-
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        mmap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        if(!title.equals("My Location")){
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
-            mmap.addMarker(options).setDraggable(true);
-            if(mcurrLocationMarker!= null){
-                mcurrLocationMarker.remove();}
-        }
-
-        hideSoftKeyboard();
-    }
-
-    private void hideSoftKeyboard(){
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            hideSoftKeyboard();
-
-            final AutocompletePrediction item = mPlaceAutocompleteAdapter.getItem(i);
-            final String placeId = item.getPlaceId();
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient2, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-
-
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(@NonNull PlaceBuffer places) {
-            if (!places.getStatus().isSuccess()) {
-                // Request did not complete successfully
-                Log.e(TAG, "Place query did not complete. Error: " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-            // Get the Place object from the buffer.
-            final Place place = places.get(0);
-
-            // Format details of the place for display and show it in a TextView.
-            et_alamat.setText(formatPlaceDetails(getResources(), place.getAddress()));
-            namaalamat.setText(formatPlaceDetails(getResources(),place.getAddress()));
-
-
-            Log.i(TAG, "Place details received: " + place.getAddress());
-
-            try{
-                mPlace = new PlaceInfo();
-                mPlace.setName(place.getName().toString());
-                Log.d(TAG, "onResult: name: " + place.getName());
-                mPlace.setAddress(place.getAddress().toString());
-                Log.d(TAG, "onResult: address: " + place.getAddress());
-//                mPlace.setAttributions(place.getAttributions().toString());
-//                Log.d(TAG, "onResult: attributions: " + place.getAttributions());
-                mPlace.setId(place.getId());
-                Log.d(TAG, "onResult: id:" + place.getId());
-                mPlace.setLatlng(place.getLatLng());
-                Log.d(TAG, "onResult: latlng: " + place.getLatLng());
-                mPlace.setRating(place.getRating());
-                Log.d(TAG, "onResult: rating: " + place.getRating());
-                mPlace.setPhoneNumber(place.getPhoneNumber().toString());
-                Log.d(TAG, "onResult: phone number: " + place.getPhoneNumber());
-                mPlace.setWebsiteUri(place.getWebsiteUri());
-                Log.d(TAG, "onResult: website uri: " + place.getWebsiteUri());
-
-                Log.d(TAG, "onResult: place: " + mPlace.toString());
-            }catch (NullPointerException e){
-                Log.e(TAG, "onResult: NullPointerException: " + e.getMessage() );
-            }
-
-            moveCamera(new LatLng(place.getViewport().getCenter().latitude,
-                    place.getViewport().getCenter().longitude), DEFAULT_ZOOM, mPlace.getName());
-
-            places.release();
-        }
-    };
-
-    private static Spanned formatPlaceDetails(Resources res, CharSequence address
-                                               ) {
-        Log.e(TAG, res.getString(R.string.place_details,address));
-        return Html.fromHtml(res.getString(R.string.place_details,  address));
-
-    }
-
-    @Override
     public void onCameraMoveStarted(int i) {
         CameraPosition position=mmap.getCameraPosition();
         Log.d("onCameraStarted",
@@ -476,13 +291,13 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         try {
             List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             if (addressList != null && addressList.size() > 0) {
-                String address = addressList.get(0).getThoroughfare();
+                String address = addressList.get(0).getAddressLine(0);
                 String number = addressList.get(0).getFeatureName();
                 String city = addressList.get(0).getLocality();
                 String state = addressList.get(0).getAdminArea();
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
-                namaalamat.setText(address + " No. " + number + ", "+city+", "+state+", "+country+", "+postalCode+"\n");
+                namaalamat.setText(address +"\n");
             }
 
         } catch (IOException e) {
@@ -552,5 +367,30 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                String strEditText = data.getStringExtra("alamat");
+                double lati = data.getDoubleExtra("latitude",0.0);
+                double longi = data.getDoubleExtra("longitude",0.0);
 
+                final LatLng latLng1 = new LatLng(lati,longi);
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng1.latitude, latLng1.longitude)).zoom(16).build();
+
+                final MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng1);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+
+                //move map camera
+                mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                if(mcurrLocationMarker!= null){
+                    mcurrLocationMarker.remove();}
+                mcurrLocationMarker = mmap.addMarker(markerOptions);
+                namaalamat.setText(strEditText);
+            }
+        }
+    }
 }
