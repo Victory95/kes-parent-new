@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,8 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.facebook.login.LoginManager;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Service.Common;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
@@ -31,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
         tv_member_type.setText("MEMBER_TYPE : " + member_type);
         tv_token.setText("Token : " + token);
 
+        ////// Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mAuth = FirebaseAuth.getInstance();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -77,10 +97,25 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(TAG_TOKEN, null);
                 editor.commit();
 
+                /////// Logout Facebook
+                LoginManager.getInstance().logOut();
+
+
+                ///// Google Logout
+                mAuth.signOut();
+                mGoogleSignInClient.signOut().addOnCompleteListener(MainActivity.this,
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseUser user = null;
+                            }
+                        });
+
                 Intent intent = new Intent(MainActivity.this, OpsiMasuk.class);
                 finish();
                 startActivity(intent);
             }
         });
     }
+
 }

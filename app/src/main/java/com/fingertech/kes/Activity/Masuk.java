@@ -77,8 +77,7 @@ public class Masuk extends AppCompatActivity {
 
     int status;
     String code;
-    String deviceid;
-    String id, email, member_id, fullname, member_type, token;
+    String id, email, member_id, fullname, member_type, token, deviceid;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -101,7 +100,6 @@ public class Masuk extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton sign_in_button;
-    private Button sign_out_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +123,6 @@ public class Masuk extends AppCompatActivity {
         til_kata_sandi = (TextInputLayout) findViewById(R.id.til_kata_sandi);
         loginButton    = (LoginButton) findViewById(R.id.login_button);
         sign_in_button = (SignInButton) findViewById(R.id.sign_in_button);
-        sign_out_button = (Button) findViewById(R.id.sign_out_button);
 
         ////// sharedpreferences
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
@@ -152,7 +149,6 @@ public class Masuk extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mAuth = FirebaseAuth.getInstance();
 
-
         btn_masuk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +160,8 @@ public class Masuk extends AppCompatActivity {
         tvb_lupa_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+                startActivity(intent);
             }
         });
 
@@ -173,13 +170,6 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signIn();
-            }
-        });
-
-        sign_out_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
             }
         });
 
@@ -263,7 +253,7 @@ public class Masuk extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
-    //////// Progressbar Dolog - Loading Animation
+    //////// Progressbar - Loading Animation
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();
@@ -334,16 +324,27 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
-                        Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Masuk.this, MainActivity.class);
-                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                        intent.putExtra(TAG_TOKEN, token);
-                        finish();
-                        startActivity(intent);
-
+                        if(jsonObject.get("member_type").toString().equals("6")){
+                            Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Masuk.this, MainActivity.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                            intent.putExtra(TAG_TOKEN, token);
+                            finish();
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Masuk.this, AksesAnak.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                            intent.putExtra(TAG_TOKEN, token);
+                            finish();
+                            startActivity(intent);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -470,8 +471,8 @@ public class Masuk extends AppCompatActivity {
                 String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
                 String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
                 String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
-                String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0003);
-                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0007);
+                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0003);
+                String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0007);
                 String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
                 String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
                 String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
@@ -508,11 +509,11 @@ public class Masuk extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0002")){
                         Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0007")){
+                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RS_ERR_0003")){
                         login_sosmed_post();
-//                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0004")){
                         Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RS_ERR_0005")){
@@ -587,14 +588,7 @@ public class Masuk extends AppCompatActivity {
         });
     }
 
-    ///// Login Google
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+    /////// Login with Google
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -623,39 +617,17 @@ public class Masuk extends AppCompatActivity {
                 });
     }
     private void updateUI(FirebaseUser user) {
-        TextView displayName = findViewById(R.id.displayName);
-        ImageView profileImage = findViewById(R.id.profilePic);
         if (user != null) {
-            displayName.setText(user.getDisplayName());
-            displayName.setVisibility(View.VISIBLE);
+            email = user.getEmail();
+            fullname = user.getDisplayName();
+            id = user.getUid();
+            getDeviceID();
+            register_sosmed_post();
             // Loading profile image
-            Uri profilePicUrl = user.getPhotoUrl();
-            if (profilePicUrl != null) {
-                Glide.with(this).load(profilePicUrl)
-                        .into(profileImage);
-            }
-            profileImage.setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
+//            Uri profilePicUrl = user.getPhotoUrl();
+//            if (profilePicUrl != null) { Glide.with(this).load(profilePicUrl).into(profileImage); }
         } else {
-            displayName.setVisibility(View.GONE);
-            profileImage.setVisibility(View.GONE);
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
         }
-    }
-    private void signOut() {
-        // Firebase sign out
-        mAuth.signOut();
-
-        // Google sign out
-        mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
     }
 
 }

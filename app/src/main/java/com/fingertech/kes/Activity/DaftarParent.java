@@ -103,6 +103,7 @@ public class DaftarParent extends AppCompatActivity {
         et_fullname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
         checkInternetCon();
+        mApiInterface = ApiClient.getClient().create(Auth.class);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(DaftarParent.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -203,7 +204,6 @@ public class DaftarParent extends AppCompatActivity {
             }
         });
 
-        mApiInterface = ApiClient.getClient().create(Auth.class);
         btn_buat_akun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

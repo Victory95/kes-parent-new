@@ -42,7 +42,6 @@ dependencies {
     //////glide
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-
     ///////// Retrofit
     implementation 'com.google.code.gson:gson:2.6.2'
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
@@ -63,5 +62,7 @@ dependencies {
     //// Login Seomed Google
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
+    ///////// Search Material Design
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
 }
 apply plugin: 'com.google.gms.google-services'

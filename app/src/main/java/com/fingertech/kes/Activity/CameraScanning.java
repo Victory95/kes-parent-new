@@ -219,6 +219,7 @@ public class CameraScanning extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra("key_nik", result);
+                intent.putExtra("key_nik_akses_anak", result);
                 setResult(RESULT_OK, intent);
                 finish();
             }

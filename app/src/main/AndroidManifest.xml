@@ -128,7 +128,21 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Fragment.maps_kerja"></activity>
+        <activity android:name=".Activity.Fragment.maps_kerja" />
+        <activity
+            android:name=".Activity.ForgotPassword"
+            android:label="@string/label_forgot_pass"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.Masuk" />
+        </activity>
+        <activity
+            android:name=".Activity.AksesAnak"
+            android:label="@string/label_akses_anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
