@@ -1,6 +1,7 @@
 package com.fingertech.kes.Activity.Fragment;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -27,6 +28,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.DaftarParent;
+import com.fingertech.kes.Activity.OpsiDaftar;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -81,6 +84,7 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
     private static int REQUEST_CODE = 0;
     String location;
     private Button Pilih;
+    String result = "sdasdasdasdas";
 
 
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
@@ -104,6 +108,7 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
                 showPlaceAutoComplete(PICK_UP);
             }
         });
+        Pilih = (Button)findViewById(R.id.pilih);
 
     }
 
@@ -228,7 +233,7 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
-        LatLng latLng = mmap.getCameraPosition().target;
+        final LatLng latLng = mmap.getCameraPosition().target;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
             List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
@@ -239,15 +244,25 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
                 String state = addressList.get(0).getAdminArea();
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
-                msearch.setText(address +"\n");
-                Pilih = (Button)findViewById(R.id.pilih);
+                final double latitude1 = addressList.get(0).getLatitude();
+                final double longitude1 = addressList.get(0).getLongitude();
+
+                result = address ;
+                msearch.setText(result +"\n");
+
                 Pilih.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("ResourceType")
                     @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(maps_kerja.this, PekerjaanFragment.class);
-                        startActivity(intent);
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.putExtra("alamat", result);
+                        intent.putExtra("latitude",latitude1);
+                        intent.putExtra("longitude", longitude1);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                 });
+
 
             }
 

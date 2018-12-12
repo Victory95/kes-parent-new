@@ -19,6 +19,7 @@
         android:textColor="#ffffff"
         android:layout_marginTop="70dp"
         android:background="@drawable/rectang_line"
+        android:backgroundTint="@color/rectange"
         android:text="Selamat datang"
         android:textSize="28dp"/>
 

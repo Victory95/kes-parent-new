@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
 /**
@@ -55,27 +56,25 @@ import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCA
  */
 public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnInfoWindowClickListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, GoogleMap.OnCameraIdleListener,
+        GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener,
+        GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
-    GoogleApiClient mGoogleApiClient;
     private Marker mCurrLocationMarker;
-    private LocationManager lm;
     private TextView namakerja;
-    final Marker[] marker = new Marker[1];
-    private static final float DEFAULT_ZOOM = 15;
-    private static final String TAG= "KES";
     private LocationRequest mlocationRequest;
     private Location mlastLocation;
+    private ImageView arro;
+
+    GoogleApiClient mGoogleApiClient;
+
     Double CurrentLatitude;
     Double CurrentLongitude;
-    private ImageView arro;
 
     String location;
 
-
-    private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(-40, -168), new LatLng(71, 136));
 
     public static PekerjaanFragment newInstance() {
         // Required empty public constructor
@@ -89,7 +88,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pekerjaan, container, false);
-        namakerja = (TextView) view.findViewById(R.id.nama_kerja);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapKerja);
         mapFragment.getMapAsync(this);
@@ -97,10 +95,13 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         arro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), maps_kerja.class);
-                startActivity(intent);
+                Intent intent = new Intent(getContext(), maps_kerja.class);
+                startActivityForResult(intent,1);
             }
         });
+        namakerja = (TextView) view.findViewById(R.id.nama_kerja);
+
+
         return view;
     }
 
@@ -153,17 +154,17 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                         position.tilt));
 
         LatLng LatLng = mMap.getCameraPosition().target;
-        Geocoder geocode1 = new Geocoder(getContext(), Locale.getDefault());
+        Geocoder geocode1 = new Geocoder(getContext());
         try {
             List<Address> addressList = geocode1.getFromLocation(LatLng.latitude, LatLng.longitude, 1);
             if (addressList != null && addressList.size() > 0) {
-                String address1 = addressList.get(0).getThoroughfare();
+                String address1 = addressList.get(0).getAddressLine(0);
                 String number1 = addressList.get(0).getFeatureName();
                 String city1 = addressList.get(0).getLocality();
                 String state1 = addressList.get(0).getAdminArea();
                 String country1 = addressList.get(0).getCountryName();
                 String postalCode1 = addressList.get(0).getPostalCode();
-                namakerja.setText(address1 + " No. " + number1 + ", "+ city1 +", "+ state1 +", "+ country1 +", "+ postalCode1 +"\n");
+                namakerja.setText(address1 +"\n");
             }
 
         } catch (IOException e) {
@@ -345,8 +346,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
         try {
 
-            Geocoder gcd = new Geocoder(getContext()
-                    , Locale.getDefault());
+            Geocoder gcd = new Geocoder(getContext(),Locale.getDefault());
 
             List<Address> addresses = gcd.getFromLocation(CurrentLatitude,
 
@@ -403,5 +403,32 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                String strEditText = data.getStringExtra("alamat");
+                double lati = data.getDoubleExtra("latitude",0.0);
+                double longi = data.getDoubleExtra("longitude",0.0);
+
+                final LatLng latLng1 = new LatLng(lati,longi);
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng1.latitude, latLng1.longitude)).zoom(16).build();
+
+                final MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng1);
+                markerOptions.title("Current Position");
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+
+                //move map camera
+                mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                if(mCurrLocationMarker!= null){
+                    mCurrLocationMarker.remove();}
+                mCurrLocationMarker = mMap.addMarker(markerOptions);
+                namakerja.setText(strEditText);
+            }
+        }
+    }
+
 
 }
