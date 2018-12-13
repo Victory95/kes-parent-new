@@ -93,10 +93,8 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         return Fragment;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kontak, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKontak);
@@ -151,6 +149,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 .build();
         mGoogleApiClient.connect();
     }
+
     @Override
     public void onLocationChanged(Location location) {
         mlastLocation = location;
@@ -213,7 +212,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mlocationRequest = new LocationRequest();
@@ -237,6 +235,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
     @Override
     public void onCameraMoveStarted(int i) {
         CameraPosition position=mmap.getCameraPosition();
@@ -305,6 +304,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         }
 
     }
+
     void getAddress() {
 
         try {
@@ -354,8 +354,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-
-
     void updateLocation(Location location) {
 
         mlastLocation = location;
@@ -367,6 +365,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
 
     }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -393,4 +392,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
             }
         }
     }
+
+
 }

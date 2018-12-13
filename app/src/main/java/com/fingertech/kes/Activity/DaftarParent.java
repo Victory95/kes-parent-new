@@ -331,6 +331,7 @@ public class DaftarParent extends AppCompatActivity {
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -375,6 +376,7 @@ public class DaftarParent extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
+
     public void register_orangtua_post(){
         progressBar();
         showDialog();

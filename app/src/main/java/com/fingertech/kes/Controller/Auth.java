@@ -42,6 +42,18 @@ public interface Auth {
                                              @Field("gender") String gender,
                                              @Field("device_id") String device_id);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //////// Update Parent
+    @FormUrlEncoded
+    @POST("auth/update_orangtua")
+    Call<JSONResponse>update_orangtua_get(@Field("fullname") String fullname,
+                                             @Field("parent_name") String parent_name,
+                                             @Field("parent_nik") String parent_nik,
+                                             @Field("parent_birth_place") String parent_birth_place,
+                                             @Field("parent_birth_date") String parent_birth_date,
+                                             @Field("parent_type") String parent_type,
+                                             @Field("device_id") String device_id);
+
     //////// Login Parent
     @FormUrlEncoded
     @POST("auth/login")
