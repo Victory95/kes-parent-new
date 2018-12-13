@@ -43,7 +43,7 @@ public class OpsiMasuk extends AppCompatActivity {
         member_type = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
 
         if (session) {
-            Intent intent = new Intent(OpsiMasuk.this, MainActivity.class);
+            Intent intent = new Intent(OpsiMasuk.this, AksesAnak.class);
             intent.putExtra(TAG_EMAIL, email);
             intent.putExtra(TAG_MEMBER_ID, memberid);
             intent.putExtra(TAG_FULLNAME, fullname);

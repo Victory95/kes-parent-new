@@ -63,6 +63,5 @@ dependencies {
     //// Login Seomed Google
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
-    implementation 'org.jetbrains:annotations-java5:15.0'
 }
 apply plugin: 'com.google.gms.google-services'

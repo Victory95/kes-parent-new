@@ -32,43 +32,102 @@
                     android:src="@drawable/ic_logo_type"
                     android:layout_width="150dp"
                     android:layout_height="150dp" />
+
                 <RelativeLayout
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+                    \\\\ Skip this
+                    <com.google.android.gms.common.SignInButton
+                        android:id="@+id/sign_in_button"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:visibility="visible" />
+
+                    \\\\ custom Login Google
                     <ImageView
                         android:layout_marginLeft="20dp"
-                        android:src="@drawable/ic_google"
-                        android:layout_width="25dp"
+                        android:src="@drawable/ic_google_original"
+                        android:layout_width="18dp"
                         android:layout_height="match_parent" />
                     <Button
                         android:id="@+id/btn_Google"
-                        android:text="google"
-                        android:textColor="@color/default_textColor"
+                        android:text="@string/btn_google_daftar"
+                        android:textAllCaps="false"
+                        android:textColor="#6b6b6b"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
                 </RelativeLayout>Google
                 <RelativeLayout
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rectangle_line"
+                    android:backgroundTint="#3b5998"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
+
+                    /// Skip This
+                    <com.facebook.login.widget.LoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"/>
+
+                    ////// Here Custom Login Facebook
                     <ImageView
                         android:layout_marginLeft="20dp"
-                        android:src="@drawable/ic_facebook"
-                        android:layout_width="25dp"
+                        android:src="@drawable/ic_facebook_original"
+                        android:layout_width="18dp"
                         android:layout_height="match_parent" />
                     <Button
                         android:id="@+id/btn_Facebook"
-                        android:text="facebook"
-                        android:textColor="@color/default_textColor"
+                        android:textAllCaps="false"
+                        android:text="@string/btn_facebook_daftar"
+                        android:paddingLeft="10dp"
+                        android:textColor="@android:color/white"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </RelativeLayout>Facebook
+
                 <RelativeLayout
-                    android:layout_marginTop="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_marginTop="50dp"
+                        android:layout_marginBottom="50dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp">
+
+                        <View
+                            android:layout_weight="1"
+                            android:layout_marginLeft="2dp"
+                            android:background="@color/textColor_Grey"
+                            android:layout_width="match_parent"
+                            android:layout_marginRight="20dp"
+                            android:layout_height="wrap_content"></View>
+
+                        <View
+                            android:layout_marginRight="2dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_weight="1"
+                            android:background="@color/textColor_Grey"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"></View>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/ic_logo_grey"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
@@ -78,8 +137,9 @@
                         android:layout_width="25dp"
                         android:layout_height="match_parent" />
                     <Button
+                        android:textAllCaps="false"
                         android:id="@+id/btn_Email"
-                        android:text="email"
+                        android:text="@string/btn_email"
                         android:textColor="@color/default_textColor"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
@@ -96,8 +156,9 @@
                         android:layout_width="25dp"
                         android:layout_height="match_parent" />
                     <Button
+                        android:textAllCaps="false"
                         android:id="@+id/btn_Orangtua"
-                        android:text="orangtua"
+                        android:text="@string/btn_orangtua"
                         android:textColor="@color/default_textColor"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
@@ -124,7 +185,7 @@
                 android:layout_weight="1"
                 android:layout_marginRight="5dp"
                 android:gravity="right"
-                android:text="Sudah punya akun?"
+                android:text="@string/tv_recommend_masuk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -133,7 +194,7 @@
                 android:id="@+id/tv_Masuk"
                 android:layout_weight="1"
                 android:layout_alignParentBottom="true"
-                android:text="Masuk"
+                android:text="@string/btn_recommend_masuk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>Bottombar
