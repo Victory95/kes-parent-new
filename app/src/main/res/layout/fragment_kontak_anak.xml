@@ -8,6 +8,10 @@
     android:background="#46bfee"
     tools:context=".Activity.Fragment.KontakAnakFragment">
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -155,4 +159,4 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />Penerimaan KPS
     </android.support.design.widget.TextInputLayout>Penerimaan KPS
-    </LinearLayout></LinearLayout>
+    </LinearLayout></android.support.v4.widget.NestedScrollView></LinearLayout>

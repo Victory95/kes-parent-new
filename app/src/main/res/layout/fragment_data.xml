@@ -9,9 +9,10 @@
     android:background="#46bfee"
     tools:context=".Activity.Fragment.DataFragment">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -256,4 +257,4 @@ mohon di isi dengan benar"
             android:textColor="#f00000"
             android:textSize="10dp"/>
 
-    </LinearLayout></ScrollView></RelativeLayout>
+    </LinearLayout></android.support.v4.widget.NestedScrollView></RelativeLayout>
