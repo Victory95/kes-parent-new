@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class DBHelper extends SQLiteOpenHelper{
 
@@ -329,5 +331,20 @@ public class DBHelper extends SQLiteOpenHelper{
             return null;
         }
 
+    }
+
+    public Set<String> getAllData() {
+        Set<String> set = new HashSet<String>();
+        String selectQuery = "select * from country order by negara asc" ;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                set.add(cursor.getString(2));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return set;
     }
 }

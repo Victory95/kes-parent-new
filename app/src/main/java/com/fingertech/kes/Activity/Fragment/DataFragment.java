@@ -2,15 +2,18 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.ParseException;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -33,9 +36,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.DaftarPublic;
@@ -50,6 +55,10 @@ import com.fingertech.kes.Util.JWTUtils;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -71,6 +80,7 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     private TextInputLayout til_namadepan,til_namabelakang,til_Nik,til_Hubungan,til_tempat_lahir,til_tanggal_lahir;
     private EditText et_namadepan,et_namabelakang,et_Nik,et_Hubungan,et_tempat_lahir,et_tanggal_lahir;
     private Spinner et_negaraasal;
+    private TextView t_tanggal_lahir;
 
     private ProgressDialog dialog;
     int status;
@@ -82,15 +92,17 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     ConnectivityManager conMgr;
     SharedPreferences sharedpreferences;
     Boolean session = false;
+    private DatePickerDialog datePickerDialog;
+    private SimpleDateFormat dateFormatter;
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
 
     public static final String TAG_NAMA_DEPAN        = "fullname";
-    public static final String TAG_NAMA_BELAKANG     = "parent_name";
+    public static final String TAG_NAMA_BELAKANG     = "nama_belakang";
     public static final String TAG_NIK               = "parent_nik";
-    public static final String TAG_HUBUNGAN          = "parent_type";
+    public static final String TAG_HUBUNGAN          = "hubungan";
     public static final String TAG_TEMPAT_LAHIR      = "parent_birth_place";
-    public static final String TAG_TANGGAL_LAHIR     = "parent_birth_date";
+    public static final String TAG_TANGGAL_LAHIR     = "tanggal_lahir";
     public static final String TAG_TOKEN             = "token";
 
     Auth mApiInterface;
@@ -101,24 +113,102 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         et_namadepan = (EditText)view.findViewById(R.id.et_nama_depan);
         et_namabelakang = (EditText)view.findViewById(R.id.et_nama_belakang);
         et_Nik = (EditText)view.findViewById(R.id.et_NIK);
-        et_Hubungan = (EditText)view.findViewById(R.id.et_hubungan);
         et_tempat_lahir = (EditText)view.findViewById(R.id.et_tempatlahir);
         et_tanggal_lahir = (EditText)view.findViewById(R.id.et_tanggallahir);
-        et_negaraasal = (Spinner)view.findViewById(R.id.et_negara);
+        et_negaraasal = (Spinner)view.findViewById(R.id.sp_negara);
         til_namadepan = (TextInputLayout)view.findViewById(R.id.til_nama_depan);
         til_namabelakang = (TextInputLayout)view.findViewById(R.id.til_nama_belakang);
         til_Nik = (TextInputLayout)view.findViewById(R.id.til_NIK);
-        til_Hubungan = (TextInputLayout)view.findViewById(R.id.til_hubungan);
         til_tempat_lahir = (TextInputLayout)view.findViewById(R.id.til_tempatlahir);
         til_tanggal_lahir = (TextInputLayout)view.findViewById(R.id.til_tanggallahir);
-       //submitForm();
-           // login_post();
-        // Spinner click listener
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
+        //Mengambil calendar bawaan dari android
+        Calendar calendar = Calendar.getInstance();
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
+                //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
+                et_tanggal_lahir.setText(convertDate(i, i1, i2));
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        //calendar.get(Calendar.YEAR) memberikan nilai tahun awal pada dialog sesuai tahun yang didapat dari calendar
+
+        et_tanggal_lahir.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
+            }
+        });
+
+        et_tanggal_lahir.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
+                }
+            }
+        });
+
         et_negaraasal.setOnItemSelectedListener(this);
-        mApiInterface = ApiClient.getClient().create(Auth.class);
+
+        // submitForm();
+        //login_post();
         // Loading spinner data from database
         loadSpinnerData();
-    return view;
+
+        // Spinner click listener
+        Spinner et_hubungan = (Spinner) view.findViewById(R.id.sp_hubungan);
+        String[] years = {"Hubungan","Ayah","Ibu","Wali"};
+
+        final List<String> plantsList = new ArrayList<>(Arrays.asList(years));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_text,plantsList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        et_hubungan.setAdapter(spinnerArrayAdapter);
+
+        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        nama_depan       = sharedpreferences.getString(TAG_NAMA_DEPAN,"fullname");
+        nik   = sharedpreferences.getString(TAG_NIK,"parent_nik");
+        tempat_lahir    = sharedpreferences.getString(TAG_TEMPAT_LAHIR,"parent_birth_place");
+
+        token       = sharedpreferences.getString(TAG_TOKEN,"token");
+
+        et_namadepan.setText(nama_depan);
+        et_Nik.setText(nik);
+        et_tempat_lahir.setText(tempat_lahir);
+
+        mApiInterface = ApiClient.getClient().create(Auth.class);
+
+        return view;
     }
 
     private void submitForm() {
@@ -141,7 +231,8 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             return;
 
         }
-        login_post();
+            else{
+           }
     }
 
     private boolean validateNamaDepan() {
@@ -233,7 +324,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                 ,new String[] {"negara"}
                 ,new int[] { R.id.negarA});
 
-
         et_negaraasal.setAdapter(adapter);
 
     }
@@ -248,7 +338,7 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     public void login_post(){
-        Call<JSONResponse> call = mApiInterface.update_orangtua_get(et_namadepan.getText().toString(),et_namabelakang.getText().toString(), et_Nik.getText().toString(),et_Hubungan.getText().toString(), et_tempat_lahir.getText().toString(),et_tanggal_lahir.getText().toString(), deviceid.toString());
+        Call<JSONResponse> call = mApiInterface.update_orangtua_get(et_namadepan.getText().toString(), et_Nik.getText().toString(),et_Hubungan.getText().toString(), et_tempat_lahir.getText().toString(),et_tanggal_lahir.getText().toString());
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -259,49 +349,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                 status = resource.status;
                 code = resource.code;
 
-                String RO_SCS_0001 = getResources().getString(R.string.RO_SCS_0001);
-                String RO_ERR_0001 = getResources().getString(R.string.RO_ERR_0001);
-                String RO_ERR_0002 = getResources().getString(R.string.RO_ERR_0002);
-                String RO_ERR_0003 = getResources().getString(R.string.RO_ERR_0003);
-                String RO_ERR_0004 = getResources().getString(R.string.RO_ERR_0004);
-                String RO_ERR_0005 = getResources().getString(R.string.RO_ERR_0005);
-                String RO_ERR_0006 = getResources().getString(R.string.RO_ERR_0006);
-                String RO_ERR_0007 = getResources().getString(R.string.RO_ERR_0007);
-                String RO_ERR_0008 = getResources().getString(R.string.RO_ERR_0008);
-                String RO_ERR_0009 = getResources().getString(R.string.RO_ERR_0009);
-                String RO_ERR_0010 = getResources().getString(R.string.RO_ERR_0010);
-
-                if (status == 1 && code.equals("RO_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), RO_SCS_0001, Toast.LENGTH_LONG).show();
-                    et_namadepan.setText("");
-                    et_namabelakang.setText("");
-                    et_Nik.setText("");
-                    et_Hubungan.setText("");
-                    et_tempat_lahir.setText("");
-                    et_tanggal_lahir.setText("");
-                } else {
-                    if(status == 0 && code.equals("RO_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0006, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0007, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0008")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0008, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0009")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0009, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RO_ERR_0010")){
-                        Toast.makeText(getApplicationContext(), RO_ERR_0010, Toast.LENGTH_LONG).show();
-                    }
-                }
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
@@ -315,6 +362,20 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         if (dialog.isShowing())
             dialog.dismiss();
         dialog.setContentView(R.layout.progressbar);
+    }
+    //Konversi tanggal dari date dialog ke format yang kita inginkan
+    String convertDate(int year, int month, int day) {
+        Log.d("Tanggal", year + "/" + month + "/" + day);
+        String temp = year + "-" + (month + 1) + "-" + day;
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(temp));
+            return e;
+                } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }

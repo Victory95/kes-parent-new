@@ -4,6 +4,7 @@ package com.fingertech.kes.Activity.Fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,8 +21,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +48,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -100,6 +105,84 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
             }
         });
         namakerja = (TextView) view.findViewById(R.id.nama_kerja);
+
+        // Spinner click listener
+        Spinner et_pekerjaan = (Spinner) view.findViewById(R.id.sp_pekerjaan);
+        String[] pendidikan = {"Pendidikan","SD","SMP","SMA","D3","S1","S2","S3"};
+
+        final List<String> plantsList = new ArrayList<>(Arrays.asList(pendidikan));
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_text,plantsList){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        et_pekerjaan.setAdapter(spinnerArrayAdapter);
+
+        // Spinner click listener
+        Spinner et_penghasilan = (Spinner) view.findViewById(R.id.sp_penghasilan);
+        String[] penghasilan = {"Penghasilan","Dibawah 1 Juta","1 - 3 Juta","4 - 5 Juta","6 - 7 Juta","8 - 9 Juta","10 - 11 Juta","12 - 13 Juta","14 - 15 Juta","16 - 17 Juta","18 - 19 Juta","Diatas 20 Juta"};
+
+        final List<String> penghasil = new ArrayList<>(Arrays.asList(penghasilan));
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                getActivity(),R.layout.spinner_text,penghasil){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        et_penghasilan.setAdapter(ArrayAdapter);
 
 
         return view;
@@ -346,7 +429,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
         try {
 
-            Geocoder gcd = new Geocoder(getContext(),Locale.getDefault());
+            Geocoder gcd = new Geocoder(getContext());
 
             List<Address> addresses = gcd.getFromLocation(CurrentLatitude,
 

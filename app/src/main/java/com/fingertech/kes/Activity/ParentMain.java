@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -69,7 +70,7 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
             @Override
             public void onClick(View view) {
                 if(ParentPager.getCurrentItem() == 7){
-                    Intent intent = new Intent(ParentMain.this, maps_kerja.class);
+                    Intent intent = new Intent(ParentMain.this, MenuUtama.class);
                     startActivity(intent);
                 }else {
                     ParentPager.setCurrentItem(getItem(+1), true);
@@ -88,7 +89,6 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
             }
             }
         });
-
 
         checkLocationPermission();
         setUiPageViewController();
@@ -112,7 +112,7 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
             );
 
             params.setMargins(4, 0, 4, 0);
-            indicator.addView(mDots[i], params);
+            indicator.addView(mDots[i]);
             mDots[0].setBackgroundResource(R.drawable.selected_item);
         }
     }

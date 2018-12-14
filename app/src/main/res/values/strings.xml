@@ -99,4 +99,10 @@
     <string name="autocomplete_hint">Enter place name or address</string>
     <string name="selected_place">Last Selected Place:</string>
     <string name="get_current_place">GET CURRENT PLACE</string>
+    <string name="title_activity_menu_utama">MenuUtama</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
 </resources>

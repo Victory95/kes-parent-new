@@ -35,12 +35,10 @@ public interface Auth {
     @FormUrlEncoded
     @POST("auth/update_orangtua")
     Call<JSONResponse>update_orangtua_get(@Field("fullname") String fullname,
-                                             @Field("parent_name") String parent_name,
                                              @Field("parent_nik") String parent_nik,
                                              @Field("parent_birth_place") String parent_birth_place,
                                              @Field("parent_birth_date") String parent_birth_date,
-                                             @Field("parent_type") String parent_type,
-                                             @Field("device_id") String device_id);
+                                             @Field("parent_type") String parent_type);
 
     //////// Login Parent
     @FormUrlEncoded
@@ -76,6 +74,7 @@ public interface Auth {
     @PUT("update")
     Call<JSONResponse> putPublic(@Field("memberid") String memberid, @Field("fullname") String fullname, @Field("email") String email,
                                  @Field("mobile_phone") String mobile_phone);
+
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "public", hasBody = true)
     Call<JSONResponse> deletePublic(@Field("memberid") String memberid);
