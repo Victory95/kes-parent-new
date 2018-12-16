@@ -54,10 +54,13 @@ public interface Auth {
     //////// Request code acsess
     @FormUrlEncoded
     @POST("auth/request_code_acsess")
-
     Call<JSONResponse>request_code_acsess_post(@Header("Authorization") String authorization, @Field("email") String email, @Field("fullname") String fullname, @Field("parent_id") String parent_id,
                                                @Field("student_id") String student_id, @Field("school_id") String school_id);
 
+    //////// search_school
+    @FormUrlEncoded
+    @POST("auth/search_school")
+    Call<JSONResponse.School>search_school_post(@Field("key") String key);
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded

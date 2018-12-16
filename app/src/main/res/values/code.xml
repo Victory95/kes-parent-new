@@ -71,4 +71,8 @@
     <string name="RCA_ERR_0007">Expired date kosong</string>
     <string name="RCA_ERR_0008">gagal request kode</string>
 
+    /////// Search School
+    <string name="SS_SCS_0001">Sekolah ditemukan</string>
+    <string name="SS_ERR_0001">Sekolah tidak ditemukan</string>
+
 </resources>
