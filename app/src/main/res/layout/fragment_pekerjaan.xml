@@ -10,6 +10,10 @@
     android:id="@+id/fragment"
     tools:context=".Activity.Fragment.PekerjaanFragment">
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,27 +29,25 @@
             android:textColor="#ffffff"
             android:textSize="25dp" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_pendidikan"
-            android:textColorHint="@android:color/white"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="15dp">
 
-            <EditText
-                android:theme="@style/TextLabel"
-                android:id="@+id/et_pendidikan"
-                android:hint="Pendidikan"
-                android:textSize="16dp"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/edt_bg_selector_white"
-                android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
-                android:paddingTop="10dp"
+            <Spinner
+                android:id="@+id/sp_pekerjaan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Pendidikan
-        </android.support.design.widget.TextInputLayout>Pendidikan
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/edt_bg_selector_white"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_nama_perusahaan"
@@ -91,28 +93,25 @@
                 android:layout_height="wrap_content"/> Jabatan
         </android.support.design.widget.TextInputLayout>Jabatan
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_penghasilan"
-            android:textColorHint="@android:color/white"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="15dp">
 
-            <EditText
-                android:theme="@style/TextLabel"
-                android:id="@+id/et_penghasilan"
-                android:hint="Penghasilan"
-                android:textSize="16dp"
-                android:inputType="textEmailAddress"
-                android:background="@drawable/edt_bg_selector_white"
-                android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
-                android:paddingTop="10dp"
+            <Spinner
+                android:id="@+id/sp_penghasilan"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Penghasilan
-        </android.support.design.widget.TextInputLayout>Penghasilan
-
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/edt_bg_selector_white"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,5 +177,5 @@ seputar beasiswa"
             android:textAlignment="center"
             android:textColor="#ffffff"
             android:textSize="12.5dp" />
-    </LinearLayout>
+    </LinearLayout></android.support.v4.widget.NestedScrollView>
 </LinearLayout>

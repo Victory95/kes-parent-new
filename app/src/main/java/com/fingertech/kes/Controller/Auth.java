@@ -30,6 +30,16 @@ public interface Auth {
                                              @Field("mobile_phone") String mobile_phone, @Field("password") String password, @Field("relation") String relation,
                                              @Field("gender") String gender, @Field("device_id") String device_id);
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    //////// Update Parent
+    @FormUrlEncoded
+    @POST("auth/update_orangtua")
+    Call<JSONResponse>update_orangtua_get(@Field("fullname") String fullname,
+                                             @Field("parent_nik") String parent_nik,
+                                             @Field("parent_birth_place") String parent_birth_place,
+                                             @Field("parent_birth_date") String parent_birth_date,
+                                             @Field("parent_type") String parent_type);
+
     //////// Login Parent
     @FormUrlEncoded
     @POST("auth/login")
@@ -67,6 +77,7 @@ public interface Auth {
     @PUT("update")
     Call<JSONResponse> putPublic(@Field("memberid") String memberid, @Field("fullname") String fullname, @Field("email") String email,
                                  @Field("mobile_phone") String mobile_phone);
+
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "public", hasBody = true)
     Call<JSONResponse> deletePublic(@Field("memberid") String memberid);

@@ -8,16 +8,18 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/PagerParent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></android.support.v4.view.ViewPager>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/viewPagerIndicators"></android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:id="@+id/viewPagerIndicators"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/next"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="41dp"
         android:gravity="center">
 
         <LinearLayout
@@ -45,8 +47,9 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="batal"
+            android:text="Batal"
             android:textAlignment="textStart"
+            android:textAllCaps="false"
             android:textColor="#ffffff" />
 
         <Button
@@ -55,11 +58,11 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:text="Berikutnya"
             android:background="#0046bfee"
-            android:textColor="#ffffff"
-            android:textAlignment="textEnd" />
+            android:text="Berikutnya"
+            android:textAlignment="textEnd"
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
     </LinearLayout>
-
 
 </RelativeLayout>

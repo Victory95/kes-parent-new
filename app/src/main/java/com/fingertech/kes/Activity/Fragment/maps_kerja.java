@@ -68,27 +68,21 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnInfoWindowClickListener{
 
-    private static final float DEFAULT_ZOOM = 15;
-    private static final String TAG= "KES";
     private GoogleMap mmap;
     private LocationRequest mlocationRequest;
     private Marker mcurrLocationMarker;
     private Location mlastLocation;
-    GoogleApiClient mGoogleApiClient,mGoogleApiClient2;
-    private TextView namakontak,namaalamat;
+    GoogleApiClient mGoogleApiClient;
     private TextView msearch;
     Double currentLatitude;
     Double currentLongitude;
     public static final int PICK_UP = 0;
-    public static final int DEST_LOC = 1;
     private static int REQUEST_CODE = 0;
     String location;
     private Button Pilih;
-    String result = "sdasdasdasdas";
+    String result = "";
 
 
-    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
-    private PlaceInfo mPlace;
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
