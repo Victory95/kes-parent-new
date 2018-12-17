@@ -14,17 +14,16 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,26 +33,13 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Util.JWTUtils;
-import com.google.gson.Gson;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.fingertech.kes.Rest.ApiClient.BASE_URL;
 
 public class AksesAnak extends AppCompatActivity {
     private EditText et_nik_niora_siswa;
@@ -63,11 +49,12 @@ public class AksesAnak extends AppCompatActivity {
     private FloatingSearchView floating_search_view;
     private LinearLayout lay_akses_anak;
     private TextView tv_val_nama_kodes;
+    Context mContext;
     String email, member_id, fullname, member_type, parent_id, student_id, school_id;
     int status;
     String code;
     Integer kosong = 0;
-    String authorization,school_name,school_code;
+    String authorization;
 
     private ProgressDialog dialog;
     ConnectivityManager conMgr;
@@ -80,17 +67,7 @@ public class AksesAnak extends AppCompatActivity {
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
 
-    String sn_0,sn_1,sn_2,sn_3,sn_4,sn_5,sn_6,sn_7,sn_8,sn_9,sn_10,sn_11,sn_12,sn_13,sn_14,sn_15,sn_16,sn_17,sn_18,sn_19,sn_20;
-
-    //Dummy data for search suggestions
-    private static final List<String> SOME_HARDCODED_DATA;
-
-    static {
-        SOME_HARDCODED_DATA = new ArrayList<>();
-        SOME_HARDCODED_DATA.add("qwertyuiopasdfghjklzxcvbnm");
-     }
-
-    //This just for illustration how to populate suggestions
+    List<String> SOME_HARDCODED_DATA;
     private static class SimpleSuggestions implements SearchSuggestion {
         private final String mData;
         public SimpleSuggestions(String string) {
@@ -149,15 +126,17 @@ public class AksesAnak extends AppCompatActivity {
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         member_type   = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
-
         search_school_post();
+
         btn_minta_kode_akses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+//                submitForm();
+                search_school_post();
             }
         });
 
+        //////// Camera scan nik
         iv_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +144,6 @@ public class AksesAnak extends AppCompatActivity {
                 startActivityForResult(i, 1);
             }
         });
-
         //////// Editext disable focus touch screen
         lay_akses_anak.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -189,20 +167,20 @@ public class AksesAnak extends AppCompatActivity {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
                 //emulating search on dummy data
+//                if(newQuery == null){
+//                    Toast.makeText(mContext, "Kosong Bang!", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    search_school_post();
+//                }
                 List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
                 if (!oldQuery.equals("") && newQuery.equals("")) {
                     floating_search_view.clearSuggestions();
                     kosong = 0;
                 } else {
                     for (String item : SOME_HARDCODED_DATA) {
-                        if (item.contains(newQuery)) {
-                            list.add(new SimpleSuggestions(sn_0));
-                            list.add(new SimpleSuggestions(sn_1));
-                            list.add(new SimpleSuggestions(sn_2));
-                            list.add(new SimpleSuggestions(sn_3));
-                            list.add(new SimpleSuggestions(sn_4));
-                            list.add(new SimpleSuggestions(sn_5));
-                            Toast.makeText(AksesAnak.this, String.valueOf(school_name), Toast.LENGTH_SHORT).show();
+                        if (item.contains(newQuery.toUpperCase())) {
+                            list.add(new SimpleSuggestions(item));
+                            search_school_post();
                         }
                     }
                     floating_search_view.swapSuggestions(list);
@@ -368,21 +346,13 @@ public class AksesAnak extends AppCompatActivity {
                 if (status == 1 && code.equals("SS_SCS_0001")) {
                     List<JSONResponse.SData> arrayList = response.body().getData();
                     if (arrayList != null) {
-                        int listSize = arrayList.size();
-                        for (int i = 0; i<listSize; i++){
-                            sn_0 = arrayList.get(0).getSchool_name();
-                            sn_1 = arrayList.get(1).getSchool_name();
-                            sn_2 = arrayList.get(2).getSchool_name();
-                            sn_3 = arrayList.get(3).getSchool_name();
-                            sn_4 = arrayList.get(4).getSchool_name();
-                            sn_5 = arrayList.get(5).getSchool_name();
-                            Log.i("Member :",String.valueOf(arrayList.get(i).getSchool_name()));
-                            Log.i("Member code :",String.valueOf(arrayList.get(i).getSchool_code()));
-//                            school_name = String.valueOf(arrayList.get(i).getSchool_name());
-//                                        school_code = String.valueOf(arrayList.get(i).getSchool_code());
-//                            Toast.makeText(AksesAnak.this, school_name, Toast.LENGTH_SHORT).show();
+                        SOME_HARDCODED_DATA = new ArrayList<String>();
+                        for (int i = 0; i < arrayList.size(); i++){
+                            SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_name());
+                            SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_code());
                         }
                     }
+
                 } else {
                     if(status == 0 && code.equals("SS_ERR_0001")){
                         Toast.makeText(getApplicationContext(), SS_ERR_0001, Toast.LENGTH_LONG).show();
@@ -397,7 +367,42 @@ public class AksesAnak extends AppCompatActivity {
     }
 
 
-
-
+//    @Override
+//    public Filter getFilter() {
+//        return new Filter() {
+//            @Override
+//            protected FilterResults performFiltering(CharSequence charSequence) {
+//                String charString = charSequence.toString();
+//                if (charString.isEmpty()) {
+//                    contactListFiltered = contactList;
+//                } else {
+//                    List<Contact> filteredList = new ArrayList<>();
+//                    for (Contact row : contactList) {
+//
+//                        // name match condition. this might differ depending on your requirement
+//                        // here we are looking for name or phone number match
+//                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getPhone().contains(charSequence)) {
+//                            filteredList.add(row);
+//                        }
+//                    }
+//
+//                    contactListFiltered = filteredList;
+//                }
+//
+//                FilterResults filterResults = new FilterResults();
+//                filterResults.values = contactListFiltered;
+//                return filterResults;
+//            }
+//
+//            @Override
+//            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+//                contactListFiltered = (ArrayList<Contact>) filterResults.values;
+//
+//                // refresh the list with filtered data
+//                notifyDataSetChanged();
+//            }
+//        };
+//    }
+//
 
 }

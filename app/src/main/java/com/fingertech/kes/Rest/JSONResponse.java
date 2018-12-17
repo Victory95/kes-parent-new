@@ -3,7 +3,6 @@ package com.fingertech.kes.Rest;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class JSONResponse{
@@ -773,7 +772,6 @@ public class JSONResponse{
             this.edulevel_id = edulevel_id;
         }
     }
-
 
     //////// Data Response - Login Public
     public class Login_Data {

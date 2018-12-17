@@ -127,7 +127,7 @@
                 <com.arlib.floatingsearchview.FloatingSearchView
                     android:id="@+id/floating_search_view"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="350dp"
                     app:floatingSearch_hintTextColor="@color/default_textHint"
                     app:floatingSearch_searchBarMarginLeft="36dp"
                     app:floatingSearch_searchBarMarginRight="36dp"
