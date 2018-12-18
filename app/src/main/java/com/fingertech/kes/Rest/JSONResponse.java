@@ -32,7 +32,6 @@ public class JSONResponse{
             return data;
         }
     }
-    //////// Data Array- Search School
     public class SData{
         @SerializedName("schoolid")
         @Expose
@@ -771,6 +770,68 @@ public class JSONResponse{
         public void setEdulevel_id(String edulevel_id) {
             this.edulevel_id = edulevel_id;
         }
+    }
+
+    //////// Response check student nik
+    public class Check_Student_NIK{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<CSNIK_Data> data;
+        public List<CSNIK_Data> getData() {
+            return data;
+        }
+    }
+    public class CSNIK_Data{
+        @SerializedName("memberid")
+        @Expose
+        private String memberid;
+        @SerializedName("fullname")
+        @Expose
+        private String fullname;
+        @SerializedName("nik")
+        @Expose
+        private String nik;
+
+        public String getMemberid() {
+            return memberid;
+        }
+
+        public void setMemberid(String memberid) {
+            this.memberid = memberid;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
+        }
+
+        public String getNik() {
+            return nik;
+        }
+
+        public void setNik(String nik) {
+            this.nik = nik;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        @SerializedName("picture")
+        @Expose
+        private String picture;
     }
 
     //////// Data Response - Login Public

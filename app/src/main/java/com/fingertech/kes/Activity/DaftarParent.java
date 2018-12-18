@@ -402,6 +402,7 @@ public class DaftarParent extends AppCompatActivity {
                 String RO_ERR_0008 = getResources().getString(R.string.RO_ERR_0008);
                 String RO_ERR_0009 = getResources().getString(R.string.RO_ERR_0009);
                 String RO_ERR_0010 = getResources().getString(R.string.RO_ERR_0010);
+                String RO_ERR_0011 = getResources().getString(R.string.RO_ERR_0011);
 
                 if (status == 1 && code.equals("RO_SCS_0001")) {
                     Toast.makeText(getApplicationContext(), RO_SCS_0001, Toast.LENGTH_LONG).show();
@@ -437,7 +438,9 @@ public class DaftarParent extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), RO_ERR_0009, Toast.LENGTH_LONG).show();
                     }if(status == 0 && code.equals("RO_ERR_0010")){
                         Toast.makeText(getApplicationContext(), RO_ERR_0010, Toast.LENGTH_LONG).show();
-                    }
+                    }if(status == 0 && code.equals("RO_ERR_0011")){
+                    Toast.makeText(getApplicationContext(), RO_ERR_0011, Toast.LENGTH_LONG).show();
+                }
                 }
             }
             @Override

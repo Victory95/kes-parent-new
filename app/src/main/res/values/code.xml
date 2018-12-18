@@ -36,6 +36,7 @@
     <string name="RO_ERR_0008">Devices tidak dikenal</string>
     <string name="RO_ERR_0009">Email sudah digunakan</string>
     <string name="RO_ERR_0010">Gagal Daftar</string>
+    <string name="RO_ERR_0011">NIK sudah terdaftar</string>
 
     /////// Register Sosmed
     <string name="RS_SCS_0001">Berhasil Daftar</string>
@@ -74,5 +75,9 @@
     /////// Search School
     <string name="SS_SCS_0001">Sekolah ditemukan</string>
     <string name="SS_ERR_0001">Sekolah tidak ditemukan</string>
+
+    /////// check_student_nik
+    <string name="CSN_SCS_0001">Student nik ditemukan</string>
+    <string name="CSN_ERR_0001">Student nik tidak ditemukan</string>
 
 </resources>

@@ -49,7 +49,6 @@ public class AksesAnak extends AppCompatActivity {
     private FloatingSearchView floating_search_view;
     private LinearLayout lay_akses_anak;
     private TextView tv_val_nama_kodes;
-    Context mContext;
     String email, member_id, fullname, member_type, parent_id, student_id, school_id;
     int status;
     String code;
@@ -68,6 +67,7 @@ public class AksesAnak extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
 
     List<String> SOME_HARDCODED_DATA;
+    List<String> LISTD_CHECK_NIK;
     private static class SimpleSuggestions implements SearchSuggestion {
         private final String mData;
         public SimpleSuggestions(String string) {
@@ -126,13 +126,12 @@ public class AksesAnak extends AppCompatActivity {
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         member_type   = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
-        search_school_post();
 
         btn_minta_kode_akses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                check_student_nik_post();
 //                submitForm();
-                search_school_post();
             }
         });
 
@@ -166,25 +165,57 @@ public class AksesAnak extends AppCompatActivity {
         floating_search_view.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
             public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                //emulating search on dummy data
-//                if(newQuery == null){
-//                    Toast.makeText(mContext, "Kosong Bang!", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    search_school_post();
-//                }
-                List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
                 if (!oldQuery.equals("") && newQuery.equals("")) {
                     floating_search_view.clearSuggestions();
                     kosong = 0;
                 } else {
-                    for (String item : SOME_HARDCODED_DATA) {
-                        if (item.contains(newQuery.toUpperCase())) {
-                            list.add(new SimpleSuggestions(item));
-                            search_school_post();
+                    floating_search_view.showProgress();
+                    /////// Json search school
+                    String key = floating_search_view.getQuery();
+                    Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toString());
+                    postCall.enqueue(new Callback<JSONResponse.School>() {
+                        @Override
+                        public void onResponse(Call<JSONResponse.School> call, Response<JSONResponse.School> response) {
+                            Log.d("TAG",response.code()+"");
+
+                            JSONResponse.School resource = response.body();
+                            status = resource.status;
+                            code = resource.code;
+
+                            String SS_SCS_0001 = getResources().getString(R.string.SS_SCS_0001);
+                            String SS_ERR_0001 = getResources().getString(R.string.SS_ERR_0001);
+
+                            if (status == 1 && code.equals("SS_SCS_0001")) {
+                                List<JSONResponse.SData> arrayList = response.body().getData();
+                                if (arrayList != null) {
+                                    SOME_HARDCODED_DATA = new ArrayList<String>();
+                                    for (int i = 0; i < arrayList.size(); i++){
+                                        SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_name());
+                                        SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_code());
+                                    }
+                                }
+
+                                List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
+                                for (String item : SOME_HARDCODED_DATA) {
+                                    if (item.contains(newQuery.toUpperCase())) {
+                                        list.add(new SimpleSuggestions(item));
+                                        floating_search_view.hideProgress();
+                                    }
+                                }
+                                floating_search_view.swapSuggestions(list);
+                                kosong = 1;
+
+                            } else {
+                                if(status == 0 && code.equals("SS_ERR_0001")){
+                                    Toast.makeText(getApplicationContext(), SS_ERR_0001, Toast.LENGTH_LONG).show();
+                                }
+                            }
                         }
-                    }
-                    floating_search_view.swapSuggestions(list);
-                    kosong = 1;
+                        @Override
+                        public void onFailure(Call<JSONResponse.School> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
         });
@@ -200,7 +231,6 @@ public class AksesAnak extends AppCompatActivity {
         }
         tv_val_nama_kodes.setVisibility(View.GONE);
 //        request_code_acsess_post();
-        search_school_post();
     }
     private boolean validateNamaKodeSekolah() {
         if (kosong == 0) {
@@ -328,81 +358,47 @@ public class AksesAnak extends AppCompatActivity {
             }
         });
     }
-    public void search_school_post(){
-        String key = floating_search_view.getQuery();
-        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toString());
-        postCall.enqueue(new Callback<JSONResponse.School>() {
+    public void check_student_nik_post(){
+        String parent_id = "689";
+        String children_nik = "5555666677778888";
+        String school_code = "BPK01";
+        progressBar();
+        showDialog();
+        Call<JSONResponse.Check_Student_NIK> postCall = mApiInterface.check_student_nik_post(authorization.toString(),parent_id.toString(), children_nik.toString(), school_code.toString());
+        postCall.enqueue(new Callback<JSONResponse.Check_Student_NIK>() {
             @Override
-            public void onResponse(Call<JSONResponse.School> call, Response<JSONResponse.School> response) {
+            public void onResponse(Call<JSONResponse.Check_Student_NIK> call, Response<JSONResponse.Check_Student_NIK> response) {
+                hideDialog();
                 Log.d("TAG",response.code()+"");
 
-                JSONResponse.School resource = response.body();
+                JSONResponse.Check_Student_NIK resource = response.body();
                 status = resource.status;
                 code = resource.code;
 
-                String SS_SCS_0001 = getResources().getString(R.string.SS_SCS_0001);
-                String SS_ERR_0001 = getResources().getString(R.string.SS_ERR_0001);
+                String CSN_SCS_0001 = getResources().getString(R.string.CSN_SCS_0001);
+                String CSN_ERR_0001 = getResources().getString(R.string.CSN_ERR_0001);
 
-                if (status == 1 && code.equals("SS_SCS_0001")) {
-                    List<JSONResponse.SData> arrayList = response.body().getData();
+                if (status == 1 && code.equals("CSN_SCS_0001")) {
+                    List<JSONResponse.CSNIK_Data> arrayList = response.body().getData();
                     if (arrayList != null) {
-                        SOME_HARDCODED_DATA = new ArrayList<String>();
+                        LISTD_CHECK_NIK = new ArrayList<String>();
                         for (int i = 0; i < arrayList.size(); i++){
-                            SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_name());
-                            SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_code());
+                            LISTD_CHECK_NIK.add(arrayList.get(i).getFullname());
                         }
                     }
-
+                    Toast.makeText(getApplicationContext(), String.valueOf(LISTD_CHECK_NIK), Toast.LENGTH_LONG).show();
                 } else {
-                    if(status == 0 && code.equals("SS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), SS_ERR_0001, Toast.LENGTH_LONG).show();
+                    if(status == 0 && code.equals("CSN_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), CSN_ERR_0001, Toast.LENGTH_LONG).show();
                     }
                 }
             }
             @Override
-            public void onFailure(Call<JSONResponse.School> call, Throwable t) {
+            public void onFailure(Call<JSONResponse.Check_Student_NIK> call, Throwable t) {
+                hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
     }
-
-
-//    @Override
-//    public Filter getFilter() {
-//        return new Filter() {
-//            @Override
-//            protected FilterResults performFiltering(CharSequence charSequence) {
-//                String charString = charSequence.toString();
-//                if (charString.isEmpty()) {
-//                    contactListFiltered = contactList;
-//                } else {
-//                    List<Contact> filteredList = new ArrayList<>();
-//                    for (Contact row : contactList) {
-//
-//                        // name match condition. this might differ depending on your requirement
-//                        // here we are looking for name or phone number match
-//                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getPhone().contains(charSequence)) {
-//                            filteredList.add(row);
-//                        }
-//                    }
-//
-//                    contactListFiltered = filteredList;
-//                }
-//
-//                FilterResults filterResults = new FilterResults();
-//                filterResults.values = contactListFiltered;
-//                return filterResults;
-//            }
-//
-//            @Override
-//            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-//                contactListFiltered = (ArrayList<Contact>) filterResults.values;
-//
-//                // refresh the list with filtered data
-//                notifyDataSetChanged();
-//            }
-//        };
-//    }
-//
 
 }

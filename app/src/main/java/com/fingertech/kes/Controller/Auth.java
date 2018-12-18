@@ -30,15 +30,11 @@ public interface Auth {
                                              @Field("mobile_phone") String mobile_phone, @Field("password") String password, @Field("relation") String relation,
                                              @Field("gender") String gender, @Field("device_id") String device_id);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
     //////// Update Parent
     @FormUrlEncoded
     @POST("auth/update_orangtua")
-    Call<JSONResponse>update_orangtua_get(@Field("fullname") String fullname,
-                                             @Field("parent_nik") String parent_nik,
-                                             @Field("parent_birth_place") String parent_birth_place,
-                                             @Field("parent_birth_date") String parent_birth_date,
-                                             @Field("parent_type") String parent_type);
+    Call<JSONResponse>update_orangtua_get(@Field("fullname") String fullname, @Field("parent_nik") String parent_nik, @Field("parent_birth_place") String parent_birth_place,
+                                          @Field("parent_birth_date") String parent_birth_date, @Field("parent_type") String parent_type);
 
     //////// Login Parent
     @FormUrlEncoded
@@ -71,6 +67,12 @@ public interface Auth {
     @FormUrlEncoded
     @POST("auth/search_school")
     Call<JSONResponse.School>search_school_post(@Field("key") String key);
+
+    //////// search_school
+    @FormUrlEncoded
+    @POST("auth/check_student_nik")
+    Call<JSONResponse.Check_Student_NIK>check_student_nik_post(@Header("Authorization") String authorization, @Field("parent_id") String parent_id,@Field("children_nik") String children_nik,
+                                                               @Field("school_code") String school_code);
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
