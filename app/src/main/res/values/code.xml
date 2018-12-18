@@ -75,4 +75,8 @@
     <string name="SS_SCS_0001">Sekolah ditemukan</string>
     <string name="SS_ERR_0001">Sekolah tidak ditemukan</string>
 
+    /////// Nearby School
+    <string name="NS_SCS_0001">Sekolah terdekat ditemukan</string>
+    <string name="NS_ERR_0001">Sekolah terdekat tidak ditemukan</string>
+
 </resources>

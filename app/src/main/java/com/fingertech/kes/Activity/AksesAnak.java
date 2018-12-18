@@ -68,6 +68,7 @@ public class AksesAnak extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
 
     List<String> SOME_HARDCODED_DATA;
+
     private static class SimpleSuggestions implements SearchSuggestion {
         private final String mData;
         public SimpleSuggestions(String string) {

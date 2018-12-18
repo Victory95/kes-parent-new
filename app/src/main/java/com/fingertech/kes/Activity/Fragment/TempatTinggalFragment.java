@@ -93,6 +93,15 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        mlocationRequest = new LocationRequest();
+        mlocationRequest.setInterval(1000);
+        mlocationRequest.setFastestInterval(1000);
+        mlocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        if (ContextCompat.checkSelfPermission(getContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mlocationRequest, this);
+        }
 
     }
 
