@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.Html;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -115,6 +116,13 @@ public class DaftarParent extends AppCompatActivity {
 
         //// CheckBox persetujuan
         getCb_ketentuan();
+
+        //// nik allcaps
+        InputFilter[] editFilters = et_nik.getFilters();
+        InputFilter[] newFilters = new InputFilter[editFilters.length + 1];
+        System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
+        newFilters[editFilters.length] = new InputFilter.AllCaps();
+        et_nik.setFilters(newFilters);
 
         iv_camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,18 +267,25 @@ public class DaftarParent extends AppCompatActivity {
         return true;
     }
     private boolean validateNik() {
+//        if (et_nik.getText().toString().trim().isEmpty()) {
+//            til_nik.setError(getResources().getString(R.string.validate_nik));
+//            requestFocus(et_nik);
+//            return false;
+//        }else if(et_nik.length()<16) {
+//            til_nik.setError(getResources().getString(R.string.validate_nik_lengh));
+//            requestFocus(et_nik);
+//            return false;
+//        } else {
+//            til_nik.setErrorEnabled(false);
+//        }
+//        return true;
         if (et_nik.getText().toString().trim().isEmpty()) {
-            til_nik.setError(getResources().getString(R.string.validate_nik));
-            requestFocus(et_nik);
-            return false;
-        }else if(et_nik.length()<16) {
-            til_nik.setError(getResources().getString(R.string.validate_nik_lengh));
+            til_nik.setError(getResources().getString(R.string.validate_nik_niora_anak));
             requestFocus(et_nik);
             return false;
         } else {
             til_nik.setErrorEnabled(false);
         }
-
         return true;
     }
     private boolean validateEmail() {

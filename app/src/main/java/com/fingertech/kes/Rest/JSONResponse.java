@@ -17,6 +17,19 @@ public class JSONResponse{
 
     @SerializedName("data")
     public Login_Data login_data;
+    //////// Data Response - Login Public
+    public class Login_Data {
+        @SerializedName("member_type")
+        public String member_type;
+        @SerializedName("count_children")
+        public String count_children;
+        @SerializedName("parent_nik")
+        public String parent_nik;
+        @SerializedName("relation")
+        public String relation;
+        @SerializedName("token")
+        public String token;
+    }
 
     //////// Response Search School
     public class School{
@@ -835,20 +848,6 @@ public class JSONResponse{
         private String picture;
     }
 
-    //////// Data Response - Login Public
-    public class Login_Data {
-        @SerializedName("member_type")
-        public String member_type;
-        @SerializedName("count_children")
-        public String count_children;
-        @SerializedName("parent_nik")
-        public String parent_nik;
-        @SerializedName("relation")
-        public String relation;
-        @SerializedName("token")
-        public String token;
-    }
-
     //////Data Response - Nearby School
     public class Nearby_School{
 
@@ -865,7 +864,6 @@ public class JSONResponse{
             return data;
         }
     }
-
     public class DataItem{
 
         @SerializedName("school_id")
