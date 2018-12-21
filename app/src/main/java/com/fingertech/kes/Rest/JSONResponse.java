@@ -848,11 +848,9 @@ public class JSONResponse{
         private String picture;
     }
 
+
     //////Data Response - Nearby School
     public class Nearby_School{
-
-        @SerializedName("status")
-        public Integer status;
 
         @SerializedName("code")
         public String code;
@@ -860,178 +858,187 @@ public class JSONResponse{
         @SerializedName("data")
         public List<DataItem> data;
 
-        public List<DataItem> getData(){
+        @SerializedName("status")
+        public int status;
+
+
+        public void setData(List<DataItem> data) {
+            this.data = data;
+        }
+
+        public List<DataItem> getData() {
             return data;
         }
-    }
-    public class DataItem{
 
-        @SerializedName("school_id")
-        @Expose
-        private String school_id;
 
-        @SerializedName("schooldetailid")
-        @Expose
-        private String schooldetailid;
+        public class DataItem {
 
-        @SerializedName("school_name")
-        @Expose
-        private String school_name;
+            @SerializedName("school_id")
+            @Expose
+            private String school_id;
 
-        @SerializedName("school_code")
-        @Expose
-        private String school_code;
+            @SerializedName("schooldetailid")
+            @Expose
+            private String schooldetailid;
 
-        @SerializedName("picture")
-        @Expose
-        private String picture;
+            @SerializedName("school_name")
+            @Expose
+            private String school_name;
 
-        @SerializedName("school_address")
-        @Expose
-        private String school_address;
+            @SerializedName("school_code")
+            @Expose
+            private String school_code;
 
-        @SerializedName("akreditasi")
-        @Expose
-        private String akreditasi;
+            @SerializedName("picture")
+            @Expose
+            private String picture;
 
-        @SerializedName("kurikulum_id")
-        @Expose
-        private String kurikulumId;
+            @SerializedName("school_address")
+            @Expose
+            private String school_address;
 
-        @SerializedName("jenjang_pendidikan")
-        @Expose
-        private String jenjang_pendidikan;
+            @SerializedName("akreditasi")
+            @Expose
+            private String akreditasi;
 
-        @SerializedName("kurikulum")
-        @Expose
-        private String kurikulum;
+            @SerializedName("kurikulum_id")
+            @Expose
+            private String kurikulumId;
 
-        @SerializedName("status_sekolah")
-        @Expose
-        private String status_sekolah;
+            @SerializedName("jenjang_pendidikan")
+            @Expose
+            private String jenjang_pendidikan;
 
-        @SerializedName("latitude")
-        @Expose
-        private double latitude;
+            @SerializedName("kurikulum")
+            @Expose
+            private String kurikulum;
 
-        @SerializedName("longitude")
-        @Expose
-        private double longitude;
+            @SerializedName("status_sekolah")
+            @Expose
+            private String status_sekolah;
 
-        @SerializedName("distance")
-        @Expose
-        private String distance;
+            @SerializedName("latitude")
+            @Expose
+            private Double latitude;
 
-        public String getSchool_id() {
-            return school_id;
-        }
+            @SerializedName("longitude")
+            @Expose
+            private Double longitude;
 
-        public void setSchool_id(String school_id) {
-            this.school_id = school_id;
-        }
+            @SerializedName("distance")
+            @Expose
+            private Double distance;
 
-        public String getSchooldetailid() {
-            return schooldetailid;
-        }
+            public String getSchool_id() {
+                return school_id;
+            }
 
-        public void setSchooldetailid(String schooldetailid) {
-            this.schooldetailid = schooldetailid;
-        }
+            public void setSchool_id(String school_id) {
+                this.school_id = school_id;
+            }
 
-        public String getSchool_name() {
-            return school_name;
-        }
+            public String getSchooldetailid() {
+                return schooldetailid;
+            }
 
-        public void setSchool_name(String school_name) {
-            this.school_name = school_name;
-        }
+            public void setSchooldetailid(String schooldetailid) {
+                this.schooldetailid = schooldetailid;
+            }
 
-        public String getSchool_code() {
-            return school_code;
-        }
+            public String getSchool_name() {
+                return school_name;
+            }
 
-        public void setSchool_code(String school_code) {
-            this.school_code = school_code;
-        }
+            public void setSchool_name(String school_name) {
+                this.school_name = school_name;
+            }
 
-        public String getPicture() {
-            return picture;
-        }
+            public String getSchool_code() {
+                return school_code;
+            }
 
-        public void setPicture(String picture) {
-            this.picture = picture;
-        }
+            public void setSchool_code(String school_code) {
+                this.school_code = school_code;
+            }
 
-        public String getSchool_address() {
-            return school_address;
-        }
+            public String getPicture() {
+                return picture;
+            }
 
-        public void setSchool_address(String school_address) {
-            this.school_address = school_address;
-        }
+            public void setPicture(String picture) {
+                this.picture = picture;
+            }
 
-        public String getAkreditasi() {
-            return akreditasi;
-        }
+            public String getSchool_address() {
+                return school_address;
+            }
 
-        public void setAkreditasi(String akreditasi) {
-            this.akreditasi = akreditasi;
-        }
+            public void setSchool_address(String school_address) {
+                this.school_address = school_address;
+            }
 
-        public String getKurikulumId() {
-            return kurikulumId;
-        }
+            public String getAkreditasi() {
+                return akreditasi;
+            }
 
-        public void setKurikulumId(String kurikulumId) {
-            this.kurikulumId = kurikulumId;
-        }
+            public void setAkreditasi(String akreditasi) {
+                this.akreditasi = akreditasi;
+            }
 
-        public String getJenjang_pendidikan() {
-            return jenjang_pendidikan;
-        }
+            public String getKurikulumId() {
+                return kurikulumId;
+            }
 
-        public void setJenjang_pendidikan(String jenjang_pendidikan) {
-            this.jenjang_pendidikan = jenjang_pendidikan;
-        }
+            public void setKurikulumId(String kurikulumId) {
+                this.kurikulumId = kurikulumId;
+            }
 
-        public String getKurikulum() {
-            return kurikulum;
-        }
+            public String getJenjang_pendidikan() {
+                return jenjang_pendidikan;
+            }
 
-        public void setKurikulum(String kurikulum) {
-            this.kurikulum = kurikulum;
-        }
+            public void setJenjang_pendidikan(String jenjang_pendidikan) {
+                this.jenjang_pendidikan = jenjang_pendidikan;
+            }
 
-        public String getStatus_sekolah() {
-            return status_sekolah;
-        }
+            public String getKurikulum() {
+                return kurikulum;
+            }
 
-        public void setStatus_sekolah(String status_sekolah) {
-            this.status_sekolah = status_sekolah;
-        }
+            public void setKurikulum(String kurikulum) {
+                this.kurikulum = kurikulum;
+            }
 
-        public double getLatitude() {
-            return latitude;
-        }
+            public String getStatus_sekolah() {
+                return status_sekolah;
+            }
 
-        public void setLatitude(double latitude) {
-            this.latitude = latitude;
-        }
+            public void setStatus_sekolah(String status_sekolah) {
+                this.status_sekolah = status_sekolah;
+            }
 
-        public double getLongitude() {
-            return longitude;
-        }
+            public Double getLatitude() {
+                return latitude;
+            }
 
-        public void setLongitude(double longitude) {
-            this.longitude = longitude;
-        }
+            public void setLatitude(Double latitude) {
+                this.latitude = latitude;
+            }
 
-        public String getDistance() {
-            return distance;
-        }
+            public Double getLongitude() {
+                return longitude;
+            }
 
-        public void setDistance(String distance) {
-            this.distance = distance;
-        }
-    }
+            public void setLongitude(Double longitude) {
+                this.longitude = longitude;
+            }
+
+            public Double getDistance() {
+                return distance;
+            }
+
+            public void setDistance(Double distance) {
+                this.distance = distance;
+            }
+        }}
 }

@@ -1,7 +1,6 @@
 package com.fingertech.kes.Controller;
 
 import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Rest.ResponseMAP;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -87,9 +86,10 @@ public interface Auth {
     @HTTP(method = "DELETE", path = "public", hasBody = true)
     Call<JSONResponse> deletePublic(@Field("memberid") String memberid);
 
-
-    @GET("auth/nearby_school")
-    Call<ResponseMAP> nearby_school_post(@Query("parent_latitude") Double latitude,
-                                         @Query("parent_longitude") Double longitude);
+    @FormUrlEncoded
+    @POST("auth/nearby_radius")
+    Call<JSONResponse.Nearby_School>nearby_radius_post(@Field("latitude") Double latitude,
+                                         @Field("longitude") Double longitude,
+                                        @Field("radius") Double radius);
 
 }

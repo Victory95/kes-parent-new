@@ -85,4 +85,11 @@
     <string name="NS_SCS_0001">Sekolah terdekat ditemukan</string>
     <string name="NS_ERR_0001">Sekolah terdekat tidak ditemukan</string>
 
+    /////// Nearby Radius
+    <string name="NR_SCS_0001">Sekolah terdekat ditemukan</string>
+    <string name="NR_ERR_0001">Latitude tidak ditemukan</string>
+    <string name="NR_ERR_0002">Longitude tidak ditemukan</string>
+    <string name="NR_ERR_0003">radius tidak ditemukan</string>
+    <string name="NR_ERR_0004">Sekolah terdekat tidak ditemukan</string>
+
 </resources>

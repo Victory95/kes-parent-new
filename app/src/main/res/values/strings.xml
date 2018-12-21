@@ -106,4 +106,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_menu_guest">MenuGuest</string>
+
+    <string name="no_location_data_provided">no location</string>
+    <string name="service_not_available">no</string>
+    <string name="invalid_lat_long_used">sda</string>
+    <string name="no_address_found">no Address</string>
 </resources>

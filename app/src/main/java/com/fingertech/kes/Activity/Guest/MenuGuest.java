@@ -1,11 +1,17 @@
 package com.fingertech.kes.Activity.Guest;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +20,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
+import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,17 +35,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.OpsiMasuk;
+import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
+import com.fingertech.kes.Activity.RecycleView.CustomRecyclerViewDataAdapter;
+import com.fingertech.kes.Activity.RecycleView.CustomRecyclerViewItem;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Rest.ResponseMAP;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,10 +59,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -58,54 +70,48 @@ import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MenuGuest extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnMyLocationChangeListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener {
 
 
     CarouselView customCarouselView;
     int[] sampleImages = {R.drawable.image_1, R.drawable.image_2, R.drawable.image_1, R.drawable.image_4, R.drawable.image_5};
     String[] sampleTitles = {"Orange", "Grapes", "Strawberry", "Cherry", "Apricot"};
-    String[] sampleNetworkImageURLs = {
-            "https://placeholdit.imgix.net/~text?txtsize=15&txt=image1&txt=350%C3%97150&w=350&h=150",
-            "https://placeholdit.imgix.net/~text?txtsize=15&txt=image2&txt=350%C3%97150&w=350&h=150",
-            "https://placeholdit.imgix.net/~text?txtsize=15&txt=image3&txt=350%C3%97150&w=350&h=150",
-            "https://placeholdit.imgix.net/~text?txtsize=15&txt=image4&txt=350%C3%97150&w=350&h=150",
-            "https://placeholdit.imgix.net/~text?txtsize=15&txt=image5&txt=350%C3%97150&w=350&h=150"
-    };
 
+
+    private List<CustomRecyclerViewItem> itemList;
+    private CustomRecyclerViewDataAdapter customRecyclerViewDataAdapter = null;
+    private GoogleMap.OnCameraIdleListener onCameraIdleListener;
+    private GoogleMap.OnCameraMoveListener onCameraMove;
     private GoogleMap mapG;
     private LocationRequest mlocationRequest;
-    private Marker CurrLocationMarker;
-    private Circle circle;
+    private Marker CurrLocationMarker,m,sd,smp,sma;
     private Location lastLocation;
-    private TextView namaalamat;
     private Button lock,Nearby;
     private Boolean clicked = false;
-    private int PROXIMITY_RADIUS = 2000;
-
+    private int overallXScroll= 0;
+    public SnappyRecycleView snappyRecyclerView;
     GoogleApiClient mGoogleApiClient;
 
-    Double currentLatitude;
-    Double currentLongitude;
-    Double latitude;
-    Double longitude;
+    Double PROXIMITY_RADIUS = 2.0;
+    Double currentLatitude,latitude;
+    Double currentLongitude,longitude;
+    Double CurrentLatitude;
+    Double CurrentLongitude;
     String location;
     String code;
-
     Auth mApiInterface;
     int status;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +119,7 @@ public class MenuGuest extends AppCompatActivity
         setContentView(R.layout.menu_guest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -137,23 +144,23 @@ public class MenuGuest extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
 
-        // lock = (Button) findViewById(R.id.lock);
-        // lock.setOnClickListener(new View.OnClickListener(){
+        lock = (Button) findViewById(R.id.lock);
+        lock.setOnClickListener(new View.OnClickListener(){
 
-        //   @Override
-        // public void onClick(View view) {
-        //   if(clicked) {
-        //     mapG.getUiSettings().setScrollGesturesEnabled(false);
-        //   clicked = true;
-        // view.setBackgroundResource(R.drawable.ic_lock);
-        //     }
-        //       else {
-        //       mapG.getUiSettings().setScrollGesturesEnabled(true);
-        //     clicked = false;
-        //   view.setBackgroundResource(R.drawable.ic_unlock);
-        //}
-        //}
-        // });
+            @Override
+            public void onClick(View view) {
+                if(clicked) {
+                    mapG.getUiSettings().setScrollGesturesEnabled(false);
+                    clicked = false;
+                    view.setBackgroundResource(R.drawable.ic_lock);
+                }
+                else {
+                    mapG.getUiSettings().setScrollGesturesEnabled(true);
+                    clicked = true;
+                    view.setBackgroundResource(R.drawable.ic_unlock);
+                }
+            }
+        });
 
         //show error dialog if Google Play Services not available
         if (!isGooglePlayServicesAvailable()) {
@@ -164,12 +171,12 @@ public class MenuGuest extends AppCompatActivity
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
         Nearby = (Button)findViewById(R.id.cari_sekolah2);
-        Nearby.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                build_retrofit_and_get_response();
-            }
-        });
+
+        configureCameraIdle();
+        configureCameraMove();
+        //initControls();
+
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -209,9 +216,7 @@ public class MenuGuest extends AppCompatActivity
     ViewListener viewListener = new ViewListener() {
         @Override
         public View setViewForPosition(final int position) {
-
             View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
-
             TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
             ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
 
@@ -221,12 +226,10 @@ public class MenuGuest extends AppCompatActivity
             Baca.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Toast.makeText(MenuGuest.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
                 }
             });
             customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
-
             return customView;
         }
     };
@@ -317,41 +320,12 @@ public class MenuGuest extends AppCompatActivity
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map));
 
         //move map camera
         mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mapG.animateCamera(CameraUpdateFactory.zoomTo(13));
-        mapG.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-            }
+        mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
 
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onMarkerDragEnd(final Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-                mapG.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                mapG.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                    @Override
-                    public boolean onMyLocationButtonClick() {
-                        mapG.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                        Toast.makeText(MenuGuest.this, "The camera is moving.",
-                                Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-            }
-
-            @Override
-            public void onMarkerDrag(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.i("System out", "onMarkerDrag...");
-            }
-        });
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -372,15 +346,8 @@ public class MenuGuest extends AppCompatActivity
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
+        mapG.clear();
 
-        CircleOptions circleOptions = new CircleOptions()
-                .center(position.target)
-                .radius(2000)
-                .strokeWidth(2)
-                .strokeColor(Color.BLUE)
-                .fillColor(Color.parseColor("#500084d3"));
-        // Supported formats are: #RRGGBB #AARRGGBB
-        //   #AA is the alpha, or amount of transparency
         LatLng latLng = mapG.getCameraPosition().target;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
@@ -392,17 +359,28 @@ public class MenuGuest extends AppCompatActivity
                 String state = addressList.get(0).getAdminArea();
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
+
+
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (circle != null) {
-            circle.remove();
+        CurrentLatitude = latLng.latitude;
+        CurrentLongitude = latLng.longitude;
 
-        }
-        circle = mapG.addCircle(circleOptions);
-        mapG.setOnMyLocationChangeListener(this);
+
+        MarkerOptions options = new MarkerOptions()
+                .position(position.target)
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
+                .title("im here");
+
+        dapat_map();
+
+
+        //dapat_sekolah();
+        CurrLocationMarker = mapG.addMarker(options);
+
     }
 
     @Override
@@ -425,9 +403,10 @@ public class MenuGuest extends AppCompatActivity
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
+
         MarkerOptions options = new MarkerOptions()
                 .position(position.target)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map))
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
                 .title("im here");
 
 
@@ -435,6 +414,7 @@ public class MenuGuest extends AppCompatActivity
             CurrLocationMarker.remove();}
 
         CurrLocationMarker = mapG.addMarker(options);
+
     }
 
     @Override
@@ -464,15 +444,13 @@ public class MenuGuest extends AppCompatActivity
             buildGoogleApiClient();
             mapG.setMyLocationEnabled(true);
         }
-        if (CurrLocationMarker != null) {
-            CurrLocationMarker.remove();
-        }
 
         mapG.setOnCameraMoveStartedListener(this);
-        mapG.setOnCameraMoveListener(this);
+        //mapG.setOnCameraMoveListener(this);
         mapG.setOnCameraMoveCanceledListener(this);
-        mapG.setOnCameraIdleListener(this);
-        build_retrofit_and_get_response();
+        mapG.setOnCameraIdleListener(onCameraIdleListener);
+        mapG.setOnCameraMoveListener(onCameraMove);
+
 
     }
 
@@ -484,7 +462,6 @@ public class MenuGuest extends AppCompatActivity
                 .build();
         mGoogleApiClient.connect();
     }
-
 
     void getAddress() {
 
@@ -543,78 +520,607 @@ public class MenuGuest extends AppCompatActivity
 
         currentLongitude = lastLocation.getLongitude();
 
-
-
     }
 
-    @Override
-    public void onMyLocationChange(Location location) {
-        Location target = new Location("target");
-        for(LatLng point : new LatLng[]{}) {
-            target.setLatitude(point.latitude);
-            target.setLongitude(point.longitude);
-            if(location.distanceTo(target) < 2000) {
-                // bingo!
-                build_retrofit_and_get_response();
-            }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorResId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+
+        private Context context;
+
+        public CustomInfoWindowGoogleMap(Context ctx){
+            context = ctx;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            View view = ((Activity)context).getLayoutInflater()
+                    .inflate(R.layout.custom_snippet, null);
+
+            TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
+
+            // Getting reference to the TextView to set longitude
+            TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
+
+            // Getting reference to the TextView to set latitude
+            TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
+
+            // Getting reference to the TextView to set longitude
+            TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
+
+            // Getting reference to the TextView to set longitude
+            TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
+
+
+            ImageView img = view.findViewById(R.id.imageS);
+
+            tvSch.setText(marker.getTitle());
+            tvAkr.setText("Akreditasi "+marker.getSnippet());
+
+            InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
+
+            tvSch.setText(infoWindowData.getNama());
+            tvAkr.setText("Akreditasi "+ infoWindowData.getAkreditasi());
+            tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
+            tvAlm.setText(infoWindowData.getAlamat());
+
+            return view;
         }
     }
 
-    private void build_retrofit_and_get_response() {
+    public class InfoWindowData {
+        private String image;
+        private Double jarak;
+        private String alamat,nama,akreditasi;
 
-        Call<ResponseMAP> call = mApiInterface.nearby_school_post(latitude,longitude);
+        public String getImage() {
+            return image;
+        }
 
-        call.enqueue(new Callback<ResponseMAP>() {
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public Double getJarak() {
+            return jarak;
+        }
+
+        public void setJarak(Double jarak) {
+            this.jarak = jarak;
+        }
+
+        public String getAlamat() {
+            return alamat;
+        }
+
+        public void setAlamat(String alamat) {
+            this.alamat = alamat;
+        }
+
+        public String getNama() {
+            return nama;
+        }
+
+        public void setNama(String nama) {
+            this.nama = nama;
+        }
+
+        public String getAkreditasi() {
+            return akreditasi;
+        }
+
+        public void setAkreditasi(String akreditasi) {
+            this.akreditasi = akreditasi;
+        }
+
+    }
+
+    public void dapat_map(){
+
+        Call<JSONResponse.Nearby_School> call = mApiInterface.nearby_radius_post(CurrentLatitude,CurrentLongitude,PROXIMITY_RADIUS);
+
+        call.enqueue(new Callback<JSONResponse.Nearby_School>() {
 
             @Override
-            public void onResponse(Call<ResponseMAP> call, Response<ResponseMAP> response) {
-                Log.d("TAG",response.code()+"");
+            public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
+                Log.i("KES", response.code() + "");
 
-                ResponseMAP resource = response.body();
+                JSONResponse.Nearby_School resource = response.body();
 
                 status = resource.status;
                 code = resource.code;
 
-                String NS_SCS_0001 = getResources().getString(R.string.NS_SCS_0001);
-                String NS_ERR_0001 = getResources().getString(R.string.NS_ERR_0001);
+                String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
+                String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
+                String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
+                String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
+                String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                if (status == 1 && code.equals("NS_SCS_0001")) {
+                CustomRecyclerViewItem Item = null;
+
+                if (status == 1 && code.equals("NR_SCS_0001")) {
+                    itemList = new ArrayList<CustomRecyclerViewItem>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
-                        Toast.makeText(getApplicationContext(), NS_SCS_0001, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
                         double lat = response.body().getData().get(i).getLatitude();
                         double lng = response.body().getData().get(i).getLongitude();
-                        String placeName = response.body().getData().get(i).getSchool_name();
-                        String vicinity = response.body().getData().get(i).getSchool_address();
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        LatLng latLng = new LatLng(lat, lng);
-                        // Position of Marker on Map
-                        markerOptions.position(latLng);
-                        // Adding Title to the Marker
-                        markerOptions.title(placeName + " : " + vicinity);
-                        // Adding Marker to the Camera.
-                        Marker m = mapG.addMarker(markerOptions);
-                        // Adding colour to the marker
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
-                        // move map camera
-                        mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                        mapG.animateCamera(CameraUpdateFactory.zoomTo(13));
-                    }
+                        final String placeName = response.body().getData().get(i).getSchool_name();
+                        final String vicinity = response.body().getData().get(i).getSchool_address();
+                        final String akreditasi = response.body().getData().get(i).getAkreditasi();
+                        final String picture = response.body().getData().get(i).getPicture();
+                        final double Jarak = response.body().getData().get(i).getDistance();
+                        final Integer page = response.body().getData().size();
 
-                } else {
-                    if(status == 0 && code.equals("NS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), NS_ERR_0001, Toast.LENGTH_LONG).show();
+                        LatLng latLng = new LatLng(lat, lng);
+                        if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
+                            MarkerOptions markerOptions = new MarkerOptions();
+
+                            // Position of Marker on Map
+                            markerOptions.position(latLng);
+                            // Adding colour to the marker
+                            markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sd));
+                            // Remove Marker
+
+                            // Adding Marker to the Camera.
+                            m = mapG.addMarker(markerOptions);
+
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SMP")){
+                            MarkerOptions markerOptions = new MarkerOptions();
+
+                            // Position of Marker on Map
+                            markerOptions.position(latLng);
+                            // Adding colour to the marker
+                            markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp));
+                            // Remove Marker
+
+                            // Adding Marker to the Camera.
+                            m = mapG.addMarker(markerOptions);
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                            MarkerOptions markerOptions = new MarkerOptions();
+
+                            // Position of Marker on Map
+                            markerOptions.position(latLng);
+                            // Adding colour to the marker
+                            markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp));
+                            // Remove Marker
+
+                            // Adding Marker to the Camera.
+                            m= mapG.addMarker(markerOptions);
+                        }
+                        else {
+                            MarkerOptions markerOptions = new MarkerOptions();
+
+                            // Position of Marker on Map
+                            markerOptions.position(latLng);
+                            // Adding colour to the marker
+                            markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sma));
+                            // Remove Marker
+
+                            // Adding Marker to the Camera.
+                            m= mapG.addMarker(markerOptions);
+                        }
+
+
+                        final Marker[] lastOpenned = {null};
+
+                        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            public boolean onMarkerClick(Marker marker) {
+                                // Check if there is an open info window
+                                if (m != null) {
+                                    // Close the info window
+                                    m.hideInfoWindow();
+
+                                }
+
+                                // Open the info window for the marker
+                                marker.showInfoWindow();
+                                // Re-assign the last openned such that we can close it later
+                                m = marker;
+
+                                // Event was handled by our code do not launch default behaviour.
+                                return true;
+                            }
+                        });
+
+                        InfoWindowData info = new InfoWindowData();
+                        info.setNama(placeName);
+                        info.setAkreditasi(akreditasi);
+                        info.setJarak(Jarak);
+                        info.setAlamat(vicinity);
+
+                        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(MenuGuest.this);
+                        mapG.setInfoWindowAdapter(customInfoWindow);
+
+
+                        m.setTag(info);
+                       // m.showInfoWindow();
+
+                        Item = new CustomRecyclerViewItem();
+                        Item.setName(placeName);
+                        Item.setAkreditas(akreditasi);
+                        Item.setJarak(Jarak);
+                        itemList.add(Item);
+                    }
+                    // Create the recyclerview.
+                    snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
+                    // Create the grid layout manager with 2 columns.
+                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuGuest.this);
+                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    snappyRecyclerView.setLayoutManager(new SnappyLinearLayoutManager(MenuGuest.this));
+
+                    //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
+                    // Set layout manager.
+                    snappyRecyclerView.setLayoutManager(layoutManager);
+
+                    // Create car recycler view data adapter with car item list.
+                    customRecyclerViewDataAdapter = new CustomRecyclerViewDataAdapter(itemList);
+
+                    customRecyclerViewDataAdapter.setOnItemClickListener(new CustomRecyclerViewDataAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Toast.makeText(MenuGuest.this, "Clicked at index "+ position, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                            int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
+                            int scrollOffset = recyclerView.computeHorizontalScrollOffset();
+                            int currentItem = 0;
+                            float itemWidth = horizontalScrollRange * 1.0f / itemList.size();
+                            itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
+                            if (scrollOffset != 0) {
+                                currentItem = Math.round(scrollOffset / itemWidth);
+                            }
+                            currentItem = (currentItem < 0) ? 0 : currentItem;
+                            currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
+                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SD")) {
+                                latitude = response.body().getData().get(currentItem).getLatitude();
+                                longitude = response.body().getData().get(currentItem).getLongitude();
+                                final LatLng latLng = new LatLng(latitude, longitude);
+                                final MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sd60));
+                                // Remove Marker
+                                if (m != null) {
+                                    m.remove();
+                                }
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            }
+                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMP")){
+                                latitude = response.body().getData().get(currentItem).getLatitude();
+                                longitude = response.body().getData().get(currentItem).getLongitude();
+                                final LatLng latLng = new LatLng(latitude, longitude);
+                                final MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp60));
+                                // Remove Marker
+                                if (m != null) {
+                                    m.remove();
+                                }
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMA")){
+                                latitude = response.body().getData().get(currentItem).getLatitude();
+                                longitude = response.body().getData().get(currentItem).getLongitude();
+                                final LatLng latLng = new LatLng(latitude, longitude);
+                                final MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sma60));
+                                // Remove Marker
+                                if (m != null) {
+                                    m.remove();
+                                }
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                                latitude = response.body().getData().get(currentItem).getLatitude();
+                                longitude = response.body().getData().get(currentItem).getLongitude();
+                                final LatLng latLng = new LatLng(latitude, longitude);
+                                final MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp60));
+                                // Remove Marker
+                                if (m != null) {
+                                    m.remove();
+                                }
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            }
+                            Toast.makeText(MenuGuest.this, "Scrolled to"+currentItem, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    // Set data adapter.
+                    snappyRecyclerView.setAdapter(customRecyclerViewDataAdapter);
+
+
+                } else{
+                    if (status == 0 && code.equals("NR_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                    if (status == 0 && code.equals("NR_ERR_0002")) {
+                        Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
+                    }
+                    if (status == 0 && code.equals("NR_ERR_0003")) {
+                        Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
+                    }
+                    if (status == 0 && code.equals("NR_ERR_0004")) {
+                        Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
                     }
                 }
+
             }
 
             @Override
-            public void onFailure(Call<ResponseMAP> call, Throwable t) {
+            public void onFailure(Call<JSONResponse.Nearby_School> call, Throwable t) {
                 Log.d("onFailure", t.toString());
             }
 
         });
+    }
+
+    public LinearSnapHelper getSnapHelper() {
+        return new LinearSnapHelper() {
+            @Override
+            public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
+                View centerView = findSnapView(layoutManager);
+                if (centerView == null)
+                    return RecyclerView.NO_POSITION;
+
+                int position = layoutManager.getPosition(centerView);
+                int targetPosition = -1;
+                if (layoutManager.canScrollHorizontally()) {
+                    if (velocityX < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                if (layoutManager.canScrollVertically()) {
+                    if (velocityY < 0) {
+                        targetPosition = position - 1;
+                    } else {
+                        targetPosition = position + 1;
+                    }
+                }
+
+                final int firstItem = 0;
+                final int lastItem = layoutManager.getItemCount() - 1;
+                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem));
+                return targetPosition;
+            }
+        };
+    }
+
+    public interface ISnappyLayoutManager {
+
+        /**
+         * @param velocityX
+         * @param velocityY
+         * @return the resultant position from a fling of the given velocity.
+         */
+        int getPositionForVelocity(int velocityX, int velocityY);
+
+        /**
+         * @return the position this list must scroll to to fix a state where the
+         * views are not snapped to grid.
+         */
+        int getFixScrollPos();
+
+    }
+    public class SnappyLinearLayoutManager extends LinearLayoutManager implements ISnappyLayoutManager {
+        // These variables are from android.widget.Scroller, which is used, via ScrollerCompat, by
+        // Recycler View. The scrolling distance calculation logic originates from the same place. Want
+        // to use their variables so as to approximate the look of normal Android scrolling.
+        // Find the Scroller fling implementation in android.widget.Scroller.fling().
+        private static final float INFLEXION = 0.35f; // Tension lines cross at (INFLEXION, 1)
+        private float DECELERATION_RATE = (float) (Math.log(0.78) / Math.log(0.9));
+        private  double FRICTION = 0.84;
+
+        private double deceleration;
+
+        public SnappyLinearLayoutManager(Context context) {
+            super(context);
+            calculateDeceleration(context);
+        }
+
+        public SnappyLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
+            super(context, orientation, reverseLayout);
+            calculateDeceleration(context);
+        }
+
+        private void calculateDeceleration(Context context) {
+            deceleration = SensorManager.GRAVITY_EARTH // g (m/s^2)
+                    * 39.3700787 // inches per meter
+                    // pixels per inch. 160 is the "default" dpi, i.e. one dip is one pixel on a 160 dpi
+                    // screen
+                    * context.getResources().getDisplayMetrics().density * 160.0f * FRICTION;
+        }
+
+        @Override
+        public int getPositionForVelocity(int velocityX, int velocityY) {
+            if (getChildCount() == 0) {
+                return 0;
+            }
+            if (getOrientation() == HORIZONTAL) {
+                return calcPosForVelocity(velocityX, getChildAt(0).getLeft(), getChildAt(0).getWidth(),
+                        getPosition(getChildAt(0)));
+            } else {
+                return calcPosForVelocity(velocityY, getChildAt(0).getTop(), getChildAt(0).getHeight(),
+                        getPosition(getChildAt(0)));
+            }
+        }
+
+        private int calcPosForVelocity(int velocity, int scrollPos, int childSize, int currPos) {
+            final double dist = getSplineFlingDistance(velocity);
+
+            final double tempScroll = scrollPos + (velocity > 0 ? dist : -dist);
+
+            if (velocity < 0) {
+                // Not sure if I need to lower bound this here.
+                return (int) Math.max(currPos + tempScroll / childSize, 0);
+            } else {
+                return (int) (currPos + (tempScroll / childSize) + 1);
+            }
+        }
+
+        @Override
+        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
+            final LinearSmoothScroller linearSmoothScroller =
+                    new LinearSmoothScroller(recyclerView.getContext()) {
+
+                        // I want a behavior where the scrolling always snaps to the beginning of
+                        // the list. Snapping to end is also trivial given the default implementation.
+                        // If you need a different behavior, you may need to override more
+                        // of the LinearSmoothScrolling methods.
+                        protected int getHorizontalSnapPreference() {
+                            return SNAP_TO_START;
+                        }
+
+                        protected int getVerticalSnapPreference() {
+                            return SNAP_TO_START;
+                        }
+
+                        @Override
+                        public PointF computeScrollVectorForPosition(int targetPosition) {
+                            return SnappyLinearLayoutManager.this
+                                    .computeScrollVectorForPosition(targetPosition);
+                        }
+                    };
+            linearSmoothScroller.setTargetPosition(position);
+            startSmoothScroll(linearSmoothScroller);
+
+        }
+
+        private double getSplineFlingDistance(double velocity) {
+            final double l = getSplineDeceleration(velocity);
+            final double decelMinusOne = DECELERATION_RATE - 1.0;
+            return ViewConfiguration.getScrollFriction() * deceleration
+                    * Math.exp(DECELERATION_RATE / decelMinusOne * l);
+        }
+
+        private double getSplineDeceleration(double velocity) {
+            return Math.log(INFLEXION * Math.abs(velocity)
+                    / (ViewConfiguration.getScrollFriction() * deceleration));
+        }
+
+        /**
+         * This implementation obviously doesn't take into account the direction of the
+         * that preceded it, but there is no easy way to get that information without more
+         * hacking than I was willing to put into it.
+         */
+        @Override
+        public int getFixScrollPos() {
+            if (this.getChildCount() == 0) {
+                return 0;
+            }
+
+            final View child = getChildAt(0);
+            final int childPos = getPosition(child);
+
+            if (getOrientation() == HORIZONTAL
+                    && Math.abs(child.getLeft()) > child.getMeasuredWidth() / 2) {
+                // Scrolled first view more than halfway offscreen
+                return childPos + 1;
+            } else if (getOrientation() == VERTICAL
+                    && Math.abs(child.getTop()) > child.getMeasuredWidth() / 2) {
+                // Scrolled first view more than halfway offscreen
+                return childPos + 1;
+            }
+            return childPos;
+        }
 
     }
 
+    private void configureCameraIdle() {
+        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+
+                CameraPosition position=mapG.getCameraPosition();
+                Log.d("onCameraIdle",
+                        String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
+                                position.target.latitude,
+                                position.target.longitude, position.zoom,
+                                position.tilt));
+                mapG.clear();
+
+                LatLng latLng = mapG.getCameraPosition().target;
+                Geocoder geocoder = new Geocoder(MenuGuest.this, Locale.getDefault());
+                try {
+                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    if (addressList != null && addressList.size() > 0) {
+                        String address = addressList.get(0).getAddressLine(0);
+                        String number = addressList.get(0).getFeatureName();
+                        String city = addressList.get(0).getLocality();
+                        String state = addressList.get(0).getAdminArea();
+                        String country = addressList.get(0).getCountryName();
+                        String postalCode = addressList.get(0).getPostalCode();
+
+
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                CurrentLatitude = latLng.latitude;
+                CurrentLongitude = latLng.longitude;
+
+
+                MarkerOptions options = new MarkerOptions()
+                        .position(position.target)
+                        .icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_map))
+                        .title("im here");
+
+                dapat_map();
+
+
+                //dapat_sekolah();
+                CurrLocationMarker = mapG.addMarker(options);
+        };
+    };
+    }
+    private void configureCameraMove(){
+        onCameraMove = new GoogleMap.OnCameraMoveListener(){
+          @Override
+          public void onCameraMove(){
+              //Remove previous center if it exists
+              if (CurrLocationMarker != null) {
+                  CurrLocationMarker.remove();
+              }
+
+              CameraPosition test = mapG.getCameraPosition();
+              //Assign mCenterMarker reference:
+              CurrLocationMarker = mapG.addMarker(new MarkerOptions().position(mapG.getCameraPosition().target).icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_map)).title("Test"));
+              Log.d("TEST", "Map Coordinate: " + String.valueOf(test));
+          }
+        };
+    }
 }
+
+
+
+
 
