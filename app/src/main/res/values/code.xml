@@ -85,9 +85,4 @@
     <string name="NS_SCS_0001">Sekolah terdekat ditemukan</string>
     <string name="NS_ERR_0001">Sekolah terdekat tidak ditemukan</string>
 
-    /////// check_school_kes
-    <string name="CSK_SCS_0001">Sekolah telah bergabung dengan KES</string>
-    <string name="CSK_ERR_0001">Sekolah belum bergabung dengan KES</string>
-    <string name="CSK_ERR_0002">Kode sekolah kosong</string>
-
 </resources>

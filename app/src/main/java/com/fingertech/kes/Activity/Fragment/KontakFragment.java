@@ -2,9 +2,13 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -50,6 +54,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -165,41 +170,12 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
 
         //move map camera
         mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        mmap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragStart..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-            }
 
-            @SuppressWarnings("unchecked")
-            @Override
-            public void onMarkerDragEnd(final Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.d("System out", "onMarkerDragEnd..."+arg0.getPosition().latitude+"..."+arg0.getPosition().longitude);
-                mmap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                mmap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                    @Override
-                    public boolean onMyLocationButtonClick() {
-                        mmap.animateCamera(CameraUpdateFactory.newLatLng(arg0.getPosition()));
-                        Toast.makeText(getContext(), "The camera is moving.",
-                                Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-            }
-
-            @Override
-            public void onMarkerDrag(Marker arg0) {
-                // TODO Auto-generated method stub
-                Log.i("System out", "onMarkerDrag...");
-            }
-        });
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -257,7 +233,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                         position.tilt));
         MarkerOptions options = new MarkerOptions()
                 .position(position.target)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.map))
+                .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map))
                 .title("im here");
 
         if(mcurrLocationMarker!= null){
@@ -391,6 +367,14 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 namaalamat.setText(strEditText);
             }
         }
+    }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorResId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
 
