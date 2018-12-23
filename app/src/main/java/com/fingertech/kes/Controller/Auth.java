@@ -77,6 +77,11 @@ public interface Auth {
     Call<JSONResponse.Check_Student_NIK>check_student_nik_post(@Header("Authorization") String authorization, @Field("parent_id") String parent_id,@Field("children_nik") String children_nik,
                                                                @Field("school_code") String school_code);
 
+    //////// check_school_kes
+    @FormUrlEncoded
+    @POST("auth/check_school_kes")
+    Call<JSONResponse>check_school_kes_post(@Header("Authorization") String authorization, @Field("school_code") String school_code);
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
     @PUT("update")

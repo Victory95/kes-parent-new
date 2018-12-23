@@ -419,8 +419,6 @@ public class OpsiDaftar extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        progressBar();
-        showDialog();
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -437,7 +435,6 @@ public class OpsiDaftar extends AppCompatActivity {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
                         }
-                        hideDialog();
                     }
                 });
     }

@@ -22,13 +22,34 @@
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_marginTop="55dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_val_nama_kodes"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:text="@string/validate_nama_kode_sekolah"
+                        android:textSize="12dp"
+                        android:textColor="@android:color/holo_red_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/tv_val_nama_kodes_join"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:textSize="12dp"
+                        android:textColor="@color/textColor_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -66,14 +87,30 @@
                                     android:layout_height="wrap_content" />
                             </android.support.design.widget.TextInputLayout>NIK
 
-                            <TextView
+                            <LinearLayout
+                                android:background="@drawable/rectangle_line_blue"
+                                android:layout_marginTop="15dp"
                                 android:layout_marginLeft="40dp"
                                 android:layout_marginRight="40dp"
-                                android:textColor="@color/textColor_Grey"
-                                android:textSize="12dp"
-                                android:text="@string/tv_info_akses_anak"
+                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:padding="10dp"
+                                    android:src="@drawable/ic_info"
+                                    android:layout_width="50dp"
+                                    android:layout_height="match_parent" />
+                                <TextView
+                                    android:id="@+id/tv_info_nama_anak"
+                                    android:paddingTop="10dp"
+                                    android:paddingRight="10dp"
+                                    android:paddingBottom="10dp"
+                                    android:textColor="@color/textColor_Grey"
+                                    android:textSize="12dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <android.support.v7.widget.CardView
@@ -99,6 +136,29 @@
 
                     </RelativeLayout>
 
+                    <TextView
+                        android:layout_marginTop="15dp"
+                        android:text="@string/tv_nama_anak_info"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:textSize="12dp"
+                        android:gravity="center"
+                        android:textColor="@color/textColor_Grey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tv_nama_anak"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="40dp"
+                        android:text="_____"
+                        android:textSize="25dp"
+                        android:gravity="center"
+                        android:textColor="@color/colorAccent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <Button
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
@@ -115,22 +175,10 @@
                         android:layout_height="wrap_content" />Button Masuk
                 </LinearLayout>
 
-                <TextView
-                    android:visibility="gone"
-                    android:layout_marginTop="55dp"
-                    android:id="@+id/tv_val_nama_kodes"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:text="@string/validate_nama_kode_sekolah"
-                    android:textSize="12dp"
-                    android:textColor="@android:color/holo_red_light"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <com.arlib.floatingsearchview.FloatingSearchView
                     android:id="@+id/floating_search_view"
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="200dp"
                     app:floatingSearch_hintTextColor="@color/default_textHint"
                     app:floatingSearch_searchBarMarginLeft="36dp"
                     app:floatingSearch_searchBarMarginRight="36dp"
@@ -138,6 +186,7 @@
                     app:floatingSearch_searchHint="@string/et_nama_kode_sekolah"
                     app:floatingSearch_suggestionsListAnimDuration="250"
                     app:floatingSearch_showSearchKey="true"
+                    app:floatingSearch_dismissFocusOnItemSelection="true"
                     app:floatingSearch_leftActionMode="showSearch"
                     app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
 

@@ -6,15 +6,25 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -39,6 +49,7 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -52,11 +63,11 @@ public class AksesAnak extends AppCompatActivity {
     private ImageView iv_camera;
     private FloatingSearchView floating_search_view;
     private LinearLayout lay_akses_anak;
-    private TextView tv_val_nama_kodes;
+    private TextView tv_val_nama_kodes,tv_val_nama_kodes_join,tv_info_nama_anak,tv_nama_anak;
     String email, member_id, fullname, member_type, parent_id, student_id, school_id;
     int status;
     String code;
-    Integer kosong = 0;
+    Integer kosong = 0,status_nik =0;
     String authorization;
 
     private ProgressDialog dialog;
@@ -115,13 +126,16 @@ public class AksesAnak extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
         checkInternetCon();
 
-        et_nik_niora_siswa    = (EditText)findViewById(R.id.et_nik_niora_siswa);
-        til_nik_niora_siswa   = (TextInputLayout)findViewById(R.id.til_nik_niora_siswa);
-        btn_minta_kode_akses  = (Button)findViewById(R.id.btn_minta_kode_akses);
-        iv_camera             = (ImageView) findViewById(R.id.iv_camera);
-        floating_search_view  = (FloatingSearchView) findViewById(R.id.floating_search_view);
-        lay_akses_anak        = (LinearLayout) findViewById(R.id.lay_akses_anak);
-        tv_val_nama_kodes     = (TextView) findViewById(R.id.tv_val_nama_kodes);
+        et_nik_niora_siswa     = (EditText)findViewById(R.id.et_nik_niora_siswa);
+        til_nik_niora_siswa    = (TextInputLayout)findViewById(R.id.til_nik_niora_siswa);
+        btn_minta_kode_akses   = (Button)findViewById(R.id.btn_minta_kode_akses);
+        iv_camera              = (ImageView) findViewById(R.id.iv_camera);
+        floating_search_view   = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        lay_akses_anak         = (LinearLayout) findViewById(R.id.lay_akses_anak);
+        tv_val_nama_kodes      = (TextView) findViewById(R.id.tv_val_nama_kodes);
+        tv_val_nama_kodes_join = (TextView) findViewById(R.id.tv_val_nama_kodes_join);
+        tv_info_nama_anak      = (TextView) findViewById(R.id.tv_info_nama_anak);
+        tv_nama_anak           = (TextView) findViewById(R.id.tv_nama_anak);
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
 
@@ -133,11 +147,12 @@ public class AksesAnak extends AppCompatActivity {
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
 
         et_disableFocus();
+        getval_InfoAksesAnak();
 
         btn_minta_kode_akses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                submitForm();
+                submitForm();
             }
         });
 
@@ -152,12 +167,14 @@ public class AksesAnak extends AppCompatActivity {
 
         floating_search_view.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
-                if (!oldQuery.equals("") && newQuery.equals("")) {
-                    floating_search_view.clearSuggestions();
+            public void onSearchTextChanged(final String oldQuery, final String newQuery) {
+                floating_search_view.showProgress();
+                if(newQuery.equals("")){
+                    tv_val_nama_kodes_join.setVisibility(View.GONE);
+                    floating_search_view.hideProgress();
                     kosong = 0;
-                } else {
-                    floating_search_view.showProgress();
+                    tv_val_nama_kodes.setText(getResources().getString(R.string.validate_nama_kode_sekolah));
+                }else{
                     /////// Json search school
                     String key = floating_search_view.getQuery();
                     Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toString());
@@ -180,6 +197,7 @@ public class AksesAnak extends AppCompatActivity {
                                     for (int i = 0; i < arrayList.size(); i++){
                                         SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_name());
                                         SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_code());
+                                        school_id = arrayList.get(i).getSchool_id();
                                     }
                                 }
 
@@ -187,23 +205,54 @@ public class AksesAnak extends AppCompatActivity {
                                 for (String item : SOME_HARDCODED_DATA) {
                                     if (item.contains(newQuery.toUpperCase())) {
                                         list.add(new SimpleSuggestions(item));
-                                        floating_search_view.hideProgress();
+                                        floating_search_view.swapSuggestions(list);
+                                        if(floating_search_view.getQuery().toString().equals(item)||floating_search_view.getQuery().toString().equals(item)){
+                                            floating_search_view.clearSuggestions();
+                                            tv_val_nama_kodes.setVisibility(View.GONE);
+                                            tv_val_nama_kodes_join.setVisibility(View.GONE);
+                                            floating_search_view.hideProgress();
+                                            floating_search_view.clearSearchFocus();
+                                            kosong = 1;
+                                            Toast.makeText(AksesAnak.this, school_id, Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            floating_search_view.hideProgress();
+                                            kosong = 0;
+                                        }
                                     }
                                 }
-                                floating_search_view.swapSuggestions(list);
-                                kosong = 1;
 
                             } else {
                                 if(status == 0 && code.equals("SS_ERR_0001")){
                                     Toast.makeText(getApplicationContext(), SS_ERR_0001, Toast.LENGTH_LONG).show();
+                                    floating_search_view.hideProgress();
                                 }
                             }
                         }
                         @Override
                         public void onFailure(Call<JSONResponse.School> call, Throwable t) {
+                            floating_search_view.hideProgress();
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
                         }
                     });
+                }
+            }
+        });
+
+        floating_search_view.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                check_school_kes_post();
+                tv_val_nama_kodes.setVisibility(View.GONE);
+            }
+            @Override
+            public void onSearchAction(String currentQuery) {
+                if(kosong==1){
+                    check_school_kes_post();
+                }else if(floating_search_view.getQuery().toString().isEmpty()){
+                    tv_val_nama_kodes.setText(getResources().getString(R.string.validate_nama_kode_sekolah));
+                }else {
+                    tv_val_nama_kodes.setVisibility(View.VISIBLE);
+                    tv_val_nama_kodes.setText(getResources().getString(R.string.validate_sekolah_code));
                 }
             }
         });
@@ -213,6 +262,7 @@ public class AksesAnak extends AppCompatActivity {
         System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
         newFilters[editFilters.length] = new InputFilter.AllCaps();
         et_nik_niora_siswa.setFilters(newFilters);
+
 
         et_nik_niora_siswa.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -237,14 +287,28 @@ public class AksesAnak extends AppCompatActivity {
         if (!validateNikNiora()) {
             return;
         }
-        tv_val_nama_kodes.setVisibility(View.GONE);
+        if(kosong==0){
+//            check_school_kes_post();
+//            check_student_nik_post();
+            Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show();
+        }else{
+            kosong=0;
+            status_nik=0;
+            tv_val_nama_kodes.setVisibility(View.GONE);
+            tv_val_nama_kodes_join.setVisibility(View.GONE);
+            floating_search_view.clearQuery();
+            tv_nama_anak.setText("_____");
+            et_nik_niora_siswa.setText("");
+        }
 //        request_code_acsess_post();
     }
     private boolean validateNamaKodeSekolah() {
         if (kosong == 0) {
             tv_val_nama_kodes.setVisibility(View.VISIBLE);
+            til_nik_niora_siswa.setError(getResources().getString(R.string.validate_nik_niora_ortu));
             return false;
         } else {
+            til_nik_niora_siswa.setErrorEnabled(false);
             tv_val_nama_kodes.setVisibility(View.GONE);
         }
         return true;
@@ -254,7 +318,10 @@ public class AksesAnak extends AppCompatActivity {
             til_nik_niora_siswa.setError(getResources().getString(R.string.validate_nik_niora_anak));
             requestFocus(et_nik_niora_siswa);
             return false;
-        } else {
+        } else if(status_nik==0){
+            til_nik_niora_siswa.setError(getResources().getString(R.string.validate_nik_niora));
+            requestFocus(et_nik_niora_siswa);
+        }else {
             til_nik_niora_siswa.setErrorEnabled(false);
         }
         return true;
@@ -319,6 +386,7 @@ public class AksesAnak extends AppCompatActivity {
                             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         }
                     }
+                    floating_search_view.clearSuggestions();
                 }
                 return false;
             }
@@ -332,12 +400,94 @@ public class AksesAnak extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+    public void getval_Recommend(){
+        String language = Locale.getDefault().getLanguage();
+        if (language.equals("en")) {
+            SpannableString ss = new SpannableString("The school hasn't joined KES. Recommend the school to join KES");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    startActivity(new Intent(AksesAnak.this, RecommendSchool.class));
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv_val_nama_kodes_join.setText(ss);
+            tv_val_nama_kodes_join.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_val_nama_kodes_join.setHighlightColor(Color.TRANSPARENT);
+        }
+        else if (language.equals("in")) {
+            SpannableString ss = new SpannableString("Sekolah belum bergabung di KES. Rekomendasikan sekolah untuk bergabung dengan KES");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    startActivity(new Intent(AksesAnak.this, RecommendSchool.class));
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv_val_nama_kodes_join.setText(ss);
+            tv_val_nama_kodes_join.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_val_nama_kodes_join.setHighlightColor(Color.TRANSPARENT);
+        }
+    }
+    public void getval_InfoAksesAnak(){
+        String language = Locale.getDefault().getLanguage();
+        if (language.equals("en")) {
+            SpannableString ss = new SpannableString("The access code will be sent via email registered with the school, if the email you use is different from the email registered with the school please Contact us");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    startActivity(new Intent(AksesAnak.this, RecommendSchool.class));
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(clickableSpan, 150, 160, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv_info_nama_anak.setText(ss);
+            tv_info_nama_anak.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_info_nama_anak.setHighlightColor(Color.TRANSPARENT);
+        }
+        else if (language.equals("in")) {
+            SpannableString ss = new SpannableString("Kode akses akan dikirimkan melalui email yang terdaftar pada sekolah, bila email yang anda gunakan berbeda dengan email yang terdaftar pada sekolah mohon Hubungi Kami");
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    startActivity(new Intent(AksesAnak.this, MainActivity.class));
+                }
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(true);
+                }
+            };
+            ss.setSpan(clickableSpan, 154, 166, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv_info_nama_anak.setText(ss);
+            tv_info_nama_anak.setMovementMethod(LinkMovementMethod.getInstance());
+            tv_info_nama_anak.setHighlightColor(Color.TRANSPARENT);
+        }
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        hideKeyboard(AksesAnak.this);
+    }
 
     ///// Retrofit JSON
     public void request_code_acsess_post(){
         parent_id  = member_id;
         student_id = "12";
-        school_id  = "5";
         progressBar();
         showDialog();
         Call<JSONResponse> postCall = mApiInterface.request_code_acsess_post(authorization.toString(), email.toString(), fullname.toString(), parent_id.toString(), student_id.toString(), school_id.toString());
@@ -396,12 +546,10 @@ public class AksesAnak extends AppCompatActivity {
         });
     }
     public void check_student_nik_post(){
-        String parent_id = "6891";
-        String children_nik = "5555666677778888";
-        String school_code = "BPK01";
+        String parent_id = "730";
         progressBar();
         showDialog();
-        Call<JSONResponse.Check_Student_NIK> postCall = mApiInterface.check_student_nik_post(authorization.toString(),parent_id.toString(), et_nik_niora_siswa.getText().toString(), school_code.toString());
+        Call<JSONResponse.Check_Student_NIK> postCall = mApiInterface.check_student_nik_post(authorization.toString(),parent_id.toString(), et_nik_niora_siswa.getText().toString(), floating_search_view.getQuery().toString());
         postCall.enqueue(new Callback<JSONResponse.Check_Student_NIK>() {
             @Override
             public void onResponse(Call<JSONResponse.Check_Student_NIK> call, Response<JSONResponse.Check_Student_NIK> response) {
@@ -424,9 +572,28 @@ public class AksesAnak extends AppCompatActivity {
                             LISTD_CHECK_NIK.add(arrayList.get(i).getFullname());
                         }
                     }
-                    Toast.makeText(getApplicationContext(), String.valueOf(LISTD_CHECK_NIK), Toast.LENGTH_LONG).show();
+
+                    List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
+                    for (final String item : LISTD_CHECK_NIK) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            Toast.makeText(getApplicationContext(), CSN_SCS_0001, Toast.LENGTH_SHORT).show();
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tv_nama_anak.setText(item);
+                                    status_nik =1;
+                                    til_nik_niora_siswa.setErrorEnabled(false);
+                                }
+                            }, 1000);
+                        }
+                    }
                 } else {
+                    status_nik =0;
                     if(status == 0 && code.equals("CSN_ERR_0001")){
+                        til_nik_niora_siswa.setError(getResources().getString(R.string.validate_nik_niora));
+                        requestFocus(et_nik_niora_siswa);
                         Toast.makeText(getApplicationContext(), CSN_ERR_0001, Toast.LENGTH_LONG).show();
                     }
                     if(status == 0 && code.equals("CSN_ERR_0002")){
@@ -437,6 +604,42 @@ public class AksesAnak extends AppCompatActivity {
             @Override
             public void onFailure(Call<JSONResponse.Check_Student_NIK> call, Throwable t) {
                 hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    public void check_school_kes_post(){
+        String key = floating_search_view.getQuery();
+        Call<JSONResponse> postCall = mApiInterface.check_school_kes_post(authorization.toString(),key.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String CSK_SCS_0001 = getResources().getString(R.string.CSK_SCS_0001);
+                String CSK_ERR_0001 = getResources().getString(R.string.CSK_ERR_0001);
+                String CSK_ERR_0002 = getResources().getString(R.string.CSK_ERR_0002);
+
+                if (status == 1 && code.equals("CSK_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), CSK_SCS_0001, Toast.LENGTH_LONG).show();
+                    tv_val_nama_kodes_join.setVisibility(View.GONE);
+                } else {
+                    if(status == 0 && code.equals("CSK_ERR_0001")){
+                        tv_val_nama_kodes_join.setVisibility(View.VISIBLE);
+                        getval_Recommend();
+                        Toast.makeText(getApplicationContext(), CSK_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                    if(status == 0 && code.equals("CSK_ERR_0002")){
+//                        Toast.makeText(getApplicationContext(), CSK_ERR_0002, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });

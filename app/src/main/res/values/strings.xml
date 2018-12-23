@@ -11,6 +11,7 @@
     <string name="label_pemindaian_nik">Pemindaian Scan NIK</string>
     <string name="label_forgot_pass">Lupa Kata Sandi</string>
     <string name="label_akses_anak">Akses Siswa</string>
+    <string name="label_recommend_school">Rekomendasikan Sekolah</string>
     <string name="action_settings">Settings</string>
 
     ///////// Toast show
@@ -28,6 +29,13 @@
     <string name="btn_masuk_sebagai_tamu">Masuk Sebagai Tamu</string>
     <string name="btn_daftar">Daftar</string>
     <string name="tv_slogan">Temukan Sekolahmu Disini</string>
+
+    ///////// recommanded school
+    <string name="tv_recommand_info">Untuk dapat menggunakan sistem KES, silahkan bergabung dengan cara merekomendasikan sekolah anda ke KES</string>
+    <string name="tv_belum_recommand_info">Sekolah anda belum terhubung dengan KES? Ayo! rekomendasikan sekolahmu dan biarkan KES memantau perkembangan anak anda</string>
+    <string name="tv_sudah_recommand_info">Anda telah merekomendasikan sekolah ini untuk bergabung dengan KES, Untuk infomasi selanjutnya kan dikirimkan ke email anda</string>
+    <string name="btn_rekomendasikan">Rekomendasikan Sekolah Dengan KES</string>
+    <string name="btn_share">Ajak orang lain untuk merekomendasikan</string>
 
     //////// Opsi Daftar
     <string name="tv_recommend_masuk">Sudah punya akun? </string>
@@ -50,10 +58,14 @@
     ///////// Akses Anak
     <string name="tv_info_akses_anak">Kode akses akan dikirimkan melalui email yang terdaftar pada sekolah, bila email yang anda gunakan berbeda dengan email yang terdaftar pada sekolah mohon hubungi kami</string>
     <string name="et_nama_kode_sekolah">Nama / Kode Sekolah</string>
-    <string name="et_nama_nik_niora">NIK / NIORA</string>
+    <string name="et_nama_nik_niora">NIK / NIORA Anak</string>
     <string name="btn_minta_kode_akses">Minta Kode Akses</string>
-    <string name="validate_nama_kode_sekolah">* Mohon nama sekolah / kode sekolah anda</string>
+    <string name="validate_nama_kode_sekolah">* Mohon isi nama sekolah / kode sekolah</string>
     <string name="validate_nik_niora_anak">* Masukan NIK / NIORA</string>
+    <string name="validate_sekolah_code">* Nama sekolah / kode sekolah tidak ditemukan</string>
+    <string name="tv_nama_anak_info">Nama anak anda</string>
+    <string name="validate_nik_niora">* NIK / NIORA tidak ditemukan</string>
+    <string name="validate_nik_niora_ortu">* NIK / NIORA anak tidak cokok dengan orangtua</string>
 
     //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
