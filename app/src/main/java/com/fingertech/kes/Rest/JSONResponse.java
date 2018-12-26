@@ -848,6 +848,100 @@ public class JSONResponse{
         private String picture;
     }
 
+    //////// masuk_code_acsess
+    public class Masuk_code_acsess{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<MCA_Data> data;
+        public List<MCA_Data> getData() {
+            return data;
+        }
+    }
+    public class MCA_Data{
+        @SerializedName("parent_id")
+        @Expose
+        private String parent_id;
+        @SerializedName("school_id")
+        @Expose
+        private String school_id;
+        @SerializedName("student_id")
+        @Expose
+        private String student_id;
+        @SerializedName("student_nik")
+        @Expose
+        private String student_nik;
+        @SerializedName("parstd_status")
+        @Expose
+        private String parstd_status;
+        @SerializedName("datez")
+        @Expose
+        private String datez;
+        @SerializedName("member_id")
+        @Expose
+        private String member_id;
+
+        public String getParent_id() {
+            return parent_id;
+        }
+
+        public void setParent_id(String parent_id) {
+            this.parent_id = parent_id;
+        }
+
+        public String getSchool_id() {
+            return school_id;
+        }
+
+        public void setSchool_id(String school_id) {
+            this.school_id = school_id;
+        }
+
+        public String getStudent_id() {
+            return student_id;
+        }
+
+        public void setStudent_id(String student_id) {
+            this.student_id = student_id;
+        }
+
+        public String getStudent_nik() {
+            return student_nik;
+        }
+
+        public void setStudent_nik(String student_nik) {
+            this.student_nik = student_nik;
+        }
+
+        public String getParstd_status() {
+            return parstd_status;
+        }
+
+        public void setParstd_status(String parstd_status) {
+            this.parstd_status = parstd_status;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+    }
+
 
     //////Data Response - Nearby School
     public class Nearby_School{

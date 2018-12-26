@@ -70,7 +70,7 @@ public interface Auth {
     @POST("auth/search_school")
     Call<JSONResponse.School>search_school_post(@Field("key") String key);
 
-    //////// search_school
+    //////// check_student_nik
     @FormUrlEncoded
     @POST("auth/check_student_nik")
     Call<JSONResponse.Check_Student_NIK>check_student_nik_post(@Header("Authorization") String authorization, @Field("parent_id") String parent_id,@Field("children_nik") String children_nik,
@@ -80,6 +80,12 @@ public interface Auth {
     @FormUrlEncoded
     @POST("auth/check_school_kes")
     Call<JSONResponse>check_school_kes_post(@Header("Authorization") String authorization, @Field("school_code") String school_code);
+
+    //////// masuk_code_acsess
+    @FormUrlEncoded
+    @POST("auth/masuk_code_acsess")
+    Call<JSONResponse.Masuk_code_acsess>masuk_code_acsess_post(@Header("Authorization") String authorization, @Field("verification_code") String verification_code, @Field("parent_id") String parent_id,
+                                                               @Field("student_id") String student_id, @Field("student_nik") String student_nik,@Field("school_id") String school_id);
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded

@@ -67,6 +67,13 @@
     <string name="validate_nik_niora">* NIK / NIORA tidak ditemukan</string>
     <string name="validate_nik_niora_ortu">* NIK / NIORA anak tidak cokok dengan orangtua</string>
 
+    ///////// Kode Akses Anak
+    <string name="btn_submit">submit</string>
+    <string name="tv_kode_aa_label">Vertifikasi Kode</string>
+    <string name="tv_kode_aa_info">Mohon masukan kode akses yang telah kami kirimkan ke email anda</string>
+    <string name="tv_kode_aa_label2">Data Siswa</string>
+    <string name="validate_kode_aa">* Masukan kode vertifikasi terlebih dahulu</string>
+
     //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
     <string name="et_nik">NIK / NIORA</string>

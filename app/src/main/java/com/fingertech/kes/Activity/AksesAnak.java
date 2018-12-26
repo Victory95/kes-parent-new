@@ -64,13 +64,13 @@ public class AksesAnak extends AppCompatActivity {
     private FloatingSearchView floating_search_view;
     private LinearLayout lay_akses_anak;
     private TextView tv_val_nama_kodes,tv_val_nama_kodes_join,tv_info_nama_anak,tv_nama_anak;
-    String email, member_id, fullname, member_type, parent_id, student_id, school_id;
+    private ProgressDialog dialog;
+    String email, member_id, fullname, member_type, student_id, school_id;
     int status;
     String code;
     Integer kosong = 0,status_nik =0;
     String authorization;
 
-    private ProgressDialog dialog;
     ConnectivityManager conMgr;
     Auth mApiInterface;
 
@@ -82,7 +82,6 @@ public class AksesAnak extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
 
     List<String> SOME_HARDCODED_DATA;
-    List<String> LISTD_CHECK_NIK;
 
     private static class SimpleSuggestions implements SearchSuggestion {
         private final String mData;
@@ -299,8 +298,8 @@ public class AksesAnak extends AppCompatActivity {
             floating_search_view.clearQuery();
             tv_nama_anak.setText("_____");
             et_nik_niora_siswa.setText("");
+            request_code_acsess_post();
         }
-//        request_code_acsess_post();
     }
     private boolean validateNamaKodeSekolah() {
         if (kosong == 0) {
@@ -486,11 +485,9 @@ public class AksesAnak extends AppCompatActivity {
 
     ///// Retrofit JSON
     public void request_code_acsess_post(){
-        parent_id  = member_id;
-        student_id = "12";
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.request_code_acsess_post(authorization.toString(), email.toString(), fullname.toString(), parent_id.toString(), student_id.toString(), school_id.toString());
+        Call<JSONResponse> postCall = mApiInterface.request_code_acsess_post(authorization.toString(), email.toString(), fullname.toString(), member_id.toString(), student_id.toString(), school_id.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -513,11 +510,8 @@ public class AksesAnak extends AppCompatActivity {
 
                 if (status == 1 && code.equals("RCA_SCS_0001")) {
                     Toast.makeText(getApplicationContext(), RCA_SCS_0001, Toast.LENGTH_LONG).show();
-                    email.equals("");
-                    fullname.equals("");
-                    parent_id.equals("");
-                    student_id.equals("");
-                    school_id.equals("");
+                    Intent intent = new Intent(getApplicationContext(), KodeAksesAnak.class);
+                    startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RCA_ERR_0001")){
                         Toast.makeText(getApplicationContext(), RCA_ERR_0001, Toast.LENGTH_LONG).show();
@@ -546,10 +540,9 @@ public class AksesAnak extends AppCompatActivity {
         });
     }
     public void check_student_nik_post(){
-        String parent_id = "730";
         progressBar();
         showDialog();
-        Call<JSONResponse.Check_Student_NIK> postCall = mApiInterface.check_student_nik_post(authorization.toString(),parent_id.toString(), et_nik_niora_siswa.getText().toString(), floating_search_view.getQuery().toString());
+        Call<JSONResponse.Check_Student_NIK> postCall = mApiInterface.check_student_nik_post(authorization.toString(),member_id.toString(), et_nik_niora_siswa.getText().toString(), floating_search_view.getQuery().toString());
         postCall.enqueue(new Callback<JSONResponse.Check_Student_NIK>() {
             @Override
             public void onResponse(Call<JSONResponse.Check_Student_NIK> call, Response<JSONResponse.Check_Student_NIK> response) {
@@ -560,6 +553,9 @@ public class AksesAnak extends AppCompatActivity {
                 status = resource.status;
                 code = resource.code;
 
+                List<String> AL_CHECK_NIK_GETFULLNAME = null;
+                List<String> AL_CHECK_NIK_GETMEMBERID = null;
+
                 String CSN_SCS_0001 = getResources().getString(R.string.CSN_SCS_0001);
                 String CSN_ERR_0001 = getResources().getString(R.string.CSN_ERR_0001);
                 String CSN_ERR_0002 = getResources().getString(R.string.CSN_ERR_0002);
@@ -567,26 +563,28 @@ public class AksesAnak extends AppCompatActivity {
                 if (status == 1 && code.equals("CSN_SCS_0001")) {
                     List<JSONResponse.CSNIK_Data> arrayList = response.body().getData();
                     if (arrayList != null) {
-                        LISTD_CHECK_NIK = new ArrayList<String>();
+                        AL_CHECK_NIK_GETFULLNAME = new ArrayList<String>();
+                        AL_CHECK_NIK_GETMEMBERID = new ArrayList<String>();
                         for (int i = 0; i < arrayList.size(); i++){
-                            LISTD_CHECK_NIK.add(arrayList.get(i).getFullname());
+                            AL_CHECK_NIK_GETFULLNAME.add(arrayList.get(i).getFullname());
+                            AL_CHECK_NIK_GETMEMBERID.add(arrayList.get(i).getMemberid());
                         }
                     }
 
                     List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
-                    for (final String item : LISTD_CHECK_NIK) {
+                    for (final String item : AL_CHECK_NIK_GETFULLNAME) {
                         if (item.contains(item)) {
                             list.add(new SimpleSuggestions(item));
+                            tv_nama_anak.setText(item);
+                            status_nik =1;
+                            til_nik_niora_siswa.setErrorEnabled(false);
                             Toast.makeText(getApplicationContext(), CSN_SCS_0001, Toast.LENGTH_SHORT).show();
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    tv_nama_anak.setText(item);
-                                    status_nik =1;
-                                    til_nik_niora_siswa.setErrorEnabled(false);
-                                }
-                            }, 1000);
+                        }
+                    }
+                    for (final String item : AL_CHECK_NIK_GETMEMBERID) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            student_id = item;
                         }
                     }
                 } else {
@@ -644,5 +642,6 @@ public class AksesAnak extends AppCompatActivity {
             }
         });
     }
+
 
 }
