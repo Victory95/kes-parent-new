@@ -48,7 +48,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="7"
                 android:id="@+id/cari_sekolah2"
-                android:background="@drawable/arrow"/>
+                android:background="@drawable/ic_arrow_black"/>
 
             </LinearLayout>
 

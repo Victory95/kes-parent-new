@@ -326,7 +326,7 @@ public class Masuk extends AppCompatActivity {
                         /// call session
                         if(jsonObject.get("member_type").toString().equals("6")){
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, ParentMain.class);
+                            Intent intent = new Intent(Masuk.this, MainActivity.class);
                             intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                             intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));

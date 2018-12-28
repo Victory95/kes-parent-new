@@ -267,18 +267,6 @@ public class DaftarParent extends AppCompatActivity {
         return true;
     }
     private boolean validateNik() {
-//        if (et_nik.getText().toString().trim().isEmpty()) {
-//            til_nik.setError(getResources().getString(R.string.validate_nik));
-//            requestFocus(et_nik);
-//            return false;
-//        }else if(et_nik.length()<16) {
-//            til_nik.setError(getResources().getString(R.string.validate_nik_lengh));
-//            requestFocus(et_nik);
-//            return false;
-//        } else {
-//            til_nik.setErrorEnabled(false);
-//        }
-//        return true;
         if (et_nik.getText().toString().trim().isEmpty()) {
             til_nik.setError(getResources().getString(R.string.validate_nik_niora_anak));
             requestFocus(et_nik);

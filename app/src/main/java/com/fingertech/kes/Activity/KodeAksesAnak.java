@@ -1,12 +1,16 @@
 package com.fingertech.kes.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +22,7 @@ import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -31,9 +36,6 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 
-import java.util.LinkedList;
-import java.util.regex.Pattern;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,10 +45,10 @@ import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     private EditText editTextone,editTexttwo,editTextthree,editTextfour,editTextfive,editTextsix;
     private Button btn_submit;
-    private ImageView iv_copy_paste;
-    private TextView tv_val_kode_aa;
+    private ImageView iv_copy_paste,iv_close,iv_foto_profile;
+    private TextView tv_val_kode_aa,tv_kode_akses_anak_sekolah,tv_kode_akses_anak_nama;
     private ProgressDialog dialog;
-    String verification_code,parent_id,student_id,student_nik,school_id;
+    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name;
     Integer status;
     String code;
 
@@ -54,12 +56,15 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
 
     SharedPreferences sharedpreferences;
     public static final String TAG_TOKEN        = "token";
-    public static final String TAG_MEMBER_ID    = "email"; /// PARENT ID
-    public static final String TAG_STUDENT_ID   = "member_id";
-    public static final String TAG_STUDENT_NIK  = "fullname";
-    public static final String TAG_SCHOOL_ID    = "member_type";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
     String authorization;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +78,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         editTextsix     =(EditText)findViewById(R.id.editTextsix);
         btn_submit      =(Button)findViewById(R.id.btn_submit);
         iv_copy_paste   =(ImageView)findViewById(R.id.iv_copy_paste);
+        iv_close        =(ImageView)findViewById(R.id.iv_close);
+        iv_foto_profile =(ImageView)findViewById(R.id.iv_foto_profile);
         tv_val_kode_aa  =(TextView)findViewById(R.id.tv_val_kode_aa);
+        tv_kode_akses_anak_sekolah  =(TextView)findViewById(R.id.tv_kode_akses_anak_sekolah);
+        tv_kode_akses_anak_nama     =(TextView)findViewById(R.id.tv_kode_akses_anak_nama);
 
         editTextone.addTextChangedListener(this);
         editTexttwo.addTextChangedListener( this);
@@ -82,14 +91,19 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         editTextfive.addTextChangedListener(this);
         editTextsix.addTextChangedListener(this);
 
+        editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+        editTextone.setTextColor(getResources().getColor(R.color.colorPrimary));
+
         mApiInterface = ApiClient.getClient().create(Auth.class);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
-//        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-//        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
-//        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
+        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
 
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -169,6 +183,137 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 return false;
             }
         });
+
+        tv_kode_akses_anak_nama.setText(childrenname);
+        tv_kode_akses_anak_sekolah.setText(school_name);
+
+        editTextone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextone.onTouchEvent(event);
+                editTextone.setSelection(editTextone.getText().length());
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextone.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+        editTexttwo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTexttwo.onTouchEvent(event);
+                editTexttwo.setSelection(editTexttwo.getText().length());
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+        editTextthree.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextthree.onTouchEvent(event);
+                editTextthree.setSelection(editTextthree.getText().length());
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+        editTextfour.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextfour.onTouchEvent(event);
+                editTextfour.setSelection(editTextfour.getText().length());
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+        editTextfive.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextfive.onTouchEvent(event);
+                editTextfive.setSelection(editTextfive.getText().length());
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+        editTextsix.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                editTextsix.onTouchEvent(event);
+                editTextsix.setSelection(editTextsix.getText().length());
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextsix.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
+                return true;
+            }
+        });
+
         iv_copy_paste.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +350,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     tv_val_kode_aa.setVisibility(View.VISIBLE);
                 }else {
                     tv_val_kode_aa.setVisibility(View.GONE);
-                   masuk_code_acsess_post();
+                    masuk_code_acsess_post();
                 }
             }
         });
@@ -219,21 +364,55 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     public void afterTextChanged(Editable editable) {
         if (editable.length() == 1) {
             if (editTextone.length() == 1) {
+                editTextone.setSelection(editTextone.getText().length());
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextone.setTextColor(Color.WHITE);
                 editTexttwo.requestFocus();
             }
             if (editTexttwo.length() == 1) {
+                editTexttwo.setSelection(editTexttwo.getText().length());
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTexttwo.setTextColor(Color.WHITE);
                 editTextthree.requestFocus();
             }
             if (editTextthree.length() == 1) {
+                editTextthree.setSelection(editTextthree.getText().length());
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextthree.setTextColor(Color.WHITE);
                 editTextfour.requestFocus();
             }
             if (editTextfour.length() == 1) {
+                editTextfour.setSelection(editTextfour.getText().length());
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfour.setTextColor(Color.WHITE);
                 editTextfive.requestFocus();
             }
             if (editTextfive.length() == 1) {
+                editTextfive.setSelection(editTextfive.getText().length());
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                editTextsix.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextfive.setTextColor(Color.WHITE);
                 editTextsix.requestFocus();
             }
             if (editTextsix.length() == 1) {
+                editTextsix.setSelection(editTextsix.getText().length());
+
+                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                editTextsix.setTextColor(Color.WHITE);
                 hideKeyboard(KodeAksesAnak.this);
             }
         }
@@ -244,6 +423,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                         if (end == 0 || dstart < dend && editTextone.length() == 0 && editTextone.length() == 0) {
                             editTextone.requestFocus();
+                            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                            editTextone.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                            editTexttwo.setTextColor(Color.WHITE);
                         }
                         return source;
                     }
@@ -259,6 +443,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                         if (end == 0 || dstart < dend && editTexttwo.length() == 0) {
                             editTexttwo.requestFocus();
+                            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                            editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                            editTextthree.setTextColor(Color.WHITE);
                         }
                         return source;
                     }
@@ -274,6 +463,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                         if (end == 0 || dstart < dend && editTextthree.length() == 0) {
                             editTextthree.requestFocus();
+                            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                            editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                            editTextfour.setTextColor(Color.WHITE);
                         }
                         return source;
                     }
@@ -289,6 +483,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                         if (end == 0 || dstart < dend && editTextfour.length() == 0) {
                             editTextfour.requestFocus();
+                            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                            editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                            editTextfive.setTextColor(Color.WHITE);
                         }
                         return source;
                     }
@@ -304,6 +503,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
                         if (end == 0 || dstart < dend && editTextfive.length() == 0) {
                             editTextfive.requestFocus();
+                            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                            editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                            editTextsix.setTextColor(Color.WHITE);
                         }
                         return source;
                     }
@@ -340,11 +544,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     }
 
     public void masuk_code_acsess_post(){
-        verification_code = "139478";
-        parent_id   = "232";
-        student_id  = "415";
-        student_nik = "65671298521";
-        school_id   = "1";
+        verification_code = editTextone.getText().toString()+editTexttwo.getText().toString()+editTextthree.getText().toString()+editTextfour.getText().toString()+editTextfive.getText().toString()+editTextsix.getText().toString();
         progressBar();
         showDialog();
         Call<JSONResponse.Masuk_code_acsess> postCall = mApiInterface.masuk_code_acsess_post(authorization.toString(), verification_code.toString(), parent_id.toString(), student_id.toString(), student_nik.toString(), school_id.toString());
@@ -352,7 +552,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
             @Override
             public void onResponse(Call<JSONResponse.Masuk_code_acsess> call, Response<JSONResponse.Masuk_code_acsess> response) {
                 hideDialog();
-                Log.d("TAG",response.code()+"");
+                Log.i("TAG_KODE_AKSES_ANAK",response.code()+"");
 
                 JSONResponse.Masuk_code_acsess resource = response.body();
                 status = resource.status;
@@ -369,7 +569,10 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 String MCA_ERR_0008 = getResources().getString(R.string.MCA_ERR_0008);
 
                 if (status == 1 && code.equals("MCA_SCS_0001")) {
+                    JSONResponse.MCA_Data data = (JSONResponse.MCA_Data) resource.data;
                     Toast.makeText(getApplicationContext(), MCA_SCS_0001, Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getApplicationContext(), ParentMain.class);
+                    startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("MCA_ERR_0001")){
                         Toast.makeText(getApplicationContext(), MCA_ERR_0001, Toast.LENGTH_LONG).show();

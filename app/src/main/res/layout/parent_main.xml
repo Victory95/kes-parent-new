@@ -1,43 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#46bfee">
+    android:background="@color/colorPrimary">
 
     <android.support.v4.view.ViewPager
+        android:layout_weight="1"
         android:id="@+id/PagerParent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/viewPagerIndicators"></android.support.v4.view.ViewPager>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/viewPagerIndicators"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_above="@id/next"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="41dp"
-        android:gravity="center">
-
-        <LinearLayout
-            android:id="@+id/indicators"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:orientation="horizontal"></LinearLayout>
-    </LinearLayout>
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="1"
         android:orientation="horizontal">
 
         <Button
@@ -52,6 +31,24 @@
             android:textAllCaps="false"
             android:textColor="#ffffff" />
 
+        <LinearLayout
+            android:id="@+id/viewPagerIndicators"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:id="@+id/indicators"
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </LinearLayout>
+
         <Button
             android:id="@+id/btn_berikut"
             android:layout_width="match_parent"
@@ -65,4 +62,4 @@
             android:textColor="#ffffff" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

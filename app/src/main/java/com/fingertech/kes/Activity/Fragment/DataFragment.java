@@ -1,57 +1,37 @@
 package com.fingertech.kes.Activity.Fragment;
 
-
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.ParseException;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
-import android.text.Html;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.DaftarPublic;
 import com.fingertech.kes.Activity.Masuk;
-import com.fingertech.kes.Activity.ParentMain;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Service.DBHelper;
-import com.fingertech.kes.Util.JWTUtils;
 
 import org.json.JSONObject;
 
@@ -68,25 +48,17 @@ import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DataFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-
-    public DataFragment() {
-        // Required empty public constructor
-    }
-
-    private TextInputLayout til_namadepan,til_namabelakang,til_Nik,til_Hubungan,til_tempat_lahir,til_tanggal_lahir;
-    private EditText et_namadepan,et_namabelakang,et_Nik,et_Hubungan,et_tempat_lahir,et_tanggal_lahir;
+    private TextInputLayout til_namadepan,til_namabelakang,til_Nik,til_Hubungan,til_tempat_lahir,til_tanggal_lahir,til_Email;
+    private EditText et_namadepan,et_namabelakang,et_Nik,et_Hubungan,et_tempat_lahir,et_tanggal_lahir,et_Email;
     private Spinner et_negaraasal;
-    private TextView t_tanggal_lahir;
-
+    private Spinner et_hubungan;
     private ProgressDialog dialog;
+    private RadioButton rb_wni,rb_wna;
     int status;
     String code;
-    String deviceid;
-    String id, nama_depan,nama_belakang,nik,hubungan,tempat_lahir,tanggal_lahir, token;
+    String nama_depan,email,nik,hubungan,tempat_lahir,tanggal_lahir, token,student_id,school_code,authorization,type_warga;
+    String parent_name,parent_email,parent_nik,parent_type,parent_birth_place,parent_birth_date,kewarganegaraan,parent_address,parent_phone;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -106,22 +78,42 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     public static final String TAG_TOKEN             = "token";
 
     Auth mApiInterface;
+
+    public DataFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_data, container, false);
-        et_namadepan = (EditText)view.findViewById(R.id.et_nama_depan);
-        et_namabelakang = (EditText)view.findViewById(R.id.et_nama_belakang);
-        et_Nik = (EditText)view.findViewById(R.id.et_NIK);
-        et_tempat_lahir = (EditText)view.findViewById(R.id.et_tempatlahir);
-        et_tanggal_lahir = (EditText)view.findViewById(R.id.et_tanggallahir);
-        et_negaraasal = (Spinner)view.findViewById(R.id.sp_negara);
-        til_namadepan = (TextInputLayout)view.findViewById(R.id.til_nama_depan);
-        til_namabelakang = (TextInputLayout)view.findViewById(R.id.til_nama_belakang);
-        til_Nik = (TextInputLayout)view.findViewById(R.id.til_NIK);
-        til_tempat_lahir = (TextInputLayout)view.findViewById(R.id.til_tempatlahir);
+        View view         = inflater.inflate(R.layout.fragment_data, container, false);
+        et_namadepan      = (EditText)view.findViewById(R.id.et_nama_depan);
+        et_Email          = (EditText)view.findViewById(R.id.et_Email);
+        et_Nik            = (EditText)view.findViewById(R.id.et_NIK);
+        et_tempat_lahir   = (EditText)view.findViewById(R.id.et_tempatlahir);
+        et_tanggal_lahir  = (EditText)view.findViewById(R.id.et_tanggallahir);
+        et_negaraasal     = (Spinner)view.findViewById(R.id.sp_negara);
+        til_namadepan     = (TextInputLayout)view.findViewById(R.id.til_nama_depan);
+        til_Email         = (TextInputLayout)view.findViewById(R.id.til_Email);
+        til_Nik           = (TextInputLayout)view.findViewById(R.id.til_NIK);
+        til_tempat_lahir  = (TextInputLayout)view.findViewById(R.id.til_tempatlahir);
         til_tanggal_lahir = (TextInputLayout)view.findViewById(R.id.til_tanggallahir);
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        et_hubungan       = (Spinner) view.findViewById(R.id.sp_hubungan);
+        rb_wni            = (RadioButton) view.findViewById(R.id.rb_wni);
+        rb_wna            = (RadioButton) view.findViewById(R.id.rb_wna);
+        dateFormatter     = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
+        mApiInterface = ApiClient.getClient().create(Auth.class);
+
+        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        nama_depan      = sharedpreferences.getString(TAG_NAMA_DEPAN,"fullname");
+        nik             = sharedpreferences.getString(TAG_NIK,"parent_nik");
+        tempat_lahir    = sharedpreferences.getString(TAG_TEMPAT_LAHIR,"parent_birth_place");
+        token           = sharedpreferences.getString(TAG_TOKEN,"token");
+
+        et_namadepan.setText(nama_depan);
+        et_Nik.setText(nik);
+        et_tempat_lahir.setText(tempat_lahir);
 
         //Mengambil calendar bawaan dari android
         Calendar calendar = Calendar.getInstance();
@@ -150,72 +142,14 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
 
         et_negaraasal.setOnItemSelectedListener(this);
 
-        // submitForm();
-        //login_post();
-        // Loading spinner data from database
+        data_parent_student_get();
+
         loadSpinnerData();
-
-        // Spinner click listener
-        Spinner et_hubungan = (Spinner) view.findViewById(R.id.sp_hubungan);
-        String[] years = {"Hubungan","Ayah","Ibu","Wali"};
-
-        final List<String> plantsList = new ArrayList<>(Arrays.asList(years));
-
-        // Initializing an ArrayAdapter
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                getActivity(),R.layout.spinner_text,plantsList){
-            @Override
-            public boolean isEnabled(int position){
-                if(position == 0)
-                {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if(position == 0){
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
-                }
-                else {
-                    tv.setTextColor(Color.BLACK);
-                }
-                return view;
-            }
-        };
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        et_hubungan.setAdapter(spinnerArrayAdapter);
-
-        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        nama_depan       = sharedpreferences.getString(TAG_NAMA_DEPAN,"fullname");
-        nik   = sharedpreferences.getString(TAG_NIK,"parent_nik");
-        tempat_lahir    = sharedpreferences.getString(TAG_TEMPAT_LAHIR,"parent_birth_place");
-
-        token       = sharedpreferences.getString(TAG_TOKEN,"token");
-
-        et_namadepan.setText(nama_depan);
-        et_Nik.setText(nik);
-        et_tempat_lahir.setText(tempat_lahir);
-
-        mApiInterface = ApiClient.getClient().create(Auth.class);
-
         return view;
     }
 
     private void submitForm() {
         if (!validateNamaDepan()) {
-            return;
-        }
-        if (!validateNamaBelakang()) {
             return;
         }
         if (!validateNIK()) {
@@ -234,7 +168,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             else{
            }
     }
-
     private boolean validateNamaDepan() {
         if (et_namadepan.getText().toString().trim().isEmpty()) {
             til_namadepan.setError(getResources().getString(R.string.validate_name_depan));
@@ -246,19 +179,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
 
         return true;
     }
-
-    private boolean validateNamaBelakang() {
-        if (et_namabelakang.getText().toString().trim().isEmpty()) {
-            til_namabelakang.setError(getResources().getString(R.string.validate_name_belakang));
-            requestFocus(et_namabelakang);
-            return false;
-        } else {
-            til_namabelakang.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
     private boolean validateNIK() {
         if (et_Nik.getText().toString().trim().isEmpty()) {
             til_Nik.setError(getResources().getString(R.string.validate_nik));
@@ -270,7 +190,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
 
         return true;
     }
-
     private boolean validateHubungan() {
         if (et_Hubungan.getText().toString().trim().isEmpty()) {
             til_Hubungan.setError(getResources().getString(R.string.validate_hubungan));
@@ -282,7 +201,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
 
         return true;
     }
-
     private boolean validateTempatLahir() {
         if (et_tempat_lahir.getText().toString().trim().isEmpty()) {
             til_tempat_lahir.setError(getResources().getString(R.string.validate_tempat_lahir));
@@ -294,7 +212,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
 
         return true;
     }
-
     private boolean validateTanggalLahir() {
         if (et_tanggal_lahir.getText().toString().trim().isEmpty()) {
             til_tanggal_lahir.setError(getResources().getString(R.string.validate_tanggal_lahir));
@@ -307,12 +224,29 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         return true;
     }
 
+    //////// Progressbar - Loading Animation
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(getActivity());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-
     private void loadSpinnerData() {
         // database handler
         DBHelper db = new DBHelper(getApplicationContext());
@@ -331,37 +265,128 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
     }
-
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
-
-    public void login_post(){
-        Call<JSONResponse> call = mApiInterface.update_orangtua_get(et_namadepan.getText().toString(), et_Nik.getText().toString(),et_Hubungan.getText().toString(), et_tempat_lahir.getText().toString(),et_tanggal_lahir.getText().toString());
-        call.enqueue(new Callback<JSONResponse>() {
+    public void data_parent_student_get(){
+        /////// percobaan input manual
+        authorization = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFhYWFAeWFoc29vLmNvbSIsIm1lbWJlcl9pZCI6IjE3NCIsImZ1bGxuYW1lIjoiYWFhYWFhYSJ9.OjEl90fIvF9kMM01QCHuQzKAdboBCgrI7YX_4WepPHA";
+        school_code = "bpk01";
+        parent_nik = "9843584821";
+        student_id = "416";
+//        parent_nik = et_Nik.getText().toString();
+        progressBar();
+        showDialog();
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toString(), parent_nik.toString(), student_id.toString());
+        call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                hideDialog();
-//                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
+            public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
                 Log.d("TAG",response.code()+"");
-                JSONResponse resource = response.body();
+                hideDialog();
+
+                JSONResponse.Data_parent_student resource = response.body();
                 status = resource.status;
                 code = resource.code;
 
+                String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
+                String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
+                String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
+                String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
+
+                if (status == 1 && code.equals("DPG_SCS_0001")) {
+                    final JSONResponse.DPS_Data data = resource.data;
+                    JSONObject jsonObject = null;
+                    et_namadepan.setText(data.parent_name);
+                    et_Email.setText(data.parent_email);
+                    et_Nik.setText(data.parent_nik);
+                    parent_type = data.parent_type;
+                    et_tempat_lahir.setText(data.parent_birth_place);
+                    et_tanggal_lahir.setText(data.parent_birth_date);
+                    type_warga = data.type_warga;
+
+                    // Spinner click listener
+                    final String[] years = {"Hubungan","Ayah","Ibu","Wali"};
+                    final List<String> plantsList = new ArrayList<>(Arrays.asList(years));
+
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_text,plantsList){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+                    spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    et_hubungan.setAdapter(spinnerArrayAdapter);
+
+                    if(parent_type.equals("Ayah")){
+                        et_hubungan.setSelection(1);
+                    }else if(parent_type.equals("Ibu")){
+                        et_hubungan.setSelection(2);
+                    }else if(parent_type.equals("Wali")){
+                        et_hubungan.setSelection(3);
+                    }
+
+                    rb_wni.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            type_warga = "WNI";
+                        }
+                    });
+                    rb_wna.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            type_warga = "WNA";
+                        }
+                    });
+
+                    rb_wni.setChecked(true);
+
+//                    if(type_warga.equals("WNI")){
+////                        rb_wni.isChecked();
+//                        rb_wni.setChecked(true);
+//                    }else if(type_warga.equals("WNA")){
+////                        rb_wna.isChecked();
+//                        rb_wna.setChecked(true);
+//                    }
+                } else {
+                    if(status == 0 && code.equals("DPG_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("DPG_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("DPG_ERR_0003")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
+                    }
+                }
             }
             @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
+            public void onFailure(Call<JSONResponse.Data_parent_student> call, Throwable t) {
                 hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    private void hideDialog() {
-        if (dialog.isShowing())
-            dialog.dismiss();
-        dialog.setContentView(R.layout.progressbar);
     }
     //Konversi tanggal dari date dialog ke format yang kita inginkan
     String convertDate(int year, int month, int day) {
@@ -377,5 +402,4 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             return "";
         }
     }
-
 }

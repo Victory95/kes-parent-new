@@ -87,6 +87,10 @@ public interface Auth {
     Call<JSONResponse.Masuk_code_acsess>masuk_code_acsess_post(@Header("Authorization") String authorization, @Field("verification_code") String verification_code, @Field("parent_id") String parent_id,
                                                                @Field("student_id") String student_id, @Field("student_nik") String student_nik,@Field("school_id") String school_id);
 
+    //////// data_parent_student
+    @GET("parents/data_parent_student")
+    Call<JSONResponse.Data_parent_student>data_parent_student_get(@Header("Authorization") String authorization, @Query("school_code") String school_code, @Query("parent_nik") String parent_nik, @Query("student_id") String student_id);
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
     @PUT("update")

@@ -857,10 +857,7 @@ public class JSONResponse{
         public String code;
 
         @SerializedName("data")
-        public List<MCA_Data> data;
-        public List<MCA_Data> getData() {
-            return data;
-        }
+        public MCA_Data data;
     }
     public class MCA_Data{
         @SerializedName("parent_id")
@@ -884,64 +881,63 @@ public class JSONResponse{
         @SerializedName("member_id")
         @Expose
         private String member_id;
-
-        public String getParent_id() {
-            return parent_id;
-        }
-
-        public void setParent_id(String parent_id) {
-            this.parent_id = parent_id;
-        }
-
-        public String getSchool_id() {
-            return school_id;
-        }
-
-        public void setSchool_id(String school_id) {
-            this.school_id = school_id;
-        }
-
-        public String getStudent_id() {
-            return student_id;
-        }
-
-        public void setStudent_id(String student_id) {
-            this.student_id = student_id;
-        }
-
-        public String getStudent_nik() {
-            return student_nik;
-        }
-
-        public void setStudent_nik(String student_nik) {
-            this.student_nik = student_nik;
-        }
-
-        public String getParstd_status() {
-            return parstd_status;
-        }
-
-        public void setParstd_status(String parstd_status) {
-            this.parstd_status = parstd_status;
-        }
-
-        public String getDatez() {
-            return datez;
-        }
-
-        public void setDatez(String datez) {
-            this.datez = datez;
-        }
-
-        public String getMember_id() {
-            return member_id;
-        }
-
-        public void setMember_id(String member_id) {
-            this.member_id = member_id;
-        }
     }
 
+    //////// data_parent_student
+    public class Data_parent_student{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public DPS_Data data;
+    }
+    public class DPS_Data{
+        @SerializedName("studentparentid")
+        public String studentparentid;
+        @SerializedName("student_id")
+        public String student_id;
+        @SerializedName("parent_type")
+        public String parent_type;
+        @SerializedName("parent_name")
+        public String parent_name;
+        @SerializedName("type_warga")
+        public String type_warga;
+        @SerializedName("parent_nik")
+        public String parent_nik;
+        @SerializedName("parent_birth_place")
+        public String parent_birth_place;
+        @SerializedName("parent_birth_date")
+        public String parent_birth_date;
+        @SerializedName("parent_home_phone")
+        public String parent_home_phone;
+        @SerializedName("parent_phone")
+        public String parent_phone;
+        @SerializedName("parent_education")
+        public String parent_education;
+        @SerializedName("parent_email")
+        public String parent_email;
+        @SerializedName("employment")
+        public String employment;
+        @SerializedName("company_name")
+        public String company_name;
+        @SerializedName("workplace_address")
+        public String workplace_address;
+        @SerializedName("office_latitude")
+        public String office_latitude;
+        @SerializedName("office_longitude")
+        public String office_longitude;
+        @SerializedName("parent_income")
+        public String parent_income;
+        @SerializedName("parent_address")
+        public String parent_address;
+        @SerializedName("parent_latitude")
+        public String parent_latitude;
+        @SerializedName("parent_longitude")
+        public String parent_longitude;
+    }
 
     //////Data Response - Nearby School
     public class Nearby_School{

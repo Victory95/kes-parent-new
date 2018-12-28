@@ -97,6 +97,12 @@
     <string name="CSK_ERR_0001">Gagal tidak ditemukan</string>
     <string name="CSK_ERR_0002">Kode sekolah kosong</string>
 
+    /////// data_parent_student
+    <string name="DPG_SCS_0001">Berhasil</string>
+    <string name="DPG_ERR_0001">Gagal</string>
+    <string name="DPG_ERR_0002">gagal decoded</string>
+    <string name="DPG_ERR_0003">akses token tidak ada</string>
+
     /////// masuk_code_acsess
     <string name="MCA_SCS_0001">Berhasil verification code</string>
     <string name="MCA_ERR_0001">verification code kosong</string>

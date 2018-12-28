@@ -10,21 +10,17 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -32,12 +28,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +45,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,7 +58,7 @@ public class AksesAnak extends AppCompatActivity {
     private LinearLayout lay_akses_anak;
     private TextView tv_val_nama_kodes,tv_val_nama_kodes_join,tv_info_nama_anak,tv_nama_anak;
     private ProgressDialog dialog;
-    String email, member_id, fullname, member_type, student_id, school_id;
+    String email, member_id, fullname, member_type, student_id, student_nik, school_id,school_name;
     int status;
     String code;
     Integer kosong = 0,status_nik =0;
@@ -74,14 +67,21 @@ public class AksesAnak extends AppCompatActivity {
     ConnectivityManager conMgr;
     Auth mApiInterface;
 
+    public static final String my_shared_preferences = "my_shared_preferences";
+    public static final String session_status = "session_status";
+
     SharedPreferences sharedpreferences;
     public static final String TAG_EMAIL        = "email";
     public static final String TAG_MEMBER_ID    = "member_id";
     public static final String TAG_FULLNAME     = "fullname";
+
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_STUDNET_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
-
-    List<String> SOME_HARDCODED_DATA;
 
     private static class SimpleSuggestions implements SearchSuggestion {
         private final String mData;
@@ -186,40 +186,40 @@ public class AksesAnak extends AppCompatActivity {
                             status = resource.status;
                             code = resource.code;
 
+                            List<String> SS_GETNAME_AND_SCHOOLCODE = null;
+
                             String SS_SCS_0001 = getResources().getString(R.string.SS_SCS_0001);
                             String SS_ERR_0001 = getResources().getString(R.string.SS_ERR_0001);
 
                             if (status == 1 && code.equals("SS_SCS_0001")) {
                                 List<JSONResponse.SData> arrayList = response.body().getData();
                                 if (arrayList != null) {
-                                    SOME_HARDCODED_DATA = new ArrayList<String>();
+                                    SS_GETNAME_AND_SCHOOLCODE = new ArrayList<String>();
                                     for (int i = 0; i < arrayList.size(); i++){
-                                        SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_name());
-                                        SOME_HARDCODED_DATA.add(arrayList.get(i).getSchool_code());
-                                        school_id = arrayList.get(i).getSchool_id();
+                                        SS_GETNAME_AND_SCHOOLCODE.add(arrayList.get(i).getSchool_name());
+                                        SS_GETNAME_AND_SCHOOLCODE.add(arrayList.get(i).getSchool_code());
                                     }
                                 }
 
                                 List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
-                                for (String item : SOME_HARDCODED_DATA) {
+                                for (String item : SS_GETNAME_AND_SCHOOLCODE) {
                                     if (item.contains(newQuery.toUpperCase())) {
                                         list.add(new SimpleSuggestions(item));
                                         floating_search_view.swapSuggestions(list);
-                                        if(floating_search_view.getQuery().toString().equals(item)||floating_search_view.getQuery().toString().equals(item)){
+                                        if(floating_search_view.getQuery().toString().equals(item)){
                                             floating_search_view.clearSuggestions();
                                             tv_val_nama_kodes.setVisibility(View.GONE);
                                             tv_val_nama_kodes_join.setVisibility(View.GONE);
                                             floating_search_view.hideProgress();
                                             floating_search_view.clearSearchFocus();
                                             kosong = 1;
-                                            Toast.makeText(AksesAnak.this, school_id, Toast.LENGTH_SHORT).show();
+                                            search_school_post();
                                         }else{
                                             floating_search_view.hideProgress();
                                             kosong = 0;
                                         }
                                     }
                                 }
-
                             } else {
                                 if(status == 0 && code.equals("SS_ERR_0001")){
                                     Toast.makeText(getApplicationContext(), SS_ERR_0001, Toast.LENGTH_LONG).show();
@@ -287,10 +287,17 @@ public class AksesAnak extends AppCompatActivity {
             return;
         }
         if(kosong==0){
-//            check_school_kes_post();
-//            check_student_nik_post();
+            /// save session
             Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show();
         }else{
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putBoolean(session_status, true);
+            editor.putString(TAG_STUDNET_ID, (String) student_id);
+            editor.putString(TAG_STUDENT_NIK, (String) student_nik);
+            editor.putString(TAG_SCHOOL_ID, (String) school_id);
+            editor.putString(TAG_NAMA_ANAK, tv_nama_anak.getText().toString());
+            editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
+            editor.commit();
             kosong=0;
             status_nik=0;
             tv_val_nama_kodes.setVisibility(View.GONE);
@@ -555,6 +562,7 @@ public class AksesAnak extends AppCompatActivity {
 
                 List<String> AL_CHECK_NIK_GETFULLNAME = null;
                 List<String> AL_CHECK_NIK_GETMEMBERID = null;
+                List<String> AL_CHECK_NIK_GETNIK = null;
 
                 String CSN_SCS_0001 = getResources().getString(R.string.CSN_SCS_0001);
                 String CSN_ERR_0001 = getResources().getString(R.string.CSN_ERR_0001);
@@ -565,9 +573,11 @@ public class AksesAnak extends AppCompatActivity {
                     if (arrayList != null) {
                         AL_CHECK_NIK_GETFULLNAME = new ArrayList<String>();
                         AL_CHECK_NIK_GETMEMBERID = new ArrayList<String>();
+                        AL_CHECK_NIK_GETNIK = new ArrayList<String>();
                         for (int i = 0; i < arrayList.size(); i++){
                             AL_CHECK_NIK_GETFULLNAME.add(arrayList.get(i).getFullname());
                             AL_CHECK_NIK_GETMEMBERID.add(arrayList.get(i).getMemberid());
+                            AL_CHECK_NIK_GETNIK.add(arrayList.get(i).getNik());
                         }
                     }
 
@@ -585,6 +595,12 @@ public class AksesAnak extends AppCompatActivity {
                         if (item.contains(item)) {
                             list.add(new SimpleSuggestions(item));
                             student_id = item;
+                        }
+                    }
+                    for (final String item : AL_CHECK_NIK_GETNIK) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            student_nik = item;
                         }
                     }
                 } else {
@@ -638,6 +654,58 @@ public class AksesAnak extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void search_school_post(){
+        String key = floating_search_view.getQuery();
+        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toString());
+        postCall.enqueue(new Callback<JSONResponse.School>() {
+            @Override
+            public void onResponse(Call<JSONResponse.School> call, Response<JSONResponse.School> response) {
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse.School resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                List<String> SS_GETSCHOOLNAME = null;
+                List<String> SS_GETSCHOOLID = null;
+
+                if (status == 1 && code.equals("SS_SCS_0001")) {
+                    List<JSONResponse.SData> arrayList = response.body().getData();
+                    if (arrayList != null) {
+                        SS_GETSCHOOLNAME = new ArrayList<String>();
+                        SS_GETSCHOOLID = new ArrayList<String>();
+                        for (int i = 0; i < arrayList.size(); i++){
+                            SS_GETSCHOOLNAME.add(arrayList.get(i).getSchool_name());
+                            SS_GETSCHOOLID.add(arrayList.get(i).getSchoolid());
+                        }
+                    }
+                    List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
+                    for (final String item : SS_GETSCHOOLID) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            school_id =item;
+                        }
+                    }
+                    for (final String item : SS_GETSCHOOLNAME) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            school_name =item;
+                        }
+                    }
+                } else {
+                    if(status == 0 && code.equals("SS_ERR_0001")){
+                        floating_search_view.hideProgress();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.School> call, Throwable t) {
+                floating_search_view.hideProgress();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });

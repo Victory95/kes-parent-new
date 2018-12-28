@@ -3,11 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#46bfee"
+    android:background="@color/colorPrimary"
     tools:context=".Activity.Fragment.TempatTinggalFragment">
+
+    <TextView
+        android:layout_marginBottom="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:text="Tempat Tinggal"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:textColor="#ffffff"
+        android:textSize="25dp" />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,24 +30,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
-            android:text="Tempat Tinggal"
-            android:layout_marginTop="10dp"
-            android:textAlignment="center"
-            android:textColor="#ffffff"
-            android:textSize="25dp" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_Alamat"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -43,7 +48,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />Alamat
@@ -51,11 +56,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_rt"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -65,7 +71,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />RT/RW
@@ -73,11 +79,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_kelurahan"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -87,7 +94,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/> Kelurahan/Desa
@@ -95,11 +102,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_Kecamatan"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -109,7 +117,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />Kecamatan
@@ -117,11 +125,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_kode_pos"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -131,7 +140,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />Kode Pos
@@ -139,11 +148,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_status_tinggal"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -153,7 +163,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />Status tinggal
@@ -161,11 +171,12 @@
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_transportasi"
-            android:textColorHint="@android:color/white"
+            android:textColorHint="#B6FFFFFF"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
@@ -175,7 +186,7 @@
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
-                android:textColor="#e6e6e6"
+                android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />Alamat
@@ -183,26 +194,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="@drawable/maps"/>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center|left"
+                android:textColor="@android:color/white"
                 android:id="@+id/nama_rumah"
                 android:text="Lokasi Rumah"/>
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/arrow"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ic_arrow"
                 android:id="@+id/arrom"/>
         </LinearLayout>
 
@@ -210,9 +223,10 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
             app:cardCornerRadius="12dp">
 
             <fragment
@@ -221,8 +235,5 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp" />
         </android.support.v7.widget.CardView>
-
-
-
     </LinearLayout></android.support.v4.widget.NestedScrollView>
 </LinearLayout>

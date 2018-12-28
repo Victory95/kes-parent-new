@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,8 @@ import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -55,10 +59,16 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
     public static int PAGE_COUNT = 8;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.parent_main);
+
+        Window window = ParentMain.this.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(ParentMain.this,R.color.colorPrimary));
 
         indicator = (LinearLayout) findViewById(R.id.indicators);
         ParentPager = (ViewPager) findViewById(R.id.PagerParent);
@@ -162,7 +172,6 @@ public class ParentMain extends AppCompatActivity implements ViewPager.OnPageCha
                 case 2:
                     return new KontakFragment();
                 case 3:
-
                     return new PekerjaanFragment();
                 case 4:
                     return new AnakFragment();
