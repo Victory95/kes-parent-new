@@ -41,7 +41,6 @@ public class JSONResponse{
 
         @SerializedName("data")
         public List<SData> data;
-
         public List<SData> getData() {
             return data;
         }

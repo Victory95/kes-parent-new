@@ -58,7 +58,7 @@ public class AksesAnak extends AppCompatActivity {
     private LinearLayout lay_akses_anak;
     private TextView tv_val_nama_kodes,tv_val_nama_kodes_join,tv_info_nama_anak,tv_nama_anak;
     private ProgressDialog dialog;
-    String email, member_id, fullname, member_type, student_id, student_nik, school_id,school_name;
+    String email, member_id, fullname, member_type, student_id, student_nik, school_id,school_name,school_code;
     int status;
     String code;
     Integer kosong = 0,status_nik =0;
@@ -673,15 +673,18 @@ public class AksesAnak extends AppCompatActivity {
 
                 List<String> SS_GETSCHOOLNAME = null;
                 List<String> SS_GETSCHOOLID = null;
+                List<String> SS_GETSCHOOL_CODE = null;
 
                 if (status == 1 && code.equals("SS_SCS_0001")) {
                     List<JSONResponse.SData> arrayList = response.body().getData();
+                    SS_GETSCHOOLNAME = new ArrayList<String>();
+                    SS_GETSCHOOLID = new ArrayList<String>();
+                    SS_GETSCHOOL_CODE = new ArrayList<String>();
                     if (arrayList != null) {
-                        SS_GETSCHOOLNAME = new ArrayList<String>();
-                        SS_GETSCHOOLID = new ArrayList<String>();
                         for (int i = 0; i < arrayList.size(); i++){
                             SS_GETSCHOOLNAME.add(arrayList.get(i).getSchool_name());
                             SS_GETSCHOOLID.add(arrayList.get(i).getSchoolid());
+                            SS_GETSCHOOL_CODE.add(arrayList.get(i).getSchool_code());
                         }
                     }
                     List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
@@ -695,6 +698,12 @@ public class AksesAnak extends AppCompatActivity {
                         if (item.contains(item)) {
                             list.add(new SimpleSuggestions(item));
                             school_name =item;
+                        }
+                    }
+                    for (final String item : SS_GETSCHOOL_CODE) {
+                        if (item.contains(item)) {
+                            list.add(new SimpleSuggestions(item));
+                            school_code =item;
                         }
                     }
                 } else {
