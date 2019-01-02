@@ -90,7 +90,7 @@
     <string name="NR_ERR_0001">Latitude kosong</string>
     <string name="NR_ERR_0002">Longitude kosong</string>
     <string name="NR_ERR_0003">Radius kosong</string>
-    <string name="NR_ERR_0004">Gagal menemukan selokah</string>
+    <string name="NR_ERR_0004">Gagal menemukan sekolah</string>
 
     /////// check_school_kes
     <string name="CSK_SCS_0001">Berhasil ditemukan</string>
@@ -113,5 +113,9 @@
     <string name="MCA_ERR_0006">Code verification sudah kadaluarsa</string>
     <string name="MCA_ERR_0007">Akses Anak telah digunakan. Maksimun 2</string>
     <string name="MCA_ERR_0008">Gagal tersimpan</string>
+
+    //////School_onprov
+    <string name="SOP_SCS_0001">Berhasil menampilkan</string>
+    <string name="SOP_ERR_0001">Gagal menampilkan</string>
 
 </resources>

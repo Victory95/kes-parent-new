@@ -237,7 +237,7 @@ public class JSONResponse{
         private String latitude;
         @SerializedName("longitude")
         @Expose
-        private String longitude;
+        private Double longitude;
         @SerializedName("detail_picture")
         @Expose
         private String detail_picture;
@@ -752,11 +752,11 @@ public class JSONResponse{
             this.latitude = latitude;
         }
 
-        public String getLongitude() {
+        public Double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(String longitude) {
+        public void setLongitude(Double longitude) {
             this.longitude = longitude;
         }
 
@@ -958,176 +958,1060 @@ public class JSONResponse{
         public List<DataItem> getData() {
             return data;
         }
+        }
+
+    public class DataItem {
+
+        @SerializedName("school_id")
+        @Expose
+        private String school_id;
+
+        @SerializedName("schooldetailid")
+        @Expose
+        private String schooldetailid;
+
+        @SerializedName("school_name")
+        @Expose
+        private String school_name;
+
+        @SerializedName("school_code")
+        @Expose
+        private String school_code;
+
+        @SerializedName("picture")
+        @Expose
+        private String picture;
+
+        @SerializedName("school_address")
+        @Expose
+        private String school_address;
+
+        @SerializedName("akreditasi")
+        @Expose
+        private String akreditasi;
+
+        @SerializedName("kurikulum_id")
+        @Expose
+        private String kurikulumId;
+
+        @SerializedName("jenjang_pendidikan")
+        @Expose
+        private String jenjang_pendidikan;
+
+        @SerializedName("kurikulum")
+        @Expose
+        private String kurikulum;
+
+        @SerializedName("status_sekolah")
+        @Expose
+        private String status_sekolah;
+
+        @SerializedName("latitude")
+        @Expose
+        private Double latitude;
+
+        @SerializedName("longitude")
+        @Expose
+        private Double longitude;
+
+        @SerializedName("distance")
+        @Expose
+        private Double distance;
+
+        public String getSchool_id() {
+            return school_id;
+        }
+
+        public void setSchool_id(String school_id) {
+            this.school_id = school_id;
+        }
+
+        public String getSchooldetailid() {
+            return schooldetailid;
+        }
+
+        public void setSchooldetailid(String schooldetailid) {
+            this.schooldetailid = schooldetailid;
+        }
+
+        public String getSchool_name() {
+            return school_name;
+        }
+
+        public void setSchool_name(String school_name) {
+            this.school_name = school_name;
+        }
+
+        public String getSchool_code() {
+            return school_code;
+        }
+
+        public void setSchool_code(String school_code) {
+            this.school_code = school_code;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+
+        public String getSchool_address() {
+            return school_address;
+        }
+
+        public void setSchool_address(String school_address) {
+            this.school_address = school_address;
+        }
+
+        public String getAkreditasi() {
+            return akreditasi;
+        }
+
+        public void setAkreditasi(String akreditasi) {
+            this.akreditasi = akreditasi;
+        }
+
+        public String getKurikulumId() {
+            return kurikulumId;
+        }
+
+        public void setKurikulumId(String kurikulumId) {
+            this.kurikulumId = kurikulumId;
+        }
+
+        public String getJenjang_pendidikan() {
+            return jenjang_pendidikan;
+        }
+
+        public void setJenjang_pendidikan(String jenjang_pendidikan) {
+            this.jenjang_pendidikan = jenjang_pendidikan;
+        }
+
+        public String getKurikulum() {
+            return kurikulum;
+        }
+
+        public void setKurikulum(String kurikulum) {
+            this.kurikulum = kurikulum;
+        }
+
+        public String getStatus_sekolah() {
+            return status_sekolah;
+        }
+
+        public void setStatus_sekolah(String status_sekolah) {
+            this.status_sekolah = status_sekolah;
+        }
+
+        public Double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(Double latitude) {
+            this.latitude = latitude;
+        }
+
+        public Double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(Double longitude) {
+            this.longitude = longitude;
+        }
+
+        public Double getDistance() {
+            return distance;
+        }
+
+        public void setDistance(Double distance) {
+            this.distance = distance;
+        }
+    }
+
+    public class School_Provinsi{
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataProv> data;
+
+        @SerializedName("status")
+        public int status;
 
 
-        public class DataItem {
+        public void setData(List<DataProv> data) {
+            this.data = data;
+        }
 
-            @SerializedName("school_id")
-            @Expose
-            private String school_id;
+        public List<DataProv> getData() {
+            return data;
+        }
+    }
+    public class DataProv{
 
-            @SerializedName("schooldetailid")
-            @Expose
-            private String schooldetailid;
+        @SerializedName("tanggalIzin")
+        @Expose
+        private String tanggalIzin;
 
-            @SerializedName("school_name")
-            @Expose
-            private String school_name;
+        @SerializedName("kurikulum")
+        @Expose
+        private String kurikulum;
 
-            @SerializedName("school_code")
-            @Expose
-            private String school_code;
+        @SerializedName("akreditasi")
+        @Expose
+        private String akreditasi;
 
-            @SerializedName("picture")
-            @Expose
-            private String picture;
+        @SerializedName("detailPicture")
+        @Expose
+        private String detailPicture;
 
-            @SerializedName("school_address")
-            @Expose
-            private String school_address;
+        @SerializedName("operator")
+        @Expose
+        private String operator;
 
-            @SerializedName("akreditasi")
-            @Expose
-            private String akreditasi;
+        @SerializedName("kurikulumId")
+        @Expose
+        private String kurikulumId;
 
-            @SerializedName("kurikulum_id")
-            @Expose
-            private String kurikulumId;
+        @SerializedName("ruangKelas")
+        @Expose
+        private String ruangKelas;
 
-            @SerializedName("jenjang_pendidikan")
-            @Expose
-            private String jenjang_pendidikan;
+        @SerializedName("kabupatenId")
+        @Expose
+        private String kabupatenId;
 
-            @SerializedName("kurikulum")
-            @Expose
-            private String kurikulum;
+        @SerializedName("schoolPhone")
+        @Expose
+        private String schoolPhone;
 
-            @SerializedName("status_sekolah")
-            @Expose
-            private String status_sekolah;
+        @SerializedName("kepsek")
+        @Expose
+        private String kepsek;
 
-            @SerializedName("latitude")
-            @Expose
-            private Double latitude;
+        @SerializedName("sanitasi")
+        @Expose
+        private String sanitasi;
 
-            @SerializedName("longitude")
-            @Expose
-            private Double longitude;
+        @SerializedName("internetAlternatif")
+        @Expose
+        private String internetAlternatif;
 
-            @SerializedName("distance")
-            @Expose
-            private Double distance;
+        @SerializedName("longitude")
+        @Expose
+        private Double longitude;
 
-            public String getSchool_id() {
-                return school_id;
-            }
+        @SerializedName("skPendidikan")
+        @Expose
+        private String skPendirian;
 
-            public void setSchool_id(String school_id) {
-                this.school_id = school_id;
-            }
+        @SerializedName("kebutuhanKhusus")
+        @Expose
+        private String kebutuhanKhusus;
 
-            public String getSchooldetailid() {
-                return schooldetailid;
-            }
+        @SerializedName("datez")
+        @Expose
+        private String datez;
 
-            public void setSchooldetailid(String schooldetailid) {
-                this.schooldetailid = schooldetailid;
-            }
+        @SerializedName("schoolPublish")
+        @Expose
+        private String schoolPublish;
 
-            public String getSchool_name() {
-                return school_name;
-            }
+        @SerializedName("dayaListrik")
+        @Expose
+        private String dayaListrik;
 
-            public void setSchool_name(String school_name) {
-                this.school_name = school_name;
-            }
+        @SerializedName("statusKepemilikan")
+        @Expose
+        private String statusKepemilikan;
 
-            public String getSchool_code() {
-                return school_code;
-            }
+        @SerializedName("kodePos")
+        @Expose
+        private String kodePos;
 
-            public void setSchool_code(String school_code) {
-                this.school_code = school_code;
-            }
+        @SerializedName("npwp")
+        @Expose
+        private String npwp;
 
-            public String getPicture() {
-                return picture;
-            }
+        @SerializedName("kecamatanId")
+        @Expose
+        private String kecamatanId;
 
-            public void setPicture(String picture) {
-                this.picture = picture;
-            }
+        @SerializedName("kelurahan")
+        @Expose
+        private String kelurahan;
 
-            public String getSchool_address() {
-                return school_address;
-            }
+        @SerializedName("tsiswaPria")
+        @Expose
+        private String tsiswaPria;
 
-            public void setSchool_address(String school_address) {
-                this.school_address = school_address;
-            }
+        @SerializedName("tguru")
+        @Expose
+        private String tguru;
 
-            public String getAkreditasi() {
-                return akreditasi;
-            }
+        @SerializedName("lastupdate")
+        @Expose
+        private String lastupdate;
 
-            public void setAkreditasi(String akreditasi) {
-                this.akreditasi = akreditasi;
-            }
+        @SerializedName("schooldetailid")
+        @Expose
+        private String schooldetailid;
 
-            public String getKurikulumId() {
-                return kurikulumId;
-            }
+        @SerializedName("aksesInternet")
+        @Expose
+        private String aksesInternet;
 
-            public void setKurikulumId(String kurikulumId) {
-                this.kurikulumId = kurikulumId;
-            }
+        @SerializedName("rt")
+        @Expose
+        private String rt;
 
-            public String getJenjang_pendidikan() {
-                return jenjang_pendidikan;
-            }
+        @SerializedName("jenjangPendidikan")
+        @Expose
+        private String jenjangPendidikan;
 
-            public void setJenjang_pendidikan(String jenjang_pendidikan) {
-                this.jenjang_pendidikan = jenjang_pendidikan;
-            }
+        @SerializedName("schoolCode")
+        @Expose
+        private String schoolCode;
 
-            public String getKurikulum() {
-                return kurikulum;
-            }
+        @SerializedName("rw")
+        @Expose
+        private String rw;
 
-            public void setKurikulum(String kurikulum) {
-                this.kurikulum = kurikulum;
-            }
+        @SerializedName("lessonHour")
+        @Expose
+        private String lessonHour;
 
-            public String getStatus_sekolah() {
-                return status_sekolah;
-            }
+        @SerializedName("nwp")
+        @Expose
+        private String nwp;
 
-            public void setStatus_sekolah(String status_sekolah) {
-                this.status_sekolah = status_sekolah;
-            }
+        @SerializedName("latitude")
+        @Expose
+        private Double latitude;
 
-            public Double getLatitude() {
-                return latitude;
-            }
+        @SerializedName("noRekening")
+        @Expose
+        private String noRekening;
 
-            public void setLatitude(Double latitude) {
-                this.latitude = latitude;
-            }
+        @SerializedName("schoolContact")
+        @Expose
+        private String schoolContact;
 
-            public Double getLongitude() {
-                return longitude;
-            }
+        @SerializedName("edulevelId")
+        @Expose
+        private String edulevelId;
 
-            public void setLongitude(Double longitude) {
-                this.longitude = longitude;
-            }
+        @SerializedName("laboratorium")
+        @Expose
+        private String laboratorium;
 
-            public Double getDistance() {
-                return distance;
-            }
+        @SerializedName("schoolId")
+        @Expose
+        private String schoolId;
 
-            public void setDistance(Double distance) {
-                this.distance = distance;
-            }
-        }}
+        @SerializedName("sumberListrik")
+        @Expose
+        private String sumberListrik;
+
+        @SerializedName("schoolAddress")
+        @Expose
+        private String schoolAddress;
+
+        @SerializedName("accountName")
+        @Expose
+        private String accountName;
+
+        @SerializedName("tsiswaWanita")
+        @Expose
+        private String tsiswaWanita;
+
+        @SerializedName("namaBank")
+        @Expose
+        private String namaBank;
+
+        @SerializedName("tanahBukaMilik")
+        @Expose
+        private String tanahBukanMilik;
+
+        @SerializedName("waktuPenyelenggaraan")
+        @Expose
+        private String waktuPenyelenggaraan;
+
+        @SerializedName("sertifikasiIso")
+        @Expose
+        private String sertifikasiIso;
+
+        @SerializedName("memberId")
+        @Expose
+        private String memberId;
+
+        @SerializedName("cabang")
+        @Expose
+        private String cabang;
+
+        @SerializedName("noFax")
+        @Expose
+        private String noFax;
+
+        @SerializedName("website")
+        @Expose
+        private String website;
+
+        @SerializedName("schoolQuez")
+        @Expose
+        private String schoolQuez;
+
+        @SerializedName("schoolDbase")
+        @Expose
+        private String schoolDbase;
+
+        @SerializedName("perpustakaan")
+        @Expose
+        private String perpustakaan;
+
+        @SerializedName("schoolName")
+        @Expose
+        private String schoolName;
+
+        @SerializedName("rombel")
+        @Expose
+        private String rombel;
+
+        @SerializedName("picture")
+        @Expose
+        private String picture;
+
+        @SerializedName("skIzin")
+        @Expose
+        private String skIzin;
+
+        @SerializedName("schoolEmail")
+        @Expose
+        private String schoolEmail;
+
+        @SerializedName("provinsiId")
+        @Expose
+        private String provinsiId;
+
+        @SerializedName("tanggalPendirian")
+        @Expose
+        private String tanggalPendirian;
+
+        @SerializedName("schoolid")
+        @Expose
+        private String schoolid;
+
+        @SerializedName("addressMap")
+        @Expose
+        private String addressMap;
+
+        @SerializedName("statusSekolah")
+        @Expose
+        private String statusSekolah;
+
+        @SerializedName("mbs")
+        @Expose
+        private String mbs;
+
+        @SerializedName("TanahMilik")
+        @Expose
+        private String tanahMilik;
+
+        @SerializedName("bersediaMenerimaBos")
+        @Expose
+        private String bersediaMenerimaBos;
+
+        public void setTanggalIzin(String tanggalIzin){
+            this.tanggalIzin = tanggalIzin;
+        }
+
+        public String getTanggalIzin(){
+            return tanggalIzin;
+        }
+
+        public void setKurikulum(String kurikulum){
+            this.kurikulum = kurikulum;
+        }
+
+        public String getKurikulum(){
+            return kurikulum;
+        }
+
+        public void setAkreditasi(String akreditasi){
+            this.akreditasi = akreditasi;
+        }
+
+        public String getAkreditasi(){
+            return akreditasi;
+        }
+
+        public void setDetailPicture(String detailPicture){
+            this.detailPicture = detailPicture;
+        }
+
+        public String getDetailPicture(){
+            return detailPicture;
+        }
+
+        public void setOperator(String operator){
+            this.operator = operator;
+        }
+
+        public String getOperator(){
+            return operator;
+        }
+
+        public void setKurikulumId(String kurikulumId){
+            this.kurikulumId = kurikulumId;
+        }
+
+        public String getKurikulumId(){
+            return kurikulumId;
+        }
+
+        public void setRuangKelas(String ruangKelas){
+            this.ruangKelas = ruangKelas;
+        }
+
+        public String getRuangKelas(){
+            return ruangKelas;
+        }
+
+        public void setKabupatenId(String kabupatenId){
+            this.kabupatenId = kabupatenId;
+        }
+
+        public String getKabupatenId(){
+            return kabupatenId;
+        }
+
+        public void setSchoolPhone(String schoolPhone){
+            this.schoolPhone = schoolPhone;
+        }
+
+        public String getSchoolPhone(){
+            return schoolPhone;
+        }
+
+        public void setKepsek(String kepsek){
+            this.kepsek = kepsek;
+        }
+
+        public String getKepsek(){
+            return kepsek;
+        }
+
+        public void setSanitasi(String sanitasi){
+            this.sanitasi = sanitasi;
+        }
+
+        public String getSanitasi(){
+            return sanitasi;
+        }
+
+        public void setInternetAlternatif(String internetAlternatif){
+            this.internetAlternatif = internetAlternatif;
+        }
+
+        public String getInternetAlternatif(){
+            return internetAlternatif;
+        }
+
+        public void setLongitude(Double longitude){
+            this.longitude = longitude;
+        }
+
+        public Double getLongitude(){
+            return longitude;
+        }
+
+        public void setSkPendirian(String skPendirian){
+            this.skPendirian = skPendirian;
+        }
+
+        public String getSkPendirian(){
+            return skPendirian;
+        }
+
+        public void setKebutuhanKhusus(String kebutuhanKhusus){
+            this.kebutuhanKhusus = kebutuhanKhusus;
+        }
+
+        public String getKebutuhanKhusus(){
+            return kebutuhanKhusus;
+        }
+
+        public void setDatez(String datez){
+            this.datez = datez;
+        }
+
+        public String getDatez(){
+            return datez;
+        }
+
+        public void setSchoolPublish(String schoolPublish){
+            this.schoolPublish = schoolPublish;
+        }
+
+        public String getSchoolPublish(){
+            return schoolPublish;
+        }
+
+        public void setDayaListrik(String dayaListrik){
+            this.dayaListrik = dayaListrik;
+        }
+
+        public String getDayaListrik(){
+            return dayaListrik;
+        }
+
+        public void setStatusKepemilikan(String statusKepemilikan){
+            this.statusKepemilikan = statusKepemilikan;
+        }
+
+        public String getStatusKepemilikan(){
+            return statusKepemilikan;
+        }
+
+        public void setKodePos(String kodePos){
+            this.kodePos = kodePos;
+        }
+
+        public String getKodePos(){
+            return kodePos;
+        }
+
+        public void setNpwp(String npwp){
+            this.npwp = npwp;
+        }
+
+        public String getNpwp(){
+            return npwp;
+        }
+
+        public void setKecamatanId(String kecamatanId){
+            this.kecamatanId = kecamatanId;
+        }
+
+        public String getKecamatanId(){
+            return kecamatanId;
+        }
+
+        public void setKelurahan(String kelurahan){
+            this.kelurahan = kelurahan;
+        }
+
+        public String getKelurahan(){
+            return kelurahan;
+        }
+
+        public void setTsiswaPria(String tsiswaPria){
+            this.tsiswaPria = tsiswaPria;
+        }
+
+        public String getTsiswaPria(){
+            return tsiswaPria;
+        }
+
+        public void setTguru(String tguru){
+            this.tguru = tguru;
+        }
+
+        public String getTguru(){
+            return tguru;
+        }
+
+        public void setLastupdate(String lastupdate){
+            this.lastupdate = lastupdate;
+        }
+
+        public String getLastupdate(){
+            return lastupdate;
+        }
+
+        public void setSchooldetailid(String schooldetailid){
+            this.schooldetailid = schooldetailid;
+        }
+
+        public String getSchooldetailid(){
+            return schooldetailid;
+        }
+
+        public void setAksesInternet(String aksesInternet){
+            this.aksesInternet = aksesInternet;
+        }
+
+        public String getAksesInternet(){
+            return aksesInternet;
+        }
+
+        public void setRt(String rt){
+            this.rt = rt;
+        }
+
+        public String getRt(){
+            return rt;
+        }
+
+        public void setJenjangPendidikan(String jenjangPendidikan){
+            this.jenjangPendidikan = jenjangPendidikan;
+        }
+
+        public String getJenjangPendidikan(){
+            return jenjangPendidikan;
+        }
+
+        public void setSchoolCode(String schoolCode){
+            this.schoolCode = schoolCode;
+        }
+
+        public String getSchoolCode(){
+            return schoolCode;
+        }
+
+        public void setRw(String rw){
+            this.rw = rw;
+        }
+
+        public String getRw(){
+            return rw;
+        }
+
+        public void setLessonHour(String lessonHour){
+            this.lessonHour = lessonHour;
+        }
+
+        public String getLessonHour(){
+            return lessonHour;
+        }
+
+        public void setNwp(String nwp){
+            this.nwp = nwp;
+        }
+
+        public String getNwp(){
+            return nwp;
+        }
+
+        public void setLatitude(Double latitude){
+            this.latitude = latitude;
+        }
+
+        public Double getLatitude(){
+            return latitude;
+        }
+
+        public void setNoRekening(String noRekening){
+            this.noRekening = noRekening;
+        }
+
+        public String getNoRekening(){
+            return noRekening;
+        }
+
+        public void setSchoolContact(String schoolContact){
+            this.schoolContact = schoolContact;
+        }
+
+        public String getSchoolContact(){
+            return schoolContact;
+        }
+
+        public void setEdulevelId(String edulevelId){
+            this.edulevelId = edulevelId;
+        }
+
+        public String getEdulevelId(){
+            return edulevelId;
+        }
+
+        public void setLaboratorium(String laboratorium){
+            this.laboratorium = laboratorium;
+        }
+
+        public String getLaboratorium(){
+            return laboratorium;
+        }
+
+        public void setSchoolId(String schoolId){
+            this.schoolId = schoolId;
+        }
+
+        public String getSchoolId(){
+            return schoolId;
+        }
+
+        public void setSumberListrik(String sumberListrik){
+            this.sumberListrik = sumberListrik;
+        }
+
+        public String getSumberListrik(){
+            return sumberListrik;
+        }
+
+        public void setSchoolAddress(String schoolAddress){
+            this.schoolAddress = schoolAddress;
+        }
+
+        public String getSchoolAddress(){
+            return schoolAddress;
+        }
+
+        public void setAccountName(String accountName){
+            this.accountName = accountName;
+        }
+
+        public String getAccountName(){
+            return accountName;
+        }
+
+        public void setTsiswaWanita(String tsiswaWanita){
+            this.tsiswaWanita = tsiswaWanita;
+        }
+
+        public String getTsiswaWanita(){
+            return tsiswaWanita;
+        }
+
+        public void setNamaBank(String namaBank){
+            this.namaBank = namaBank;
+        }
+
+        public String getNamaBank(){
+            return namaBank;
+        }
+
+        public void setTanahBukanMilik(String tanahBukanMilik){
+            this.tanahBukanMilik = tanahBukanMilik;
+        }
+
+        public String getTanahBukanMilik(){
+            return tanahBukanMilik;
+        }
+
+        public void setWaktuPenyelenggaraan(String waktuPenyelenggaraan){
+            this.waktuPenyelenggaraan = waktuPenyelenggaraan;
+        }
+
+        public String getWaktuPenyelenggaraan(){
+            return waktuPenyelenggaraan;
+        }
+
+        public void setSertifikasiIso(String sertifikasiIso){
+            this.sertifikasiIso = sertifikasiIso;
+        }
+
+        public String getSertifikasiIso(){
+            return sertifikasiIso;
+        }
+
+        public void setMemberId(String memberId){
+            this.memberId = memberId;
+        }
+
+        public String getMemberId(){
+            return memberId;
+        }
+
+        public void setCabang(String cabang){
+            this.cabang = cabang;
+        }
+
+        public String getCabang(){
+            return cabang;
+        }
+
+        public void setNoFax(String noFax){
+            this.noFax = noFax;
+        }
+
+        public String getNoFax(){
+            return noFax;
+        }
+
+        public void setWebsite(String website){
+            this.website = website;
+        }
+
+        public String getWebsite(){
+            return website;
+        }
+
+        public void setSchoolQuez(String schoolQuez){
+            this.schoolQuez = schoolQuez;
+        }
+
+        public String getSchoolQuez(){
+            return schoolQuez;
+        }
+
+        public void setSchoolDbase(String schoolDbase){
+            this.schoolDbase = schoolDbase;
+        }
+
+        public String getSchoolDbase(){
+            return schoolDbase;
+        }
+
+        public void setPerpustakaan(String perpustakaan){
+            this.perpustakaan = perpustakaan;
+        }
+
+        public String getPerpustakaan(){
+            return perpustakaan;
+        }
+
+        public void setSchoolName(String schoolName){
+            this.schoolName = schoolName;
+        }
+
+        public String getSchoolName(){
+            return schoolName;
+        }
+
+        public void setRombel(String rombel){
+            this.rombel = rombel;
+        }
+
+        public String getRombel(){
+            return rombel;
+        }
+
+        public void setPicture(String picture){
+            this.picture = picture;
+        }
+
+        public String getPicture(){
+            return picture;
+        }
+
+        public void setSkIzin(String skIzin){
+            this.skIzin = skIzin;
+        }
+
+        public String getSkIzin(){
+            return skIzin;
+        }
+
+        public void setSchoolEmail(String schoolEmail){
+            this.schoolEmail = schoolEmail;
+        }
+
+        public String getSchoolEmail(){
+            return schoolEmail;
+        }
+
+        public void setProvinsiId(String provinsiId){
+            this.provinsiId = provinsiId;
+        }
+
+        public String getProvinsiId(){
+            return provinsiId;
+        }
+
+        public void setTanggalPendirian(String tanggalPendirian){
+            this.tanggalPendirian = tanggalPendirian;
+        }
+
+        public String getTanggalPendirian(){
+            return tanggalPendirian;
+        }
+
+        public void setSchoolid(String schoolid){
+            this.schoolid = schoolid;
+        }
+
+        public String getSchoolid(){
+            return schoolid;
+        }
+
+        public void setAddressMap(String addressMap){
+            this.addressMap = addressMap;
+        }
+
+        public String getAddressMap(){
+            return addressMap;
+        }
+
+        public void setStatusSekolah(String statusSekolah){
+            this.statusSekolah = statusSekolah;
+        }
+
+        public String getStatusSekolah(){
+            return statusSekolah;
+        }
+
+        public void setMbs(String mbs){
+            this.mbs = mbs;
+        }
+
+        public String getMbs(){
+            return mbs;
+        }
+
+        public void setTanahMilik(String tanahMilik){
+            this.tanahMilik = tanahMilik;
+        }
+
+        public String getTanahMilik(){
+            return tanahMilik;
+        }
+
+        public void setBersediaMenerimaBos(String bersediaMenerimaBos){
+            this.bersediaMenerimaBos = bersediaMenerimaBos;
+        }
+
+        public String getBersediaMenerimaBos(){
+            return bersediaMenerimaBos;
+        }
+    }
+
+    public class Provinsi{
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<Prov> data;
+
+        @SerializedName("status")
+        public int status;
+
+
+        public void setData(List<Prov> data) {
+            this.data = data;
+        }
+
+        public List<Prov> getData() {
+            return data;
+        }
+    }
+    public static class Prov{
+
+        @SerializedName("provinsiid")
+        @Expose
+        private String provinsiid;
+
+        @SerializedName("nama_provinsi")
+        @Expose
+        private String nama_provinsi;
+
+        public void setProvinsiid(String provinsiid){
+            this.provinsiid = provinsiid;
+        }
+
+        public String getProvinsiid(){
+            return provinsiid;
+        }
+
+        public void setNamaProvinsi(String nama_provinsi){
+            this.nama_provinsi = nama_provinsi;
+        }
+
+        public String getNamaProvinsi(){
+            return nama_provinsi;
+        }
+    }
 }

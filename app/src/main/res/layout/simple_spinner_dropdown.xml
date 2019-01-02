@@ -9,4 +9,5 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="5dp"
-    android:singleLine="true" />
+    android:singleLine="true"
+    android:background="@drawable/edt_bg_selector_black"/>

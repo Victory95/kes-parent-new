@@ -10,6 +10,8 @@ import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Auth {
@@ -107,4 +109,11 @@ public interface Auth {
                                          @Field("longitude") Double longitude,
                                         @Field("radius") Double radius);
 
+    @GET("school/school_onprov")
+    Call<JSONResponse.School_Provinsi>school_onprov_get(@Query("id_prov") String id_prov,
+                                        @Query("jp") String jp);
+
+
+    @GET("school/provinsi")
+    Call<JSONResponse.Provinsi>provinsi_get();
 }

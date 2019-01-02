@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
@@ -41,6 +43,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.config.GoogleDirectionConfiguration;
+import com.akexorcist.googledirection.constant.TransitMode;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.constant.Unit;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Leg;
+import com.akexorcist.googledirection.model.Route;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.fingertech.kes.Activity.OpsiMasuk;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.RecycleView.CustomRecyclerViewDataAdapter;
@@ -63,8 +75,11 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
@@ -78,10 +93,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
+
 public class MenuGuest extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
 
     CarouselView customCarouselView;
@@ -99,10 +116,13 @@ public class MenuGuest extends AppCompatActivity
     private Location lastLocation;
     private Button lock,Nearby;
     private Boolean clicked = false;
-    private int overallXScroll= 0;
     public SnappyRecycleView snappyRecyclerView;
     GoogleApiClient mGoogleApiClient;
+    ArrayList<LatLng> markerPoints;
+    Polyline line;
+    LatLngBounds.Builder builder;
 
+    PolylineOptions lineOptions;
     Double PROXIMITY_RADIUS = 2.0;
     Double currentLatitude,latitude;
     Double currentLongitude,longitude;
@@ -144,8 +164,8 @@ public class MenuGuest extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
 
-        lock = (Button) findViewById(R.id.lock);
-        lock.setOnClickListener(new View.OnClickListener(){
+/*
+        findViewById(R.id.locks).setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -160,8 +180,17 @@ public class MenuGuest extends AppCompatActivity
                     view.setBackgroundResource(R.drawable.ic_unlock);
                 }
             }
-        });
+        });*/
 
+        findViewById(R.id.squareFab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent mIntent = new Intent(MenuGuest.this,FullMap.class);
+                startActivity(mIntent);
+
+            }
+        });
         //show error dialog if Google Play Services not available
         if (!isGooglePlayServicesAvailable()) {
             Log.d("onCreate", "Google Play Services not available. Ending Test case.");
@@ -171,11 +200,7 @@ public class MenuGuest extends AppCompatActivity
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
         Nearby = (Button)findViewById(R.id.cari_sekolah2);
-
-        configureCameraIdle();
-        configureCameraMove();
-        //initControls();
-
+        checkLocationPermission();
 
     }
 
@@ -223,14 +248,14 @@ public class MenuGuest extends AppCompatActivity
             fruitImageView.setImageResource(sampleImages[position]);
             labelTextView.setText(sampleTitles[position]);
             Button Baca = (Button) customView.findViewById(R.id.baca);
-            Baca.setOnClickListener(new View.OnClickListener() {
+                Baca.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(MenuGuest.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
-                }
-            });
+                    }
+                });
             customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
-            return customView;
+        return customView;
         }
     };
 
@@ -313,118 +338,31 @@ public class MenuGuest extends AppCompatActivity
 
         }
 
-        //Place current location marker
-        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
+            //Place current location marker
+            final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
 
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map));
+            final MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("Current Position");
+            markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_map));
 
-        //move map camera
-        mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
-
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
-            mGoogleApiClient.connect();
-        }
-
-        updateLocation(location);
-        getAddress();
-
-    }
-
-    @Override
-    public void onCameraIdle() {
-        CameraPosition position=mapG.getCameraPosition();
-        Log.d("onCameraIdle",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
-        mapG.clear();
-
-        LatLng latLng = mapG.getCameraPosition().target;
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addressList != null && addressList.size() > 0) {
-                String address = addressList.get(0).getAddressLine(0);
-                String number = addressList.get(0).getFeatureName();
-                String city = addressList.get(0).getLocality();
-                String state = addressList.get(0).getAdminArea();
-                String country = addressList.get(0).getCountryName();
-                String postalCode = addressList.get(0).getPostalCode();
-
-
+            //move map camera
+            mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
+            CurrLocationMarker = mapG.addMarker(markerOptions);
+            //stop location updates
+            if (mGoogleApiClient != null) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                mGoogleApiClient.connect();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        CurrentLatitude = latLng.latitude;
-        CurrentLongitude = latLng.longitude;
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
+            updateLocation(location);
+            getAddress();
+            dapat_map();
 
-
-        MarkerOptions options = new MarkerOptions()
-                .position(position.target)
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
-                .title("im here");
-
-        dapat_map();
-
-
-        //dapat_sekolah();
-        CurrLocationMarker = mapG.addMarker(options);
-
-    }
-
-    @Override
-    public void onCameraMoveCanceled() {
-        CameraPosition position=mapG.getCameraPosition();
-
-        Log.d("onCameraMoveCanceled",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
-    }
-
-    @Override
-    public void onCameraMove() {
-        CameraPosition position=mapG.getCameraPosition();
-
-        Log.d("onCameraMove",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
-
-        MarkerOptions options = new MarkerOptions()
-                .position(position.target)
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
-                .title("im here");
-
-
-        if(CurrLocationMarker!= null){
-            CurrLocationMarker.remove();}
-
-        CurrLocationMarker = mapG.addMarker(options);
-
-    }
-
-    @Override
-    public void onCameraMoveStarted(int i) {
-        CameraPosition position=mapG.getCameraPosition();
-        Log.d("onCameraStarted",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
     }
 
     @Override
@@ -445,11 +383,11 @@ public class MenuGuest extends AppCompatActivity
             mapG.setMyLocationEnabled(true);
         }
 
-        mapG.setOnCameraMoveStartedListener(this);
+        //mapG.setOnCameraMoveStartedListener(this);
         //mapG.setOnCameraMoveListener(this);
-        mapG.setOnCameraMoveCanceledListener(this);
-        mapG.setOnCameraIdleListener(onCameraIdleListener);
-        mapG.setOnCameraMoveListener(onCameraMove);
+        //mapG.setOnCameraMoveCanceledListener(this);
+        //mapG.setOnCameraIdleListener(onCameraIdleListener);
+       // mapG.setOnCameraMoveListener(onCameraMove);
 
 
     }
@@ -629,7 +567,7 @@ public class MenuGuest extends AppCompatActivity
 
     public void dapat_map(){
 
-        Call<JSONResponse.Nearby_School> call = mApiInterface.nearby_radius_post(CurrentLatitude,CurrentLongitude,PROXIMITY_RADIUS);
+        Call<JSONResponse.Nearby_School> call = mApiInterface.nearby_radius_post(currentLatitude,currentLongitude,PROXIMITY_RADIUS);
 
         call.enqueue(new Callback<JSONResponse.Nearby_School>() {
 
@@ -659,9 +597,7 @@ public class MenuGuest extends AppCompatActivity
                         final String placeName = response.body().getData().get(i).getSchool_name();
                         final String vicinity = response.body().getData().get(i).getSchool_address();
                         final String akreditasi = response.body().getData().get(i).getAkreditasi();
-                        final String picture = response.body().getData().get(i).getPicture();
                         final double Jarak = response.body().getData().get(i).getDistance();
-                        final Integer page = response.body().getData().size();
 
                         LatLng latLng = new LatLng(lat, lng);
                         if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
@@ -713,26 +649,25 @@ public class MenuGuest extends AppCompatActivity
                         }
 
 
-                        final Marker[] lastOpenned = {null};
 
-                        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                            public boolean onMarkerClick(Marker marker) {
-                                // Check if there is an open info window
-                                if (m != null) {
-                                    // Close the info window
-                                    m.hideInfoWindow();
-
-                                }
-
-                                // Open the info window for the marker
-                                marker.showInfoWindow();
-                                // Re-assign the last openned such that we can close it later
-                                m = marker;
-
-                                // Event was handled by our code do not launch default behaviour.
-                                return true;
-                            }
-                        });
+//                        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//                            public boolean onMarkerClick(Marker marker) {
+//                                // Check if there is an open info window
+//                                if (m != null) {
+//                                    // Close the info window
+//                                    m.hideInfoWindow();
+//
+//                                }
+//
+//                                // Open the info window for the marker
+//                                marker.showInfoWindow();
+//                                // Re-assign the last openned such that we can close it later
+//                                m = marker;
+//
+//                                // Event was handled by our code do not launch default behaviour.
+//                                return true;
+//                            }
+//                        });
 
                         InfoWindowData info = new InfoWindowData();
                         info.setNama(placeName);
@@ -751,6 +686,8 @@ public class MenuGuest extends AppCompatActivity
                         Item.setName(placeName);
                         Item.setAkreditas(akreditasi);
                         Item.setJarak(Jarak);
+                        Item.setLat(lat);
+                        Item.setLng(lng);
                         itemList.add(Item);
                     }
                     // Create the recyclerview.
@@ -771,8 +708,54 @@ public class MenuGuest extends AppCompatActivity
                         @Override
                         public void onItemClick(View view, int position) {
                             Toast.makeText(MenuGuest.this, "Clicked at index "+ position, Toast.LENGTH_SHORT).show();
+
+                            LatLng latLng = new LatLng(currentLatitude,currentLongitude);
+                            latitude = response.body().getData().get(position).getLatitude();
+                            longitude = response.body().getData().get(position).getLongitude();
+                            final LatLng StartlatLng = new LatLng(latitude, longitude);
+                            GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
+                            String $key = getResources().getString(R.string.google_maps_key);
+
+
+                            GoogleDirection.withServerKey($key)
+                                    .from(latLng)
+                                    .to(StartlatLng)
+                                    .transportMode(TransportMode.DRIVING)
+                                    .transitMode(TransitMode.BUS)
+                                    .unit(Unit.METRIC)
+                                    .execute(new DirectionCallback() {
+                                        @Override
+                                        public void onDirectionSuccess(Direction direction, String rawBody) {
+
+                                            Log.d("GoogleDirection", "Response Direction Status: " + direction.toString()+"\n"+rawBody);
+
+                                            if(direction.isOK()) {
+                                                // Do something
+                                                Route route = direction.getRouteList().get(0);
+                                                Leg leg = route.getLegList().get(0);
+                                                ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
+                                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(getApplication(), directionPositionList, 5, Color.RED);
+                                                line = mapG.addPolyline(polylineOptions);
+                                                setCameraWithCoordinationBounds(direction.getRouteList().get(0));
+
+                                            } else {
+                                                // Do something
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onDirectionFailure(Throwable t) {
+                                            // Do something
+                                            Log.e("GoogleDirection", "Response Direction Status: " + t.getMessage()+"\n"+t.getCause());
+                                        }
+                                    });
+                            if(line != null){
+                                line.remove();
+                            }
                         }
+
                     });
+
                     snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
                         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -786,6 +769,9 @@ public class MenuGuest extends AppCompatActivity
                             }
                             currentItem = (currentItem < 0) ? 0 : currentItem;
                             currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
+                            if(line != null){
+                                line.remove();
+                            }
                             if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SD")) {
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
@@ -801,6 +787,9 @@ public class MenuGuest extends AppCompatActivity
                                 }
                                 // Adding Marker to the Camera.
                                 m = mapG.addMarker(markerOptions);
+                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
+
                             }
                             else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
@@ -817,6 +806,9 @@ public class MenuGuest extends AppCompatActivity
                                 }
                                 // Adding Marker to the Camera.
                                 m = mapG.addMarker(markerOptions);
+                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
                             }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMA")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
@@ -832,6 +824,8 @@ public class MenuGuest extends AppCompatActivity
                                 }
                                 // Adding Marker to the Camera.
                                 m = mapG.addMarker(markerOptions);
+                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
                             }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SPK SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
@@ -847,8 +841,9 @@ public class MenuGuest extends AppCompatActivity
                                 }
                                 // Adding Marker to the Camera.
                                 m = mapG.addMarker(markerOptions);
+                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
                             }
-                            Toast.makeText(MenuGuest.this, "Scrolled to"+currentItem, Toast.LENGTH_SHORT).show();
                         }
                     });
                     // Set data adapter.
@@ -880,40 +875,6 @@ public class MenuGuest extends AppCompatActivity
         });
     }
 
-    public LinearSnapHelper getSnapHelper() {
-        return new LinearSnapHelper() {
-            @Override
-            public int findTargetSnapPosition(RecyclerView.LayoutManager layoutManager, int velocityX, int velocityY) {
-                View centerView = findSnapView(layoutManager);
-                if (centerView == null)
-                    return RecyclerView.NO_POSITION;
-
-                int position = layoutManager.getPosition(centerView);
-                int targetPosition = -1;
-                if (layoutManager.canScrollHorizontally()) {
-                    if (velocityX < 0) {
-                        targetPosition = position - 1;
-                    } else {
-                        targetPosition = position + 1;
-                    }
-                }
-
-                if (layoutManager.canScrollVertically()) {
-                    if (velocityY < 0) {
-                        targetPosition = position - 1;
-                    } else {
-                        targetPosition = position + 1;
-                    }
-                }
-
-                final int firstItem = 0;
-                final int lastItem = layoutManager.getItemCount() - 1;
-                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem));
-                return targetPosition;
-            }
-        };
-    }
-
     public interface ISnappyLayoutManager {
 
         /**
@@ -930,6 +891,7 @@ public class MenuGuest extends AppCompatActivity
         int getFixScrollPos();
 
     }
+
     public class SnappyLinearLayoutManager extends LinearLayoutManager implements ISnappyLayoutManager {
         // These variables are from android.widget.Scroller, which is used, via ScrollerCompat, by
         // Recycler View. The scrolling distance calculation logic originates from the same place. Want
@@ -1026,11 +988,6 @@ public class MenuGuest extends AppCompatActivity
                     / (ViewConfiguration.getScrollFriction() * deceleration));
         }
 
-        /**
-         * This implementation obviously doesn't take into account the direction of the
-         * that preceded it, but there is no easy way to get that information without more
-         * hacking than I was willing to put into it.
-         */
         @Override
         public int getFixScrollPos() {
             if (this.getChildCount() == 0) {
@@ -1054,70 +1011,32 @@ public class MenuGuest extends AppCompatActivity
 
     }
 
-    private void configureCameraIdle() {
-        onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-
-                CameraPosition position=mapG.getCameraPosition();
-                Log.d("onCameraIdle",
-                        String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                                position.target.latitude,
-                                position.target.longitude, position.zoom,
-                                position.tilt));
-                mapG.clear();
-
-                LatLng latLng = mapG.getCameraPosition().target;
-                Geocoder geocoder = new Geocoder(MenuGuest.this, Locale.getDefault());
-                try {
-                    List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                    if (addressList != null && addressList.size() > 0) {
-                        String address = addressList.get(0).getAddressLine(0);
-                        String number = addressList.get(0).getFeatureName();
-                        String city = addressList.get(0).getLocality();
-                        String state = addressList.get(0).getAdminArea();
-                        String country = addressList.get(0).getCountryName();
-                        String postalCode = addressList.get(0).getPostalCode();
-
-
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                CurrentLatitude = latLng.latitude;
-                CurrentLongitude = latLng.longitude;
-
-
-                MarkerOptions options = new MarkerOptions()
-                        .position(position.target)
-                        .icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_map))
-                        .title("im here");
-
-                dapat_map();
-
-
-                //dapat_sekolah();
-                CurrLocationMarker = mapG.addMarker(options);
-        };
-    };
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
-    private void configureCameraMove(){
-        onCameraMove = new GoogleMap.OnCameraMoveListener(){
-          @Override
-          public void onCameraMove(){
-              //Remove previous center if it exists
-              if (CurrLocationMarker != null) {
-                  CurrLocationMarker.remove();
-              }
-
-              CameraPosition test = mapG.getCameraPosition();
-              //Assign mCenterMarker reference:
-              CurrLocationMarker = mapG.addMarker(new MarkerOptions().position(mapG.getCameraPosition().target).icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_map)).title("Test"));
-              Log.d("TEST", "Map Coordinate: " + String.valueOf(test));
-          }
-        };
+    private void setCameraWithCoordinationBounds(Route route) {
+        LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();
+        LatLng northeast = route.getBound().getNortheastCoordination().getCoordination();
+        LatLngBounds bounds = new LatLngBounds(southwest, northeast);
+        mapG.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
+
 }
 
 

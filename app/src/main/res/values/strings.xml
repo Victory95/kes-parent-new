@@ -130,4 +130,16 @@
     <string name="service_not_available">no</string>
     <string name="invalid_lat_long_used">sda</string>
     <string name="no_address_found">no Address</string>
+
+    <string name="action_hide">Hide Panel</string>
+    <string name="action_show">Show Panel</string>
+    <string name="action_anchor_enable">Enable Anchor Point</string>
+    <string name="action_anchor_disable">Disable Anchor Point</string>
+
+
+    <string name="rb_sd">SD</string>
+    <string name="rb_smp">SMP</string>
+    <string name="rb_smk">SMK</string>
+    <string name="rb_sma">SMA</string>
+
 </resources>

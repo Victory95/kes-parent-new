@@ -5,6 +5,25 @@ public class CustomRecyclerViewItem {
     private String nama_sekolah;
     private String akreditas;
     private Double jarak;
+    private Double lat;
+
+    public Double getLat() {
+        return lat;
+    }
+
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+
+    public Double getLng() {
+        return lng;
+    }
+
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+
+    private Double lng;
 
 
     public String getName() {
