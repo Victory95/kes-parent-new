@@ -20,6 +20,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -94,7 +96,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     private CustomRecyclerViewDataAdapter cUstomRecyclerViewDataAdapter = null;
     private GoogleMap mapF;
     private LocationRequest mlocationRequest;
-    private Marker CurrlocationMarker,m,sd,smp,sma;
+    private Marker CurrlocationMarker,m,sd,smp,sma,c;
     private Location LastLocation;
     private Button lock,Nearby;
     private Boolean clicked = false;
@@ -106,6 +108,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     private RadioButton rb_sma,rb_smp,rb_smk,rb_sd;
     private List<JSONResponse.Prov> arrayList;
     private Button tampilProv;
+    private MarkerOptions markerOptions;
     String provid;
     String jenjang;
     GoogleApiClient mGoogleApiClient;
@@ -153,43 +156,18 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
 
+                mapF.clear();
                 final LatLng lati = new LatLng(currentLatitudef, currentLongitudef);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lati.latitude, lati.longitude)).zoom(13).build();
                 mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mapF.animateCamera(CameraUpdateFactory.zoomTo(14));
-//                if(mapF != null){
-//                    mapF.clear();
-//                }
-//                mapF.setBuildingsEnabled(true);
-//                mapF.setIndoorEnabled(true);
-//                mapF.setTrafficEnabled(true);
-//                UiSettings mUiSettings = mapF.getUiSettings();
-//                mUiSettings.setZoomControlsEnabled(true);
-//                mUiSettings.setCompassEnabled(true);
-//                mUiSettings.setMyLocationButtonEnabled(false);
-//                mUiSettings.setScrollGesturesEnabled(true);
-//                mUiSettings.setZoomGesturesEnabled(true);
-//                mUiSettings.setTiltGesturesEnabled(true);
-//                mUiSettings.setRotateGesturesEnabled(true);
-//
-//                mClusterManager = new ClusterManager<SampleClusterItem>(FullMap.this, mapF);
-//
-//                mapF.setOnCameraIdleListener(mClusterManager);
-//                mapF.setOnMarkerClickListener(mClusterManager);
-//                mapF.setOnInfoWindowClickListener(mClusterManager);
-//                dapat_sekolah();
-//                mClusterManager.setOnClusterClickListener(FullMap.this);
-//                mClusterManager.setOnClusterItemClickListener(FullMap.this);
-////                mClusterManager.setRenderer(new RenderClusterInfoWindow());
-//                mClusterManager.cluster();
-//                snappyrecyclerView.setVisibility(View.GONE);
+                dapat_map();
+                snappyrecyclerView.setVisibility(View.VISIBLE);
             }
         });
         //set layout slide listener
         slidingLayout = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
 
-        //some "demo" event
-        slidingLayout.setPanelSlideListener(onSlideListener());
         imageView = (ImageView) findViewById(R.id.arrowF);
 
         et_provinsi = (Spinner) findViewById(R.id.sp_provinsi);
@@ -198,6 +176,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         rb_sma = (RadioButton) findViewById(R.id.sma);
         rb_smk = (RadioButton) findViewById(R.id.smk);
         tampilProv = (Button) findViewById(R.id.TampilProv);
+
         dapat_provinsi();
         et_provinsi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -213,7 +192,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
             }
         });
-
 
         rb_sd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,35 +220,52 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             }
         });
 
+        slidingLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                Log.i("KES", "onPanelSlide, offset " + slideOffset);
+            }
 
-//        tampilProv.setOnClickListener(new View.OnClickListener(){
-//
-//            @Override
-//            public void onClick(View view) {
-//                if(mapF != null){
-//                    mapF.clear();
-//                }
-//                mapF.setBuildingsEnabled(true);
-//                mapF.setIndoorEnabled(true);
-//                mapF.setTrafficEnabled(true);
-//                UiSettings mUiSettings = mapF.getUiSettings();
-//                mUiSettings.setZoomControlsEnabled(true);
-//                mUiSettings.setCompassEnabled(true);
-//                mUiSettings.setMyLocationButtonEnabled(true);
-//                mUiSettings.setScrollGesturesEnabled(true);
-//                mUiSettings.setZoomGesturesEnabled(true);
-//                mUiSettings.setTiltGesturesEnabled(true);
-//                mUiSettings.setRotateGesturesEnabled(true);
-//
-//                mClusterManager = new ClusterManager<>(FullMap.this, mapF);
-//
-//                mapF.setOnCameraIdleListener(mClusterManager);
-//                mapF.setOnMarkerClickListener(mClusterManager);
-//                mapF.setOnInfoWindowClickListener(mClusterManager);
-//                dapat_sekolah();
-//                mClusterManager.cluster();
-//            }
-//        });
+            @Override
+            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
+                Log.i("KES", "onPanelStateChanged " + newState);
+            }
+        });
+        slidingLayout.setFadeOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        });
+
+        tampilProv.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                if(mapF != null){
+                    mapF.clear();
+                }
+
+                mClusterManager = new ClusterManager<SampleClusterItem>(FullMap.this, mapF);
+
+                final LatLng lati = new LatLng(currentLatitudef, currentLongitudef);
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lati.latitude, lati.longitude)).zoom(10).build();
+
+                mapF.setOnCameraIdleListener(mClusterManager);
+                mapF.setOnMarkerClickListener(mClusterManager);
+                mapF.setOnInfoWindowClickListener(mClusterManager);
+                dapat_sekolah();
+                mClusterManager.setOnClusterClickListener(FullMap.this);
+                mClusterManager.setOnClusterItemClickListener(FullMap.this);
+                mClusterManager.setRenderer(new MarkerClusterRenderer(FullMap.this, mapF, mClusterManager));
+                //mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                mapF.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lati.latitude, lati.longitude), 10));
+//                mapF.animateCamera(CameraUpdateFactory.zoomTo(11));
+                mClusterManager.cluster();
+                snappyrecyclerView.setVisibility(View.GONE);
+
+            }
+        });
 
     }
 
@@ -876,35 +871,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         mapF.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
 
-    private SlidingUpPanelLayout.PanelSlideListener onSlideListener() {
-        return new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View view, float v) {
-            }
-
-            @Override
-            public void onPanelCollapsed(View view) {
-                imageView.setBackgroundResource(R.drawable.ic_up_arrow);
-            }
-
-            @Override
-            public void onPanelExpanded(View view) {
-                imageView.setBackgroundResource(R.drawable.ic_arrow_down);
-
-
-            }
-
-            @Override
-            public void onPanelAnchored(View view) {
-
-            }
-
-            @Override
-            public void onPanelHidden(View view) {
-
-            }
-        };
-    }
 
     public void dapat_provinsi(){
 
@@ -1001,66 +967,29 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         });
     }
 
-    private class RenderClusterInfoWindow extends DefaultClusterRenderer<SampleClusterItem> {
+    public class MarkerClusterRenderer extends DefaultClusterRenderer<SampleClusterItem> {
 
-        RenderClusterInfoWindow(Context context, GoogleMap map, ClusterManager<SampleClusterItem> clusterManager) {
+        public MarkerClusterRenderer(Context context, GoogleMap map,
+                                     ClusterManager<SampleClusterItem> clusterManager) {
             super(context, map, clusterManager);
         }
 
         @Override
-        protected void onClusterRendered(Cluster<SampleClusterItem> cluster, Marker marker) {
-            super.onClusterRendered(cluster, marker);
-        }
-
-        @Override
         protected void onBeforeClusterItemRendered(SampleClusterItem item, MarkerOptions markerOptions) {
-            markerOptions.title(item.getName());
-
-            super.onBeforeClusterItemRendered(item, markerOptions);
-        }
-    }
-
-    private class CoffeeRenderer extends DefaultClusterRenderer<SampleClusterItem> {
-        private final IconGenerator mIconGenerator = new IconGenerator(getApplicationContext());
-        private final IconGenerator mClusterIconGenerator = new IconGenerator(getApplicationContext());
-        private final ImageView mImageView;
-        private final ImageView mClusterImageView;
-        private final int mDimension;
-
-        public CoffeeRenderer() {
-            super(getApplicationContext(), mapF, mClusterManager);
-
-            View multiProfile = getLayoutInflater().inflate(R.layout.multi_profile, null);
-            mClusterIconGenerator.setContentView(multiProfile);
-            mClusterImageView = (ImageView) multiProfile.findViewById(R.id.image);
-
-            mImageView = new ImageView(getApplicationContext());
-            mDimension = (int) getResources().getDimension(R.dimen.custom_profile_image);
-            mImageView.setLayoutParams(new ViewGroup.LayoutParams(mDimension, mDimension));
-            int padding = (int) getResources().getDimension(R.dimen.custom_profile_padding);
-            mImageView.setPadding(padding, padding, padding, padding);
-            mIconGenerator.setContentView(mImageView);
-        }
-
-        @Override
-        protected void onBeforeClusterItemRendered(SampleClusterItem person, MarkerOptions markerOptions) {
-            // Draw a single person.
-            // Set the info window to show their name.
-//            Bitmap icon = mIconGenerator.makeIcon();
-//            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
-        }
-
-        @Override
-        protected void onBeforeClusterRendered(Cluster<SampleClusterItem> cluster, MarkerOptions markerOptions) {
-           // mClusterImageView.setImageDrawable(getResources().getDrawable(R.drawable.map));
-//            Bitmap icon = mClusterIconGenerator.makeIcon(String.valueOf(cluster.getSize()));
-//            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon));
-        }
-
-        @Override
-        protected boolean shouldRenderAsCluster(Cluster cluster) {
-            // Always render clusters.
-            return cluster.getSize() > 1;
+            // use this to make your change to the marker option
+            // for the marker before it gets render on the map
+            if(jenjang.equals("SD")){
+            markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sd));
+            }else if (jenjang.equals("SMP")){
+                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp));
+            }
+            else if (jenjang.equals("SMA")){
+                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma));
+            }
+            else if (jenjang.equals("SMK")){
+                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma));
+            }
+            //markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma));
         }
     }
 
@@ -1099,7 +1028,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
         return true;
     }
-
     @Override
     public boolean onClusterItemClick(SampleClusterItem item) {
         // Does nothing, but you could go into the user's profile page, for example.

@@ -131,6 +131,7 @@ public class MenuGuest extends AppCompatActivity
     String location;
     String code;
     Auth mApiInterface;
+    Button carisekolah,carisekolah2;
     int status;
 
     @Override
@@ -200,6 +201,26 @@ public class MenuGuest extends AppCompatActivity
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
         Nearby = (Button)findViewById(R.id.cari_sekolah2);
+        carisekolah = (Button)findViewById(R.id.cari_sekolah);
+        carisekolah2 = (Button)findViewById(R.id.cari_sekolah2);
+        carisekolah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent mIntent = new Intent(MenuGuest.this,SearchingMAP.class);
+                startActivity(mIntent);
+
+            }
+        });
+        carisekolah2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent mIntent = new Intent(MenuGuest.this,SearchingMAP.class);
+                startActivity(mIntent);
+
+            }
+        });
         checkLocationPermission();
 
     }

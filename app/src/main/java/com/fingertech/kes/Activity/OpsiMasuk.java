@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.fingertech.kes.Activity.Guest.MenuGuest;
 import com.fingertech.kes.R;
 
 public class OpsiMasuk extends AppCompatActivity {
@@ -69,7 +70,7 @@ public class OpsiMasuk extends AppCompatActivity {
         btn_masuk_tamu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MenuGuest.class);
                 startActivity(intent);
             }
         });

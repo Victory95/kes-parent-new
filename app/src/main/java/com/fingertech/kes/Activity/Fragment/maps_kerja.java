@@ -345,6 +345,7 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
         mmap.setOnCameraMoveCanceledListener(this);
         mmap.setOnCameraIdleListener(this);
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -436,8 +437,6 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
 
     }
 
-
-
     void updateLocation(Location location) {
 
         mlastLocation = location;
@@ -449,6 +448,7 @@ public class maps_kerja extends AppCompatActivity implements OnMapReadyCallback,
 
 
     }
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable background = ContextCompat.getDrawable(context, vectorResId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
