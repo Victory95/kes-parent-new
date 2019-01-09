@@ -117,5 +117,9 @@
     //////School_onprov
     <string name="SOP_SCS_0001">Berhasil menampilkan</string>
     <string name="SOP_ERR_0001">Gagal menampilkan</string>
+    
+    //////School_Get
+    <string name="DS_SCS_0001">Berhsail menampilkan detail sekolah</string>
+    <string name="DS_ERR_0001">Gagal menampilkan sekolah</string>
 
 </resources>

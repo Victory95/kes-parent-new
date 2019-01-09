@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.fingertech.kes.Activity.Guest.MenuGuest;
+import com.fingertech.kes.Activity.MenuGuest;
 
 public final class SnappyRecycleView extends RecyclerView {
 

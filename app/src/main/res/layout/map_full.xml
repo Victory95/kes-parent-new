@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e7e7e7"
-    tools:context=".Activity.Guest.FullMap">
+    tools:context=".Activity.Maps.FullMap">
 
     <include layout="@layout/full_map" />
     <include layout="@layout/bottom_sheet" />

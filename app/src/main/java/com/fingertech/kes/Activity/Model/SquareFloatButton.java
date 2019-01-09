@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.Guest;
+package com.fingertech.kes.Activity.Model;
 
 import android.content.Context;
 import android.util.AttributeSet;

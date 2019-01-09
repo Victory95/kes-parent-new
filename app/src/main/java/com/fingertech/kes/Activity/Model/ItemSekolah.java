@@ -1,6 +1,6 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.Model;
 
-public class CustomRecyclerViewItem {
+public class ItemSekolah {
 
     private String nama_sekolah;
     private String akreditas;

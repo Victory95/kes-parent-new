@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -89,7 +90,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         arrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), maps_kerja.class);
+                Intent intent = new Intent(getContext(), full_maps.class);
                 startActivityForResult(intent,1);
             }
         });

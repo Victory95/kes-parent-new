@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragPelengkap"
+    tools:context=".Activity.Fragment.DataPelengkap">
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:shrinkColumns="1"
+                android:stretchColumns="1">
+                <!-- Row 3 with 2 columns -->
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="SK Pendirian Sekolah"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/SkSekolah"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Tanggal SK Pendirian Sekolah"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/tanggalSK"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Status Kepemilikan"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/StatusPemilik"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="SK izin operasional"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/Skizin"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Tanggal SK izin operasional"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/TanggalIzin"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Kebutuhan Khusus"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/KebutuhanKhusus"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <LinearLayout
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/tabel_border"
+                            android:padding="23dip"
+                            android:text="Nomor Rekening"
+                            android:textColor="#000000" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/nomor_rekening"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Nama Bank"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/nama_bank"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Cabang"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/cabang"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Rekening Atas Nama"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/nama_rekening"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="MBS"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/mbs"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Luas Tanah milik (m2)"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/luas_tanah"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Luas Tanah Bukan Milik (m2)"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/luas_tanah_bukan"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="Nama Wajib Pajak"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/nama_pajak"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text="NPWP"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/npwp"
+                        android:layout_weight="1"
+                        android:background="@drawable/tabel_border"
+                        android:padding="20dip"
+                        android:text=""
+                        android:textColor="#000000" />
+                </TableRow>
+            </TableLayout>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+</FrameLayout>

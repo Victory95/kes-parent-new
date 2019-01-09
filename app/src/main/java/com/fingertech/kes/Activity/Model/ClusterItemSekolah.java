@@ -1,16 +1,16 @@
-package com.fingertech.kes.Activity.Guest;
+package com.fingertech.kes.Activity.Model;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
 
-public class SampleClusterItem implements ClusterItem {
+public class ClusterItemSekolah implements ClusterItem {
 
     private final LatLng mPosition;
     private String name;
     private String twitterHandle;
 
-    public SampleClusterItem(double lat, double lng, String name, String twitterHandle) {
+    public ClusterItemSekolah(double lat, double lng, String name, String twitterHandle) {
         this.name = name;
         this.twitterHandle = twitterHandle;
         mPosition = new LatLng(lat, lng);

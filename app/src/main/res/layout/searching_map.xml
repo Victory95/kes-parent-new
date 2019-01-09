@@ -4,11 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Guest.SearchingMAP">
+    tools:context=".Activity.Maps.SearchingMAP">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_satu"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/loc"
+        android:layout_below="@id/toolbar_satu"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
@@ -24,56 +32,105 @@
         android:layout_gravity="center"
         android:layout_marginLeft="5dp"/>
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/searchh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/loc"
-        android:id="@+id/searchh">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:id="@+id/kelurahan"
-        android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
-        android:paddingBottom="1dp"
-        android:textColor="#000"
-        android:layout_gravity="center"
-        android:layout_weight="2"
-        android:background="@drawable/edt_bg_selector_black"/>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_bookmark"
-        android:layout_marginRight="10dp"/>
-    </LinearLayout>
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:scrollbars="none"
-            android:layout_below="@id/searchh"
-            android:id="@+id/search_school"
-            android:layout_height="wrap_content">
-            <!--<ImageView-->
-                <!--android:layout_width="15dp"-->
-                <!--android:layout_height="15dp"-->
-                <!--android:background="@drawable/search"/>-->
-            <android.support.v7.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/autoCompleteTextViewPlace"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/kelurahan"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_height="wrap_content"/>
+                android:layout_height="30dp"
+                android:background="@drawable/edt_bg_selector_black"
+                android:text="..."
+                android:paddingTop="5dp"
+                android:paddingLeft="2dp"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="9">
+
+            <ImageView
+                android:id="@+id/book"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="3dp"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_bookmark" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/searchh"
+        android:id="@+id/search_school"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/rectangle_line22"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_school"
+        android:orientation="vertical">
+
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/mapSearch"
-        android:layout_below="@id/search_school"
         android:layout_marginTop="10dp"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="200dp">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+        <com.fingertech.kes.Activity.Model.SquareFloatButton
+            android:id="@+id/refres"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:background="@drawable/ripple"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_refresh" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,4 +166,5 @@
         app:tickMarkCount="4"
         app:tickMarkRadius="5dp" />
     </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

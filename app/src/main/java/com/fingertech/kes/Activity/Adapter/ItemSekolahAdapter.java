@@ -1,26 +1,23 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.Adapter;
 
-import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.R;
 
 import java.util.List;
 
-public class CustomRecyclerViewDataAdapter extends RecyclerView.Adapter<CustomRecyclerViewDataAdapter.MyHolder> {
+public class ItemSekolahAdapter extends RecyclerView.Adapter<ItemSekolahAdapter.MyHolder> {
 
-    private List<CustomRecyclerViewItem> viewItemList;
+    private List<ItemSekolah> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public CustomRecyclerViewDataAdapter(List<CustomRecyclerViewItem> viewItemList) {
+    public ItemSekolahAdapter(List<ItemSekolah> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -42,7 +39,7 @@ public class CustomRecyclerViewDataAdapter extends RecyclerView.Adapter<CustomRe
     public void onBindViewHolder(MyHolder holder, int position) {
 
             // Get car item dto in list.
-            CustomRecyclerViewItem viewItem = viewItemList.get(position);
+            ItemSekolah viewItem = viewItemList.get(position);
                 // Set car item title.
                 holder.name.setText(viewItem.getName());;
                 holder.jarak.setText("Jarak > "+String.format("%.2f", viewItem.getJarak())+"Km");

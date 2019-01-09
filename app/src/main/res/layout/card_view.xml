@@ -6,7 +6,6 @@
     android:layout_height="75dp"
     android:layout_margin="10dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="10dp"
     >
 
     <TextView

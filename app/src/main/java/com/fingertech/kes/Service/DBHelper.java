@@ -7,15 +7,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.fingertech.kes.Activity.Model.Data;
+import com.fingertech.kes.Rest.BookmarkTabel;
 
 public class DBHelper extends SQLiteOpenHelper{
 
     private static final String db_name ="school";
-    private static final int db_version=1;
+    private static final int db_version=2;
+    public static final String TABLE_SQLite = "sqlite";
+
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_ADDRESS = "address";
 
 
     public DBHelper(Context context) {
@@ -282,36 +285,16 @@ public class DBHelper extends SQLiteOpenHelper{
                 " ('ZA', 'South Africa'), \n" +
                 " ('ZM', 'Zambia'), \n" +
                 " ('ZW', 'Zimbabwe');";
+
+        db.execSQL(BookmarkTabel.createTable());
         db.execSQL(sql);
     }
 
     // dijalankan apabila ingin mengupgrade database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-    }
-    public List<String> getAllLabels(){
-        List<String> labels = new ArrayList<String>();
-
-        // Select All Query
-        String selectQuery = "SELECT  * FROM country ORDER BY negara ASC" ;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                labels.add(cursor.getString(2));
-            } while (cursor.moveToNext());
-        }
-
-        // closing connection
-        cursor.close();
-        db.close();
-
-        // returning lables
-        return labels;
+        db.execSQL("DROP TABLE IF EXISTS " + Data.TABLE);
+        onCreate(db);
     }
 
     // Select All Data
@@ -333,18 +316,4 @@ public class DBHelper extends SQLiteOpenHelper{
 
     }
 
-    public Set<String> getAllData() {
-        Set<String> set = new HashSet<String>();
-        String selectQuery = "select * from country order by negara asc" ;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                set.add(cursor.getString(2));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        db.close();
-        return set;
-    }
 }

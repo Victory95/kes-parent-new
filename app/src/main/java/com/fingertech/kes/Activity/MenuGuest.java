@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.Guest;
+package com.fingertech.kes.Activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,7 +24,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -53,10 +52,14 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.fingertech.kes.Activity.OpsiMasuk;
+import com.fingertech.kes.Activity.Maps.FullMap;
+import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
+import com.fingertech.kes.Activity.Maps.OnInfoWindowElemTouchListener;
+import com.fingertech.kes.Activity.Maps.SearchingMAP;
+import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
-import com.fingertech.kes.Activity.RecycleView.CustomRecyclerViewDataAdapter;
-import com.fingertech.kes.Activity.RecycleView.CustomRecyclerViewItem;
+import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
+import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -106,8 +109,8 @@ public class MenuGuest extends AppCompatActivity
     String[] sampleTitles = {"Orange", "Grapes", "Strawberry", "Cherry", "Apricot"};
 
 
-    private List<CustomRecyclerViewItem> itemList;
-    private CustomRecyclerViewDataAdapter customRecyclerViewDataAdapter = null;
+    private List<ItemSekolah> itemList;
+    private ItemSekolahAdapter itemSekolahAdapter = null;
     private GoogleMap.OnCameraIdleListener onCameraIdleListener;
     private GoogleMap.OnCameraMoveListener onCameraMove;
     private GoogleMap mapG;
@@ -133,6 +136,7 @@ public class MenuGuest extends AppCompatActivity
     Auth mApiInterface;
     Button carisekolah,carisekolah2;
     int status;
+    private OnInfoWindowElemTouchListener infoButtonListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +150,8 @@ public class MenuGuest extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+        mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
         toggle.syncState();
@@ -404,12 +410,6 @@ public class MenuGuest extends AppCompatActivity
             mapG.setMyLocationEnabled(true);
         }
 
-        //mapG.setOnCameraMoveStartedListener(this);
-        //mapG.setOnCameraMoveListener(this);
-        //mapG.setOnCameraMoveCanceledListener(this);
-        //mapG.setOnCameraIdleListener(onCameraIdleListener);
-       // mapG.setOnCameraMoveListener(onCameraMove);
-
 
     }
 
@@ -530,61 +530,22 @@ public class MenuGuest extends AppCompatActivity
 
             InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
 
-            tvSch.setText(infoWindowData.getNama());
-            tvAkr.setText("Akreditasi "+ infoWindowData.getAkreditasi());
             tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
             tvAlm.setText(infoWindowData.getAlamat());
+            final String SchoolDetailId = infoWindowData.getSchooldetailid();
 
+            mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
+                    intent.putExtra("detailid",SchoolDetailId);
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }
 
-    public class InfoWindowData {
-        private String image;
-        private Double jarak;
-        private String alamat,nama,akreditasi;
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public Double getJarak() {
-            return jarak;
-        }
-
-        public void setJarak(Double jarak) {
-            this.jarak = jarak;
-        }
-
-        public String getAlamat() {
-            return alamat;
-        }
-
-        public void setAlamat(String alamat) {
-            this.alamat = alamat;
-        }
-
-        public String getNama() {
-            return nama;
-        }
-
-        public void setNama(String nama) {
-            this.nama = nama;
-        }
-
-        public String getAkreditasi() {
-            return akreditasi;
-        }
-
-        public void setAkreditasi(String akreditasi) {
-            this.akreditasi = akreditasi;
-        }
-
-    }
 
     public void dapat_map(){
 
@@ -607,18 +568,19 @@ public class MenuGuest extends AppCompatActivity
                 String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
                 String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                CustomRecyclerViewItem Item = null;
+                ItemSekolah Item = null;
 
                 if (status == 1 && code.equals("NR_SCS_0001")) {
-                    itemList = new ArrayList<CustomRecyclerViewItem>();
+                    itemList = new ArrayList<ItemSekolah>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
-                        double lat = response.body().getData().get(i).getLatitude();
-                        double lng = response.body().getData().get(i).getLongitude();
-                        final String placeName = response.body().getData().get(i).getSchool_name();
-                        final String vicinity = response.body().getData().get(i).getSchool_address();
-                        final String akreditasi = response.body().getData().get(i).getAkreditasi();
-                        final double Jarak = response.body().getData().get(i).getDistance();
+                        double lat                  = response.body().getData().get(i).getLatitude();
+                        double lng                  = response.body().getData().get(i).getLongitude();
+                        final String placeName      = response.body().getData().get(i).getSchool_name();
+                        final String vicinity       = response.body().getData().get(i).getSchool_address();
+                        final String akreditasi     = response.body().getData().get(i).getAkreditasi();
+                        final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                        final double Jarak          = response.body().getData().get(i).getDistance();
 
                         LatLng latLng = new LatLng(lat, lng);
                         if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
@@ -628,6 +590,8 @@ public class MenuGuest extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sd));
+                            markerOptions.title(placeName);
+                            markerOptions.snippet(akreditasi);
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -640,6 +604,8 @@ public class MenuGuest extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp));
+                            markerOptions.title(placeName);
+                            markerOptions.snippet(akreditasi);
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -651,6 +617,8 @@ public class MenuGuest extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_smp));
+                            markerOptions.title(placeName);
+                            markerOptions.snippet(akreditasi);
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -663,6 +631,8 @@ public class MenuGuest extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuGuest.this, R.drawable.ic_sma));
+                            markerOptions.title(placeName);
+                            markerOptions.snippet(akreditasi);
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -691,19 +661,19 @@ public class MenuGuest extends AppCompatActivity
 //                        });
 
                         InfoWindowData info = new InfoWindowData();
-                        info.setNama(placeName);
-                        info.setAkreditasi(akreditasi);
+//                        info.setNama(placeName);
+//                        info.setAkreditasi(akreditasi);
                         info.setJarak(Jarak);
                         info.setAlamat(vicinity);
+                        info.setSchooldetailid(schooldetailid);
 
                         CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(MenuGuest.this);
                         mapG.setInfoWindowAdapter(customInfoWindow);
 
-
                         m.setTag(info);
                        // m.showInfoWindow();
 
-                        Item = new CustomRecyclerViewItem();
+                        Item = new ItemSekolah();
                         Item.setName(placeName);
                         Item.setAkreditas(akreditasi);
                         Item.setJarak(Jarak);
@@ -723,9 +693,9 @@ public class MenuGuest extends AppCompatActivity
                     snappyRecyclerView.setLayoutManager(layoutManager);
 
                     // Create car recycler view data adapter with car item list.
-                    customRecyclerViewDataAdapter = new CustomRecyclerViewDataAdapter(itemList);
+                    itemSekolahAdapter = new ItemSekolahAdapter(itemList);
 
-                    customRecyclerViewDataAdapter.setOnItemClickListener(new CustomRecyclerViewDataAdapter.OnItemClickListener() {
+                    itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Toast.makeText(MenuGuest.this, "Clicked at index "+ position, Toast.LENGTH_SHORT).show();
@@ -868,7 +838,7 @@ public class MenuGuest extends AppCompatActivity
                         }
                     });
                     // Set data adapter.
-                    snappyRecyclerView.setAdapter(customRecyclerViewDataAdapter);
+                    snappyRecyclerView.setAdapter(itemSekolahAdapter);
 
 
                 } else{
@@ -1051,6 +1021,7 @@ public class MenuGuest extends AppCompatActivity
             return true;
         }
     }
+
     private void setCameraWithCoordinationBounds(Route route) {
         LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();
         LatLng northeast = route.getBound().getNortheastCoordination().getCoordination();
@@ -1058,6 +1029,10 @@ public class MenuGuest extends AppCompatActivity
         mapG.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
     }
 
+    public static int getPixelsFromDp(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int)(dp * scale + 0.5f);
+    }
 }
 
 

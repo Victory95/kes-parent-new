@@ -1,0 +1,212 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="#fff"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_arrow_down"
+            android:id="@+id/arrowF"
+            android:layout_weight="1.4"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            android:text="Filter"
+            android:textAlignment="center"
+            android:gravity="center_vertical"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            android:textAlignment="center"
+            android:layout_gravity="center"
+            android:text="Reset"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"
+        android:text="Kurikulum"
+        android:textStyle="bold" />
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/edt_bg_selector_black"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/kurikulum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:spinnerMode="dropdown" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:onClick="showDropDown"
+            android:src="@drawable/ic_arrow_down" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="20dp"
+        android:text="Akreditasi"
+        android:textStyle="bold" />
+    <RadioGroup
+        android:id="@+id/jenis_kelamin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp">
+
+        <RadioButton
+            android:id="@+id/A"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/B"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="B"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/C"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/tidakakreditasi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak terakreditasi"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+    </RadioGroup>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="visible"
+        android:background="#000000"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jenjang"
+        android:textStyle="bold"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"/>
+
+    <RadioGroup
+        android:id="@+id/jenjangschool"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal">
+
+        <RadioButton
+            android:id="@+id/sma"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMA"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/smk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMK"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/smp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMP"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+        <RadioButton
+            android:id="@+id/sd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SD"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            android:buttonTint="@color/black"/>
+
+    </RadioGroup>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/cari"
+        android:text="Cari"
+        android:textColor="#ffffff"
+        android:clickable="true"
+        android:textAlignment="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rectang_line"
+        android:focusable="true"
+        android:layout_marginBottom="30dp"/>
+
+
+</LinearLayout>

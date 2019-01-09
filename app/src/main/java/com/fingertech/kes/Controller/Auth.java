@@ -1,6 +1,5 @@
 package com.fingertech.kes.Controller;
 
-import com.fingertech.kes.Activity.Guest.place.Predictions;
 import com.fingertech.kes.Rest.JSONResponse;
 
 import retrofit2.Call;
@@ -11,8 +10,6 @@ import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Auth {
@@ -118,12 +115,7 @@ public interface Auth {
     @GET("school/kes_provinsi")
     Call<JSONResponse.Provinsi>provinsi_get();
 
-    @GET("place/autocomplete/json")
-    public Call<Predictions> getPlacesAutoComplete(
-            @Query("input") String input,
-            @Query("types") String types,
-            @Query("language") String language,
-            @Query("key") String key
-    );
+    @GET("auth/kes_detail_school")
+    Call<JSONResponse.DetailSchool>detail_school_get(@Query("sch") String sch);
 
 }

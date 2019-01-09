@@ -1,9 +1,7 @@
 package com.fingertech.kes.Activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -15,14 +13,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Fragment.AnakFragment;
 import com.fingertech.kes.Activity.Fragment.DataAnakFragment;
@@ -32,20 +27,7 @@ import com.fingertech.kes.Activity.Fragment.KontakFragment;
 import com.fingertech.kes.Activity.Fragment.ParentFragment;
 import com.fingertech.kes.Activity.Fragment.PekerjaanFragment;
 import com.fingertech.kes.Activity.Fragment.TempatTinggalFragment;
-import com.fingertech.kes.Activity.Fragment.maps_kerja;
-import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
-import com.fingertech.kes.Rest.ApiClient;
-import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Util.JWTUtils;
-
-import org.json.JSONObject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.fingertech.kes.Activity.Masuk.TAG_TOKEN;
 
 
 public class ParentMain extends AppCompatActivity implements ViewPager.OnPageChangeListener {
