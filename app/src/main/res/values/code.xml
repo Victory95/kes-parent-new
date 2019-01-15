@@ -119,7 +119,35 @@
     <string name="SOP_ERR_0001">Gagal menampilkan</string>
     
     //////School_Get
-    <string name="DS_SCS_0001">Berhsail menampilkan detail sekolah</string>
+    <string name="DS_SCS_0001">Berhasil menampilkan detail sekolah</string>
     <string name="DS_ERR_0001">Gagal menampilkan sekolah</string>
 
+    //////UpdateParent
+    <string name="UPA_SCS_0001">Berhasil Update</string>
+    <string name="UPA_ERR_0021">Gagal Update</string>
+    <string name="UPA_ERR_0001">student id kosong</string>
+    <string name="UPA_ERR_0002">parent name kosong</string>
+    <string name="UPA_ERR_0003">parent nik kosong</string>
+    <string name="UPA_ERR_0004">parent type kosong</string>
+    <string name="UPA_ERR_0005">parent birth date kosong</string>
+    <string name="UPA_ERR_0006">parent birth place kosong</string>
+    <string name="UPA_ERR_0007">type warga kosong</string>
+    <string name="UPA_ERR_0008">parent home phone kosong</string>
+    <string name="UPA_ERR_0009">parent phone kosong</string>
+    <string name="UPA_ERR_0010">parent address kosong</string>
+    <string name="UPA_ERR_0011">parent laitude kosong</string>
+    <string name="UPA_ERR_0012">parent longitude kosong</string>
+    <string name="UPA_ERR_0013">parent email kosong</string>
+    <string name="UPA_ERR_0014">parent education kosong</string>
+    <string name="UPA_ERR_0015">company name kosong</string>
+    <string name="UPA_ERR_0016">employment kosong</string>
+    <string name="UPA_ERR_0017">parent income kosong</string>
+    <string name="UPA_ERR_0018">workplace address kosong</string>
+    <string name="UPA_ERR_0019">office latitude kosong</string>
+    <string name="UPA_ERR_0020">office longitude kosong</string>
+
+
+    //////DataStudent
+    <string name="DTS_SCS_0001">Data Ditemukan</string>
+    <string name="DTS_ERR_0001">Data Tidak Ditemukan</string>
 </resources>

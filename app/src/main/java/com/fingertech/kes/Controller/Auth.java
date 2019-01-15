@@ -10,6 +10,7 @@ import retrofit2.http.HTTP;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Auth {
@@ -118,4 +119,38 @@ public interface Auth {
     @GET("auth/kes_detail_school")
     Call<JSONResponse.DetailSchool>detail_school_get(@Query("sch") String sch);
 
+    //////// search_school
+    @FormUrlEncoded
+    @POST("auth/kes_delete_verification")
+    Call<JSONResponse.DeleteCode>delete_verification_post(@Field("verification_code") String verification_code);
+
+    @FormUrlEncoded
+    @PUT("parents/kes_update_parent/{studentparentid}")
+    Call<JSONResponse>update_parent_put(@Header("Authorization") String authorization,
+                                        @Path("studentparentid")String studentparentid,
+                                        @Field("school_code") String school_code,
+                                        @Field("student_id") String student_id,
+                                        @Field("parent_name") String parent_name,
+                                        @Field("parent_nik") String parent_nik,
+                                        @Field("parent_type") String parent_type,
+                                        @Field("birth_date") String birth_date,
+                                        @Field("parent_birth_place") String parent_birth_place,
+                                        @Field("type_warga") String type_warga,
+                                        @Field("parent_home_phone") String parent_home_phone,
+                                        @Field("parent_phone") String parent_phone,
+                                        @Field("parent_address") String parent_address,
+                                        @Field("parent_latitude") String parent_latitude,
+                                        @Field("parent_longitude") String parent_longitude,
+                                        @Field("parent_email") String parent_email,
+                                        @Field("parent_education") String parent_education,
+                                        @Field("company_name") String company_name,
+                                        @Field("employment") String employment,
+                                        @Field("parent_income") String parent_income,
+                                        @Field("workplace_address") String workplace_address,
+                                        @Field("office_latitude") String office_latitude,
+                                        @Field("office_longitude") String office_longitude);
+
+    //////DetailStudent
+    @GET("students/kes_detail_student")
+    Call<JSONResponse.DetailStudent>kes_detail_student_get(@Header("Authorization") String authorization, @Query("school_code") String school_code, @Query("student_id") String student_id,@Query("parent_nik") String parent_nik);
 }

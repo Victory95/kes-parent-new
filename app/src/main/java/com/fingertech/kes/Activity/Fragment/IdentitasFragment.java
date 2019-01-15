@@ -39,6 +39,7 @@ public class IdentitasFragment extends Fragment {
             KEcamatan        = this.getArguments().getString("kecamatan");
             KElurahan        = this.getArguments().getString("kelurahan");
             Rt               = this.getArguments().getString("rt");
+            Rw               = this.getArguments().getString("rw");
             ALamat           = this.getArguments().getString("alamat");
             Kodepos          = this.getArguments().getString("kodepos");
 
@@ -72,7 +73,7 @@ public class IdentitasFragment extends Fragment {
         kabupaten.setText(KAbupaten);
         kecamatan.setText(KEcamatan);
         kelurahan.setText(KElurahan);
-        rt.setText(Rt);
+        rt.setText(Rt + "/" + Rw);
         alamat.setText(ALamat);
         kodepos.setText(Kodepos);
         return view;

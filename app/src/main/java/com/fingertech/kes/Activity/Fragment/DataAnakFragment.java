@@ -2,29 +2,52 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.fingertech.kes.Activity.AnakMain;
+import com.fingertech.kes.Activity.Masuk;
+import com.fingertech.kes.Activity.ParentMain;
+import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
+import com.fingertech.kes.Rest.ApiClient;
+import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Service.DBHelper;
+import com.rey.material.widget.Spinner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -40,16 +63,96 @@ public class DataAnakFragment extends Fragment {
         // Required empty public constructor
     }
 
+    ViewPager ParentPager;
+    AnakMain anakMain;
+    Button buttonBerikutnya,buttonKembali;
+    private LinearLayout indicator;
+    private int mDotCount;
+    private LinearLayout[] mDots;
+    private String[] listSekolah = {
+            "Tingkatan Kelas",
+            "SD 1",
+            "SD 2",
+            "SD 3",
+            "SD 4",
+            "SD 5",
+            "SD 6",
+            "SMP 1",
+            "SMP 2",
+            "SMP 3",
+            "SMA/SMK 1",
+            "SMA/SMK 2",
+            "SMA/SMK 3"
+    };
+    private String[] listAgama = {
+            "Agama",
+            "Buddha",
+            "Hindu",
+            "Islam",
+            "Katolik",
+            "Kristen"
+    };
+    String negaraasal,kelas,levelkelas;
+    private AnakMain.FragmentAdapter fragmentAdapter;
 
+    public static final String my_shared_preferences = "my_shared_preferences";
+    public static final String my_shared_viewpager   = "my_shared_viewpager";
+    public static final String session_status = "session_status";
+
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_TOKEN        = "token";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+
+    SharedPreferences sharedpreferences,sharedviewpager;
+    int status;
+    String code;
+    ProgressDialog dialog;
+    Auth mApiInterface;
+    Spinner sp_tingkatan,sp_agama;
+    RadioButton rb_laki,rb_wanita,rb_wni,rb_wna;
+    EditText et_nama_lengkap,et_nis,et_nisn,et_nik,et_tempat_lahir,et_rombel,et_kebutuhan_khusus;
+    TextInputLayout til_nama_lengkap,til_nis,til_nisn,til_nik,til_rombel,til_tempat_lahir,til_tanggal_lahir,til_kebutuhan_khusus;
+    String email,parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
+    String tingkatan_kelas,nama_lengkap,nis,nisn,nik,rombel,jenis_kelamin,tanggal_lahir,tempat_lahir,religion,kebutuhan_khusus,kewarganegaraan;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_data_anak, container, false);
+        View view           = inflater.inflate(R.layout.fragment_data_anak, container, false);
+        et_negara_asal      = (Spinner) view.findViewById(R.id.sp_negara_asal);
+        et_tanggal          = (EditText)view.findViewById(R.id.et_tanggallahiR);
+        et_nama_lengkap     = (EditText)view.findViewById(R.id.et_nama_lengkap_anak);
+        et_nis              = (EditText)view.findViewById(R.id.et_nama_nis);
+        et_nisn             = (EditText)view.findViewById(R.id.et_nama_nisn);
+        et_rombel           = (EditText)view.findViewById(R.id.et_rombel);
+        et_tempat_lahir     = (EditText)view.findViewById(R.id.et_tempatlahiR);
+        et_nik              = (EditText)view.findViewById(R.id.et_Nik);
+        et_kebutuhan_khusus = (EditText)view.findViewById(R.id.et_kebutuhan_khusus);
+        anakMain            = (AnakMain)getActivity();
+        ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
+        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
+        buttonKembali       = (Button)view.findViewById(R.id.btn_kembali);
+        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_berikut);
+        fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+        sp_tingkatan        = (Spinner)view.findViewById(R.id.sp_tingkatan);
+        sp_agama            = (Spinner)view.findViewById(R.id.sp_agama);
+        rb_laki             = (RadioButton)view.findViewById(R.id.rb_laki_lakI);
+        rb_wanita           = (RadioButton)view.findViewById(R.id.rb_perempuaN);
+        rb_wni              = (RadioButton)view.findViewById(R.id.rb_wnI);
+        rb_wna              = (RadioButton)view.findViewById(R.id.rb_wnA);
+
 
         Calendar calendar = Calendar.getInstance();
 
-        et_tanggal =(EditText)view.findViewById(R.id.et_tanggallahiR);
+
         final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
@@ -73,9 +176,49 @@ public class DataAnakFragment extends Fragment {
             }
         });
 
-        // Spinner click listener
-        et_negara_asal = (Spinner) view.findViewById(R.id.sp_negara_asal);
+
         loadSpinnerData();
+        buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParentPager.setCurrentItem(getItem(+1), true);
+            }
+        });
+
+        buttonKembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParentPager.setCurrentItem(getItem(-1), true);
+            }
+        });
+
+        setUiPageViewController();
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+        }
+        mDots[1].setBackgroundResource(R.drawable.selected_item);
+
+        mApiInterface = ApiClient.getClient().create(Auth.class);
+        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
+//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        email         = sharedpreferences.getString(TAG_EMAIL,"email");
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+
+        school_code = "bpk01";
+        student_id = "418";
+
+        data_student_get();
+
+
+
         return view;
     }
 
@@ -97,15 +240,287 @@ public class DataAnakFragment extends Fragment {
         // database handler
         DBHelper db = new DBHelper(getApplicationContext());
 
-        final Cursor myData = db.SelectAllData();
+        final List<String> myData = db.getAllLabels();
 
-        SimpleCursorAdapter adapter;
-        adapter = new SimpleCursorAdapter(getApplicationContext(), R.layout.costum_spinner_item, myData
-                ,new String[] {"negara"}
-                ,new int[] { R.id.negarA});
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_text, myData);
+        //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        et_negara_asal.setAdapter(spinnerArrayAdapter);
+        et_negara_asal.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(Spinner parent, View view, int position, long id) {
+                negaraasal = myData.get(position).toString();
+            }
+        });
 
+    }
+    private int getItem(int i) {
+        return ParentPager.getCurrentItem() + i;
+    }
+    private void setUiPageViewController() {
+        mDotCount = fragmentAdapter.getCount();
+        mDots = new LinearLayout[mDotCount];
 
-        et_negara_asal.setAdapter(adapter);
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i] = new LinearLayout(getContext());
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
 
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+            indicator.addView(mDots[i]);
+            mDots[0].setBackgroundResource(R.drawable.selected_item);
+        }
+    }
+
+    public void data_student_get(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString(), student_id.toString(),parent_nik.toString());
+        call.enqueue(new Callback<JSONResponse.DetailStudent>() {
+            @Override
+            public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
+                Log.d("TAG",response.code()+"");
+                hideDialog();
+
+                JSONResponse.DetailStudent resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                tingkatan_kelas     = response.body().data.getEdulevel_id();
+                nama_lengkap        = response.body().data.getFullname();
+                nis                 = response.body().data.getMember_code();
+                nisn                = response.body().data.getNisn();
+                nik                 = response.body().data.getNik();
+                rombel              = response.body().data.getRombel();
+                jenis_kelamin       = response.body().data.getGender();
+                tempat_lahir        = response.body().data.getBirth_place();
+                tanggal_lahir       = response.body().data.getBirth_date();
+                religion               = response.body().data.getReligion();
+                kebutuhan_khusus    = response.body().data.getSpecial_needs();
+                kewarganegaraan     = response.body().data.getCitizen_status();
+
+                et_nama_lengkap.setText(nama_lengkap);
+                et_nis.setText(nis);
+                et_nisn.setText(nisn);
+                et_nik.setText(nik);
+                et_rombel.setText(rombel);
+                et_tempat_lahir.setText(tempat_lahir);
+                et_tanggal.setText(tanggal_lahir);
+                et_kebutuhan_khusus.setText(kebutuhan_khusus);
+
+                    if(tingkatan_kelas.equals("4")){
+                        kelas = "SD 1";
+                    }else if(tingkatan_kelas.equals("5")){
+                        kelas = "SD 2";
+                    }else if(tingkatan_kelas.equals("6")){
+                        kelas = "SD 3";
+                    }else if(tingkatan_kelas.equals("7")){
+                        kelas = "SD 4";
+                    }else if(tingkatan_kelas.equals("8")){
+                        kelas = "SD 5";
+                    }else if(tingkatan_kelas.equals("9")){
+                        kelas = "SD 6";
+                    }else if(tingkatan_kelas.equals("10")){
+                        kelas = "SMP 1";
+                    }else if(tingkatan_kelas.equals("11")){
+                        kelas = "SMP 2";
+                    }else if(tingkatan_kelas.equals("12")){
+                        kelas = "SMP 3";
+                    }else if(tingkatan_kelas.equals("13")){
+                        kelas = "SMA/SMK 1";
+                    }else if(tingkatan_kelas.equals("14")){
+                        kelas = "SMA/SMK 2";
+                    }else if(tingkatan_kelas.equals("15")){
+                        kelas = "SMA/SMK 3";
+                    }
+                    final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,penghasil){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+
+                    int spinnerPosition = ArrayAdapter.getPosition(kelas);
+                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    sp_tingkatan.setAdapter(ArrayAdapter);
+                    sp_tingkatan.setSelection(spinnerPosition);
+                    sp_tingkatan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(Spinner parent, View view, int position, long id) {
+                            kelas = penghasil.get(position);
+
+                        }
+                    });
+
+                    kelas = sp_tingkatan.getSelectedItem().toString();
+
+                    if (kelas.toString().equals("SD 1")){
+                        levelkelas = "4";
+                    }else if (kelas.toString().equals("SD 2")){
+                        levelkelas = "5";
+                    }else if (kelas.toString().equals("SD 3")){
+                        levelkelas = "6";
+                    }else if (kelas.toString().equals("SD 4")){
+                        levelkelas = "7";
+                    }else if (kelas.toString().equals("SD 5")){
+                        levelkelas = "8";
+                    }else if (kelas.toString().equals("SD 6")){
+                        levelkelas = "9";
+                    }else if (kelas.toString().equals("SMP 1")){
+                        levelkelas = "10";
+                    }else if (kelas.toString().equals("SMP 2")){
+                        levelkelas = "11";
+                    }else if (kelas.toString().equals("SMP 3")){
+                        levelkelas = "12";
+                    }else if (kelas.toString().equals("SMA/SMK 1")){
+                        levelkelas = "13";
+                    }else if (kelas.toString().equals("SMA/SMK 2")){
+                        levelkelas = "14";
+                    }else if (kelas.toString().equals("SMA/SMK 3")){
+                        levelkelas = "15";
+                    }
+                    final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> agamaadapter = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,agama){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+
+                        }
+                    };
+                    int spinneragama = agamaadapter.getPosition(religion);
+                    agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    sp_agama.setAdapter(agamaadapter);
+                    sp_agama.setSelection(spinneragama);
+
+                    if (jenis_kelamin.equals("Pria")){
+                        rb_laki.setChecked(true);
+                        rb_wanita.setChecked(false);
+                    }else if(jenis_kelamin.equals("Wanita")){
+                        rb_wanita.setChecked(true);
+                        rb_laki.setChecked(false);
+                    }
+
+                    if (kewarganegaraan.equals("WNI")){
+                        rb_wni.setChecked(true);
+                        rb_wna.setChecked(false);
+                    }else if (kewarganegaraan.equals("WNA")){
+                        rb_wna.setChecked(true);
+                        rb_wni.setChecked(false);
+                    }
+
+                    rb_wni.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            negaraasal = getResources().getString(R.string.rb_wni);
+                            et_negara_asal.setVisibility(View.GONE);
+                        }
+                    });
+
+                    rb_wna.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            et_negara_asal.setVisibility(View.VISIBLE);
+                            negaraasal = et_negara_asal.getSelectedItem().toString();
+                        }
+                    });
+
+                } else {
+                    if(status == 0 && code.equals("DTS_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.DetailStudent> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    //////// Progressbar - Loading Animation
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(getActivity());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 }

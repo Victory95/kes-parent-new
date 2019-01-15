@@ -9,27 +9,29 @@
     android:background="@color/colorPrimary"
     tools:context=".Activity.Fragment.KontakAnakFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginRight="100dp"
-        android:text="Kontak"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="20dp"
-        android:textAlignment="center"
-        android:textColor="#ffffff"
-        android:textSize="28dp" />
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never">
+        android:overScrollMode="never"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="100dp"
+                android:layout_marginBottom="5dp"
+                android:text="Kontak"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="28dp" />
+
 
 
             <android.support.design.widget.TextInputLayout
@@ -89,7 +91,7 @@
 
                 <EditText
                     android:theme="@style/TextLabel"
-                    android:id="@+id/et_e-mail"
+                    android:id="@+id/et_email_student"
                     android:hint="E-Mail"
                     android:textSize="16dp"
                     android:inputType="textEmailAddress"
@@ -172,4 +174,51 @@
             </android.support.design.widget.TextInputLayout>Penerimaan KPS
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+    <LinearLayout
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_kembali"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="#0046bfee"
+            android:text="Kembali"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
+
+        <LinearLayout
+            android:id="@+id/viewPagerIndicators"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_gravity="center"
+                android:id="@+id/indicators"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_berikut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="#0046bfee"
+            android:text="Berikutnya"
+            android:textAlignment="textEnd"
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
+    </LinearLayout>
 </LinearLayout>

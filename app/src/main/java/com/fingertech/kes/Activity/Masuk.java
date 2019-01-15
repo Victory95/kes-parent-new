@@ -39,6 +39,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
@@ -77,7 +78,7 @@ public class Masuk extends AppCompatActivity {
 
     int status;
     String code;
-    String id, email, member_id, fullname, member_type, token, deviceid;
+    String id, email, member_id, fullname, member_type, token, deviceid,parent_nik;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -91,6 +92,8 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+
 
     Auth mApiInterface;
     CallbackManager callbackManager = CallbackManager.Factory.create();
@@ -112,6 +115,7 @@ public class Masuk extends AppCompatActivity {
         ///// checking internet connection
         checkInternetCon();
 
+
         btn_masuk      = (Button) findViewById(R.id.btn_Masuk);
         btn_google     = (Button) findViewById(R.id.btn_Google);
         btn_facebook   = (Button) findViewById(R.id.btn_Facebook);
@@ -131,6 +135,7 @@ public class Masuk extends AppCompatActivity {
         member_id    = sharedpreferences.getString(TAG_MEMBER_ID, null);
         fullname     = sharedpreferences.getString(TAG_FULLNAME, null);
         member_type  = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
         token        = sharedpreferences.getString(TAG_TOKEN, null);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
@@ -313,6 +318,7 @@ public class Masuk extends AppCompatActivity {
                     JSONObject jsonObject = null;
                     try {
                         token = data.token;
+                        parent_nik = data.parent_nik;
                         jsonObject = new JSONObject(JWTUtils.decoded(token));
                         /// save session
                         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -321,6 +327,7 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                        editor.putString(TAG_PARENT_NIK, parent_nik);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
@@ -336,10 +343,11 @@ public class Masuk extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, AksesAnak.class);
+                            Intent intent = new Intent(Masuk.this, AnakMain.class);
                             intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                             intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_PARENT_NIK, parent_nik);
                             intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
                             intent.putExtra(TAG_TOKEN, token);
                             finish();

@@ -255,6 +255,7 @@ public class DaftarParent extends AppCompatActivity {
             }
         }
     }
+
     private boolean validateNamaLengkap() {
         if (et_fullname.getText().toString().trim().isEmpty()) {
             til_fullname.setError(getResources().getString(R.string.validate_fullname));
@@ -420,6 +421,8 @@ public class DaftarParent extends AppCompatActivity {
                     if(cb_ketentuan.isChecked()){
                         cb_ketentuan.toggle();
                     }
+                    Intent intent = new Intent(DaftarParent.this, OpsiMasuk.class);
+                    startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RO_ERR_0001")){
                         Toast.makeText(getApplicationContext(), RO_ERR_0001, Toast.LENGTH_LONG).show();

@@ -95,6 +95,7 @@
     <string name="validate_nik">* Masukan NIK / NIORA anda</string>
     <string name="validate_email">* Email tidak sesuai</string>
     <string name="validate_mobile_phone">* Masukan nomor handphone anda</string>
+    <string name="validate_nomor_rumah">* Masukkan nomor rumah anda</string>
     <string name="validate_pass">* Masukan kata sandi anda</string>
     <string name="validate_pass_lengh">* Minimal 6 karakter</string>
     <string name="validate_number_lengh">* Minimal 10 karakter</string>
@@ -106,6 +107,8 @@
     <string name="validate_tempat_lahir">* Masukan tempat lahir anda</string>
     <string name="validate_tanggal_lahir">* Masukan tanggal lahir anda</string>
     <string name="validate_negara">* Masukkan negara asal anda</string>
+    <string name="validate_kewarganegaraan">* Mohon pilih kewarganegaraan anda</string>
+    <string name="validate_alamat_rumah">* Mohon masukkan alamat rumah anda</string>
     <string name="validate2_nik">Pastikan NIK / NIORA benar, agar dapat mengaskses anak anda. Bisa dengan Scan NIK dari KTP/KK</string>
     <string name="validate2_mobile_phone">Pasikan nomor ponsel anda aktif untuk keamanan dan kemudahan akses</string>
     <string name="validate2_pass_lengh">Minimal 6 karakter</string>
@@ -147,5 +150,14 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="rb_wni">WNI</string>
+    <string name="rb_wna">WNA</string>
+
+    <string name="validate_alamat_kerja">* Mohon masukkan alamat kerja anda</string>
+    <string name="validate_penghasilan">* Mohon penghasilan anda</string>
+    <string name="validate_pendidikan">* Mohon masukkan pendidikan anda</string>
+    <string name="validate_jabatan">* Mohon masukkan jabatan anda</string>
+    <string name="validate_nama_perusahaan">* Mohon masukkan nama perusahaan anda</string>
 
 </resources>

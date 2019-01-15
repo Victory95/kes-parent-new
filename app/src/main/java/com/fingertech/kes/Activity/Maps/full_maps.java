@@ -18,10 +18,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -72,7 +75,6 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
     String result = "";
 
 
-
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71, 136));
 
@@ -91,8 +93,10 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                 showPlaceAutoComplete(PICK_UP);
             }
         });
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_map);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Pilih = (Button)findViewById(R.id.pilih);
-
     }
 
     private void showPlaceAutoComplete(int typeLocation) {
@@ -439,6 +443,21 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         Canvas canvas = new Canvas(bitmap);
         background.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
 

@@ -22,7 +22,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_kes" />
+            android:src="@drawable/ic_logo_kes" />
 
         <TextView
             android:layout_marginTop="40dp"
@@ -75,5 +75,5 @@
         android:textSize="12dp"
         android:textColor="#c9c8c8"
         android:gravity="center"
-        android:text="© 2018 Kids Education System" />
+        android:text="© 2018 Khronos Education System" />
 </LinearLayout>

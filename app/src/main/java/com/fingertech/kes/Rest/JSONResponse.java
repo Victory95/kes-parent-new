@@ -896,6 +896,7 @@ public class JSONResponse{
         @SerializedName("data")
         public DPS_Data data;
     }
+
     public class DPS_Data{
         @SerializedName("studentparentid")
         public String studentparentid;
@@ -928,17 +929,187 @@ public class JSONResponse{
         @SerializedName("workplace_address")
         public String workplace_address;
         @SerializedName("office_latitude")
-        public String office_latitude;
+        public double office_latitude;
         @SerializedName("office_longitude")
-        public String office_longitude;
+        public double office_longitude;
         @SerializedName("parent_income")
         public String parent_income;
         @SerializedName("parent_address")
         public String parent_address;
         @SerializedName("parent_latitude")
-        public String parent_latitude;
+        public double parent_latitude;
         @SerializedName("parent_longitude")
-        public String parent_longitude;
+        public double parent_longitude;
+
+
+        public String getStudentparentid() {
+            return studentparentid;
+        }
+
+        public void setStudentparentid(String studentparentid) {
+            this.studentparentid = studentparentid;
+        }
+
+        public String getStudent_id() {
+            return student_id;
+        }
+
+        public void setStudent_id(String student_id) {
+            this.student_id = student_id;
+        }
+
+        public String getParent_type() {
+            return parent_type;
+        }
+
+        public void setParent_type(String parent_type) {
+            this.parent_type = parent_type;
+        }
+
+        public String getParent_name() {
+            return parent_name;
+        }
+
+        public void setParent_name(String parent_name) {
+            this.parent_name = parent_name;
+        }
+
+        public String getType_warga() {
+            return type_warga;
+        }
+
+        public void setType_warga(String type_warga) {
+            this.type_warga = type_warga;
+        }
+
+        public String getParent_nik() {
+            return parent_nik;
+        }
+
+        public void setParent_nik(String parent_nik) {
+            this.parent_nik = parent_nik;
+        }
+
+        public String getParent_birth_place() {
+            return parent_birth_place;
+        }
+
+        public void setParent_birth_place(String parent_birth_place) {
+            this.parent_birth_place = parent_birth_place;
+        }
+
+        public String getParent_birth_date() {
+            return parent_birth_date;
+        }
+
+        public void setParent_birth_date(String parent_birth_date) {
+            this.parent_birth_date = parent_birth_date;
+        }
+
+        public String getParent_home_phone() {
+            return parent_home_phone;
+        }
+
+        public void setParent_home_phone(String parent_home_phone) {
+            this.parent_home_phone = parent_home_phone;
+        }
+
+        public String getParent_phone() {
+            return parent_phone;
+        }
+
+        public void setParent_phone(String parent_phone) {
+            this.parent_phone = parent_phone;
+        }
+
+        public String getParent_education() {
+            return parent_education;
+        }
+
+        public void setParent_education(String parent_education) {
+            this.parent_education = parent_education;
+        }
+
+        public String getParent_email() {
+            return parent_email;
+        }
+
+        public void setParent_email(String parent_email) {
+            this.parent_email = parent_email;
+        }
+
+        public String getEmployment() {
+            return employment;
+        }
+
+        public void setEmployment(String employment) {
+            this.employment = employment;
+        }
+
+        public String getCompany_name() {
+            return company_name;
+        }
+
+        public void setCompany_name(String company_name) {
+            this.company_name = company_name;
+        }
+
+        public String getWorkplace_address() {
+            return workplace_address;
+        }
+
+        public void setWorkplace_address(String workplace_address) {
+            this.workplace_address = workplace_address;
+        }
+
+        public double getOffice_latitude() {
+            return office_latitude;
+        }
+
+        public void setOffice_latitude(double office_latitude) {
+            this.office_latitude = office_latitude;
+        }
+
+        public double getOffice_longitude() {
+            return office_longitude;
+        }
+
+        public void setOffice_longitude(double office_longitude) {
+            this.office_longitude = office_longitude;
+        }
+
+        public String getParent_income() {
+            return parent_income;
+        }
+
+        public void setParent_income(String parent_income) {
+            this.parent_income = parent_income;
+        }
+
+        public String getParent_address() {
+            return parent_address;
+        }
+
+        public void setParent_address(String parent_address) {
+            this.parent_address = parent_address;
+        }
+
+        public double getParent_latitude() {
+            return parent_latitude;
+        }
+
+        public void setParent_latitude(double parent_latitude) {
+            this.parent_latitude = parent_latitude;
+        }
+
+        public double getParent_longitude() {
+            return parent_longitude;
+        }
+
+        public void setParent_longitude(double parent_longitude) {
+            this.parent_longitude = parent_longitude;
+        }
+
     }
 
     //////Data Response - Nearby School
@@ -2902,6 +3073,381 @@ public class JSONResponse{
 
         public void setBersedia_menerima_bos(String bersedia_menerima_bos) {
             this.bersedia_menerima_bos = bersedia_menerima_bos;
+        }
+    }
+
+    public class DeleteCode{
+        @SerializedName("message")
+        public String message;
+
+        @SerializedName("status")
+        public int status;
+
+    }
+
+    public class DetailStudent{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public DataStudent data;
+    }
+    public class DataStudent{
+
+        @SerializedName("memberid")
+        public String memberid;
+
+        @SerializedName("studentdetailid")
+        public String studentdetailid;
+
+        @SerializedName("student_id")
+        public String student_id;
+
+        @SerializedName("edulevel_id")
+        public String edulevel_id;
+
+        @SerializedName("fullname")
+        public String fullname;
+
+        @SerializedName("gender")
+        public String gender;
+
+        @SerializedName("member_code")
+        public String member_code;
+
+        @SerializedName("nisn")
+        public String nisn;
+
+        @SerializedName("rombel")
+        public String rombel;
+
+        @SerializedName("birth_place")
+        public String birth_place;
+
+        @SerializedName("birth_date")
+        public String birth_date;
+
+        @SerializedName("citizen_status")
+        public String citizen_status;
+
+        @SerializedName("nik")
+        public String nik;
+
+        @SerializedName("religion")
+        public String religion;
+
+        @SerializedName("special_needs")
+        public String special_needs;
+
+        @SerializedName("rt")
+        public String rt;
+
+        @SerializedName("rw")
+        public String rw;
+
+        @SerializedName("dusun")
+        public String dusun;
+
+        @SerializedName("kelurahan")
+        public String kelurahan;
+
+        @SerializedName("kecamatan")
+        public String kecamatan;
+
+        @SerializedName("post_code")
+        public String post_code;
+
+        @SerializedName("jenis_tinggal")
+        public String jenis_tinggal;
+
+        @SerializedName("transportasi")
+        public String transportasi;
+
+        @SerializedName("address")
+        public String address;
+
+        @SerializedName("latitude")
+        public String latitude;
+
+        @SerializedName("longitude")
+        public String longitude;
+
+        @SerializedName("mobile_phone")
+        public String mobile_phone;
+
+        @SerializedName("home_phone")
+        public String home_phone;
+
+        @SerializedName("skhun")
+        public String skhun;
+
+        @SerializedName("penerima_kps")
+        public String penerima_kps;
+
+        @SerializedName("no_kps")
+        public String no_kps;
+
+        @SerializedName("picture")
+        public String picture;
+
+
+        public String getMemberid() {
+            return memberid;
+        }
+
+        public void setMemberid(String memberid) {
+            this.memberid = memberid;
+        }
+
+        public String getStudentdetailid() {
+            return studentdetailid;
+        }
+
+        public void setStudentdetailid(String studentdetailid) {
+            this.studentdetailid = studentdetailid;
+        }
+
+        public String getStudent_id() {
+            return student_id;
+        }
+
+        public void setStudent_id(String student_id) {
+            this.student_id = student_id;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getMember_code() {
+            return member_code;
+        }
+
+        public void setMember_code(String member_code) {
+            this.member_code = member_code;
+        }
+
+        public String getNisn() {
+            return nisn;
+        }
+
+        public void setNisn(String nisn) {
+            this.nisn = nisn;
+        }
+
+        public String getRombel() {
+            return rombel;
+        }
+
+        public void setRombel(String rombel) {
+            this.rombel = rombel;
+        }
+
+        public String getBirth_place() {
+            return birth_place;
+        }
+
+        public void setBirth_place(String birth_place) {
+            this.birth_place = birth_place;
+        }
+
+        public String getBirth_date() {
+            return birth_date;
+        }
+
+        public void setBirth_date(String birth_date) {
+            this.birth_date = birth_date;
+        }
+
+        public String getCitizen_status() {
+            return citizen_status;
+        }
+
+        public void setCitizen_status(String citizen_status) {
+            this.citizen_status = citizen_status;
+        }
+
+        public String getNik() {
+            return nik;
+        }
+
+        public void setNik(String nik) {
+            this.nik = nik;
+        }
+
+        public String getReligion() {
+            return religion;
+        }
+
+        public void setReligion(String religion) {
+            this.religion = religion;
+        }
+
+        public String getSpecial_needs() {
+            return special_needs;
+        }
+
+        public void setSpecial_needs(String special_needs) {
+            this.special_needs = special_needs;
+        }
+
+        public String getRt() {
+            return rt;
+        }
+
+        public void setRt(String rt) {
+            this.rt = rt;
+        }
+
+        public String getRw() {
+            return rw;
+        }
+
+        public void setRw(String rw) {
+            this.rw = rw;
+        }
+
+        public String getDusun() {
+            return dusun;
+        }
+
+        public void setDusun(String dusun) {
+            this.dusun = dusun;
+        }
+
+        public String getKelurahan() {
+            return kelurahan;
+        }
+
+        public void setKelurahan(String kelurahan) {
+            this.kelurahan = kelurahan;
+        }
+
+        public String getKecamatan() {
+            return kecamatan;
+        }
+
+        public void setKecamatan(String kecamatan) {
+            this.kecamatan = kecamatan;
+        }
+
+        public String getPost_code() {
+            return post_code;
+        }
+
+        public void setPost_code(String post_code) {
+            this.post_code = post_code;
+        }
+
+        public String getJenis_tinggal() {
+            return jenis_tinggal;
+        }
+
+        public void setJenis_tinggal(String jenis_tinggal) {
+            this.jenis_tinggal = jenis_tinggal;
+        }
+
+        public String getTransportasi() {
+            return transportasi;
+        }
+
+        public void setTransportasi(String transportasi) {
+            this.transportasi = transportasi;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(String latitude) {
+            this.latitude = latitude;
+        }
+
+        public String getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(String longitude) {
+            this.longitude = longitude;
+        }
+
+        public String getMobile_phone() {
+            return mobile_phone;
+        }
+
+        public void setMobile_phone(String mobile_phone) {
+            this.mobile_phone = mobile_phone;
+        }
+
+        public String getHome_phone() {
+            return home_phone;
+        }
+
+        public void setHome_phone(String home_phone) {
+            this.home_phone = home_phone;
+        }
+
+        public String getSkhun() {
+            return skhun;
+        }
+
+        public void setSkhun(String skhun) {
+            this.skhun = skhun;
+        }
+
+        public String getPenerima_kps() {
+            return penerima_kps;
+        }
+
+        public void setPenerima_kps(String penerima_kps) {
+            this.penerima_kps = penerima_kps;
+        }
+
+        public String getNo_kps() {
+            return no_kps;
+        }
+
+        public void setNo_kps(String no_kps) {
+            this.no_kps = no_kps;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
         }
     }
 }

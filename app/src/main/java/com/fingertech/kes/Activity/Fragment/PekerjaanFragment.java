@@ -2,12 +2,15 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -16,18 +19,34 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+//import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.AnakMain;
+import com.fingertech.kes.Activity.KodeAksesAnak;
+import com.fingertech.kes.Activity.Masuk;
+import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.ParentMain;
+import com.fingertech.kes.Controller.Auth;
+import com.fingertech.kes.Rest.ApiClient;
+import com.fingertech.kes.Rest.JSONResponse;
+import com.rey.material.widget.Spinner;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -51,12 +70,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.app.Activity.RESULT_OK;
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -67,23 +88,93 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mMap;
     private Marker mCurrLocationMarker;
     private TextView namakerja;
+
     private LocationRequest mlocationRequest;
     private Location mlastLocation;
     private ImageView arro;
 
     GoogleApiClient mGoogleApiClient;
+    EditText Jabatan,Namaperusahaan;
+    double CurrentLatitude;
+    double CurrentLongitude;
+    TextView alamatkerja;
+    String location,pendidikan,namaperusahaan,jabatan,penghasilan,employment,gaji,studentparentid;
+    Spinner et_pekerjaan,et_penghasilan;
+    private String[] pedapatan = {"Penghasilan","< 1 juta","1 - 2 juta","3 - 5 juta","5 - 8 juta","8 - 15 juta","15 - 25 juta","25 - 40 juta","40 - 60 juta","60 - 100 juta","> 100 juta"};
+    private String[] education = {
+            "Pendidikan",
+            "SD",
+            "SMP",
+            "SMA",
+            "SMU",
+            "D3",
+            "S1",
+            "S2",
+            "S3"};
+    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
+    Integer status;
+    String code;
+    double latitude_kerja,longitude_kerja;
+    String latitude_parent,longitude_parent;
 
-    Double CurrentLatitude;
-    Double CurrentLongitude;
+    Auth mApiInterface;
 
-    String location;
+    SharedPreferences sharedpreferences;
 
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_TOKEN        = "token";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_PARENT_NAME       = "nama_parent";
+    public static final String TAG_NIK_PARENT        = "nik_parent";
+    public static final String TAG_EMAIL_PARENT      = "email_parent";
+    public static final String TAG_TEMPAT_LAHIR      = "tempat_lahir";
+    public static final String TAG_TANGGAL_LAHIR     = "tanggal_lahir";
+    public static final String TAG_HUBUNGAN          = "hubungan";
+    public static final String TAG_KEWARGANEGARAAN   = "kewarganegaraan";
+    public static final String my_shared_viewpager   = "my_shared_viewpager";
+
+
+    public static final String TAG_NOMOR_RUMAH       = "nomor_rumah";
+    public static final String TAG_NOMOR_PONSEL      = "nomor_ponsel";
+    public static final String TAG_ALAMAT_RUMAH      = "alamat_rumah";
+    public static final String TAG_LATITUDE_RUMAH    = "latitude_rumah";
+    public static final String TAG_LONGITUDE_RUMAH   = "longitude_rumah";
+
+    String authorization;
+
+    ProgressDialog dialog;
+    SharedPreferences sharedviewpager;
+
+    String namaparent,emailparent,nikparent,hubungan,tempatlahir,tanggallahir,kewarganegaraan,nomorrumah,nomorponsel,alamatrumah;
 
     public static PekerjaanFragment newInstance() {
         // Required empty public constructor
         PekerjaanFragment Fragment = new PekerjaanFragment();
         return Fragment;
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    Button next,back;
+    ParentMain parentMain;
+    private ViewPager ParentPager;
+    private LinearLayout indicator;
+    private int mDotCount;
+    private LinearLayout[] mDots;
+    private ParentMain.FragmentAdapter fragmentAdapter;
+    TextInputLayout til_nama_perusahaan,til_jabatan;
+    TextView til_pendidikan,til_penghasilan,til_alamatkerja;
 
 
     @Override
@@ -94,7 +185,39 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapKerja);
         mapFragment.getMapAsync(this);
-        arro = (ImageView)view.findViewById(R.id.arrow);
+        arro           = (ImageView)view.findViewById(R.id.arrow);
+        Jabatan        = (EditText)view.findViewById(R.id.et_jabatan);
+        Namaperusahaan = (EditText)view.findViewById(R.id.et_nama_perusahaan);
+        namakerja      = (TextView) view.findViewById(R.id.nama_kerja);
+        et_pekerjaan   = (Spinner) view.findViewById(R.id.sp_pekerjaan);
+        et_penghasilan = (Spinner) view.findViewById(R.id.sp_penghasilan);
+        alamatkerja    = (TextView)view.findViewById(R.id.alamat_kerja);
+        parentMain        = (ParentMain)getActivity();
+        indicator         = (LinearLayout) view.findViewById(R.id.indicators);
+        back              = (Button)view.findViewById(R.id.btn_kembali);
+        next              = (Button)view.findViewById(R.id.btn_berikut);
+        fragmentAdapter   = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+        ParentPager       = (ViewPager) parentMain.findViewById(R.id.PagerParent);
+        til_nama_perusahaan = (TextInputLayout)view.findViewById(R.id.til_nama_perusahaan);
+        til_jabatan         = (TextInputLayout)view.findViewById(R.id.til_jabatan);
+        til_pendidikan      = (TextView)view.findViewById(R.id.til_pendidikan);
+        til_penghasilan     = (TextView)view.findViewById(R.id.til_penghasilan);
+        til_alamatkerja     = (TextView)view.findViewById(R.id.til_alamat_kerja);
+
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParentPager.setCurrentItem(getItem(-1),true);
+            }
+        });
+        setUiPageViewController();
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+        }
+        mDots[3].setBackgroundResource(R.drawable.selected_item);
+
+
         arro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,87 +225,56 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                 startActivityForResult(intent,1);
             }
         });
-        namakerja = (TextView) view.findViewById(R.id.nama_kerja);
 
-        // Spinner click listener
-        Spinner et_pekerjaan = (Spinner) view.findViewById(R.id.sp_pekerjaan);
-        String[] pendidikan = {"Pendidikan","SD","SMP","SMA","D3","S1","S2","S3"};
-
-        final List<String> plantsList = new ArrayList<>(Arrays.asList(pendidikan));
-        // Initializing an ArrayAdapter
-        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                getActivity(),R.layout.spinner_text,plantsList){
+        namakerja.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean isEnabled(int position){
-                if(position == 0)
-                {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), full_maps.class);
+                startActivityForResult(intent,1);
             }
+        });
+        mApiInterface   = ApiClient.getClient().create(Auth.class);
+
+        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
+//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        email         = sharedpreferences.getString(TAG_EMAIL,"email");
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+
+        sharedviewpager     = getActivity().getSharedPreferences(my_shared_viewpager, Context.MODE_PRIVATE);
+        namaparent          = sharedviewpager.getString(TAG_PARENT_NAME,"nama_parent");
+        emailparent         = sharedviewpager.getString(TAG_EMAIL_PARENT,"email_parent");
+        nikparent           = sharedviewpager.getString(TAG_NIK_PARENT,"nik_parent");
+        tempatlahir         = sharedviewpager.getString(TAG_TEMPAT_LAHIR,"tempat_lahir");
+        tanggallahir        = sharedviewpager.getString(TAG_TANGGAL_LAHIR,"tanggal_lahir");
+        hubungan            = sharedviewpager.getString(TAG_HUBUNGAN,"hubungan");
+        kewarganegaraan     = sharedviewpager.getString(TAG_KEWARGANEGARAAN,"type_warga");
+        nomorrumah          = sharedviewpager.getString(TAG_NOMOR_RUMAH,"nomor_rumah");
+        nomorponsel         = sharedviewpager.getString(TAG_NOMOR_PONSEL,"nomor_ponsel");
+        latitude_parent     = sharedviewpager.getString(TAG_LATITUDE_RUMAH,"latitude_rumah");
+        longitude_parent    = sharedviewpager.getString(TAG_LONGITUDE_RUMAH,"longitude_rumah");
+        alamatrumah         = sharedviewpager.getString(TAG_ALAMAT_RUMAH,"alamat_rumah");
+
+        school_code = "bpk01";
+        student_id = "418";
+        data_parent_student_get();
+
+        next.setOnClickListener(new View.OnClickListener() {
             @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if(position == 0){
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
-                }
-                else {
-                    tv.setTextColor(Color.BLACK);
-                }
-                return view;
+            public void onClick(View v) {
+                submitForm();
+//
+//                Toast.makeText(getApplicationContext(), nomorrumah + "/" + nomorponsel + "/" + alamatrumah + "/" + latitude_parent + "/" + longitude_parent, Toast.LENGTH_LONG).show();
+
             }
-        };
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        et_pekerjaan.setAdapter(spinnerArrayAdapter);
-
-        // Spinner click listener
-        Spinner et_penghasilan = (Spinner) view.findViewById(R.id.sp_penghasilan);
-        String[] penghasilan = {"Penghasilan","Dibawah 1 Juta","1 - 3 Juta","4 - 5 Juta","6 - 7 Juta","8 - 9 Juta","10 - 11 Juta","12 - 13 Juta","14 - 15 Juta","16 - 17 Juta","18 - 19 Juta","Diatas 20 Juta"};
-
-        final List<String> penghasil = new ArrayList<>(Arrays.asList(penghasilan));
-        // Initializing an ArrayAdapter
-        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
-                getActivity(),R.layout.spinner_text,penghasil){
-            @Override
-            public boolean isEnabled(int position){
-                if(position == 0)
-                {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-            @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if(position == 0){
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
-                }
-                else {
-                    tv.setTextColor(Color.BLACK);
-                }
-                return view;
-            }
-        };
-        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        et_penghasilan.setAdapter(ArrayAdapter);
-
-
+        });
         return view;
     }
 
@@ -226,14 +318,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public void onCameraIdle() {
-        CameraPosition position=mMap.getCameraPosition();
-
-        Log.d("onCameraIdle",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
-
         LatLng LatLng = mMap.getCameraPosition().target;
         Geocoder geocode1 = new Geocoder(getContext());
         try {
@@ -245,24 +329,19 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                 String state1 = addressList.get(0).getAdminArea();
                 String country1 = addressList.get(0).getCountryName();
                 String postalCode1 = addressList.get(0).getPostalCode();
-                namakerja.setText(address1 +"\n");
+                alamatkerja.setText(address1 +"\n");
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        latitude_kerja = LatLng.latitude;
+        longitude_kerja = LatLng.longitude;
     }
 
     @Override
     public void onCameraMoveCanceled() {
         CameraPosition position=mMap.getCameraPosition();
-
-        Log.d("onCameraMoveCanceled",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
-
         if(mCurrLocationMarker != null){
             mCurrLocationMarker.remove();}
     }
@@ -270,12 +349,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onCameraMove() {
         CameraPosition position=mMap.getCameraPosition();
-
-        Log.d("onCameraMove",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
         MarkerOptions options = new MarkerOptions()
                 .position(position.target)
                 .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map))
@@ -292,11 +365,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void onCameraMoveStarted(int i) {
         CameraPosition position=mMap.getCameraPosition();
 
-        Log.d("onCameraMoveStarted",
-                String.format("lat: %f, lon: %f, zoom: %f, tilt: %f",
-                        position.target.latitude,
-                        position.target.longitude, position.zoom,
-                        position.tilt));
     }
 
 
@@ -309,7 +377,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         }
 
         //Place current location marker
-        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        final LatLng latLng = new LatLng(latitude_kerja, longitude_kerja);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
 
         final MarkerOptions markerOptions = new MarkerOptions();
@@ -328,8 +396,8 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
             mGoogleApiClient.connect();
         }
 
-        updateLocation(location);
-        getAddress();
+//        updateLocation(location);
+//        getAddress();
     }
 
 
@@ -394,67 +462,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
-    void getAddress() {
-
-        try {
-
-            Geocoder gcd = new Geocoder(getContext());
-
-            List<Address> addresses = gcd.getFromLocation(CurrentLatitude,
-
-                    CurrentLongitude, 100);
-
-            StringBuilder result = new StringBuilder();
-
-
-
-            if (addresses.size() > 0) {
-
-
-
-                Address address = addresses.get(1);
-
-                int maxIndex = address.getMaxAddressLineIndex();
-
-                for (int x = 0; x <= maxIndex; x++) {
-
-                    result.append(address.getAddressLine(x));
-
-                    result.append(",");
-
-                }
-
-
-
-            }
-
-            location = result.toString();
-
-        } catch (IOException ex) {
-
-            Toast.makeText(getContext(), ex.getMessage(),
-
-                    Toast.LENGTH_LONG).show();
-
-
-
-        }
-
-    }
-
-
-
-    void updateLocation(Location location) {
-
-        mlastLocation = location;
-
-        CurrentLatitude = mlastLocation.getLatitude();
-
-        CurrentLongitude = mlastLocation.getLongitude();
-
-
-
-    }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -477,10 +484,11 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                 if(mCurrLocationMarker!= null){
                     mCurrLocationMarker.remove();}
                 mCurrLocationMarker = mMap.addMarker(markerOptions);
-                namakerja.setText(strEditText);
+                alamatkerja.setText(strEditText);
             }
         }
     }
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable background = ContextCompat.getDrawable(context, vectorResId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
@@ -490,5 +498,362 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    public void data_parent_student_get(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toString(), parent_nik.toString(), student_id.toString());
+        call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
+            @Override
+            public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
+                Log.d("TAG",response.code()+"");
+                hideDialog();
 
+                JSONResponse.Data_parent_student resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
+                String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
+                String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
+                String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
+
+                if (status == 1 && code.equals("DPG_SCS_0001")) {
+                    pendidikan              = response.body().data.getParent_education();
+                    namaperusahaan          = response.body().data.getCompany_name();
+                    jabatan                 = response.body().data.getEmployment();
+                    penghasilan             = response.body().data.getParent_income();
+                    latitude_kerja          = response.body().data.getOffice_latitude();
+                    longitude_kerja         = response.body().data.getOffice_longitude();
+                    studentparentid         = response.body().data.getStudentparentid();
+                    Namaperusahaan.setText(namaperusahaan);
+                    Jabatan.setText(jabatan);
+
+                    final List<String> penghasil = new ArrayList<>(Arrays.asList(pedapatan));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,penghasil){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    int posti = ArrayAdapter.getPosition(penghasilan);
+                    et_penghasilan.setAdapter(ArrayAdapter);
+                    et_penghasilan.setSelection(posti);
+                    et_penghasilan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(Spinner parent, View view, int position, long id) {
+                            gaji = penghasil.get(position);
+                        }
+                    });
+                    gaji = et_penghasilan.getSelectedItem().toString();
+
+                    final List<String> plantsList = new ArrayList<>(Arrays.asList(education));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,plantsList){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+                    int posisi = spinnerArrayAdapter.getPosition(pendidikan);
+                    spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    et_pekerjaan.setAdapter(spinnerArrayAdapter);
+                    et_pekerjaan.setSelection(posisi);
+                    et_pekerjaan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(Spinner parent, View view, int position, long id) {
+                            employment = plantsList.get(position);
+                        }
+                    });
+                    employment = et_pekerjaan.getSelectedItem().toString();
+
+
+                } else {
+                    if(status == 0 && code.equals("DPG_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("DPG_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("DPG_ERR_0003")){
+                        Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.Data_parent_student> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    //////// Progressbar - Loading Animation
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(getActivity());
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private int getItem(int i) {
+        return ParentPager.getCurrentItem() + i;
+    }
+
+
+    private void setUiPageViewController() {
+        mDotCount = fragmentAdapter.getCount();
+        mDots = new LinearLayout[mDotCount];
+
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i] = new LinearLayout(getContext());
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+            indicator.addView(mDots[i]);
+            mDots[0].setBackgroundResource(R.drawable.selected_item);
+        }
+    }
+
+    public void submitForm() {
+        if (!validatePekerjaan()) {
+            return;
+        }
+        if (!validateNamaPerusahaan()) {
+            return;
+        }
+        if (!validateJabatan()) {
+            return;
+        }
+        if (!validatePenghasilan()) {
+            return;
+        }if(!validateAlamatKerja()){
+            return;
+        }
+        if(ParentPager.getCurrentItem() == 3){
+            Jabatan.clearFocus();
+            Namaperusahaan.clearFocus();
+            update_parent();
+        }
+    }
+
+    private boolean validateJabatan() {
+        if (Jabatan.getText().toString().trim().isEmpty()) {
+            til_jabatan.setError(getResources().getString(R.string.validate_jabatan));
+            requestFocus(Jabatan);
+            return false;
+        } else {
+            til_jabatan.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateNamaPerusahaan() {
+        if (Namaperusahaan.getText().toString().trim().isEmpty()) {
+            til_nama_perusahaan.setError(getResources().getString(R.string.validate_nama_perusahaan));
+            requestFocus(Namaperusahaan);
+            return false;
+        } else {
+            til_nama_perusahaan.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateAlamatKerja() {
+        if (alamatkerja.getText().toString().trim().isEmpty()) {
+            til_alamatkerja.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            til_alamatkerja.setVisibility(View.GONE);
+        }
+
+        return true;
+    }
+
+    private boolean validatePenghasilan() {
+        if (gaji == null) {
+            til_penghasilan.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            til_penghasilan.setVisibility(View.GONE);
+        }
+
+        return true;
+    }
+
+    private boolean validatePekerjaan() {
+        if (employment == null) {
+            til_pendidikan.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            til_pendidikan.setVisibility(View.GONE);
+        }
+
+        return true;
+    }
+
+    public void update_parent(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse> postCall = mApiInterface.update_parent_put(authorization.toString(),studentparentid.toString(), school_code.toString(), student_id.toString(), namaparent.toString(), nikparent.toString(), hubungan.toString(),tanggallahir.toString(),tempatlahir.toString(),kewarganegaraan.toString(),nomorrumah.toString(),nomorponsel.toString(),alamatrumah.toString(),String.valueOf(latitude_parent),String.valueOf(longitude_parent),emailparent.toString(),et_pekerjaan.getSelectedItem().toString(),Namaperusahaan.getText().toString(),Jabatan.getText().toString(),et_penghasilan.getSelectedItem().toString(),alamatkerja.getText().toString(),String.valueOf(latitude_kerja),String.valueOf(longitude_kerja));
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                hideDialog();
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String UPA_SCS_0001 = getResources().getString(R.string.UPA_SCS_0001);
+                String UPA_ERR_0001 = getResources().getString(R.string.UPA_ERR_0001);
+                String UPA_ERR_0002 = getResources().getString(R.string.UPA_ERR_0002);
+                String UPA_ERR_0003 = getResources().getString(R.string.UPA_ERR_0003);
+                String UPA_ERR_0004 = getResources().getString(R.string.UPA_ERR_0004);
+                String UPA_ERR_0005 = getResources().getString(R.string.UPA_ERR_0005);
+                String UPA_ERR_0006 = getResources().getString(R.string.UPA_ERR_0006);
+                String UPA_ERR_0007 = getResources().getString(R.string.UPA_ERR_0007);
+                String UPA_ERR_0008 = getResources().getString(R.string.UPA_ERR_0008);
+                String UPA_ERR_0009 = getResources().getString(R.string.UPA_ERR_0009);
+                String UPA_ERR_0010 = getResources().getString(R.string.UPA_ERR_0010);
+                String UPA_ERR_0011 = getResources().getString(R.string.UPA_ERR_0011);
+                String UPA_ERR_0012 = getResources().getString(R.string.UPA_ERR_0012);
+                String UPA_ERR_0013 = getResources().getString(R.string.UPA_ERR_0013);
+                String UPA_ERR_0014 = getResources().getString(R.string.UPA_ERR_0014);
+                String UPA_ERR_0015 = getResources().getString(R.string.UPA_ERR_0015);
+                String UPA_ERR_0016 = getResources().getString(R.string.UPA_ERR_0016);
+                String UPA_ERR_0017 = getResources().getString(R.string.UPA_ERR_0017);
+                String UPA_ERR_0018 = getResources().getString(R.string.UPA_ERR_0018);
+                String UPA_ERR_0019 = getResources().getString(R.string.UPA_ERR_0019);
+                String UPA_ERR_0020 = getResources().getString(R.string.UPA_ERR_0020);
+                String UPA_ERR_0021 = getResources().getString(R.string.UPA_ERR_0021);
+
+                if (status == 1 && code.equals("UPA_SCS_0001")){
+                    Intent intent = new Intent(getContext(), MenuUtama.class);
+                    getContext().startActivity(intent);
+
+                }else if (status == 0 && equals("UPA_ERR_0001")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0001, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0002")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0002, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0003")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0003, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0004")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0004, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0005")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0005, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0006")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0006, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0007")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0007, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0008")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0008, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0009")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0009, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0010")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0010, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0011")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0011, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0012")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0012, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0013")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0013, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0014")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0014, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0015")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0015, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0016")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0016, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0017")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0017, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0018")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0018, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0019")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0019, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0020")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0020, Toast.LENGTH_LONG).show();
+                }else if (status == 0 && equals("UPA_ERR_0021")){
+                    Toast.makeText(getApplicationContext(), UPA_ERR_0021, Toast.LENGTH_LONG).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

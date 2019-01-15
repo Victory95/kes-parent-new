@@ -1,6 +1,5 @@
 package com.fingertech.kes.Activity.Maps;
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,15 +26,16 @@ import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ViewConfiguration;
-import android.widget.AdapterView;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
+//import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import  com.rey.material.widget.Spinner;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.config.GoogleDirectionConfiguration;
@@ -91,7 +91,7 @@ import retrofit2.Response;
 
 public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener,ClusterManager.OnClusterClickListener<ClusterItemSekolah>, ClusterManager.OnClusterItemClickListener<ClusterItemSekolah> {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener,ClusterManager.OnClusterClickListener<ClusterItemSekolah> {
 
 
     private List<ItemSekolah> ItemList;
@@ -107,6 +107,8 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     private SlidingUpPanelLayout slidingLayout;
     ImageView imageView;
     private ClusterManager<ClusterItemSekolah> mClusterManager;
+    private Cluster<ClusterItemSekolah> clusterItemSekolahCluster;
+    private ClusterItemSekolah clusterItemSekolah;
     private RadioButton rb_sma,rb_smp,rb_smk,rb_sd;
     private List<JSONResponse.Prov> arrayList;
     private Button tampilProv;
@@ -138,6 +140,14 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         mApiInterface = ApiClient.getClient().create(Auth.class);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.full_maps);
         mapFragment.getMapAsync(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(Color.parseColor("#00FFFFFF"));
+            //getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().setFlags(WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES,WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES);
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        }
         //show error dialog if Google Play Services not available
         if (!isGooglePlayServicesAvailable()) {
             Log.d("onCreate", "Google Play Services not available. Ending Test case.");
@@ -150,9 +160,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
                     finish();
-//                Intent mIntent = new Intent(FullMap.this,MenuGuest.class);
-//                startActivity(mIntent);
-
             }
         });
         findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
@@ -179,20 +186,15 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         tampilProv = (Button) findViewById(R.id.TampilProv);
 
         dapat_provinsi();
-        et_provinsi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        et_provinsi.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedName = parent.getItemAtPosition(position).toString();
+            public void onItemSelected(Spinner parent, View view, int position, long id) {
                 provid= arrayList.get(position).getProvinsiid();
-                //Toast.makeText(FullMap.this, "Kamu memilih  " + provID, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+//                Toast.makeText(FullMap.this, "Kamu memilih  " + provid, Toast.LENGTH_SHORT).show();
             }
         });
+
 
         rb_sd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,9 +257,23 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                 mapF.setOnCameraIdleListener(mClusterManager);
                 mapF.setOnMarkerClickListener(mClusterManager);
                 mapF.setOnInfoWindowClickListener(mClusterManager);
+                mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(
+                        new InfoWindow(FullMap.this));
                 dapat_sekolah();
                 mClusterManager.setOnClusterClickListener(FullMap.this);
-                mClusterManager.setOnClusterItemClickListener(FullMap.this);
+                mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterItemSekolah>() {
+                            @Override
+                            public boolean onClusterItemClick(ClusterItemSekolah item) {
+                                clusterItemSekolah = item;
+
+                                String schooldetail = item.getSchooldetailid();
+                                Intent intent = new Intent(FullMap.this,DetailSekolah.class);
+                                intent.putExtra("detailid", schooldetail);
+                                startActivity(intent);
+                                return false;
+                            }
+                        });
+
                 mClusterManager.setRenderer(new MarkerClusterRenderer(FullMap.this, mapF, mClusterManager));
                 //mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mapF.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lati.latitude, lati.longitude), 10));
@@ -583,7 +599,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                     .from(latLng)
                                     .to(StartlatLng)
                                     .transportMode(TransportMode.DRIVING)
-                                    .alternativeRoute(true)
                                     .execute(new DirectionCallback() {
                                         @Override
                                         public void onDirectionSuccess(Direction direction, String rawBody) {
@@ -591,12 +606,9 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                             Log.d("GoogleDirection", "Response Direction Status: " + direction.toString()+"\n"+rawBody);
 
                                             if(direction.isOK()) {
-                                                for (int i = 0; i < direction.getRouteList().size(); i++) {
-                                                    Route route = direction.getRouteList().get(i);
-                                                    String color = colors[i % colors.length];
-                                                    ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
-                                                    lines = mapF.addPolyline(DirectionConverter.createPolyline(FullMap.this, directionPositionList, 5, Color.parseColor(color)));
-                                                }
+                                                Route route = direction.getRouteList().get(0);
+                                                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+                                                lines = mapF.addPolyline(DirectionConverter.createPolyline(FullMap.this, directionPositionList, 5, Color.RED));
                                                 setCameraWithCoordinationBounds(direction.getRouteList().get(0));
 
 
@@ -950,7 +962,10 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                         double lng          = response.body().getData().get(i).getLongitude();
                         String nama         = response.body().getData().get(i).getSchoolName();
                         String akreditas    = response.body().getData().get(i).getAkreditasi();
-                        mClusterManager.addItem(new ClusterItemSekolah(lat,lng,nama,akreditas));
+                        String Alamat       = response.body().getData().get(i).getSchoolAddress();
+                        String schooldetailid   = response.body().getData().get(i).getSchooldetailid();
+                        mClusterManager.addItem(new ClusterItemSekolah(lat,lng,nama,akreditas,Alamat,schooldetailid));
+
                     }
 
                     } else{
@@ -1031,11 +1046,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
         return true;
     }
-    @Override
-    public boolean onClusterItemClick(ClusterItemSekolah item) {
-        // Does nothing, but you could go into the user's profile page, for example.
-        return false;
-    }
+//
 
     private void showDialog() {
         if (!dialog.isShowing())
@@ -1054,47 +1065,55 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         dialog.setCancelable(false);
     }
 
-    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
-        private Context context;
+    public void onClusterItemInfoWindowClick(ClusterItemSekolah item) {
+        Intent intent = new Intent(FullMap.this,DetailSekolah.class);
+        intent.putExtra("mLatitude", item.getLatitude());
+        intent.putExtra("mLongitude", item.getLongitude());
 
-        public CustomInfoWindowGoogleMap(Context ctx){
-            context = ctx;
-        }
+        startActivity(intent);
+        finish();
+    }
 
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return null;
+    public class MyCustomAdapterForItems implements GoogleMap.InfoWindowAdapter {
+
+        private final View myContentsView;
+
+        MyCustomAdapterForItems() {
+            myContentsView = getLayoutInflater().inflate(
+                    R.layout.snippet, null);
         }
 
         @Override
         public View getInfoContents(Marker marker) {
-            View view = ((Activity)context).getLayoutInflater()
-                    .inflate(R.layout.snippet, null);
+            return null;
+        }
 
-            TextView tvSch = (TextView) view.findViewById(R.id.nama_sekolah_snippet);
+        @Override
+        public View getInfoWindow(Marker marker) {
+            TextView tvTitle = ((TextView) myContentsView
+                    .findViewById(R.id.nama_sekolah_snippet));
+            TextView tvSnippet = ((TextView) myContentsView
+                    .findViewById(R.id.Alamat));
 
-            // Getting reference to the TextView to set longitude
-            TextView tvAkr = (TextView) view.findViewById(R.id.Alamat);
-
-
-            ImageView img = view.findViewById(R.id.imageS);
-
-
-            InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
-            tvSch.setText(infoWindowData.getNama());
-            tvAkr.setText(infoWindowData.getAkreditasi());
-            final String SchoolDetailId = infoWindowData.getSchooldetailid();
-
-            mapF.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                    intent.putExtra("detailid",SchoolDetailId);
-                    startActivity(intent);
-                }
-            });
-            return view;
+            if (clusterItemSekolah != null) {
+                tvTitle.setText(clusterItemSekolah.getName());
+                tvSnippet.setText(clusterItemSekolah.getSnippet());
+            }
+            return myContentsView;
+        }
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 }

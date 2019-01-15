@@ -1,16 +1,26 @@
 package com.fingertech.kes.Activity.Fragment;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +28,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Spinner;
+//import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.DaftarParent;
+import com.fingertech.kes.Activity.Maps.FullMap;
+import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.ParentMain;
+import com.rey.material.widget.Spinner;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.JSONResponse;
@@ -47,8 +64,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-
-public class DataFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+//implements AdapterView.OnItemSelectedListener
+public class DataFragment extends Fragment  {
     private TextInputLayout til_namadepan,til_namabelakang,til_Nik,til_Hubungan,til_tempat_lahir,til_tanggal_lahir,til_Email;
     private EditText et_namadepan,et_namabelakang,et_Nik,et_Hubungan,et_tempat_lahir,et_tanggal_lahir,et_Email;
     private Spinner et_negaraasal;
@@ -59,28 +76,71 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
     String code;
     String nama_depan,email,nik,hubungan,tempat_lahir,tanggal_lahir, token,student_id,school_code,authorization,type_warga;
     String parent_name,parent_email,parent_nik,parent_type,parent_birth_place,parent_birth_date,kewarganegaraan,parent_address,parent_phone;
-    private static final int PERMISSION_REQUEST_CODE = 1;
+
+    String namaparent,Email,nik_parent,jeniskelamin,tempatlahir,tanggallahir,negaraasal;
+
+    private LinearLayout indicator;
+    private int mDotCount;
+    private LinearLayout[] mDots;
+    private ParentMain.FragmentAdapter fragmentAdapter;
 
     ConnectivityManager conMgr;
-    SharedPreferences sharedpreferences;
+    SharedPreferences sharedpreferences,sharedviewpager;
     Boolean session = false;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
     public static final String my_shared_preferences = "my_shared_preferences";
+    public static final String my_shared_viewpager   = "my_shared_viewpager";
     public static final String session_status = "session_status";
 
-    public static final String TAG_NAMA_DEPAN        = "fullname";
-    public static final String TAG_NAMA_BELAKANG     = "nama_belakang";
-    public static final String TAG_NIK               = "parent_nik";
-    public static final String TAG_HUBUNGAN          = "hubungan";
-    public static final String TAG_TEMPAT_LAHIR      = "parent_birth_place";
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_TOKEN        = "token";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+
+    public static final String TAG_PARENT_NAME       = "nama_parent";
+    public static final String TAG_NIK_PARENT        = "nik_parent";
+    public static final String TAG_EMAIL_PARENT      = "email_parent";
+    public static final String TAG_TEMPAT_LAHIR      = "tempat_lahir";
     public static final String TAG_TANGGAL_LAHIR     = "tanggal_lahir";
-    public static final String TAG_TOKEN             = "token";
+    public static final String TAG_HUBUNGAN          = "hubungan";
+    public static final String TAG_KEWARGANEGARAAN   = "kewarganegaraan";
+
+    String verification_code,parent_id,student_nik,school_id,childrenname,school_name,fullname,member_id;
+
+    Button next,back;
+    ParentMain parentMain;
+    private ViewPager ParentPager;
+
 
     Auth mApiInterface;
+    private String[] listSpinner = {
+            "Hubungan",
+            "Ayah",
+            "Ibu",
+            "Wali"
+    };
+
+    TextView tv_kewarganegaraan_validate,tv_validate_hubungan;
 
     public DataFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+
+//           kewarganegaraan      = bundle.getString("kewarganegaraan");
+
     }
 
     @Override
@@ -102,18 +162,52 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         rb_wni            = (RadioButton) view.findViewById(R.id.rb_wni);
         rb_wna            = (RadioButton) view.findViewById(R.id.rb_wna);
         dateFormatter     = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+        parentMain        = (ParentMain)getActivity();
+        indicator         = (LinearLayout) view.findViewById(R.id.indicators);
+        back              = (Button)view.findViewById(R.id.btn_kembali);
+        next              = (Button)view.findViewById(R.id.btn_berikut);
+        fragmentAdapter   = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+        ParentPager       = (ViewPager) parentMain.findViewById(R.id.PagerParent);
+        tv_kewarganegaraan_validate = (TextView)view.findViewById(R.id.tv_kewarganegaraan_validate);
+        tv_validate_hubungan        = (TextView)view.findViewById(R.id.tv_hubungan);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    submitForm();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParentPager.setCurrentItem(getItem(-1),true);
+            }
+        });
+        setUiPageViewController();
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+        }
+        mDots[1].setBackgroundResource(R.drawable.selected_item);
+
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
-
         sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        nama_depan      = sharedpreferences.getString(TAG_NAMA_DEPAN,"fullname");
-        nik             = sharedpreferences.getString(TAG_NIK,"parent_nik");
-        tempat_lahir    = sharedpreferences.getString(TAG_TEMPAT_LAHIR,"parent_birth_place");
-        token           = sharedpreferences.getString(TAG_TOKEN,"token");
+        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
+//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        email         = sharedpreferences.getString(TAG_EMAIL,"email");
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        et_namadepan.setText(nama_depan);
-        et_Nik.setText(nik);
-        et_tempat_lahir.setText(tempat_lahir);
+        school_code = "bpk01";
+        student_id = "418";
+
+        data_parent_student_get();
 
         //Mengambil calendar bawaan dari android
         Calendar calendar = Calendar.getInstance();
@@ -124,7 +218,6 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                 et_tanggal_lahir.setText(convertDate(i, i1, i2));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        //calendar.get(Calendar.YEAR) memberikan nilai tahun awal pada dialog sesuai tahun yang didapat dari calendar
 
         et_tanggal_lahir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -140,22 +233,52 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
 
-        et_negaraasal.setOnItemSelectedListener(this);
-
-        data_parent_student_get();
-
         loadSpinnerData();
+
+        sharedviewpager  = getActivity().getSharedPreferences(my_shared_viewpager, getActivity().MODE_PRIVATE);
+        session          = sharedpreferences.getBoolean(session_status, false);
+        parent_name      = sharedviewpager.getString(TAG_PARENT_NAME,null);
+        parent_email     = sharedviewpager.getString(TAG_EMAIL_PARENT,null);
+        nik              = sharedviewpager.getString(TAG_NIK_PARENT,null);
+        tempat_lahir     = sharedviewpager.getString(TAG_TEMPAT_LAHIR,null);
+        tanggal_lahir    = sharedviewpager.getString(TAG_TANGGAL_LAHIR,null);
+        hubungan         = sharedviewpager.getString(TAG_HUBUNGAN,null);
+        type_warga       = sharedviewpager.getString(TAG_KEWARGANEGARAAN,null);
+
         return view;
     }
 
-    private void submitForm() {
+    private int getItem(int i) {
+        return ParentPager.getCurrentItem() + i;
+    }
+
+
+    private void loadSpinnerData() {
+        // database handler
+        DBHelper db = new DBHelper(getApplicationContext());
+
+        final List<String> myData = db.getAllLabels();
+
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.spinner_text, myData);
+        //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        et_negaraasal.setAdapter(spinnerArrayAdapter);
+        et_negaraasal.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(Spinner parent, View view, int position, long id) {
+                negaraasal = myData.get(position).toString();
+            }
+        });
+
+
+
+    }
+
+    public void submitForm() {
         if (!validateNamaDepan()) {
             return;
         }
         if (!validateNIK()) {
-            return;
-        }
-        if (!validateHubungan()) {
             return;
         }
         if (!validateTempatLahir()) {
@@ -163,9 +286,38 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         }
         if (!validateTanggalLahir()) {
             return;
+        }if (!validateHubungan()){
+            return;
+        }if (negaraasal == null){
+            tv_kewarganegaraan_validate.setVisibility(View.VISIBLE);
+        }else {
+            tv_kewarganegaraan_validate.setVisibility(View.GONE);
 
-        }
-            else{
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putBoolean(session_status, true);
+            editor.putString(TAG_PARENT_NAME, et_namadepan.getText().toString());
+            editor.putString(TAG_EMAIL_PARENT, et_Email.getText().toString());
+            editor.putString(TAG_NIK_PARENT, et_Nik.getText().toString());
+            editor.putString(TAG_TEMPAT_LAHIR, et_tempat_lahir.getText().toString());
+            editor.putString(TAG_TANGGAL_LAHIR, et_tanggal_lahir.getText().toString());
+            editor.putString(TAG_HUBUNGAN, et_hubungan.getSelectedItem().toString());
+            editor.putString(TAG_KEWARGANEGARAAN, (String) negaraasal);
+            editor.commit();
+            KontakFragment kontakFragment = new KontakFragment();
+            Bundle Dataparent = new Bundle();
+            Dataparent.putString(TAG_PARENT_NAME,et_namadepan.getText().toString());
+            Dataparent.putString(TAG_EMAIL_PARENT,et_Email.getText().toString());
+            Dataparent.putString(TAG_NIK_PARENT,et_Nik.getText().toString());
+            Dataparent.putString(TAG_HUBUNGAN,et_hubungan.getSelectedItem().toString());
+            Dataparent.putString(TAG_TEMPAT_LAHIR,et_tempat_lahir.getText().toString());
+            Dataparent.putString(TAG_TANGGAL_LAHIR,et_tanggal_lahir.getText().toString());
+            Dataparent.putString(TAG_KEWARGANEGARAAN,negaraasal);
+            kontakFragment.setArguments(Dataparent);
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragKontak,kontakFragment);
+            fragmentTransaction.commit();
+            ParentPager.setCurrentItem(getItem(+1), true);
            }
     }
     private boolean validateNamaDepan() {
@@ -191,12 +343,11 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
         return true;
     }
     private boolean validateHubungan() {
-        if (et_Hubungan.getText().toString().trim().isEmpty()) {
-            til_Hubungan.setError(getResources().getString(R.string.validate_hubungan));
-            requestFocus(et_Hubungan);
+        if (parent_type == null) {
+            tv_validate_hubungan.setVisibility(View.VISIBLE);
             return false;
         } else {
-            til_Hubungan.setErrorEnabled(false);
+            tv_validate_hubungan.setVisibility(View.GONE);
         }
 
         return true;
@@ -247,35 +398,22 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
-    private void loadSpinnerData() {
-        // database handler
-        DBHelper db = new DBHelper(getApplicationContext());
-
-        final Cursor myData = db.SelectAllData();
-
-        SimpleCursorAdapter adapter;
-        adapter = new SimpleCursorAdapter(getApplicationContext(), R.layout.costum_spinner_item, myData
-                ,new String[] {"negara"}
-                ,new int[] { R.id.negarA});
-
-        et_negaraasal.setAdapter(adapter);
-
+    //Konversi tanggal dari date dialog ke format yang kita inginkan
+    String convertDate(int year, int month, int day) {
+        Log.d("Tanggal", year + "/" + month + "/" + day);
+        String temp = year + "-" + (month + 1) + "-" + day;
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(temp));
+            return e;
+                } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
     public void data_parent_student_get(){
-        /////// percobaan input manual
-        authorization = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFhYWFAeWFoc29vLmNvbSIsIm1lbWJlcl9pZCI6IjE3NCIsImZ1bGxuYW1lIjoiYWFhYWFhYSJ9.OjEl90fIvF9kMM01QCHuQzKAdboBCgrI7YX_4WepPHA";
-        school_code = "bpk01";
-        parent_nik = "9843584821";
-        student_id = "416";
-//        parent_nik = et_Nik.getText().toString();
         progressBar();
         showDialog();
         Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toString(), parent_nik.toString(), student_id.toString());
@@ -295,27 +433,30 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                 String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
 
                 if (status == 1 && code.equals("DPG_SCS_0001")) {
-                    final JSONResponse.DPS_Data data = resource.data;
-                    JSONObject jsonObject = null;
-                    et_namadepan.setText(data.parent_name);
-                    et_Email.setText(data.parent_email);
-                    et_Nik.setText(data.parent_nik);
-                    parent_type = data.parent_type;
-                    et_tempat_lahir.setText(data.parent_birth_place);
-                    et_tanggal_lahir.setText(data.parent_birth_date);
-                    type_warga = data.type_warga;
+                    namaparent              = response.body().data.getParent_name();
+                    Email                   = response.body().data.getParent_email();
+                    nik_parent              = response.body().data.getParent_nik();
+                    hubungan                = response.body().data.getParent_type();
+                    tempatlahir             = response.body().data.getParent_birth_place();
+                    tanggallahir            = response.body().data.getParent_birth_date();
+                    kewarganegaraan         = response.body().data.getType_warga();
 
-                    // Spinner click listener
-                    final String[] years = {"Hubungan","Ayah","Ibu","Wali"};
-                    final List<String> plantsList = new ArrayList<>(Arrays.asList(years));
+                    et_namadepan.setText(namaparent);
+                    et_Nik.setText(nik_parent);
+                    et_Email.setText(Email);
+                    et_tempat_lahir.setText(tempatlahir);
+                    et_tanggal_lahir.setText(tanggallahir);
 
+                    final List<String> penghasil = new ArrayList<>(Arrays.asList(listSpinner));
                     // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(),R.layout.spinner_text,plantsList){
+                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,penghasil){
                         @Override
                         public boolean isEnabled(int position){
                             if(position == 0)
                             {
                                 // Disable the first item from Spinner
+                                // First item will be use for hint
                                 return false;
                             }
                             else
@@ -323,6 +464,7 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                                 return true;
                             }
                         }
+
                         @Override
                         public View getDropDownView(int position, View convertView,
                                                     ViewGroup parent) {
@@ -336,41 +478,44 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
                                 tv.setTextColor(Color.BLACK);
                             }
                             return view;
+
+
+
+
                         }
                     };
-                    spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    et_hubungan.setAdapter(spinnerArrayAdapter);
 
-                    if(parent_type.equals("Ayah")){
-                        et_hubungan.setSelection(1);
-                    }else if(parent_type.equals("Ibu")){
-                        et_hubungan.setSelection(2);
-                    }else if(parent_type.equals("Wali")){
-                        et_hubungan.setSelection(3);
-                    }
+                    int spinnerPosition = ArrayAdapter.getPosition(hubungan);
+                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    et_hubungan.setAdapter(ArrayAdapter);
+                    et_hubungan.setSelection(spinnerPosition);
+                    et_hubungan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(Spinner parent, View view, int position, long id) {
+                            parent_type = penghasil.get(position);
+//                            Toast.makeText(getApplicationContext(), parent_type, Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    parent_type = et_hubungan.getSelectedItem().toString();
 
                     rb_wni.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            type_warga = "WNI";
+                            negaraasal = getResources().getString(R.string.rb_wni);
+                            et_negaraasal.setVisibility(View.GONE);
                         }
                     });
+
                     rb_wna.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            type_warga = "WNA";
+                            et_negaraasal.setVisibility(View.VISIBLE);
+                            negaraasal = et_negaraasal.getSelectedItem().toString();
                         }
                     });
 
-                    rb_wni.setChecked(true);
 
-//                    if(type_warga.equals("WNI")){
-////                        rb_wni.isChecked();
-//                        rb_wni.setChecked(true);
-//                    }else if(type_warga.equals("WNA")){
-////                        rb_wna.isChecked();
-//                        rb_wna.setChecked(true);
-//                    }
                 } else {
                     if(status == 0 && code.equals("DPG_ERR_0001")){
                         Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
@@ -388,18 +533,25 @@ public class DataFragment extends Fragment implements AdapterView.OnItemSelected
             }
         });
     }
-    //Konversi tanggal dari date dialog ke format yang kita inginkan
-    String convertDate(int year, int month, int day) {
-        Log.d("Tanggal", year + "/" + month + "/" + day);
-        String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
-        try {
-            String e = newDateFormat.format(calendarDateFormat.parse(temp));
-            return e;
-                } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
+
+    private void setUiPageViewController() {
+        mDotCount = fragmentAdapter.getCount();
+        mDots = new LinearLayout[mDotCount];
+
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i] = new LinearLayout(getContext());
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+            indicator.addView(mDots[i]);
+            mDots[0].setBackgroundResource(R.drawable.selected_item);
         }
     }
+
+
 }

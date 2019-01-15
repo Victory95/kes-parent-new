@@ -1,5 +1,6 @@
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -30,11 +31,14 @@
     </LinearLayout>
     <RadioGroup
         android:id="@+id/jenis_kelamin"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:layout_gravity="center_horizontal">
+
 
         <RadioButton
             android:id="@+id/sma"
@@ -42,6 +46,7 @@
             android:layout_height="wrap_content"
             android:text="SMA"
             android:textSize="20dp"
+            android:gravity="center"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
 
@@ -50,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SMK"
+            android:gravity="center"
             android:textSize="20dp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
@@ -59,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SMP"
+            android:gravity="center"
             android:textSize="20dp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
@@ -68,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SD"
+            android:gravity="center"
             android:textSize="20dp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
@@ -94,30 +102,34 @@
     <LinearLayout
 
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/edt_bg_selector_black"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal">
 
-        <Spinner
+        <com.rey.material.widget.Spinner
+            style="@style/Material.Widget.Spinner"
             android:id="@+id/sp_provinsi"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="8"
             android:gravity="center"
             android:background="@android:color/transparent"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            app:rd_style="@style/Material.Drawable.Ripple.Wave"
+            app:spn_arrowAnimClockwise="true"
+            app:spn_dividerColor="@color/black"
+            app:spn_arrowSwitchMode="true"
+            app:spn_arrowAnimDuration="3"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:onClick="showDropDown"
-            android:src="@drawable/ic_arrow_down" />
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_weight="1"-->
+            <!--android:onClick="showDropDown"-->
+            <!--android:src="@drawable/ic_arrow_down" />-->
 
     </LinearLayout>
 

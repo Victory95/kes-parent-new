@@ -17,14 +17,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.AnakMain;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -76,6 +81,13 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         return Fragment;
     }
 
+    ViewPager ParentPager;
+    AnakMain anakMain;
+    Button buttonBerikutnya,buttonKembali;
+    private LinearLayout indicator;
+    private int mDotCount;
+    private LinearLayout[] mDots;
+    private AnakMain.FragmentAdapter fragmentAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,8 +97,34 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapTinggal);
         mapFragment.getMapAsync(this);
-        namatempat = (TextView)view.findViewById(R.id.nama_rumah);
-        arrom = (ImageView)view.findViewById(R.id.arrom);
+        namatempat          = (TextView)view.findViewById(R.id.nama_rumah);
+        arrom               = (ImageView)view.findViewById(R.id.arrom);
+        anakMain            = (AnakMain)getActivity();
+        ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
+        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
+        buttonKembali       = (Button)view.findViewById(R.id.btn_kembali);
+        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_berikut);
+        fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+
+        buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParentPager.setCurrentItem(getItem(+1), true);
+            }
+        });
+
+        buttonKembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParentPager.setCurrentItem(getItem(-1), true);
+            }
+        });
+
+        setUiPageViewController();
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+        }
+        mDots[2].setBackgroundResource(R.drawable.selected_item);
         arrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +132,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                 startActivityForResult(intent,1);
             }
         });
+
         return view;
     }
 
@@ -359,5 +398,25 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         background.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+    private int getItem(int i) {
+        return ParentPager.getCurrentItem() + i;
+    }
+    private void setUiPageViewController() {
+        mDotCount = fragmentAdapter.getCount();
+        mDots = new LinearLayout[mDotCount];
 
+        for (int i = 0; i < mDotCount; i++) {
+            mDots[i] = new LinearLayout(getContext());
+            mDots[i].setBackgroundResource(R.drawable.nonselected_item);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+
+            params.setMargins(4, 0, 4, 0);
+            indicator.addView(mDots[i]);
+            mDots[0].setBackgroundResource(R.drawable.selected_item);
+        }
+    }
 }

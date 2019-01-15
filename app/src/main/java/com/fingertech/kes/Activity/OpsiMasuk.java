@@ -3,6 +3,9 @@ package com.fingertech.kes.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -42,7 +45,7 @@ public class OpsiMasuk extends AppCompatActivity {
         member_type = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
 
         if (session) {
-            Intent intent = new Intent(OpsiMasuk.this, AksesAnak.class);
+            Intent intent = new Intent(OpsiMasuk.this, MainActivity.class);
             intent.putExtra(TAG_EMAIL, email);
             intent.putExtra(TAG_MEMBER_ID, memberid);
             intent.putExtra(TAG_FULLNAME, fullname);
@@ -50,7 +53,7 @@ public class OpsiMasuk extends AppCompatActivity {
             finish();
             startActivity(intent);
         }
-
+        checkLocationPermission();
         btn_masuk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +75,28 @@ public class OpsiMasuk extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    public boolean checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

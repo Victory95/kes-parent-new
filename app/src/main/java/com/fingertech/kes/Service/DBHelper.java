@@ -10,6 +10,9 @@ import android.util.Log;
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.Rest.BookmarkTabel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper{
 
     private static final String db_name ="school";
@@ -313,7 +316,28 @@ public class DBHelper extends SQLiteOpenHelper{
         } catch (Exception e) {
             return null;
         }
+        }
+    public List<String> getAllLabels(){
+        List<String> labels = new ArrayList<String>();
 
+        // Select All Query
+        String selectQuery = "SELECT  * FROM country ORDER BY negara ASC";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                labels.add(cursor.getString(2));
+            } while (cursor.moveToNext());
+        }
+
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return labels;
     }
-
 }

@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <uses-feature android:name="android.hardware.camera.flash" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -55,7 +57,7 @@
             android:name=".Activity.SplashScreen"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.DarkStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -161,7 +163,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fingertech.kes.Activity.AksesAnak" />
         </activity>
-        <activity android:name=".Activity.Maps.full_maps" />
+        <activity
+            android:name=".Activity.Maps.full_maps"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.MenuUtama"
             android:label="@string/title_activity_menu_utama"
@@ -178,7 +184,7 @@
         <activity
             android:name=".Activity.Maps.FullMap"
             android:label="@string/title_activity_menu_guest"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Maps.SearchingMAP"
             android:label=""
@@ -217,8 +223,18 @@
         </activity>
         <activity
             android:name=".Activity.DetailSekolah"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.DarkStatusBar" />
+        <activity
+            android:name=".Activity.Search.AnakAkses"
+            android:label="Akses Siswa atau Siswi">
 
+        </activity>
+        <activity android:name=".Activity.AnakMain"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

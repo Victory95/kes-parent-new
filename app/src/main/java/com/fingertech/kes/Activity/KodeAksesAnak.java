@@ -46,15 +46,18 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     private EditText editTextone,editTexttwo,editTextthree,editTextfour,editTextfive,editTextsix;
     private Button btn_submit;
     private ImageView iv_copy_paste,iv_close,iv_foto_profile;
-    private TextView tv_val_kode_aa,tv_kode_akses_anak_sekolah,tv_kode_akses_anak_nama;
+    private TextView tv_val_kode_aa,tv_kode_akses_anak_sekolah,tv_kode_akses_anak_nama,mintakode;
     private ProgressDialog dialog;
-    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name;
+    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code;
     Integer status;
     String code;
 
     Auth mApiInterface;
 
     SharedPreferences sharedpreferences;
+
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
     public static final String TAG_STUDENT_ID   = "student_id";
@@ -62,6 +65,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     public static final String TAG_SCHOOL_ID    = "school_id";
     public static final String TAG_NAMA_ANAK    = "childrenname";
     public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
     String authorization;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -81,6 +85,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         iv_close        =(ImageView)findViewById(R.id.iv_close);
         iv_foto_profile =(ImageView)findViewById(R.id.iv_foto_profile);
         tv_val_kode_aa  =(TextView)findViewById(R.id.tv_val_kode_aa);
+        mintakode       =(TextView)findViewById(R.id.kirim_kode);
         tv_kode_akses_anak_sekolah  =(TextView)findViewById(R.id.tv_kode_akses_anak_sekolah);
         tv_kode_akses_anak_nama     =(TextView)findViewById(R.id.tv_kode_akses_anak_nama);
 
@@ -102,8 +107,12 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
         school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+
 
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -343,6 +352,24 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
             }
         });
 
+        mintakode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                request_code_acsess_post();
+                editTextone.getText().clear();
+                editTexttwo.getText().clear();
+                editTextthree.getText().clear();
+                editTextfour.getText().clear();
+                editTextfive.getText().clear();
+                editTextsix.getText().clear();
+                editTextone.addTextChangedListener(KodeAksesAnak.this);
+                editTexttwo.addTextChangedListener( KodeAksesAnak.this);
+                editTextthree.addTextChangedListener(KodeAksesAnak.this);
+                editTextfour.addTextChangedListener(KodeAksesAnak.this);
+                editTextfive.addTextChangedListener(KodeAksesAnak.this);
+                editTextsix.addTextChangedListener(KodeAksesAnak.this);
+            }
+        });
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -351,6 +378,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 }else {
                     tv_val_kode_aa.setVisibility(View.GONE);
                     masuk_code_acsess_post();
+
                 }
             }
         });
@@ -572,6 +600,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     JSONResponse.MCA_Data data = (JSONResponse.MCA_Data) resource.data;
                     Toast.makeText(getApplicationContext(), MCA_SCS_0001, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), ParentMain.class);
+                    delete_code();
                     startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("MCA_ERR_0001")){
@@ -601,4 +630,81 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         });
     }
 
+    public void request_code_acsess_post(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse> postCall = mApiInterface.request_code_acsess_post(authorization.toString(), email.toString(), fullname.toString(), parent_id.toString(), student_id.toString(), school_id.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                hideDialog();
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String RCA_SCS_0001 = getResources().getString(R.string.RCA_SCS_0001);
+                String RCA_ERR_0001 = getResources().getString(R.string.RCA_ERR_0001);
+                String RCA_ERR_0002 = getResources().getString(R.string.RCA_ERR_0002);
+                String RCA_ERR_0003 = getResources().getString(R.string.RCA_ERR_0003);
+                String RCA_ERR_0004 = getResources().getString(R.string.RCA_ERR_0004);
+                String RCA_ERR_0005 = getResources().getString(R.string.RCA_ERR_0005);
+                String RCA_ERR_0006 = getResources().getString(R.string.RCA_ERR_0006);
+                String RCA_ERR_0007 = getResources().getString(R.string.RCA_ERR_0007);
+                String RCA_ERR_0008 = getResources().getString(R.string.RCA_ERR_0008);
+
+                if (status == 1 && code.equals("RCA_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), RCA_SCS_0001, Toast.LENGTH_LONG).show();
+                } else {
+                    if(status == 0 && code.equals("RCA_ERR_0001")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0001, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0002")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0002, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0003")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0003, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0004")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0004, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0005")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0005, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0006")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0006, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0007")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0007, Toast.LENGTH_LONG).show();
+                    }if(status == 0 && code.equals("RCA_ERR_0008")){
+                        Toast.makeText(getApplicationContext(), RCA_ERR_0008, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void delete_code(){
+        verification_code = editTextone.getText().toString()+editTexttwo.getText().toString()+editTextthree.getText().toString()+editTextfour.getText().toString()+editTextfive.getText().toString()+editTextsix.getText().toString();
+        Call<JSONResponse.DeleteCode> postCall = mApiInterface.delete_verification_post(verification_code.toString());
+        postCall.enqueue(new Callback<JSONResponse.DeleteCode>() {
+            @Override
+            public void onResponse(Call<JSONResponse.DeleteCode> call, Response<JSONResponse.DeleteCode> response) {
+
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse.DeleteCode resource = response.body();
+                status = resource.status;
+                if (status == 1){
+                    Log.d("TAG",response.message()+"");
+                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.DeleteCode> call, Throwable t) {
+
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

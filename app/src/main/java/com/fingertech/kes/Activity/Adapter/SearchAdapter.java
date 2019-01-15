@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> {
 
     private List<JSONResponse.SData> viewItemList;
     private List<JSONResponse.SData> mArrayList;
@@ -34,7 +34,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
     Data data = new Data();
     private Boolean clicked = false;
 
-    public Adapter(List<JSONResponse.SData> viewItemList, Context context) {
+    public SearchAdapter(List<JSONResponse.SData> viewItemList, Context context) {
         this.viewItemList = viewItemList;
         this.mArrayList = viewItemList;
         this.context = context;
@@ -46,7 +46,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemsearch, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
@@ -59,50 +59,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
         // Get car item dto in list.
         JSONResponse.SData viewItem = viewItemList.get(position);
         holder.name.setText(viewItem.getSchool_name());
-        holder.email.setText(viewItem.getSchool_address());
-        // Find charText in wp
-        String country                  = viewItem.getSchool_name().toLowerCase(Locale.getDefault());
-        String name                     = viewItem.getSchool_address().toLowerCase(Locale.getDefault());
-        final Double latitude           = viewItem.getLatitude();
-        final Double longitude          = viewItem.getLongitude();
-        final String SchooldetailId     = viewItem.getSchooldetailid();
-        final String jenjang            = viewItem.getJenjang_pendidikan();
-        if (country.contains(searchString )) {
-            Log.e("test", country + " contains: " + searchString);
-            int startPos    = country.indexOf(searchString);
-            int endPos      = startPos + searchString.length();
-            Spannable spanText = Spannable.Factory.getInstance().newSpannable(holder.name.getText());
-            spanText.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.name.setText(spanText, TextView.BufferType.SPANNABLE);
-        }else if (name.contains(searchString)){
-            int StarPos     = name.indexOf(searchString);
-            int endPos      = StarPos + searchString.length();
-            Spannable spanText = Spannable.Factory.getInstance().newSpannable(holder.email.getText());
-            spanText.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), StarPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//            spanText.setSpan(new ForegroundColorSpan(Color.RED), StarPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            holder.email.setText(spanText, TextView.BufferType.SPANNABLE);
-        }
-        holder.bookmark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (clicked) {
-                    bookmarkTabel.delete(holder.name.getText().toString().trim());
-                    v.setBackgroundResource(R.drawable.ic_unbookmark);
-                    clicked = false;
-                }else {
-                    clicked = true;
-                    data.setName(holder.name.getText().toString().trim());
-                    data.setAddress(holder.email.getText().toString().trim());
-                    data.setLat(latitude.doubleValue());
-                    data.setLng(longitude.doubleValue());
-                    data.setSchooldetailid(SchooldetailId);
-                    data.setJenjang(jenjang);
-                    bookmarkTabel.insert(data);
-                    v.setBackgroundResource(R.drawable.ic_bookmark);
-
-                }
-            }
-        });
     }
 
     @Override
@@ -110,7 +66,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
         return viewItemList.size();
     }
 
-    public Filter getFilter(String searchString) {
+    public Filter getFilter() {
         this.searchString = searchString;
         return new Filter() {
             @Override
@@ -127,7 +83,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
 
                     for (JSONResponse.SData androidVersion : mArrayList) {
 
-                        if (androidVersion.getSchool_name().toLowerCase().contains(charString) || androidVersion.getSchool_address().toLowerCase().contains(charString) || androidVersion.getJenjang_pendidikan().toLowerCase().contains(charString) ) {
+                        if (androidVersion.getSchool_name().toLowerCase().contains(charString) || androidVersion.getSchool_code().toLowerCase().contains(charString) ) {
 
                             filteredList.add(androidVersion);
                         }
@@ -149,7 +105,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
         };
     }
 
-
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name,email;
         Button bookmark;
@@ -157,9 +112,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            name = itemView.findViewById(R.id.school_name);
-            email = itemView.findViewById(R.id.Address_school);
-            bookmark = itemView.findViewById(R.id.bookmark);
+            name = itemView.findViewById(R.id.namaSchool);
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;
         }

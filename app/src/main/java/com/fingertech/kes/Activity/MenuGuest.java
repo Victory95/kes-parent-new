@@ -227,7 +227,7 @@ public class MenuGuest extends AppCompatActivity
 
             }
         });
-        checkLocationPermission();
+//        checkLocationPermission();
 
     }
 

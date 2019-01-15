@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,10 +8,21 @@
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
-    android:id="@+id/fragment"
+    android:id="@+id/fragPekerjaan"
     tools:context=".Activity.Fragment.PekerjaanFragment">
 
-    <TextView
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:overScrollMode="never">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
@@ -22,15 +33,6 @@
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="25dp" />
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
             <Button
                 android:layout_width="match_parent"
@@ -48,6 +50,7 @@ seputar beasiswa"
                 android:textColor="@android:color/white"
                 android:textSize="10dp"/>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -55,17 +58,32 @@ seputar beasiswa"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="20dp">
 
-                <Spinner
+                <com.rey.material.widget.Spinner
+                    style="@style/Material.Widget.Spinner"
                     android:id="@+id/sp_pekerjaan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:background="@drawable/edt_bg_selector_white"
                     android:gravity="center"
-                    android:paddingBottom="4dp"
-                    android:spinnerMode="dropdown" />
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown"
+                    app:spn_dividerHeight="1dp"
+                    app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                    app:spn_arrowAnimClockwise="true"
+                    app:spn_dividerColor="@color/ic_logo_background"
+                    app:spn_arrowSwitchMode="true"
+                    app:spn_arrowAnimDuration="500"
+                    app:spn_arrowColor="@color/ic_logo_background"/>
             </LinearLayout>
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/til_pendidikan"
+                android:textColor="@color/red_300"
+                android:text="@string/validate_pendidikan"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_nama_perusahaan"
@@ -113,27 +131,44 @@ seputar beasiswa"
                     android:layout_height="wrap_content"/> Jabatan
             </android.support.design.widget.TextInputLayout>Jabatan
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="40dp"
                 android:layout_marginRight="30dp">
 
-                <Spinner
+                <com.rey.material.widget.Spinner
+                    style="@style/Material.Widget.Spinner"
                     android:id="@+id/sp_penghasilan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_gravity="center"
-                    android:background="@drawable/edt_bg_selector_white"
                     android:gravity="center"
-                    android:paddingBottom="4dp"
-                    android:spinnerMode="dropdown" />
+                    android:background="@android:color/transparent"
+                    android:spinnerMode="dropdown"
+                    app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                    app:spn_arrowAnimClockwise="true"
+                    app:spn_dividerColor="@color/ic_logo_background"
+                    app:spn_arrowSwitchMode="true"
+                    app:spn_dividerHeight="1dp"
+                    app:spn_arrowAnimDuration="500"
+                    app:spn_arrowColor="@color/ic_logo_background"/>
             </LinearLayout>
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/til_penghasilan"
+                android:textColor="@color/red_300"
+                android:text="@string/validate_penghasilan"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="20dp"
@@ -161,10 +196,19 @@ seputar beasiswa"
 
                 />
             </LinearLayout>
+            <TextView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/til_alamat_kerja"
+                android:textColor="@color/red_300"
+                android:text="@string/validate_alamat_kerja"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="230dp"
                 android:layout_marginBottom="50dp"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginLeft="30dp"
@@ -176,9 +220,69 @@ seputar beasiswa"
                     android:id="@+id/mapKerja"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
-
+                    android:layout_height="230dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="150dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@color/ic_logo_background"
+                    android:paddingLeft="5dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:hint="Silahkan isi lokasi kerja anda"
+                    android:id="@+id/alamat_kerja" />
             </android.support.v7.widget.CardView>
         </LinearLayout>
    </android.support.v4.widget.NestedScrollView>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_kembali"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:background="#0046bfee"
+            android:text="Kembali"
+            android:textAlignment="textStart"
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
+
+        <LinearLayout
+            android:id="@+id/viewPagerIndicators"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/indicators"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_berikut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="#0046bfee"
+            android:text="Submit"
+            android:textAlignment="textEnd"
+            android:textAllCaps="false"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+</RelativeLayout>

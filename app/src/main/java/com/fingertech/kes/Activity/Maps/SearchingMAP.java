@@ -162,6 +162,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 addTickMarkTextLabels();
             }
         });
+
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
