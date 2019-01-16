@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
@@ -45,8 +47,10 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class KontakAnakFragment extends Fragment {
 
 
-    public KontakAnakFragment() {
+    public static KontakAnakFragment newInstance(){
         // Required empty public constructor
+        KontakAnakFragment  Fragment = new KontakAnakFragment();
+        return Fragment;
     }
     ViewPager ParentPager;
     AnakMain anakMain;
@@ -55,11 +59,14 @@ public class KontakAnakFragment extends Fragment {
     private int mDotCount;
     private LinearLayout[] mDots;
     private AnakMain.FragmentAdapter fragmentAdapter;
+    String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
+
 
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
+    public static final String my_shared_anak   = "my_shared_anak";
 
-    public static final String TAG_EMAIL        = "email";
+
     public static final String TAG_FULLNAME     = "fullname";
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
@@ -71,6 +78,28 @@ public class KontakAnakFragment extends Fragment {
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
 
+    public static final String TAG_NAMA_LENGKAP      = "nama_lengkap";
+    public static final String TAG_NIS               = "nis";
+    public static final String TAG_NISN              = "nisn";
+    public static final String TAG_NIK               = "nik";
+    public static final String TAG_JENIS_KELAMIN     = "jenis_kelamin";
+    public static final String TAG_TEMPAT_LAHIR      = "tempat_lahir";
+    public static final String TAG_TANGGAL_LAHIR     = "tanggal_lahir";
+    public static final String TAG_ROMBEL            = "rombel";
+    public static final String TAG_KEBUTUHAN_KHUSUS  = "kebutuhan_khusus";
+    public static final String TAG_TINGKATAN         = "tingkatan";
+    public static final String TAG_KEWARGANEGARAAN   = "kewarganegaraan";
+    public static final String TAG_AGAMA             = "agama";
+
+    public static final String TAG_TELEPON_RUMAH     = "telepon_rumah";
+    public static final String TAG_HANDPHONE         = "handphone";
+    public static final String TAG_EMAIL             = "email";
+    public static final String TAG_SKUN              = "skun";
+    public static final String TAG_PENERIMAANKPS     = "penerimaan_kps";
+    public static final String TAG_NOKPS             = "no_kps";
+
+    SharedPreferences sharedanak;
+
     SharedPreferences sharedpreferences,sharedviewpager;
     String teleponrumah,handphone,email,skun,penerimaan_kps,nomor_kps;
     EditText et_teleponrumah,et_handphone,et_email,et_skun,et_penerimaankps,et_nomorkps;
@@ -80,6 +109,10 @@ public class KontakAnakFragment extends Fragment {
     ProgressDialog dialog;
     Auth mApiInterface;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,8 +122,8 @@ public class KontakAnakFragment extends Fragment {
         anakMain          = (AnakMain)getActivity();
         ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
         indicator           = (LinearLayout) view.findViewById(R.id.indicators);
-        buttonKembali       = (Button)view.findViewById(R.id.btn_kembali);
-        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_berikut);
+        buttonKembali       = (Button)view.findViewById(R.id.btn_back);
+        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_next);
         fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
         et_teleponrumah     = (EditText)view.findViewById(R.id.et_nomor_Rumah);
         et_handphone        = (EditText)view.findViewById(R.id.et_nomor_Ponsel);
@@ -102,8 +135,8 @@ public class KontakAnakFragment extends Fragment {
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParentPager.setCurrentItem(getItem(+1), true);
-            }
+                send_data();
+                ParentPager.setCurrentItem(getItem(+1), true); }
         });
 
         buttonKembali.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +152,7 @@ public class KontakAnakFragment extends Fragment {
         }
         mDots[2].setBackgroundResource(R.drawable.selected_item);
 
-        mApiInterface = ApiClient.getClient().create(Auth.class);
+        mApiInterface     = ApiClient.getClient().create(Auth.class);
         sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
@@ -127,11 +160,25 @@ public class KontakAnakFragment extends Fragment {
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
 //        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
-        email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
 //        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+
+
+        sharedanak  = getActivity().getSharedPreferences(DataAnakFragment.my_shared_anak,Context.MODE_PRIVATE);
+        Nama_lengkap        = sharedanak.getString(TAG_NAMA_LENGKAP,"");
+        Nis                 = sharedanak.getString(TAG_NIS,"");
+        Nisn                = sharedanak.getString(TAG_NISN,"");
+        Nik                 = sharedanak.getString(TAG_NIK,"");
+        Tempat_lahir        = sharedanak.getString(TAG_TEMPAT_LAHIR,"");
+        Tanggal_lahir       = sharedanak.getString(TAG_TANGGAL_LAHIR,"");
+        Rombel              = sharedanak.getString(TAG_ROMBEL,"");
+        Kebutuhankhusus     = sharedanak.getString(TAG_KEBUTUHAN_KHUSUS,"");
+        Jenis_kelamin       = sharedanak.getString(TAG_JENIS_KELAMIN,"");
+        Tingkatan           = sharedanak.getString(TAG_TINGKATAN,"");
+        Agama               = sharedanak.getString(TAG_AGAMA,"");
+        Negara              = sharedanak.getString(TAG_KEWARGANEGARAAN,"");
 
         school_code = "bpk01";
         student_id = "418";
@@ -224,6 +271,31 @@ public class KontakAnakFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
+    }
+
+    public void send_data(){
+        SharedPreferences.Editor editor = sharedanak.edit();
+        editor.putBoolean(session_status, true);
+        editor.putString(TAG_TELEPON_RUMAH,et_teleponrumah.getText().toString());
+        editor.putString(TAG_HANDPHONE,et_handphone.getText().toString());
+        editor.putString(TAG_EMAIL,et_email.getText().toString());
+        editor.putString(TAG_SKUN,et_skun.getText().toString());
+        editor.putString(TAG_PENERIMAANKPS,et_penerimaankps.getText().toString());
+        editor.putString(TAG_NOKPS,et_nomorkps.getText().toString());
+        editor.commit();
+        TempatTinggalFragment tempatTinggalFragment = new TempatTinggalFragment();
+        Bundle tempattinggal = new Bundle();
+        tempattinggal.putString(TAG_TELEPON_RUMAH,et_teleponrumah.getText().toString());
+        tempattinggal.putString(TAG_HANDPHONE,et_handphone.getText().toString());
+        tempattinggal.putString(TAG_EMAIL,et_email.getText().toString());
+        tempattinggal.putString(TAG_SKUN,et_skun.getText().toString());
+        tempattinggal.putString(TAG_PENERIMAANKPS,et_penerimaankps.getText().toString());
+        tempattinggal.putString(TAG_NOKPS,et_nomorkps.getText().toString());
+        tempatTinggalFragment.setArguments(tempattinggal);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragTempatTinggal,tempatTinggalFragment);
+        fragmentTransaction.commit();
     }
 
 }

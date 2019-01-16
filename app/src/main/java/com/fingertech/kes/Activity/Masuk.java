@@ -343,7 +343,7 @@ public class Masuk extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, AnakMain.class);
+                            Intent intent = new Intent(Masuk.this, MenuUtama.class);
                             intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                             intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));

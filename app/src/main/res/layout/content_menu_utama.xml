@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activity.MenuUtama"
     tools:showIn="@layout/app_bar_menu_utama">
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -29,367 +29,139 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/view_group">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                    <android.support.v7.widget.CardView
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:id="@+id/profilanak"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        app:cardCornerRadius="40dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <com.joooonho.SelectableRoundedImageView
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/image"
+                            android:background="@drawable/ic_student"
+                            android:scaleType="centerCrop"
+                            app:sriv_left_top_corner_radius="16dip"
+                            app:sriv_right_top_corner_radius="0dip"
+                            app:sriv_left_bottom_corner_radius="48dip"
+                            app:sriv_right_bottom_corner_radius="16dip"
+                            app:sriv_border_width="2dip"
+                            app:sriv_border_color="#008fea"
+                            app:sriv_oval="true"
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"/>
+
+                    </android.support.v7.widget.CardView>
+                        <android.support.v7.widget.CardView
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:id="@+id/namaanak"
+                            android:layout_width="80dp"
+                            android:layout_height="20dp"
+                            app:cardCornerRadius="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/nama_anak"
+                                    android:text="Profile anak"
+                                    android:textSize="8dp"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <android.support.v7.widget.CardView
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:id="@+id/btn_tambah"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:cardCornerRadius="40dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <ImageView
+                                    android:layout_width="55dp"
+                                    android:layout_height="55dp"
+                                    android:background="@drawable/ic_add"/>
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+                        <android.support.v7.widget.CardView
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:id="@+id/tambah"
+                            android:layout_width="80dp"
+                            android:layout_height="20dp"
+                            app:cardCornerRadius="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tambahanak"
+                                    android:text="Tambah anak"
+                                    android:textSize="8dp"
+                                    android:gravity="center"/>
+                            </LinearLayout>
+                        </android.support.v7.widget.CardView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <Button
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/PagerUtama"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+                </android.support.v4.view.ViewPager>
+                    <com.pixelcan.inkpageindicator.InkPageIndicator
+                        android:id="@+id/indicators"
                         android:layout_width="match_parent"
-                        android:layout_height="70dp" />
+                        android:layout_height="wrap_content"
+                        app:ipi_dotDiameter="10dp"
+                        app:ipi_dotGap="10dp"
+                        app:ipi_animationDuration="320"
+                        app:ipi_pageIndicatorColor="@android:color/darker_gray"
+                        app:ipi_currentPageIndicatorColor="@color/colorPrimary"/>
                 </LinearLayout>
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="339dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:orientation="vertical">
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/btn_profile"
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_student"
-                            android:text="Profil" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:id="@+id/btn_jadwal"
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_jadwal" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:id="@+id/btn_jadwal_ujian"
-                            android:layout_width="65dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_laboratory" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:text="Profil"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Jadwal Pelajaran"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Jadwal Ujian"
-                            android:textAlignment="center" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="0.4"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="0.6"
-                            android:background="#fff"
-                            android:gravity="center" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/btn_absen"
-                            android:layout_width="114dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_absen"
-                            android:text="Profil" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:id="@+id/btn_tugas_anak"
-                            android:layout_width="116dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_tugas" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:id="@+id/btn_rapor"
-                            android:layout_width="116dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_raport" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:text="Absensi Anak"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Tugas Anak"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Rapor Anak"
-                            android:textAlignment="center" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="0.4"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:background="#fff" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="4"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="0.6"
-                            android:background="#fff"
-                            android:gravity="center" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/btn_kalender"
-                            android:layout_width="114dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_kalender"
-                            android:text="Profil" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:id="@+id/btn_pesan"
-                            android:layout_width="116dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/ic_pesan" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#000"
-                            android:gravity="center" />
-
-                        <ImageView
-                            android:layout_width="116dp"
-                            android:layout_height="90dp"
-                            android:layout_weight="1" />
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:text="Kalender Kelas"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:text="Pesan"
-                            android:textAlignment="center" />
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="#fff"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:layout_width="114dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:textAlignment="center" />
-                    </TableRow>
-
-                </TableLayout>
             </LinearLayout>
 
-
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

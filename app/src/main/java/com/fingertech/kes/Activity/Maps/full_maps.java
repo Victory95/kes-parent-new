@@ -73,6 +73,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
     String location;
     private Button Pilih;
     String result = "";
+    Toolbar toolbar;
 
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
@@ -93,9 +94,10 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                 showPlaceAutoComplete(PICK_UP);
             }
         });
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_map);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_map);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Pilih = (Button)findViewById(R.id.pilih);
     }
 

@@ -153,6 +153,8 @@
 
     <string name="rb_wni">WNI</string>
     <string name="rb_wna">WNA</string>
+    <string name="rb_laki">Pria</string>
+    <string name="rb_wanita">Wanita</string>
 
     <string name="validate_alamat_kerja">* Mohon masukkan alamat kerja anda</string>
     <string name="validate_penghasilan">* Mohon penghasilan anda</string>

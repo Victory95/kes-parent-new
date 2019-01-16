@@ -22,6 +22,7 @@
         android:background="#46bfee"
         app:itemTextColor="#ffffff"
         app:headerLayout="@layout/nav_header_menu_utama"
+        app:itemIconPadding="@dimen/fab_margin"
         app:menu="@menu/menu_utama_drawer" />
 
 

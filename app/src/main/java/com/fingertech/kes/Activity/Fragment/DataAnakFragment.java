@@ -11,6 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
@@ -96,7 +98,7 @@ public class DataAnakFragment extends Fragment {
     private AnakMain.FragmentAdapter fragmentAdapter;
 
     public static final String my_shared_preferences = "my_shared_preferences";
-    public static final String my_shared_viewpager   = "my_shared_viewpager";
+    public static final String my_shared_anak   = "my_shared_anak";
     public static final String session_status = "session_status";
 
     public static final String TAG_EMAIL        = "email";
@@ -111,13 +113,33 @@ public class DataAnakFragment extends Fragment {
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
 
-    SharedPreferences sharedpreferences,sharedviewpager;
+    public static final String TAG_NAMA_LENGKAP      = "nama_lengkap";
+    public static final String TAG_NIS               = "nis";
+    public static final String TAG_NISN              = "nisn";
+    public static final String TAG_NIK               = "nik";
+    public static final String TAG_JENIS_KELAMIN     = "jenis_kelamin";
+    public static final String TAG_TEMPAT_LAHIR      = "tempat_lahir";
+    public static final String TAG_TANGGAL_LAHIR     = "tanggal_lahir";
+    public static final String TAG_ROMBEL            = "rombel";
+    public static final String TAG_KEBUTUHAN_KHUSUS  = "kebutuhan_khusus";
+    public static final String TAG_TINGKATAN         = "tingkatan";
+    public static final String TAG_KEWARGANEGARAAN   = "kewarganegaraan";
+    public static final String TAG_AGAMA             = "agama";
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    SharedPreferences sharedpreferences,sharedanak;
     int status;
     String code;
     ProgressDialog dialog;
     Auth mApiInterface;
     Spinner sp_tingkatan,sp_agama;
     RadioButton rb_laki,rb_wanita,rb_wni,rb_wna;
+    String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
     EditText et_nama_lengkap,et_nis,et_nisn,et_nik,et_tempat_lahir,et_rombel,et_kebutuhan_khusus;
     TextInputLayout til_nama_lengkap,til_nis,til_nisn,til_nik,til_rombel,til_tempat_lahir,til_tanggal_lahir,til_kebutuhan_khusus;
     String email,parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
@@ -148,6 +170,14 @@ public class DataAnakFragment extends Fragment {
         rb_wanita           = (RadioButton)view.findViewById(R.id.rb_perempuaN);
         rb_wni              = (RadioButton)view.findViewById(R.id.rb_wnI);
         rb_wna              = (RadioButton)view.findViewById(R.id.rb_wnA);
+        til_nama_lengkap    = (TextInputLayout)view.findViewById(R.id.til_nama_lengkap_anak);
+        til_nis             = (TextInputLayout)view.findViewById(R.id.til_nis);
+        til_nisn            = (TextInputLayout)view.findViewById(R.id.til_nisn);
+        til_nik             = (TextInputLayout)view.findViewById(R.id.til_Nik);
+        til_rombel          = (TextInputLayout)view.findViewById(R.id.til_rombel);
+        til_tempat_lahir    = (TextInputLayout)view.findViewById(R.id.til_tempatlahiR);
+        til_tanggal_lahir   = (TextInputLayout)view.findViewById(R.id.til_tanggallahiR);
+        til_kebutuhan_khusus= (TextInputLayout)view.findViewById(R.id.til_kebutuhan_khusus);
 
 
         Calendar calendar = Calendar.getInstance();
@@ -178,19 +208,6 @@ public class DataAnakFragment extends Fragment {
 
 
         loadSpinnerData();
-        buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParentPager.setCurrentItem(getItem(+1), true);
-            }
-        });
-
-        buttonKembali.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParentPager.setCurrentItem(getItem(-1), true);
-            }
-        });
 
         setUiPageViewController();
         for (int i = 0; i < mDotCount; i++) {
@@ -199,6 +216,7 @@ public class DataAnakFragment extends Fragment {
         mDots[1].setBackgroundResource(R.drawable.selected_item);
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
+
         sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
@@ -217,7 +235,37 @@ public class DataAnakFragment extends Fragment {
 
         data_student_get();
 
+        sharedanak  = getActivity().getSharedPreferences(my_shared_anak, Context.MODE_PRIVATE);
+        Nama_lengkap        = sharedanak.getString(TAG_NAMA_LENGKAP,null);
+        Nis                 = sharedanak.getString(TAG_NIS,null);
+        Nisn                = sharedanak.getString(TAG_NISN,null);
+        Nik                 = sharedanak.getString(TAG_NIK,null);
+        Rombel              = sharedanak.getString(TAG_ROMBEL,null);
+        Jenis_kelamin       = sharedanak.getString(TAG_JENIS_KELAMIN,null);
+        Agama               = sharedanak.getString(TAG_AGAMA,null);
+        Tingkatan           = sharedanak.getString(TAG_TINGKATAN,null);
+        Negara              = sharedanak.getString(TAG_KEWARGANEGARAAN,null);
+        Kebutuhankhusus     = sharedanak.getString(TAG_KEBUTUHAN_KHUSUS,null);
+        Tempat_lahir        = sharedanak.getString(TAG_TEMPAT_LAHIR,null);
+        Tanggal_lahir       = sharedanak.getString(TAG_TANGGAL_LAHIR,null);
 
+
+        buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               send_data();
+////                submitForm();
+
+                ParentPager.setCurrentItem(getItem(+1),true);
+            }
+        });
+
+        buttonKembali.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParentPager.setCurrentItem(getItem(-1), true);
+            }
+        });
 
         return view;
     }
@@ -303,7 +351,7 @@ public class DataAnakFragment extends Fragment {
                 jenis_kelamin       = response.body().data.getGender();
                 tempat_lahir        = response.body().data.getBirth_place();
                 tanggal_lahir       = response.body().data.getBirth_date();
-                religion               = response.body().data.getReligion();
+                religion            = response.body().data.getReligion();
                 kebutuhan_khusus    = response.body().data.getSpecial_needs();
                 kewarganegaraan     = response.body().data.getCitizen_status();
 
@@ -461,7 +509,18 @@ public class DataAnakFragment extends Fragment {
                         rb_wanita.setChecked(true);
                         rb_laki.setChecked(false);
                     }
-
+                    rb_laki.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            jenis_kelamin = getResources().getString(R.string.rb_laki);
+                        }
+                    });
+                    rb_wanita.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
+                        }
+                    });
                     if (kewarganegaraan.equals("WNI")){
                         rb_wni.setChecked(true);
                         rb_wna.setChecked(false);
@@ -522,5 +581,207 @@ public class DataAnakFragment extends Fragment {
         if (view.requestFocus()) {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
+    }
+
+    public void submitForm() {
+        if (!validateTingkatan()) {
+            return;
+        }
+        if (!validateNamaLengkap()) {
+            return;
+        }
+        if (!validateNis()) {
+            return;
+        }
+        if (!validateNisn()) {
+            return;
+        }
+        if (!validateNik()){
+            return;
+        }
+        if (!validateRombel()){
+            return;
+        }
+        if (!validateJeniskelamin()){
+            return;
+        }
+        if (!validateTempatlahir()){
+            return;
+        }
+        if (!validateTanggallahir()){
+            return;
+        }
+        if (!validateKebutuhankhusus()){
+            return;
+        }
+        if (!validateAgama()){
+            return;
+        }
+        if (!validateNegara()){
+            return;
+        }else {
+            send_data();
+            ParentPager.setCurrentItem(getItem(+1), true);
+        }
+    }
+
+    private boolean validateNamaLengkap() {
+        if (et_nama_lengkap.getText().toString().trim().isEmpty()) {
+            til_nama_lengkap.setError(getResources().getString(R.string.validate_name_depan));
+            requestFocus(et_nama_lengkap);
+            return false;
+        } else {
+            til_nama_lengkap.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNis() {
+        if (et_nis.getText().toString().trim().isEmpty()) {
+            til_nis.setError(getResources().getString(R.string.validate_nik));
+            requestFocus(et_nis);
+            return false;
+        } else {
+            til_nis.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNisn() {
+        if (et_nisn.getText().toString().trim().isEmpty()) {
+            til_nisn.setError(getResources().getString(R.string.validate_tempat_lahir));
+            requestFocus(et_nisn);
+            return false;
+        } else {
+            til_nisn.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNik() {
+        if (et_nik.getText().toString().trim().isEmpty()) {
+            til_nik.setError(getResources().getString(R.string.validate_tanggal_lahir));
+            requestFocus(et_nik);
+            return false;
+        } else {
+            til_nik.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateRombel() {
+        if (et_rombel.getText().toString().trim().isEmpty()) {
+            til_rombel.setError(getResources().getString(R.string.validate_name_depan));
+            requestFocus(et_rombel);
+            return false;
+        } else {
+            til_rombel.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateJeniskelamin() {
+        if (jenis_kelamin.toString().trim().isEmpty()) {
+            return false;
+        } else {
+        }
+
+        return true;
+    }
+    private boolean validateTempatlahir() {
+        if (et_tempat_lahir.getText().toString().trim().isEmpty()) {
+            til_tempat_lahir.setError(getResources().getString(R.string.validate_tempat_lahir));
+            requestFocus(et_tempat_lahir);
+            return false;
+        } else {
+            til_tempat_lahir.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateTanggallahir() {
+        if (et_tanggal.getText().toString().trim().isEmpty()) {
+            til_tanggal_lahir.setError(getResources().getString(R.string.validate_tanggal_lahir));
+            requestFocus(et_tanggal);
+            return false;
+        } else {
+            til_tanggal_lahir.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateAgama() {
+        if (sp_agama.getSelectedItem().toString().trim().isEmpty()) {
+            return false;
+        } else {
+        }
+
+        return true;
+    }
+    private boolean validateKebutuhankhusus() {
+        if (et_kebutuhan_khusus.getText().toString().trim().isEmpty()) {
+            til_kebutuhan_khusus.setError(getResources().getString(R.string.validate_nik));
+            requestFocus(et_kebutuhan_khusus);
+            return false;
+        } else {
+            til_kebutuhan_khusus.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNegara() {
+        if (kewarganegaraan.toString().trim().isEmpty()) {
+
+            return false;
+        } else {
+        }
+
+        return true;
+    }
+    private boolean validateTingkatan() {
+        if (sp_tingkatan.getSelectedItem().toString().trim().isEmpty()) {
+            return false;
+        } else {
+        }
+
+        return true;
+    }
+
+
+    public void send_data(){
+        SharedPreferences.Editor editor = sharedanak.edit();
+        editor.putBoolean(session_status, true);
+        editor.putString(TAG_NAMA_LENGKAP,et_nama_lengkap.getText().toString());
+        editor.putString(TAG_NIS,et_nis.getText().toString());
+        editor.putString(TAG_NISN,et_nisn.getText().toString());
+        editor.putString(TAG_NIK,et_nik.getText().toString());
+        editor.putString(TAG_TEMPAT_LAHIR,et_tempat_lahir.getText().toString());
+        editor.putString(TAG_TANGGAL_LAHIR,et_tanggal.getText().toString());
+        editor.putString(TAG_ROMBEL,et_rombel.getText().toString());
+        editor.putString(TAG_JENIS_KELAMIN,(String)jenis_kelamin);
+        editor.putString(TAG_KEBUTUHAN_KHUSUS,et_kebutuhan_khusus.getText().toString());
+        editor.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
+        editor.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
+        editor.putString(TAG_KEWARGANEGARAAN,(String) negaraasal);
+        editor.commit();
+        KontakAnakFragment kontakAnakFragment = new KontakAnakFragment();
+        Bundle kontakanak = new Bundle();
+        kontakanak.putString(TAG_NAMA_LENGKAP,et_nama_lengkap.getText().toString());
+        kontakanak.putString(TAG_NIS,et_nis.getText().toString());
+        kontakanak.putString(TAG_NISN,et_nisn.getText().toString());
+        kontakanak.putString(TAG_NIK,et_nik.getText().toString());
+        kontakanak.putString(TAG_TEMPAT_LAHIR,et_tempat_lahir.getText().toString());
+        kontakanak.putString(TAG_TANGGAL_LAHIR,et_tanggal.getText().toString());
+        kontakanak.putString(TAG_ROMBEL,et_rombel.getText().toString());
+        kontakanak.putString(TAG_KEBUTUHAN_KHUSUS,et_kebutuhan_khusus.getText().toString());
+        kontakanak.putString(TAG_JENIS_KELAMIN,(String) jenis_kelamin);
+        kontakanak.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
+        kontakanak.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
+        kontakanak.putString(TAG_KEWARGANEGARAAN,(String)negaraasal);
+        kontakAnakFragment.setArguments(kontakanak);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragKontakAnak,kontakAnakFragment);
+        fragmentTransaction.commit();
     }
 }

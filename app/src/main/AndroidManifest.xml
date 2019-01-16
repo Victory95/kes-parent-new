@@ -226,13 +226,15 @@
             android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Search.AnakAkses"
-            android:label="Akses Siswa atau Siswi">
-
-        </activity>
-        <activity android:name=".Activity.AnakMain"
+            android:label="Akses Siswa atau Siswi"></activity>
+        <activity
+            android:name=".Activity.AnakMain"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Activity.ProfileParent"
+            android:label="Profile"
+            android:theme="@style/AppTheme.DarkStatusBar">
 
         </activity>
     </application>
