@@ -153,4 +153,9 @@ public interface Auth {
     //////DetailStudent
     @GET("students/kes_detail_student")
     Call<JSONResponse.DetailStudent>kes_detail_student_get(@Header("Authorization") String authorization, @Query("school_code") String school_code, @Query("student_id") String student_id,@Query("parent_nik") String parent_nik);
+
+    //////GETPROFILE
+    @GET("auth/kes_profile")
+    Call<JSONResponse.GetProfile>kes_profile_get(@Header("Authorization") String authorization,
+                                      @Query("mem") String mem);
 }

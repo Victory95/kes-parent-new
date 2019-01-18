@@ -1,8 +1,11 @@
 package com.fingertech.kes.Activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,13 +36,20 @@ import android.widget.Toast;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 import android.view.ViewGroup.LayoutParams;
+
+import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
+import com.fingertech.kes.Rest.ApiClient;
+import com.fingertech.kes.Rest.JSONResponse;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import github.chenupt.springindicator.SpringIndicator;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuUtama extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,6 +67,28 @@ public class MenuUtama extends AppCompatActivity
     Toolbar toolbar;
     View header;
     TextView tv_profile;
+    CircleImageView image_profile;
+    int status;
+    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
+
+    Auth mApiInterface;
+    SharedPreferences sharedpreferences;
+
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_TOKEN        = "token";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+
+
+    String authorization;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +101,8 @@ public class MenuUtama extends AppCompatActivity
         navigationView      = (NavigationView) findViewById(R.id.nav_view);
         header              = navigationView.getHeaderView(0);
         tv_profile          = (TextView)header.findViewById(R.id.tv_profil);
+        mApiInterface       = ApiClient.getClient().create(Auth.class);
+        image_profile       = (CircleImageView)header.findViewById(R.id.image_profile);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,6 +127,23 @@ public class MenuUtama extends AppCompatActivity
         InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
         inkPageIndicator.setViewPager(ParentPager);
 
+
+        sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
+//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
+        email         = sharedpreferences.getString(TAG_EMAIL,"email");
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+
+
+        get_profile();
+
         tv_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +151,6 @@ public class MenuUtama extends AppCompatActivity
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -221,6 +272,45 @@ public class MenuUtama extends AppCompatActivity
         public int getItemPosition(Object object) {
             return POSITION_NONE;
         }
+    }
+
+    public void get_profile(){
+        retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.GetProfile>() {
+
+            @Override
+            public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
+                Log.i("KES", response.code() + "");
+
+                JSONResponse.GetProfile resource = response.body();
+
+                status = resource.status;
+
+                if (status == 1) {
+                        String picture = response.body().getData().getPicture();
+                        String nama    = response.body().getData().getFullname();
+                        tv_profile.setText(nama);
+                        if (picture.isEmpty()) {
+                            image_profile.setBackgroundResource(R.drawable.ic_logo);
+                        }else{
+                            image_profile.setBackgroundResource(Integer.parseInt(picture));
+                        }
+                } else{
+                    if (status == 0) {
+                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JSONResponse.GetProfile> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+
+        });
+
     }
 
 }

@@ -1,6 +1,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/htab_maincontent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,6 +21,7 @@
             android:layout_height="330dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="bottom|center_horizontal"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
@@ -30,78 +32,43 @@
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"/>
+            <android.support.v7.widget.CardView
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:id="@+id/profilanak"
+                android:layout_width="130dp"
+                android:layout_gravity="center"
+                android:layout_height="130dp"
+                app:cardCornerRadius="65dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/image_prof"
+                    android:background="@drawable/ic_logo"
+                    android:scaleType="centerCrop"
+                    app:border_color="@color/colorPrimary"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </android.support.v7.widget.CardView>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:alpha="0.3"
+                android:alpha="0.1"
                 android:background="@android:color/black"
                 android:fitsSystemWindows="true"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/profilanak"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:scaleType="centerCrop"
-                    app:cardCornerRadius="60dp"
-                    app:layout_collapseMode="pin">
-
-                    <com.joooonho.SelectableRoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_student"
-                        android:scaleType="centerCrop"
-                        app:layout_collapseMode="parallax"
-                        app:layout_collapseParallaxMultiplier="0.7"
-                        app:sriv_border_color="#008fea"
-                        app:sriv_border_width="2dip"
-                        app:sriv_left_bottom_corner_radius="48dip"
-                        app:sriv_left_top_corner_radius="16dip"
-                        app:sriv_oval="true"
-                        app:sriv_right_bottom_corner_radius="16dip"
-                        app:sriv_right_top_corner_radius="0dip" />
-                </android.support.v7.widget.CardView>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Profile"
-                    android:textSize="24sp"
-                    android:gravity="center"
-                    android:id="@+id/nama_profile"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7"
-                    android:textColor="@color/ic_logo_background"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Email"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    app:layout_collapseMode="parallax"
-                    app:layout_collapseParallaxMultiplier="0.7"
-                    android:id="@+id/email_profile"
-                    android:textColor="@color/ic_logo_background"/>
-            </LinearLayout>
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
                 android:id="@+id/toolbar_profile"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:orientation="vertical">
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             </android.support.v7.widget.Toolbar>
 
@@ -109,4 +76,31 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_profile"/>
+    <android.support.v7.widget.CardView
+        android:id="@+id/btn_image"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        app:layout_anchor="@id/appbar_profile"
+        app:layout_anchorGravity="bottom|end"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:cardCornerRadius="30dp"
+        app:layout_collapseMode="pin">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/ic_kamera"
+            app:layout_collapseMode="parallax"
+            app:layout_collapseParallaxMultiplier="0.7"/>
+    </android.support.v7.widget.CardView>
 </android.support.design.widget.CoordinatorLayout>

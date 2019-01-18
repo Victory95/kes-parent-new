@@ -43,7 +43,6 @@ public class AnakMain extends AppCompatActivity {
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
 
     Auth mApiInterface;
-    DataFragment dataFragment;
     SharedPreferences sharedpreferences;
 
     public static final String TAG_EMAIL        = "email";

@@ -3450,4 +3450,283 @@ public class JSONResponse{
             this.picture = picture;
         }
     }
+
+    public class GetProfile{
+
+        @SerializedName("status")
+        public int status;
+        @SerializedName("data")
+        private DataProfile data;
+
+        public void setData(DataProfile data){
+            this.data = data;
+        }
+
+        public DataProfile getData(){
+            return data;
+        }
+
+        public void setStatus(int status){
+            this.status = status;
+        }
+
+        public int getStatus(){
+            return status;
+        }
+    }
+    public class DataProfile{
+
+        @SerializedName("Member_Code")
+        private String Member_Code;
+
+        @SerializedName("Parent_Latitude")
+        private String Parent_Latitude;
+
+        @SerializedName("Birth_Date")
+        private String Birth_Date;
+
+        @SerializedName("Email")
+        private String Email;
+
+        @SerializedName("Address")
+        private String Address;
+
+        @SerializedName("Member_Type")
+        private String Member_Type;
+
+        @SerializedName("Fullname")
+        private String Fullname;
+
+        @SerializedName("Last_Update")
+        private String Last_Update;
+
+        @SerializedName("Religion")
+        private String Religion;
+
+        @SerializedName("Gender")
+        private String Gender;
+
+        @SerializedName("Date")
+        private String Date;
+
+        @SerializedName("Parent_Count")
+        private String Parent_Count;
+
+        @SerializedName("Birth_Place")
+        private String Birth_Place;
+
+        @SerializedName("Relation")
+        private String Relation;
+
+        @SerializedName("Username")
+        private String Username;
+
+        @SerializedName("Last_Login")
+        private String Last_Login;
+
+        @SerializedName("Picture")
+        private String Picture;
+
+        @SerializedName("Device_Id")
+        private String Device_Id;
+
+        @SerializedName("Number_Phone")
+        private String Number_Phone;
+
+        @SerializedName("Parent_NIK")
+        private String Parent_NIK;
+
+        @SerializedName("FG_Code")
+        private String FG_Code;
+
+        @SerializedName("Parent_Longitude")
+        private String parentLongitude;
+
+        @SerializedName("Publish")
+        private String publish;
+        public String getMember_Code() {
+            return Member_Code;
+        }
+
+        public void setMember_Code(String member_Code) {
+            Member_Code = member_Code;
+        }
+
+        public String getParent_Latitude() {
+            return Parent_Latitude;
+        }
+
+        public void setParent_Latitude(String parent_Latitude) {
+            Parent_Latitude = parent_Latitude;
+        }
+
+        public String getBirth_Date() {
+            return Birth_Date;
+        }
+
+        public void setBirth_Date(String birth_Date) {
+            Birth_Date = birth_Date;
+        }
+
+        public String getEmail() {
+            return Email;
+        }
+
+        public void setEmail(String email) {
+            Email = email;
+        }
+
+        public String getAddress() {
+            return Address;
+        }
+
+        public void setAddress(String address) {
+            Address = address;
+        }
+
+        public String getMember_Type() {
+            return Member_Type;
+        }
+
+        public void setMember_Type(String member_Type) {
+            Member_Type = member_Type;
+        }
+
+        public String getFullname() {
+            return Fullname;
+        }
+
+        public void setFullname(String fullname) {
+            Fullname = fullname;
+        }
+
+        public String getLast_Update() {
+            return Last_Update;
+        }
+
+        public void setLast_Update(String last_Update) {
+            Last_Update = last_Update;
+        }
+
+        public String getReligion() {
+            return Religion;
+        }
+
+        public void setReligion(String religion) {
+            Religion = religion;
+        }
+
+        public String getGender() {
+            return Gender;
+        }
+
+        public void setGender(String gender) {
+            Gender = gender;
+        }
+
+        public String getDate() {
+            return Date;
+        }
+
+        public void setDate(String date) {
+            Date = date;
+        }
+
+        public String getParent_Count() {
+            return Parent_Count;
+        }
+
+        public void setParent_Count(String parent_Count) {
+            Parent_Count = parent_Count;
+        }
+
+        public String getBirth_Place() {
+            return Birth_Place;
+        }
+
+        public void setBirth_Place(String birth_Place) {
+            Birth_Place = birth_Place;
+        }
+
+        public String getRelation() {
+            return Relation;
+        }
+
+        public void setRelation(String relation) {
+            Relation = relation;
+        }
+
+        public String getUsername() {
+            return Username;
+        }
+
+        public void setUsername(String username) {
+            Username = username;
+        }
+
+        public String getLast_Login() {
+            return Last_Login;
+        }
+
+        public void setLast_Login(String last_Login) {
+            Last_Login = last_Login;
+        }
+
+        public String getPicture() {
+            return Picture;
+        }
+
+        public void setPicture(String picture) {
+            Picture = picture;
+        }
+
+        public String getDevice_Id() {
+            return Device_Id;
+        }
+
+        public void setDevice_Id(String device_Id) {
+            Device_Id = device_Id;
+        }
+
+        public String getNumber_Phone() {
+            return Number_Phone;
+        }
+
+        public void setNumber_Phone(String number_Phone) {
+            Number_Phone = number_Phone;
+        }
+
+        public String getParent_NIK() {
+            return Parent_NIK;
+        }
+
+        public void setParent_NIK(String parent_NIK) {
+            Parent_NIK = parent_NIK;
+        }
+
+        public String getFG_Code() {
+            return FG_Code;
+        }
+
+        public void setFG_Code(String FG_Code) {
+            this.FG_Code = FG_Code;
+        }
+
+        public String getParentLongitude() {
+            return parentLongitude;
+        }
+
+        public void setParentLongitude(String parentLongitude) {
+            this.parentLongitude = parentLongitude;
+        }
+
+        public String getPublish() {
+            return publish;
+        }
+
+        public void setPublish(String publish) {
+            this.publish = publish;
+        }
+
+    }
 }

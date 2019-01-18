@@ -5,31 +5,28 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.fingertech.kes.Activity.Model.PermissionHelper;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.R;
 
 public class SplashScreen extends AppCompatActivity {
 
+    PermissionHelper permissionHelper;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        permissionHelper = new PermissionHelper(this);
+
 
         hideSystemUI();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(getApplicationContext(), MenuUtama.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-            }
-
-        }, 1000);
+        checkAndRequestPermissions();
 
     }
 
@@ -49,6 +46,32 @@ public class SplashScreen extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     }
+    private boolean checkAndRequestPermissions() {
+        permissionHelper.permissionListener(new PermissionHelper.PermissionListener() {
+            @Override
+            public void onPermissionCheckDone() {
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), OpsiMasuk.class));
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                        finish();
+                    }
 
+                }, 1000);
 
+            }
+        });
+
+        permissionHelper.checkAndRequestPermissions();
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        permissionHelper.onRequestCallBack(requestCode, permissions, grantResults);
+    }
 }

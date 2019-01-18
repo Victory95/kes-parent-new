@@ -93,9 +93,11 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_PASSWORD     = "password";
 
 
     Auth mApiInterface;
+    String password;
     CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private static final String TAG = "MainActivity";
@@ -333,7 +335,7 @@ public class Masuk extends AppCompatActivity {
                         /// call session
                         if(jsonObject.get("member_type").toString().equals("6")){
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, MainActivity.class);
+                            Intent intent = new Intent(Masuk.this, MenuGuest.class);
                             intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                             intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));

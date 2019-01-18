@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#40bfe8</color>
     <color name="colorPrimaryDark">#3cb0d6</color>
-    <!--<color name="colorAccent">#c1d54d</color>-->
-    <color name="colorAccent">#000000</color>
+    <color name="colorAccent">#c1d54d</color>
+    <!--<color name="colorAccent">#000000</color>-->
     <color name="kes_typ">#8fcece</color>
     <color name="ic_logo_background">#FFFFFF</color>
     <color name="default_textColor">#808080</color>

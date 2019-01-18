@@ -162,4 +162,8 @@
     <string name="validate_jabatan">* Mohon masukkan jabatan anda</string>
     <string name="validate_nama_perusahaan">* Mohon masukkan nama perusahaan anda</string>
 
+    <string name="permission_dialog">Accessing Location Permissions required</string>
+    <string name="go_to_permissions_settings">Go to App settings and enable permissions</string>
+
+
 </resources>
