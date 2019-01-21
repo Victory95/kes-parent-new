@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "238640789322-vm9buqt5u09u9tj87ik685to7akg74tg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fingertech.kes",
+            "certificate_hash": "24c53167db113da086d8d501a4e8a6b5362a4394"
+          }
+        },
+        {
           "client_id": "238640789322-04s2pm29u7brk4tqtkvdm2smqoh7ibck.apps.googleusercontent.com",
           "client_type": 3
         }

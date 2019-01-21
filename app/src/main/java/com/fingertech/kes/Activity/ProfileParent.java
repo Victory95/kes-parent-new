@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,17 +13,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -39,30 +41,31 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.fingertech.kes.BuildConfig;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.joooonho.SelectableRoundedImageView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 public class ProfileParent extends AppCompatActivity {
 
@@ -80,11 +83,19 @@ public class ProfileParent extends AppCompatActivity {
     private static final int REQUEST_TAKE_PHOTO = 2;
     CircleImageView image_profil;
 
-    String mCurrentPhotoPath;
+    String mCurrentPhotoPath,lastlogin;
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
 
     Auth mApiInterface;
-    SharedPreferences sharedpreferences;
+    SharedPreferences sharedpreferences,sharedupdate;
+
+
+    public static final String my_shared_update = "my_shared_update";
+    public static final String TAG_NAMA_PROFILE = "nama_profile";
+    public static final String TAG_NOMOR_HP     = "nomor_hp";
+    public static final String TAG_AGAMA        = "agama";
+    public static final String TAG_GENDER       = "gender";
+    String nama_profile,no_hp,religion,gender;
 
     public static final String TAG_EMAIL        = "email";
     public static final String TAG_FULLNAME     = "fullname";
@@ -93,20 +104,29 @@ public class ProfileParent extends AppCompatActivity {
     public static final String TAG_STUDENT_ID   = "student_id";
     public static final String TAG_STUDENT_NIK  = "student_nik";
     public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_NAMA_ANAK    = "childrenname";
     public static final String TAG_NAMA_SEKOLAH = "school_name";
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_LASTLOGIN    = "last_login";
 
 
+    CardView btn_katasandi;
     String authorization;
-    String nama,nohp,jeniskelamin,agama,terakhirlogin,picture,member_type;
+    String nama,nohp,jeniskelamin,agama,terakhirlogin,member_type,picture;
     int status;
+    String code;
 
     TextView email_profile,no_profile,jenis_kelamin_profile,tv_agama,last_login,member,jadi_parent;
     int bitmap_size = 40; // image quality 1 - 100;
     int max_resolution_image = 800;
     private static final int CAMERA_REQUEST_CODE = 7777;
+    File image;
+    Button logout;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +136,7 @@ public class ProfileParent extends AppCompatActivity {
         header                  = (ImageView)findViewById(R.id.htab_header);
         btn_edit                = (CardView)findViewById(R.id.btn_edit);
         cv_profile              = (CardView)findViewById(R.id.btn_image);
+        btn_katasandi           = (CardView)findViewById(R.id.btn_katasandi);
         image_profil            = (CircleImageView)findViewById(R.id.image_prof);
         email_profile           = (TextView)findViewById(R.id.email_parent);
         no_profile              = (TextView)findViewById(R.id.phone_parent);
@@ -125,6 +146,7 @@ public class ProfileParent extends AppCompatActivity {
         member                  = (TextView)findViewById(R.id.user);
         jadi_parent             = (TextView)findViewById(R.id.jd_parent);
         mApiInterface           = ApiClient.getClient().create(Auth.class);
+        logout                  = (Button)findViewById(R.id.btn_logout);
 
 
         setSupportActionBar(toolbar);
@@ -141,17 +163,20 @@ public class ProfileParent extends AppCompatActivity {
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
-        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
-        email         = sharedpreferences.getString(TAG_EMAIL,"email");
-        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
-        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        lastlogin     = sharedpreferences.getString(TAG_LASTLOGIN,"");
+        member_type   = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
 
         get_profile();
+
+        sharedupdate    = getSharedPreferences(my_shared_update,Context.MODE_PRIVATE);
+        nama_profile    = sharedupdate.getString(TAG_NAMA_PROFILE,null);
+        email           = sharedupdate.getString(TAG_EMAIL,null);
+        religion        = sharedupdate.getString(TAG_AGAMA,null);
+        gender          = sharedupdate.getString(TAG_GENDER,null);
+        no_hp           = sharedupdate.getString(TAG_NOMOR_HP,null);
+
 
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile);
@@ -204,7 +229,77 @@ public class ProfileParent extends AppCompatActivity {
            }
        });
 
+        ////// Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mAuth = FirebaseAuth.getInstance();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putBoolean(Masuk.session_status, false);
+                editor.putString(TAG_EMAIL, null);
+                editor.putString(TAG_MEMBER_ID, null);
+                editor.putString(TAG_FULLNAME, null);
+                editor.putString(TAG_MEMBER_TYPE, null);
+                editor.putString(TAG_TOKEN, null);
+                editor.commit();
+
+                /////// Logout Facebook
+                LoginManager.getInstance().logOut();
+
+
+                ///// Google Logout
+                mAuth.signOut();
+                mGoogleSignInClient.signOut().addOnCompleteListener(ProfileParent.this,
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseUser user = null;
+                            }
+                        });
+
+                Intent intent = new Intent(ProfileParent.this, OpsiMasuk.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+
+        btn_katasandi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileParent.this, ChangePassword.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor edit = sharedupdate.edit();
+                edit.putString(TAG_NAMA_PROFILE,nama);
+                edit.putString(TAG_EMAIL,email);
+                edit.putString(TAG_NOMOR_HP,nohp);
+                edit.putString(TAG_AGAMA,agama);
+                edit.putString(TAG_GENDER,jeniskelamin);
+                edit.commit();
+
+                Intent intent = new Intent(ProfileParent.this, EditProfile.class);
+                startActivity(intent);
+            }
+        });
+
+        jadi_parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileParent.this, JadiParent.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -269,12 +364,14 @@ public class ProfileParent extends AppCompatActivity {
                 try {
                     // mengambil gambar dari Gallery
                     setToImageView(handleSamplingAndRotationBitmap(ProfileParent.this,data.getData()));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
                 // Show the thumbnail on ImageView
                 Uri imageUri = Uri.parse(mCurrentPhotoPath);
+
                 try {
                     setToImageView(handleSamplingAndRotationBitmap(ProfileParent.this,imageUri));
                 } catch (IOException e) {
@@ -300,6 +397,7 @@ public class ProfileParent extends AppCompatActivity {
 
         //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
         image_profil.setImageBitmap(decoded);
+        update_picture();
     }
 
     // Untuk resize bitmap
@@ -325,7 +423,7 @@ public class ProfileParent extends AppCompatActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM), "Camera");
-        File image = File.createTempFile(
+        image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
                 storageDir      /* directory */
@@ -333,6 +431,7 @@ public class ProfileParent extends AppCompatActivity {
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+
         return image;
     }
 
@@ -481,18 +580,17 @@ public class ProfileParent extends AppCompatActivity {
                         member.setText("User Biasa");
                         jadi_parent.setVisibility(View.VISIBLE);
                     }
-                    if (picture.isEmpty()){
-                        image_profil.setBackgroundResource(R.drawable.ic_logo);
-                    }else {
-                        image_profil.setBackgroundResource(Integer.parseInt(picture));
-                    }
-                    last_login.setText(terakhirlogin);
+                    Bitmap bitma = BitmapFactory.decodeFile(picture);
+                    image_profil.setImageBitmap(bitma);
+//                    Toast.makeText(getApplicationContext(), picture, Toast.LENGTH_LONG).show();
 
+                    last_login.setText(lastlogin);
                 } else{
                     if (status == 0) {
                         Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
                     }
                 }
+
 
             }
 
@@ -504,5 +602,54 @@ public class ProfileParent extends AppCompatActivity {
         });
 
     }
-    
+
+    public void update_picture(){
+        String pic_type = "png";
+        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_picture_post(authorization.toString(),parent_id.toString(),image,pic_type.toString());
+
+        call.enqueue(new Callback<JSONResponse>() {
+
+            @Override
+            public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
+                Log.i("KES", response.code() + "");
+
+                JSONResponse resource = response.body();
+
+                status = resource.status;
+                code   = resource.code;
+
+                if (status == 1 && code.equals("UPP_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), "Foto berhasil diupload", Toast.LENGTH_LONG).show();
+                } else{
+                    if (status == 0 && code.equals("UPP_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JSONResponse> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+
+        });
+
+    }
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(ProfileParent.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
 }

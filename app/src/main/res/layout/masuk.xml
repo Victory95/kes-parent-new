@@ -33,6 +33,7 @@
                     android:id="@+id/til_email"
                     android:textColorHint="@color/default_textHint"
                     android:layout_width="match_parent"
+                    android:theme="@style/TextLabelView"
                     android:layout_height="wrap_content">
 
                     <EditText
@@ -54,6 +55,7 @@
                     app:passwordToggleTint="@color/colorPrimary"
                     android:textColorHint="@color/default_textHint"
                     app:passwordToggleEnabled="true"
+                    android:theme="@style/TextLabelView"
                     app:passwordToggleDrawable="@drawable/show_password_selector"
                     android:id="@+id/til_kata_sandi"
                     android:layout_width="match_parent"

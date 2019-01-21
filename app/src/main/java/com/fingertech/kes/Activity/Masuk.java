@@ -62,7 +62,11 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,7 +82,8 @@ public class Masuk extends AppCompatActivity {
 
     int status;
     String code;
-    String id, email, member_id, fullname, member_type, token, deviceid,parent_nik;
+    Date currentTime;
+    String id, email, member_id, fullname, member_type, token, deviceid,parent_nik,lastlogin;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -93,11 +98,12 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_MEMBER_TYPE  = "member_type";
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_PARENT_NIK   = "parent_nik";
-    public static final String TAG_PASSWORD     = "password";
+    public static final String TAG_LASTLOGIN    = "last_login";
 
 
     Auth mApiInterface;
-    String password;
+    String password,last_login;
+    int min,second,year,month,date,jam;
     CallbackManager callbackManager = CallbackManager.Factory.create();
 
     private static final String TAG = "MainActivity";
@@ -139,6 +145,7 @@ public class Masuk extends AppCompatActivity {
         member_type  = sharedpreferences.getString(TAG_MEMBER_TYPE, null);
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
         token        = sharedpreferences.getString(TAG_TOKEN, null);
+        lastlogin    = sharedpreferences.getString(TAG_LASTLOGIN,null);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -196,6 +203,10 @@ public class Masuk extends AppCompatActivity {
                 finish();
             }
         });
+
+        DateFormat df = new SimpleDateFormat("EEEEEE, dd MMM yyyy, HH:mm");
+        last_login = df.format(Calendar.getInstance().getTime());
+
     }
 
     ///// check editext
@@ -331,16 +342,20 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
                         editor.putString(TAG_PARENT_NIK, parent_nik);
                         editor.putString(TAG_TOKEN, token);
+//                        editor.putString(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
+                        editor.putString(TAG_LASTLOGIN, last_login);
                         editor.commit();
                         /// call session
                         if(jsonObject.get("member_type").toString().equals("6")){
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, MenuGuest.class);
+                            Intent intent = new Intent(Masuk.this, MenuUtama.class);
                             intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                             intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                             intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
                             intent.putExtra(TAG_TOKEN, token);
+                            intent.putExtra(TAG_LASTLOGIN,last_login);
+//                            intent.putExtra(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
                             finish();
                             startActivity(intent);
                         }else{
@@ -351,6 +366,8 @@ public class Masuk extends AppCompatActivity {
                             intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                             intent.putExtra(TAG_PARENT_NIK, parent_nik);
                             intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                            intent.putExtra(TAG_LASTLOGIN,last_login);
+//                            intent.putExtra(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
                             intent.putExtra(TAG_TOKEN, token);
                             finish();
                             startActivity(intent);

@@ -492,8 +492,10 @@ public class DataFragment extends Fragment  {
                     et_hubungan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(Spinner parent, View view, int position, long id) {
-                            parent_type = penghasil.get(position);
+                            if (position > 0) {
+                                parent_type = penghasil.get(position);
 //                            Toast.makeText(getApplicationContext(), parent_type, Toast.LENGTH_LONG).show();
+                            }
                         }
                     });
 

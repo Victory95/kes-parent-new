@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
+import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.R;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class PermissionHelper {
             int permissionReadStorage = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE);
             int permissionWriteStorage = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int permissionLocation     = ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION);
-
+            int permissionPhone        = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE);
 
             List<String> listPermissionsNeeded = new ArrayList<>();
 
@@ -67,16 +68,8 @@ public class PermissionHelper {
                 listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }if (permissionLocation != PackageManager.PERMISSION_GRANTED){
                 listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
-//                if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity,
-//                        android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-//                    ActivityCompat.requestPermissions(mActivity,
-//                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                            MY_PERMISSIONS_REQUEST_LOCATION);
-//                } else {
-//                    ActivityCompat.requestPermissions(mActivity,
-//                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                            MY_PERMISSIONS_REQUEST_LOCATION);
-//                }
+            }if (permissionPhone != PackageManager.PERMISSION_GRANTED){
+                listPermissionsNeeded.add(Manifest.permission.READ_PHONE_STATE);
             }
             if (!listPermissionsNeeded.isEmpty()) {
                 ActivityCompat.requestPermissions(mActivity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), REQUEST_PERMISSION);
@@ -104,6 +97,7 @@ public class PermissionHelper {
                 perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_FINE_LOCATION,PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.READ_PHONE_STATE,PackageManager.PERMISSION_GRANTED);
                 // Fill with actual results from user
                 if (grantResults.length > 0) {
                     for (int i = 0; i < permissions.length; i++)
@@ -112,7 +106,8 @@ public class PermissionHelper {
                     if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                             && perms.get(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                             && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                         Log.e(TAG, "permission granted");
 
                         checkAndRequestPermissions();
@@ -124,7 +119,8 @@ public class PermissionHelper {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.CAMERA) ||
                                 ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE)
                                 || ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                || ActivityCompat.shouldShowRequestPermissionRationale(mActivity,Manifest.permission.ACCESS_FINE_LOCATION)) {
+                                || ActivityCompat.shouldShowRequestPermissionRationale(mActivity,Manifest.permission.ACCESS_FINE_LOCATION)
+                                || ActivityCompat.shouldShowRequestPermissionRationale(mActivity,Manifest.permission.READ_PHONE_STATE)) {
                             showDialogOK(mActivity.getString(R.string.permission_dialog),
                                     new DialogInterface.OnClickListener() {
                                         @Override

@@ -171,24 +171,6 @@ public class MenuGuest extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
 
-/*
-        findViewById(R.id.locks).setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                if(clicked) {
-                    mapG.getUiSettings().setScrollGesturesEnabled(false);
-                    clicked = false;
-                    view.setBackgroundResource(R.drawable.ic_lock);
-                }
-                else {
-                    mapG.getUiSettings().setScrollGesturesEnabled(true);
-                    clicked = true;
-                    view.setBackgroundResource(R.drawable.ic_unlock);
-                }
-            }
-        });*/
-
         findViewById(R.id.squareFab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +188,6 @@ public class MenuGuest extends AppCompatActivity
         else {
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
-        Nearby = (Button)findViewById(R.id.cari_sekolah2);
         carisekolah = (Button)findViewById(R.id.cari_sekolah);
         carisekolah2 = (Button)findViewById(R.id.cari_sekolah2);
         carisekolah.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +208,6 @@ public class MenuGuest extends AppCompatActivity
 
             }
         });
-//        checkLocationPermission();
 
     }
 
@@ -640,29 +620,7 @@ public class MenuGuest extends AppCompatActivity
                         }
 
 
-
-//                        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                            public boolean onMarkerClick(Marker marker) {
-//                                // Check if there is an open info window
-//                                if (m != null) {
-//                                    // Close the info window
-//                                    m.hideInfoWindow();
-//
-//                                }
-//
-//                                // Open the info window for the marker
-//                                marker.showInfoWindow();
-//                                // Re-assign the last openned such that we can close it later
-//                                m = marker;
-//
-//                                // Event was handled by our code do not launch default behaviour.
-//                                return true;
-//                            }
-//                        });
-
                         InfoWindowData info = new InfoWindowData();
-//                        info.setNama(placeName);
-//                        info.setAkreditasi(akreditasi);
                         info.setJarak(Jarak);
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);

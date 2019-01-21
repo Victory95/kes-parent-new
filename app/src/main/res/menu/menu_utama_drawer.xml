@@ -14,9 +14,9 @@
             android:icon="@drawable/search"
             android:title="Cari Sekolah" />
         <item
-            android:id="@+id/nav_keluar"
+            android:id="@+id/nav_masuk"
             android:icon="@drawable/out"
-            android:title="Keluar" />
+            android:title="Masuk" />
         <item
             android:id="@+id/nav_kontak"
             android:icon="@drawable/kontak"

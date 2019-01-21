@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".Activity.JadiParent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_prof"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nik_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="40dp"
+            android:textColorHint="@color/default_textHint"
+            android:theme="@style/TextLabelView">
+
+            <EditText
+                android:id="@+id/et_nik_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edt_bg_selector"
+                android:hint="NIK / NIORA"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:textColor="@color/default_textColor"
+                android:textSize="16dp"
+                android:theme="@style/TextLabel" />
+        </android.support.design.widget.TextInputLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="40dp">
+
+            <com.rey.material.widget.Spinner
+                android:id="@+id/sp_relation"
+                style="@style/Material.Widget.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                app:spn_arrowAnimClockwise="true"
+                app:spn_arrowAnimDuration="300"
+                app:spn_arrowColor="@color/colorPrimary"
+                app:spn_arrowSwitchMode="true"
+                app:spn_dividerColor="@color/black"
+                app:spn_dividerHeight="1dp"
+                app:spn_labelTextColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/gender"
+            android:visibility="gone"
+            android:layout_marginRight="40dp"
+            android:text="Jenis Kelamin" />
+
+        <RadioGroup
+            android:id="@+id/rg_hubungan_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:visibility="gone"
+            android:layout_marginRight="40dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_pria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/colorPrimary"
+                android:text="@string/rb_pria"
+                android:textColor="@color/black" />
+
+            <RadioButton
+                android:id="@+id/rb_wanita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/colorPrimary"
+                android:text="@string/rb_wanita"
+                android:textColor="@color/black" />
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_tanggal_lahir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:paddingTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColorHint="@color/default_textHint"
+            android:theme="@style/TextLabelView">
+
+            <EditText
+                android:id="@+id/et_tanggal_lahir"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edt_bg_selector"
+                android:hint="Tanggal Lahir"
+                android:imeOptions="actionNext"
+                android:inputType="date"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp"
+                android:singleLine="true"
+                android:textColor="@color/default_textColor"
+                android:textSize="16dp"
+                android:theme="@style/TextLabel" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_jadi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/rectangle"
+            android:backgroundTint="@color/colorPrimary"
+            android:clickable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:text="Jadi Orang Tua"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -32,6 +32,7 @@
                     android:layout_height="120dp"
                     android:orientation="horizontal"
                     android:layout_marginLeft="20dp"
+                    android:visibility="gone"
                     android:layout_marginRight="20dp"
                     android:id="@+id/view_group">
                     <LinearLayout
@@ -144,11 +145,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/viewpager"
+                    android:visibility="gone"
                     android:orientation="vertical">
                 <android.support.v4.view.ViewPager
                     android:id="@+id/PagerUtama"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp">
+                    android:layout_height="300dp"
+                    >
                 </android.support.v4.view.ViewPager>
                     <com.pixelcan.inkpageindicator.InkPageIndicator
                         android:id="@+id/indicators"
@@ -161,7 +165,93 @@
                         app:ipi_currentPageIndicatorColor="@color/colorPrimary"/>
                 </LinearLayout>
 
-            </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/btn_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    app:cardCornerRadius="15dp"
+                    app:layout_collapseMode="pin">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/colorPrimary">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Cari Sekolah terdekat"
+                            android:textSize="20sp"
+                            android:textColor="@color/ic_logo_background"
+                            android:paddingStart="20dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"/>
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="9"
+                            android:background="@drawable/ic_arrow"/>
+                    </LinearLayout>
 
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/map_menu"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="#fff"
+                    android:layout_marginTop="5dp"
+                    app:cardCornerRadius="12dp">
+                    <com.fingertech.kes.Activity.Maps.MapWrapperLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:id="@+id/map_relative_layout">
+                        <fragment
+                            android:id="@+id/mapGuest"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp" />
+
+                        <com.fingertech.kes.Activity.Model.SquareFloatButton
+                            android:id="@+id/squareFab"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignEnd="@+id/mapGuest"
+                            android:layout_alignParentBottom="true"
+                            android:layout_gravity="bottom|end"
+                            android:layout_marginRight="@dimen/fab_margin"
+                            android:layout_marginBottom="@dimen/fab_margin"
+                            android:background="@drawable/ripple"
+                            android:clickable="true"
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_zoomin"
+                            android:focusable="true" />
+                    </com.fingertech.kes.Activity.Maps.MapWrapperLayout>
+                </android.support.v7.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:id="@+id/recycler_view_menu"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="20dp">
+
+                    <com.fingertech.kes.Activity.RecycleView.SnappyRecycleView
+                        android:id="@+id/recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="90dp"
+                        android:layout_gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

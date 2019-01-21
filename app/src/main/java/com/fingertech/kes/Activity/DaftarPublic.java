@@ -1,6 +1,7 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -271,6 +272,8 @@ public class DaftarPublic extends AppCompatActivity {
                     if(cb_ketentuan.isChecked()){
                         cb_ketentuan.toggle();
                     }
+                    Intent intent = new Intent(DaftarPublic.this, OpsiMasuk.class);
+                    startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RP_ERR_0001")){
                         Toast.makeText(getApplicationContext(), RP_ERR_0001, Toast.LENGTH_LONG).show();
@@ -311,18 +314,21 @@ public class DaftarPublic extends AppCompatActivity {
             }
         }
     }
+    @SuppressLint("ResourceAsColor")
     public void getCb_ketentuan(){
         String language = Locale.getDefault().getLanguage();
         if (language.equals("en")) {
             cb_ketentuan.setText(Html.fromHtml("I agree to the " +
                     "<a href='http://www.google.com'>Terms and Conditions</a>" + " given"));
             cb_ketentuan.setClickable(true);
+            cb_ketentuan.setHighlightColor(R.color.colorPrimary);
             cb_ketentuan.setMovementMethod(LinkMovementMethod.getInstance());
         }
         else if (language.equals("in")) {
             cb_ketentuan.setText(Html.fromHtml("Setuju dengan " +
                     "<a href='http://www.google.com'>Ketentuan Penggunaan</a>" + " dari KES untuk membuat akun baru"));
             cb_ketentuan.setClickable(true);
+            cb_ketentuan.setHighlightColor(R.color.colorPrimary);
             cb_ketentuan.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }

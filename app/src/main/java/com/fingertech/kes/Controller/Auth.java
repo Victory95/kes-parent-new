@@ -2,6 +2,8 @@ package com.fingertech.kes.Controller;
 
 import com.fingertech.kes.Rest.JSONResponse;
 
+import java.io.File;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -94,9 +96,15 @@ public interface Auth {
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
-    @PUT("kes_update")
-    Call<JSONResponse> putPublic(@Field("memberid") String memberid, @Field("fullname") String fullname, @Field("email") String email,
-                                 @Field("mobile_phone") String mobile_phone);
+    @PUT("kes_update/{memberid}")
+    Call<JSONResponse> kes_update_put(@Header("Authorization") String authorization,
+                                 @Path("memberid") String memberid,
+                                 @Field("fullname") String fullname,
+                                 @Field("email") String email,
+                                 @Field("mobile_phone") String mobile_phone,
+                                 @Field("religion") String religion,
+                                 @Field("gender") String gender,
+                                 @Field("lastupdate") String lastupdate);
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "public", hasBody = true)
@@ -158,4 +166,29 @@ public interface Auth {
     @GET("auth/kes_profile")
     Call<JSONResponse.GetProfile>kes_profile_get(@Header("Authorization") String authorization,
                                       @Query("mem") String mem);
+
+    @FormUrlEncoded
+    @POST("auth/kes_update_picture")
+    Call<JSONResponse>kes_update_picture_post(@Header("Authorization") String authorization,
+                                              @Field("memberid") String memberid,
+                                              @Field("picture") File picture,
+                                              @Field("pic_type") String pic_type);
+
+    @FormUrlEncoded
+    @PUT("auth/kes_change_password/{memberid}")
+    Call<JSONResponse>kes_change_password_post(@Header("Authorization") String authorization,
+                                               @Path("memberid") String memberid,
+                                               @Field("password") String password,
+                                               @Field("old_pass") String old_pass);
+
+    @FormUrlEncoded
+    @PUT("auth/kes_switch_to_parent/{member_id}")
+    Call<JSONResponse>kes_switch_to_parent_put(@Header("Authorization") String authorization,
+                                               @Path("member_id") String member_id,
+                                               @Field("nik") String nik,
+                                               @Field("relation") String relation,
+                                               @Field("gender") String gender,
+                                               @Field("birth_date") String birth_date);
+
+
 }
