@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.fingertech.kes.Activity.NextProject.ImageUtils;
 import com.fingertech.kes.BuildConfig;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
@@ -54,6 +56,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,8 +65,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -80,8 +91,28 @@ public class ProfileParent extends AppCompatActivity {
     Bitmap bitmap, decoded;
     public final int REQUEST_CAMERA = 0;
     public final int SELECT_FILE = 1;
-    private static final int REQUEST_TAKE_PHOTO = 2;
+    private static final int REQUEST_TAKE_PHOTO = 0;
     CircleImageView image_profil;
+
+    private static final int REQUEST_PICK_PHOTO = 2;
+    private Uri mMediaUri;
+    private static final int CAMERA_PIC_REQUEST = 1111;
+
+    private static final String TAG = ProfileParent.class.getSimpleName();
+
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+
+    private String mediaPath;
+
+    private Button btnCapturePicture;
+
+    private String mImageFileLocation = "";
+    public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
+    ProgressDialog pDialog;
+    private String postPath;
+
 
     String mCurrentPhotoPath,lastlogin;
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
@@ -127,6 +158,8 @@ public class ProfileParent extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     ProgressDialog dialog;
+    Uri uri;
+    String encoded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -328,12 +361,12 @@ public class ProfileParent extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
-                    try {
-                        dispatchTakePictureIntent();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+//                    try {
+//                        dispatchTakePictureIntent();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+                    captureImage();
                 } else if (items[item].equals("Choose from Library")) {
                     intent = new Intent();
                     intent.setType("image/*");
@@ -351,69 +384,113 @@ public class ProfileParent extends AppCompatActivity {
         Log.e("onActivityResult", "requestCode " + requestCode + ", resultCode " + resultCode);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CAMERA) {
-                try {
-                    Log.e("CAMERA", fileUri.getPath());
+           if (requestCode == CAMERA_PIC_REQUEST){
+                if (Build.VERSION.SDK_INT > 21) {
 
-                    bitmap = BitmapFactory.decodeFile(fileUri.getPath());
-                    setToImageView(getResizedBitmap(bitmap, max_resolution_image));
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Picasso.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
+                    postPath = mCurrentPhotoPath;
+                    uploadFile();
+
+                }else{
+                    Picasso.with(ProfileParent.this).load(fileUri).into(image_profil);
+                    postPath = fileUri.getPath();
+                    uploadFile();
+
                 }
             } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-                try {
-                    // mengambil gambar dari Gallery
-                    setToImageView(handleSamplingAndRotationBitmap(ProfileParent.this,data.getData()));
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+                uri = data.getData();
+                Picasso.with(ProfileParent.this).load(uri).into(image_profil);
+            }else if (requestCode == REQUEST_TAKE_PHOTO) {
                 // Show the thumbnail on ImageView
                 Uri imageUri = Uri.parse(mCurrentPhotoPath);
+               Picasso.with(ProfileParent.this).load(imageUri).into(image_profil);
 
-                try {
-                    setToImageView(handleSamplingAndRotationBitmap(ProfileParent.this,imageUri));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // ScanFile so it will be appeared on Gallery
-                MediaScannerConnection.scanFile(ProfileParent.this,
-                        new String[]{imageUri.getPath()}, null,
-                        new MediaScannerConnection.OnScanCompletedListener() {
-                            public void onScanCompleted(String path, Uri uri) {
-                            }
-                        });
+
             }
         }
     }
 
-    // Untuk menampilkan bitmap pada ImageView
-    private void setToImageView(Bitmap bmp) {
-        //compress image
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, bitmap_size, bytes);
-        decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
+    private void captureImage() {
+        if (Build.VERSION.SDK_INT > 21) { //use this if Lollipop_Mr1 (API 22) or above
+            Intent callCameraApplicationIntent = new Intent();
+            callCameraApplicationIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        //menampilkan gambar yang dipilih dari camera/gallery ke ImageView
-        image_profil.setImageBitmap(decoded);
-        update_picture();
+            // We give some instruction to the intent to save the image
+            File photoFile = null;
+
+            try {
+                // If the createImageFile will be successful, the photo file will have the address of the file
+                photoFile = createImageFile();
+                // Here we call the function that will try to catch the exception made by the throw function
+            } catch (IOException e) {
+                Logger.getAnonymousLogger().info("Exception error in generating the file");
+                e.printStackTrace();
+            }
+            // Here we add an extra file to the intent to put the address on to. For this purpose we use the FileProvider, declared in the AndroidManifest.
+            Uri outputUri = FileProvider.getUriForFile(
+                    this,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    photoFile);
+            callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
+
+            // The following is a new line with a trying attempt
+            callCameraApplicationIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            Logger.getAnonymousLogger().info("Calling the camera App by intent");
+
+            // The following strings calls the camera app and wait for his file in return.
+            startActivityForResult(callCameraApplicationIntent, CAMERA_PIC_REQUEST);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+            // start the image capture Intent
+            startActivityForResult(intent, CAMERA_PIC_REQUEST);
+        }
+
+
     }
 
-    // Untuk resize bitmap
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
 
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
+    /**
+     * returning image / video
+     */
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "Oops! Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
         }
-        return Bitmap.createScaledBitmap(image, width, height, true);
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + ".jpg");
+        }  else {
+            return null;
+        }
+
+        return mediaFile;
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -435,118 +512,8 @@ public class ProfileParent extends AppCompatActivity {
         return image;
     }
 
-    private void dispatchTakePictureIntent() throws IOException {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-                return;
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(ProfileParent.this,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        createImageFile());
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
-    public static Bitmap handleSamplingAndRotationBitmap(Context context, Uri selectedImage)
-            throws IOException {
-        int MAX_HEIGHT = 1024;
-        int MAX_WIDTH = 1024;
-
-        // First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
-        BitmapFactory.decodeStream(imageStream, null, options);
-        imageStream.close();
-
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, MAX_WIDTH, MAX_HEIGHT);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        imageStream = context.getContentResolver().openInputStream(selectedImage);
-        Bitmap img = BitmapFactory.decodeStream(imageStream, null, options);
-
-        img = rotateImageIfRequired(context, img, selectedImage);
-        return img;
-    }
-    private static int calculateInSampleSize(BitmapFactory.Options options,
-                                             int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-            // Calculate ratios of height and width to requested height and width
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-            // Choose the smallest ratio as inSampleSize value, this will guarantee a final image
-            // with both dimensions larger than or equal to the requested height and width.
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-
-            // This offers some additional logic in case the image has a strange
-            // aspect ratio. For example, a panorama may have a much larger
-            // width than height. In these cases the total pixels might still
-            // end up being too large to fit comfortably in memory, so we should
-            // be more aggressive with sample down the image (=larger inSampleSize).
-
-            final float totalPixels = width * height;
-
-            // Anything more than 2x the requested pixels we'll sample down further
-            final float totalReqPixelsCap = reqWidth * reqHeight * 2;
-
-            while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
-                inSampleSize++;
-            }
-        }
-        return inSampleSize;
-    }
-    private static Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage) throws IOException {
-
-        InputStream input = context.getContentResolver().openInputStream(selectedImage);
-        ExifInterface ei;
-        if (Build.VERSION.SDK_INT > 23)
-            ei = new ExifInterface(input);
-        else
-            ei = new ExifInterface(selectedImage.getPath());
-
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                return rotateImage(img, 90);
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                return rotateImage(img, 180);
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                return rotateImage(img, 270);
-            default:
-                return img;
-        }
-    }
-
-    private static Bitmap rotateImage(Bitmap img, int degree) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
-        img.recycle();
-        return rotatedImg;
-    }
-
     public void get_profile(){
+        final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
 
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
@@ -580,10 +547,9 @@ public class ProfileParent extends AppCompatActivity {
                         member.setText("User Biasa");
                         jadi_parent.setVisibility(View.VISIBLE);
                     }
-                    Bitmap bitma = BitmapFactory.decodeFile(picture);
-                    image_profil.setImageBitmap(bitma);
-//                    Toast.makeText(getApplicationContext(), picture, Toast.LENGTH_LONG).show();
 
+                    String imagefile = Base_url + picture;
+                    Picasso.with(ProfileParent.this).load(imagefile).into(image_profil);
                     last_login.setText(lastlogin);
                 } else{
                     if (status == 0) {
@@ -603,39 +569,53 @@ public class ProfileParent extends AppCompatActivity {
 
     }
 
-    public void update_picture(){
-        String pic_type = "png";
-        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_picture_post(authorization.toString(),parent_id.toString(),image,pic_type.toString());
 
-        call.enqueue(new Callback<JSONResponse>() {
+    private void uploadFile() {
+        if (postPath == null || postPath.equals("")) {
+            Toast.makeText(this, "please select an image ", Toast.LENGTH_LONG).show();
+            return;
+        } else {
 
-            @Override
-            public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
-                Log.i("KES", response.code() + "");
+            // Map is used to multipart the file using okhttp3.RequestBody
+            Map<String, RequestBody> map = new HashMap<>();
+            File file = new File(postPath);
 
-                JSONResponse resource = response.body();
+            // Parsing any Media type file
+            RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
+            map.put("file\"; filename=\"" + file.getName() + "\"", requestBody);
 
-                status = resource.status;
-                code   = resource.code;
+            Call<JSONResponse> call = mApiInterface.kes_update_picture_post(authorization.toString(),map);
 
-                if (status == 1 && code.equals("UPP_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), "Foto berhasil diupload", Toast.LENGTH_LONG).show();
-                } else{
-                    if (status == 0 && code.equals("UPP_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+            call.enqueue(new Callback<JSONResponse>() {
+
+                @Override
+                public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
+                    Log.i("KES", response.code() + "");
+
+                    JSONResponse resource = response.body();
+
+                    status = resource.status;
+                    code   = resource.code;
+
+                    if (status == 1 && code.equals("UPP_SCS_0001")) {
+                        Toast.makeText(getApplicationContext(), "Foto berhasil diupload", Toast.LENGTH_LONG).show();
+                    } else{
+                        if (status == 0 && code.equals("UPP_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                        }
                     }
+
                 }
 
-            }
+                @Override
+                public void onFailure(retrofit2.Call<JSONResponse> call, Throwable t) {
+                    Log.d("onFailure", t.toString());
+                }
 
-            @Override
-            public void onFailure(retrofit2.Call<JSONResponse> call, Throwable t) {
-                Log.d("onFailure", t.toString());
-            }
-
-        });
-
+            });
+        }
     }
+
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();
@@ -651,5 +631,10 @@ public class ProfileParent extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
+    }
+    @NonNull
+    private RequestBody createPartFromString(String descriptionString) {
+        return RequestBody.create(
+                okhttp3.MultipartBody.FORM, descriptionString);
     }
 }

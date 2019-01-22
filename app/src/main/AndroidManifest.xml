@@ -260,16 +260,15 @@
             android:label="Update Profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".Activity.JadiParent"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity
+            android:name=".Activity.JadiParent"
             android:label="Jadi Orang Tua"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
-
     </application>
 
 </manifest>

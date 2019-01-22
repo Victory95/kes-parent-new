@@ -1,17 +1,26 @@
 package com.fingertech.kes.Controller;
 
+import android.graphics.Bitmap;
+
 import com.fingertech.kes.Rest.JSONResponse;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -167,12 +176,10 @@ public interface Auth {
     Call<JSONResponse.GetProfile>kes_profile_get(@Header("Authorization") String authorization,
                                       @Query("mem") String mem);
 
-    @FormUrlEncoded
+    @Multipart
     @POST("auth/kes_update_picture")
     Call<JSONResponse>kes_update_picture_post(@Header("Authorization") String authorization,
-                                              @Field("memberid") String memberid,
-                                              @Field("picture") File picture,
-                                              @Field("pic_type") String pic_type);
+                                              @PartMap Map<String, RequestBody> map                                              );
 
     @FormUrlEncoded
     @PUT("auth/kes_change_password/{memberid}")

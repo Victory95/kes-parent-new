@@ -18,6 +18,7 @@ import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -100,6 +101,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
@@ -181,8 +183,11 @@ public class MenuUtama extends AppCompatActivity
     String code;
     Button carisekolah,carisekolah2;
     String authorization;
-    CardView btn_search,map_menu;
+    CardView btn_search,map_menu,tambah_anak;
     LinearLayout recycle_menu,view_group,viewpager;
+    LinearLayout.LayoutParams layoutParams;
+    LinearLayout ll;
+    static int i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +208,7 @@ public class MenuUtama extends AppCompatActivity
         recycle_menu        = (LinearLayout)findViewById(R.id.recycler_view_menu);
         view_group          = (LinearLayout)findViewById(R.id.view_group);
         viewpager           = (LinearLayout)findViewById(R.id.viewpager);
+        tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -280,6 +286,21 @@ public class MenuUtama extends AppCompatActivity
                 startActivity(mIntent);
             }
         });
+
+        ll = (LinearLayout)findViewById(R.id.view_group);
+        layoutParams = new LinearLayout.LayoutParams
+                (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+        tambah_anak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView view = new TextView(MenuUtama.this);
+                view.setText(++i+" view");
+                tambah_anak.addView(ll,layoutParams);
+            }
+        });
+
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -419,6 +440,8 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_profile(){
+        final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
+
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
 
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
@@ -436,8 +459,9 @@ public class MenuUtama extends AppCompatActivity
                         String nama    = response.body().getData().getFullname();
                         String member  = response.body().getData().getMember_Type();
                         tv_profile.setText(nama);
-                    Bitmap bitmap = BitmapFactory.decodeFile(picture);
-                    image_profile.setImageBitmap(bitmap);
+
+                        String imagefile = Base_url + picture;
+                        Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
                         viewpager.setVisibility(View.VISIBLE);
