@@ -35,6 +35,7 @@
                         android:layout_marginRight="40dp"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
+                        android:theme="@style/TextLabelView"
                         android:layout_height="wrap_content">
 
                         <EditText
@@ -65,6 +66,7 @@
                                 android:paddingTop="28dp"
                                 android:layout_marginLeft="40dp"
                                 android:layout_marginRight="40dp"
+                                android:theme="@style/TextLabelView"
                                 android:textColorHint="@color/default_textHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
@@ -125,6 +127,7 @@
                         android:layout_marginRight="40dp"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
+                        android:theme="@style/TextLabelView"
                         android:layout_height="wrap_content">
 
                         <EditText
@@ -145,6 +148,7 @@
                         android:paddingTop="28dp"
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
+                        android:theme="@style/TextLabelView"
                         android:textColorHint="@color/default_textHint"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -176,6 +180,7 @@
                         android:id="@+id/til_kata_sandi"
                         android:paddingTop="15dp"
                         android:layout_marginLeft="40dp"
+                        android:theme="@style/TextLabelView"
                         android:layout_marginRight="40dp"
                         app:passwordToggleTint="@color/colorPrimary"
                         android:textColorHint="@color/default_textHint"
@@ -212,6 +217,7 @@
                         android:paddingTop="15dp"
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
+                        android:theme="@style/TextLabelView"
                         app:passwordToggleTint="@color/colorPrimary"
                         android:textColorHint="@color/default_textHint"
                         app:passwordToggleEnabled="true"
@@ -356,6 +362,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
+                    android:theme="@style/TextLabelView"
                     android:textColor="@color/default_textHint" />
                 <Button
                     android:id="@+id/btn_buat_akun"

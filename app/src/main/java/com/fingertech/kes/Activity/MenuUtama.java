@@ -39,6 +39,7 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -50,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -66,6 +68,7 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
@@ -100,7 +103,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.joooonho.SelectableRoundedImageView;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.rey.material.widget.Spinner;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
@@ -108,6 +113,7 @@ import com.synnapps.carouselview.ViewListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -117,6 +123,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.fingertech.kes.Activity.MenuGuest.getPixelsFromDp;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
@@ -131,7 +138,6 @@ public class MenuUtama extends AppCompatActivity
 
     private ViewPager ParentPager;
     private FragmentAdapter fragmentAdapter;
-    private ViewGroup rootView;
     public static int PAGE_COUNT = 2;
     NavigationView navigationView;
     DrawerLayout drawer;
@@ -139,7 +145,9 @@ public class MenuUtama extends AppCompatActivity
     View header;
     TextView tv_profile;
     CircleImageView image_profile;
+    String nama_anak,foto;
     int status;
+    String Base_url;
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code,parent_nik;
 
     Auth mApiInterface;
@@ -159,34 +167,27 @@ public class MenuUtama extends AppCompatActivity
 
     private List<ItemSekolah> itemList;
     private ItemSekolahAdapter itemSekolahAdapter = null;
-    private GoogleMap.OnCameraIdleListener onCameraIdleListener;
-    private GoogleMap.OnCameraMoveListener onCameraMove;
     private GoogleMap mapG;
     private LocationRequest mlocationRequest;
-    private Marker CurrLocationMarker,m,sd,smp,sma;
+    private Marker CurrLocationMarker,m;
     private Location lastLocation;
-    private Button lock,Nearby;
-    private Boolean clicked = false;
+
     public SnappyRecycleView snappyRecyclerView;
     GoogleApiClient mGoogleApiClient;
-    ArrayList<LatLng> markerPoints;
     Polyline line;
-    LatLngBounds.Builder builder;
-
-    PolylineOptions lineOptions;
     Double PROXIMITY_RADIUS = 2.0;
     Double currentLatitude,latitude;
     Double currentLongitude,longitude;
-    Double CurrentLatitude;
-    Double CurrentLongitude;
     String location;
     String code;
-    Button carisekolah,carisekolah2;
     String authorization;
     CardView btn_search,map_menu,tambah_anak;
     LinearLayout recycle_menu,view_group,viewpager;
     LinearLayout.LayoutParams layoutParams;
     LinearLayout ll;
+    CircleImageView imageView;
+    TextView namaanak;
+    String Base_anak;
     static int i;
 
     @Override
@@ -209,6 +210,9 @@ public class MenuUtama extends AppCompatActivity
         view_group          = (LinearLayout)findViewById(R.id.view_group);
         viewpager           = (LinearLayout)findViewById(R.id.viewpager);
         tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
+        imageView           = (CircleImageView) findViewById(R.id.image_anak);
+        namaanak            = (TextView)findViewById(R.id.nama_anak);
+
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -227,7 +231,7 @@ public class MenuUtama extends AppCompatActivity
         });
 
         navigationView.setNavigationItemSelectedListener(this);
-
+        navigationView.setCheckedItem(R.id.nav_beranda);
 
         ParentPager.setAdapter(fragmentAdapter);
         InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
@@ -244,8 +248,11 @@ public class MenuUtama extends AppCompatActivity
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        Base_url      = "http://kes.co.id/assets/images/profile/mm_";
+        Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
+
 
         get_profile();
 
@@ -284,19 +291,6 @@ public class MenuUtama extends AppCompatActivity
             public void onClick(View v) {
                 Intent mIntent = new Intent(MenuUtama.this, SearchingMAP.class);
                 startActivity(mIntent);
-            }
-        });
-
-        ll = (LinearLayout)findViewById(R.id.view_group);
-        layoutParams = new LinearLayout.LayoutParams
-                (LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
-        tambah_anak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TextView view = new TextView(MenuUtama.this);
-                view.setText(++i+" view");
-                tambah_anak.addView(ll,layoutParams);
             }
         });
 
@@ -392,6 +386,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
+
             // Handle the camera action
         } else if (id == R.id.nav_cari_sekolah) {
 
@@ -440,7 +435,7 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_profile(){
-        final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
+
 
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
 
@@ -470,6 +465,7 @@ public class MenuUtama extends AppCompatActivity
                         viewpager.setVisibility(View.GONE);
                         view_group.setVisibility(View.GONE);
                     }
+                    data_student_get();
                 } else{
                     if (status == 0) {
                         Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
@@ -485,6 +481,43 @@ public class MenuUtama extends AppCompatActivity
 
         });
 
+    }
+
+
+    public void data_student_get(){
+
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString().toLowerCase(), student_id.toString(),parent_nik.toString());
+        call.enqueue(new Callback<JSONResponse.DetailStudent>() {
+            @Override
+            public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse.DetailStudent resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    nama_anak        = response.body().getData().getFullname();
+                    foto             = response.body().getData().getPicture();
+
+                    namaanak.setText(nama_anak);
+                    String imagefiles = Base_anak + foto;
+                    Picasso.with(MenuUtama.this).load(imagefiles).into(imageView);
+
+                } else {
+                    if(status == 0 && code.equals("DTS_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.DetailStudent> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
@@ -995,23 +1028,6 @@ public class MenuUtama extends AppCompatActivity
             }
 
         });
-    }
-
-    public interface ISnappyLayoutManager {
-
-        /**
-         * @param velocityX
-         * @param velocityY
-         * @return the resultant position from a fling of the given velocity.
-         */
-        int getPositionForVelocity(int velocityX, int velocityY);
-
-        /**
-         * @return the position this list must scroll to to fix a state where the
-         * views are not snapped to grid.
-         */
-        int getFixScrollPos();
-
     }
 
     public class SnappyLinearLayoutManager extends LinearLayoutManager implements MenuGuest.ISnappyLayoutManager {

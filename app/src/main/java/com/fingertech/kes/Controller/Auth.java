@@ -178,8 +178,10 @@ public interface Auth {
 
     @Multipart
     @POST("auth/kes_update_picture")
-    Call<JSONResponse>kes_update_picture_post(@Header("Authorization") String authorization,
-                                              @PartMap Map<String, RequestBody> map                                              );
+    Call<JSONResponse.UpdatePicture> kes_update_picture_post(@Header("Authorization") String authorization,
+            @Part("memberid") RequestBody memberid,
+            @Part MultipartBody.Part picture_old,
+            @Part("pic_type") RequestBody pic_type);
 
     @FormUrlEncoded
     @PUT("auth/kes_change_password/{memberid}")
@@ -196,6 +198,32 @@ public interface Auth {
                                                @Field("relation") String relation,
                                                @Field("gender") String gender,
                                                @Field("birth_date") String birth_date);
+
+    @FormUrlEncoded
+    @PUT("parents/kes_update_parent/{studentdetailid}")
+    Call<JSONResponse>update_student_put(@Header("Authorization") String authorization,
+                                        @Path("studentdetailid")String studentdetailid,
+                                        @Field("school_code") String school_code,
+                                        @Field("student_id") String student_id,
+                                        @Field("rombel") String rombel,
+                                        @Field("special_needs") String special_needs,
+                                        @Field("rt") String rt,
+                                        @Field("rw") String rw,
+                                        @Field("dusun") String dusun,
+                                        @Field("kelurahan") String kelurahan,
+                                        @Field("parent_home_phone") String parent_home_phone,
+                                        @Field("parent_phone") String parent_phone,
+                                        @Field("parent_address") String parent_address,
+                                        @Field("parent_latitude") String parent_latitude,
+                                        @Field("parent_longitude") String parent_longitude,
+                                        @Field("parent_email") String parent_email,
+                                        @Field("parent_education") String parent_education,
+                                        @Field("company_name") String company_name,
+                                        @Field("employment") String employment,
+                                        @Field("parent_income") String parent_income,
+                                        @Field("workplace_address") String workplace_address,
+                                        @Field("office_latitude") String office_latitude,
+                                        @Field("office_longitude") String office_longitude);
 
 
 }

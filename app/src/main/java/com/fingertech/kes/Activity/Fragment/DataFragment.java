@@ -210,25 +210,29 @@ public class DataFragment extends Fragment  {
         data_parent_student_get();
 
         //Mengambil calendar bawaan dari android
-        Calendar calendar = Calendar.getInstance();
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
-                //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
-                et_tanggal_lahir.setText(convertDate(i, i1, i2));
+        Calendar mcurrentDate = Calendar.getInstance();
+        int mYear = mcurrentDate.get(Calendar.YEAR);
+        int mMonth = mcurrentDate.get(Calendar.MONTH);
+        int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+        final DatePickerDialog mDatePicker;
+        mDatePicker = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                et_tanggal_lahir.setText(convertDate(selectedyear, selectedmonth, selectedday));
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        }, mYear, mMonth, mDay);
+
 
         et_tanggal_lahir.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
+                mDatePicker.show();//Dialog ditampilkan ketika edittext diclick
             }
         });
 
         et_tanggal_lahir.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View view, boolean b) {
                 if (b) {
-                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
+                    mDatePicker.show();//Dialog ditampilkan ketika edittext mendapat fokus
                 }
             }
         });

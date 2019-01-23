@@ -801,7 +801,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                 String UPA_ERR_0021 = getResources().getString(R.string.UPA_ERR_0021);
 
                 if (status == 1 && code.equals("UPA_SCS_0001")){
-                    Intent intent = new Intent(getContext(), MenuUtama.class);
+                    Intent intent = new Intent(getContext(), AnakMain.class);
                     getContext().startActivity(intent);
 
                 }else if (status == 0 && equals("UPA_ERR_0001")){

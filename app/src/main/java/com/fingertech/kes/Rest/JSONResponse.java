@@ -4,6 +4,7 @@ import com.fingertech.kes.Activity.DetailSekolah;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
 import java.util.List;
 
 public class JSONResponse{
@@ -3092,8 +3093,18 @@ public class JSONResponse{
         @SerializedName("code")
         public String code;
 
+
         @SerializedName("data")
         public DataStudent data;
+
+        public DataStudent getData() {
+            return data;
+        }
+
+        public void setData(DataStudent data) {
+            this.data = data;
+        }
+
     }
     public class DataStudent{
 
@@ -3728,5 +3739,24 @@ public class JSONResponse{
             this.publish = publish;
         }
 
+    }
+
+    public class UpdatePicture{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        private String message;
+        private String path;
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getPath() {
+            return path;
+        }
     }
 }

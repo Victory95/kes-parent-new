@@ -318,7 +318,7 @@ public class OpsiDaftar extends AppCompatActivity {
                         editor.commit();
                         /// call session
                         Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
                         intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
@@ -387,7 +387,7 @@ public class OpsiDaftar extends AppCompatActivity {
                         editor.commit();
                         /// call session
                         Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
                         intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));

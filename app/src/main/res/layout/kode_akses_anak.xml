@@ -188,6 +188,7 @@
         android:layout_height="wrap_content"
         android:text="Kirim kode OTP lagi"
         android:textAlignment="center"
+        android:layout_marginTop="20dp"
         android:textColor="@color/ic_logo_background"
         android:id="@+id/kirim_kode"/>
     <Button

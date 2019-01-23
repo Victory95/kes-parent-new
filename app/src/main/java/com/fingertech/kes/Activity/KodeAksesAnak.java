@@ -2,10 +2,12 @@ package com.fingertech.kes.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -35,6 +37,10 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.rey.material.app.Dialog;
+import com.rey.material.app.DialogFragment;
+import com.rey.material.app.SimpleDialog;
+import com.rey.material.app.ThemeManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,7 +72,9 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     public static final String TAG_NAMA_ANAK    = "childrenname";
     public static final String TAG_NAMA_SEKOLAH = "school_name";
     public static final String TAG_SCHOOL_CODE  = "school_code";
-    String authorization;
+    public static final String TAG_COUNT        = "count_children";
+
+    String authorization,count_student;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -112,6 +120,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        count_student= sharedpreferences.getString(TAG_COUNT,"");
 
 
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
@@ -380,6 +389,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                     masuk_code_acsess_post();
 
                 }
+
             }
         });
 
@@ -597,11 +607,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 String MCA_ERR_0008 = getResources().getString(R.string.MCA_ERR_0008);
 
                 if (status == 1 && code.equals("MCA_SCS_0001")) {
-                    JSONResponse.MCA_Data data = (JSONResponse.MCA_Data) resource.data;
-                    Toast.makeText(getApplicationContext(), MCA_SCS_0001, Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getApplicationContext(), ParentMain.class);
-                    delete_code();
-                    startActivity(intent);
+                    pilihan();
                 } else {
                     if(status == 0 && code.equals("MCA_ERR_0001")){
                         Toast.makeText(getApplicationContext(), MCA_ERR_0001, Toast.LENGTH_LONG).show();
@@ -706,5 +712,30 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
+    }
+    private void pilihan() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(KodeAksesAnak.this,R.style.DialogTheme);
+        builder.setTitle("Update Data Orang Tua");
+        builder.setMessage("Apakah anda ingin mengubah data anda?");
+        builder.setIcon(R.drawable.ic_alarm);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), ParentMain.class);
+                delete_code();
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), AnakMain.class);
+                delete_code();
+                startActivity(intent);
+            }
+        });
+        builder.show();
+
     }
 }

@@ -201,7 +201,7 @@ public class AnakAkses extends AppCompatActivity {
             editor.putString(TAG_SCHOOL_ID, (String) school_id);
             editor.putString(TAG_NAMA_ANAK, tvinfo.getText().toString());
             editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
-            editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode);
+            editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
             editor.commit();
 
             status_nik=0;
@@ -232,7 +232,7 @@ public class AnakAkses extends AppCompatActivity {
             requestFocus(et_nik);
             return false;
         } else if(status_nik==0){
-            tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
+//            tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
             requestFocus(et_nik);
         }else {
             tl_input_noira.setErrorEnabled(false);
@@ -266,6 +266,8 @@ public class AnakAkses extends AppCompatActivity {
                             school_name         = response.body().getData().get(position).getSchool_name();
                             sekolah_kode        = response.body().getData().get(position).getSchool_code();
                             school_id           = response.body().getData().get(position).getSchool_id();
+                            sekolah_kode        = sekolah_kode.toLowerCase();
+
                             search.setText(school_name);
                             recyclerView.setVisibility(View.GONE);
                             hideKeyboard(AnakAkses.this);

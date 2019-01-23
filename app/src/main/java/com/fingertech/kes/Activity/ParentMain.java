@@ -130,17 +130,6 @@ public class ParentMain extends AppCompatActivity {
         school_code = "bpk01";
         student_id = "418";
 
-
-        if (session) {
-            Intent intent = new Intent(ParentMain.this, MenuUtama.class);
-            intent.putExtra(TAG_EMAIL, email);
-            intent.putExtra(TAG_MEMBER_ID, parent_id);
-            intent.putExtra(TAG_FULLNAME, fullname);
-            intent.putExtra(TAG_MEMBER_TYPE, member_type);
-            finish();
-            startActivity(intent);
-        }
-
         //data_parent_student_get();
     }
 

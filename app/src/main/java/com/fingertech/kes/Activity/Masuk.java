@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
@@ -25,17 +24,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -81,9 +77,10 @@ public class Masuk extends AppCompatActivity {
     private ProgressDialog dialog;
 
     int status;
+    String count_student;
     String code;
     Date currentTime;
-    String id, email, member_id, fullname, member_type, token, deviceid,parent_nik,lastlogin;
+    String id, email, member_id, fullname, member_type, token, deviceid,parent_nik,lastlogin,image_google;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     ConnectivityManager conMgr;
@@ -99,6 +96,9 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_PARENT_NIK   = "parent_nik";
     public static final String TAG_LASTLOGIN    = "last_login";
+    public static final String TAG_COUNT        = "count_children";
+    public static final String TAG_PHOTO        = "foto_profile";
+
 
 
     Auth mApiInterface;
@@ -146,6 +146,7 @@ public class Masuk extends AppCompatActivity {
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
         token        = sharedpreferences.getString(TAG_TOKEN, null);
         lastlogin    = sharedpreferences.getString(TAG_LASTLOGIN,null);
+        count_student= sharedpreferences.getString(TAG_COUNT,null);
 
         ////// check permission READ_PHONE_STATE for deviceid[imei] smartphone
         if (ContextCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
@@ -332,6 +333,7 @@ public class Masuk extends AppCompatActivity {
                     try {
                         token = data.token;
                         parent_nik = data.parent_nik;
+                        count_student = data.count_children;
                         jsonObject = new JSONObject(JWTUtils.decoded(token));
                         /// save session
                         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -341,8 +343,8 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
                         editor.putString(TAG_PARENT_NIK, parent_nik);
+                        editor.putString(TAG_COUNT,count_student);
                         editor.putString(TAG_TOKEN, token);
-//                        editor.putString(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
                         editor.putString(TAG_LASTLOGIN, last_login);
                         editor.commit();
                         /// call session
@@ -355,22 +357,35 @@ public class Masuk extends AppCompatActivity {
                             intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
                             intent.putExtra(TAG_TOKEN, token);
                             intent.putExtra(TAG_LASTLOGIN,last_login);
-//                            intent.putExtra(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
                             finish();
                             startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, MenuUtama.class);
-                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                            intent.putExtra(TAG_PARENT_NIK, parent_nik);
-                            intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                            intent.putExtra(TAG_LASTLOGIN,last_login);
-//                            intent.putExtra(TAG_LASTLOGIN,jam + ":" + min + ":" + second + " " + date + "-" + month + "-" + year);
-                            intent.putExtra(TAG_TOKEN, token);
-                            finish();
-                            startActivity(intent);
+                            if(count_student.toString().equals("0")) {
+                                Intent intent = new Intent(Masuk.this, AnakAkses.class);
+                                intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                                intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                                intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                                intent.putExtra(TAG_PARENT_NIK, parent_nik);
+                                intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                                intent.putExtra(TAG_LASTLOGIN, last_login);
+                                intent.putExtra(TAG_COUNT, count_student);
+                                intent.putExtra(TAG_TOKEN, token);
+                                finish();
+                                startActivity(intent);
+                            }else {
+                                Intent intent = new Intent(Masuk.this, MenuUtama.class);
+                                intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                                intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                                intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                                intent.putExtra(TAG_PARENT_NIK, parent_nik);
+                                intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                                intent.putExtra(TAG_LASTLOGIN, last_login);
+                                intent.putExtra(TAG_COUNT, count_student);
+                                intent.putExtra(TAG_TOKEN, token);
+                                finish();
+                                startActivity(intent);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -516,16 +531,18 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, "6");
+                        editor.putString(TAG_PHOTO,image_google);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
                         Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
                         intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, "6");
                         intent.putExtra(TAG_TOKEN, token);
+                        intent.putExtra(TAG_PHOTO,image_google);
                         startActivity(intent);
                         finish();
                     } catch (Exception e) {
@@ -585,15 +602,17 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, "6");
+                        editor.putString(TAG_PHOTO,image_google);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
                         Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
                         intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, "6");
+                        intent.putExtra(TAG_PHOTO,image_google);
                         intent.putExtra(TAG_TOKEN, token);
                         startActivity(intent);
                         finish();
@@ -646,6 +665,7 @@ public class Masuk extends AppCompatActivity {
             fullname = user.getDisplayName();
             id = user.getUid();
             getDeviceID();
+            image_google = String.valueOf(user.getPhotoUrl());
             register_sosmed_post();
             // Loading profile image
 //            Uri profilePicUrl = user.getPhotoUrl();

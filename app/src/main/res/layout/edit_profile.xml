@@ -95,6 +95,15 @@
                             android:textSize="16dp"
                             android:theme="@style/TextLabel" />
                     </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:textColor="@color/textColor_Grey"
+                    android:textSize="12dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:text="@string/validate2_mobile_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

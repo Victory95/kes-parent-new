@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +43,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
+import com.fingertech.kes.Activity.NextProject.FileUtils;
 import com.fingertech.kes.Activity.NextProject.ImageUtils;
 import com.fingertech.kes.BuildConfig;
 import com.fingertech.kes.Controller.Auth;
@@ -350,7 +353,6 @@ public class ProfileParent extends AppCompatActivity {
         return true;
     }
     private void selectImage() {
-        image_profil.setImageResource(0);
         final CharSequence[] items = {"Take Photo", "Choose from Library",
                 "Cancel"};
 
@@ -361,11 +363,6 @@ public class ProfileParent extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
-//                    try {
-//                        dispatchTakePictureIntent();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
                     captureImage();
                 } else if (items[item].equals("Choose from Library")) {
                     intent = new Intent();
@@ -387,29 +384,67 @@ public class ProfileParent extends AppCompatActivity {
            if (requestCode == CAMERA_PIC_REQUEST){
                 if (Build.VERSION.SDK_INT > 21) {
 
-                    Picasso.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
-                    postPath = mCurrentPhotoPath;
-                    uploadFile();
-
+                    Glide.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
+                    File files = new File(mCurrentPhotoPath);
+                    uploadImage(files);
                 }else{
-                    Picasso.with(ProfileParent.this).load(fileUri).into(image_profil);
-                    postPath = fileUri.getPath();
-                    uploadFile();
+                    Glide.with(ProfileParent.this).load(fileUri).into(image_profil);
+                    File files = FileUtils.getFile(ProfileParent.this, fileUri);
+                    uploadImage(files);
 
                 }
             } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
 
                 uri = data.getData();
                 Picasso.with(ProfileParent.this).load(uri).into(image_profil);
-            }else if (requestCode == REQUEST_TAKE_PHOTO) {
-                // Show the thumbnail on ImageView
-                Uri imageUri = Uri.parse(mCurrentPhotoPath);
-               Picasso.with(ProfileParent.this).load(imageUri).into(image_profil);
-
-
+                File file = FileUtils.getFile(ProfileParent.this, uri);
+                uploadImage(file);
             }
         }
     }
+
+    private void uploadImage(File file) {
+        progressBar();
+        showDialog();
+        String pic_type = "png";
+        RequestBody photoBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part photoPart = MultipartBody.Part.createFormData("picture",
+                file.getName(), photoBody);
+        RequestBody ids = RequestBody.create(MediaType.parse("multipart/form-data"), parent_id);
+        RequestBody picss = RequestBody.create(MediaType.parse("multipart/form-data"), pic_type);
+        Call<JSONResponse.UpdatePicture> call = mApiInterface.kes_update_picture_post(authorization.toString(),ids,photoPart,picss);
+
+        call.enqueue(new Callback<JSONResponse.UpdatePicture>() {
+
+            @Override
+            public void onResponse(retrofit2.Call<JSONResponse.UpdatePicture> call, final Response<JSONResponse.UpdatePicture> response) {
+                hideDialog();
+                Log.i("KES", response.code() + "");
+
+                JSONResponse.UpdatePicture resource = response.body();
+
+                status = resource.status;
+                code   = resource.code;
+
+                if (status == 1 && code.equals("UPP_SCS_0001")) {
+                    Toast.makeText(getApplicationContext(), "Foto berhasil diupload", Toast.LENGTH_LONG).show();
+                } else{
+                    if (status == 0 && code.equals("UPP_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<JSONResponse.UpdatePicture> call, Throwable t) {
+                hideDialog();
+                Log.d("onFailure", t.toString());
+            }
+
+        });
+    }
+
 
     private void captureImage() {
         if (Build.VERSION.SDK_INT > 21) { //use this if Lollipop_Mr1 (API 22) or above
@@ -459,9 +494,6 @@ public class ProfileParent extends AppCompatActivity {
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    /**
-     * returning image / video
-     */
     private static File getOutputMediaFile(int type) {
 
         // External sdcard location
@@ -493,6 +525,7 @@ public class ProfileParent extends AppCompatActivity {
         return mediaFile;
     }
 
+
     @SuppressLint("SimpleDateFormat")
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -507,7 +540,7 @@ public class ProfileParent extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        mCurrentPhotoPath =  image.getAbsolutePath();
 
         return image;
     }
@@ -541,10 +574,10 @@ public class ProfileParent extends AppCompatActivity {
                     jenis_kelamin_profile.setText(jeniskelamin);
                     tv_agama.setText(agama);
                     if(member_type.toString().equals("3")){
-                        member.setText("Orangtua");
+                        member.setText("Sebagai Orangtua");
                         jadi_parent.setVisibility(View.INVISIBLE);
                     }else{
-                        member.setText("User Biasa");
+                        member.setText("Sebagai User Biasa");
                         jadi_parent.setVisibility(View.VISIBLE);
                     }
 
@@ -569,52 +602,6 @@ public class ProfileParent extends AppCompatActivity {
 
     }
 
-
-    private void uploadFile() {
-        if (postPath == null || postPath.equals("")) {
-            Toast.makeText(this, "please select an image ", Toast.LENGTH_LONG).show();
-            return;
-        } else {
-
-            // Map is used to multipart the file using okhttp3.RequestBody
-            Map<String, RequestBody> map = new HashMap<>();
-            File file = new File(postPath);
-
-            // Parsing any Media type file
-            RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
-            map.put("file\"; filename=\"" + file.getName() + "\"", requestBody);
-
-            Call<JSONResponse> call = mApiInterface.kes_update_picture_post(authorization.toString(),map);
-
-            call.enqueue(new Callback<JSONResponse>() {
-
-                @Override
-                public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
-                    Log.i("KES", response.code() + "");
-
-                    JSONResponse resource = response.body();
-
-                    status = resource.status;
-                    code   = resource.code;
-
-                    if (status == 1 && code.equals("UPP_SCS_0001")) {
-                        Toast.makeText(getApplicationContext(), "Foto berhasil diupload", Toast.LENGTH_LONG).show();
-                    } else{
-                        if (status == 0 && code.equals("UPP_ERR_0001")) {
-                            Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                }
-
-                @Override
-                public void onFailure(retrofit2.Call<JSONResponse> call, Throwable t) {
-                    Log.d("onFailure", t.toString());
-                }
-
-            });
-        }
-    }
 
     private void showDialog() {
         if (!dialog.isShowing())
