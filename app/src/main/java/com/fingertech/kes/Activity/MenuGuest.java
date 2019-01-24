@@ -56,6 +56,7 @@ import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.OnInfoWindowElemTouchListener;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
+import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
@@ -297,13 +298,15 @@ public class MenuGuest extends AppCompatActivity
 
         if (id == R.id.nav_beranda) {
             // Handle the camera action
-        } else if (id == R.id.nav_cari_sekolah) {
-
-        } else if (id == R.id.nav_keluar) {
-            Intent intent = new Intent(MenuGuest.this, OpsiMasuk.class);
+        } else if (id == R.id.nav_registrasi) {
+            Intent intent = new Intent(MenuGuest.this, OpsiDaftar.class);
             startActivity(intent);
-        } else if (id == R.id.nav_kontak) {
-
+        } else if (id == R.id.nav_masuk) {
+            Intent intent = new Intent(MenuGuest.this, Masuk.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_tentang) {
+            Intent intent = new Intent(MenuGuest.this, TentangKami.class);
+            startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
 
         }

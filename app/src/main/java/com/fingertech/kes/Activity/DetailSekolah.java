@@ -119,7 +119,7 @@ public class DetailSekolah extends AppCompatActivity {
                     lokasisekolah.setText(Alamat);
                     isShow = true;
                 } else if(isShow) {
-                    //collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+//                    collapsingToolbarLayout.setTitle(NamaSekolah);//carefull there should a space between double quote otherwise it wont work
                     namadetailsekolah.setText(" ");
                     lokasisekolah.setText(" ");
                     isShow = false;

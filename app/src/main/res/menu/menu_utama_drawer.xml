@@ -7,23 +7,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_beranda"
-            android:icon="@drawable/home"
-            android:title="Beranda" />
+            android:icon="@drawable/ic_home"
+            android:title="@string/beranda" />
         <item
-            android:id="@+id/nav_cari_sekolah"
-            android:icon="@drawable/search"
-            android:title="Cari Sekolah" />
+            android:id="@+id/nav_user"
+            android:icon="@drawable/ic_user2"
+            android:title="Profil Anda" />
         <item
-            android:id="@+id/nav_masuk"
-            android:icon="@drawable/out"
-            android:title="Masuk" />
-        <item
-            android:id="@+id/nav_kontak"
-            android:icon="@drawable/kontak"
-            android:title="Kontak" />
+            android:id="@+id/nav_tentang"
+            android:icon="@drawable/ic_about"
+            android:title="@string/tentang_kami" />
         <item
             android:id="@+id/nav_Pengaturan"
-            android:icon="@drawable/setting"
-            android:title="Pengaturan" />
+            android:icon="@drawable/ic_settings"
+            android:title="@string/pengaturan" />
     </group>
 </menu>

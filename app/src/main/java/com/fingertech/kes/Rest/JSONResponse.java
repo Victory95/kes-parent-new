@@ -3181,10 +3181,10 @@ public class JSONResponse{
         public String address;
 
         @SerializedName("latitude")
-        public String latitude;
+        public double latitude;
 
         @SerializedName("longitude")
-        public String longitude;
+        public double longitude;
 
         @SerializedName("mobile_phone")
         public String mobile_phone;
@@ -3397,19 +3397,19 @@ public class JSONResponse{
             this.address = address;
         }
 
-        public String getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(String latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
         }
 
-        public String getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(String longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
 

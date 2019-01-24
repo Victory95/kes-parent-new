@@ -165,6 +165,17 @@
     <string name="permission_dialog">Accessing Location Permissions required</string>
     <string name="go_to_permissions_settings">Go to App settings and enable permissions</string>
     <string name="rb_pria">Pria</string>
+    <string name="kontak">Kontak</string>
+    <string name="pengaturan">Pengaturan</string>
+    <string name="masuk">Masuk</string>
+    <string name="cari_sekolah">Cari Sekolah</string>
+    <string name="beranda">Beranda</string>
+    <string name="tentang_kami">Tentang Kami</string>
+    <string name="khronos">Khronos Education System</string>
+    <string name="informasi_mengenai_data_diri_anak_anda">Informasi mengenai data diri anak anda</string>
+    <string name="data_anak">Data Anak</string>
+    <string name="informasi_kontak_anak_anda">Informasi Kontak anak anda</string>
+    <string name="informasi_mengenai_alamat_tempat_tinggal_anak_anda">Informasi mengenai alamat tempat tinggal anak anda</string>
     <!--<string name="default_web_client_id"  translatable="false">123.apps.googleusercontent.com</string>-->
     <!--<string name="default_web_client_id" translatable="false">123.apps.googleusercontent.com</string>-->
     <!--<string name="firebase_database_url" translatable="false">https://123.firebaseio.com</string>-->

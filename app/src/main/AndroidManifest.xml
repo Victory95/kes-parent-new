@@ -183,11 +183,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.MenuUtama"
-            android:label="@string/title_activity_menu_utama"
+            android:label="@string/khronos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.MenuGuest"
-            android:label="@string/title_activity_menu_guest"
+            android:label="@string/khronos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.KodeAksesAnak"
@@ -267,6 +267,21 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".Activity.Maps.TentangKami"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".Activity.Anak.ProfilAnak"
+           android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+        </activity>
+
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

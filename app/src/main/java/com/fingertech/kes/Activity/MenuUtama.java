@@ -30,6 +30,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
@@ -77,6 +78,7 @@ import android.view.ViewGroup.LayoutParams;
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
+import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
@@ -233,17 +235,11 @@ public class MenuUtama extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_beranda);
 
-        ParentPager.setAdapter(fragmentAdapter);
-        InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
-        inkPageIndicator.setViewPager(ParentPager);
-
-
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
         student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
@@ -254,6 +250,10 @@ public class MenuUtama extends AppCompatActivity
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
 
+        ParentPager.setAdapter(fragmentAdapter);
+        InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
+        inkPageIndicator.setViewPager(ParentPager);
+
         get_profile();
 
         tv_profile.setOnClickListener(new View.OnClickListener() {
@@ -263,6 +263,15 @@ public class MenuUtama extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        image_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
+                startActivity(intent);
+            }
+        });
+
 
         final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
         mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
@@ -388,14 +397,11 @@ public class MenuUtama extends AppCompatActivity
         if (id == R.id.nav_beranda) {
 
             // Handle the camera action
-        } else if (id == R.id.nav_cari_sekolah) {
+        } else if (id == R.id.nav_user) {
 
-        } else if (id == R.id.nav_masuk) {
-            Intent intent = new Intent(MenuUtama.this, Masuk.class);
+        }else if (id == R.id.nav_tentang) {
+            Intent intent = new Intent(MenuUtama.this, TentangKami.class);
             startActivity(intent);
-
-        } else if (id == R.id.nav_kontak) {
-
         } else if (id == R.id.nav_Pengaturan) {
 
         }
@@ -405,18 +411,33 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
+    public void send_data(){
+        Bundle bundle = new Bundle();
+        bundle.putString("parent_nik",parent_nik);
+        bundle.putString("student_id",student_id);
+        bundle.putString("school_code",school_code);
+        bundle.putString("authorization",authorization);
+        MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.fragMenuSatu,menuSatuFragment);
+        fragmentTransaction.commit();
+        menuSatuFragment.setArguments(bundle);
+    }
 
-    public static class FragmentAdapter extends FragmentStatePagerAdapter {
+    public class FragmentAdapter extends FragmentStatePagerAdapter {
 
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
+
         @Override
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
+                    send_data();
                     return new MenuSatuFragment();
                 case 1:
                     return new MenuDuaFragment();
@@ -433,6 +454,7 @@ public class MenuUtama extends AppCompatActivity
             return POSITION_NONE;
         }
     }
+
 
     public void get_profile(){
 

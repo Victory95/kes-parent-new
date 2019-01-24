@@ -467,8 +467,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                     jenis_tinggal       = response.body().data.getJenis_tinggal();
                     transportasi        = response.body().data.getTransportasi();
                     alamat              = response.body().data.getAddress();
-                    CurrentLatitude     = Double.parseDouble(response.body().data.getLatitude());
-                    CurrentLongitude    = Double.parseDouble(response.body().data.getLongitude());
+                    CurrentLatitude     = response.body().data.getLatitude();
+                    CurrentLongitude    = response.body().data.getLongitude();
 
                     et_rt.setText(rt);
                     et_rw.setText(rw);

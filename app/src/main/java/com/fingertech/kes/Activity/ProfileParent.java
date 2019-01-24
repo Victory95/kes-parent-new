@@ -163,6 +163,8 @@ public class ProfileParent extends AppCompatActivity {
     ProgressDialog dialog;
     Uri uri;
     String encoded;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    AppBarLayout appBarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,29 +216,9 @@ public class ProfileParent extends AppCompatActivity {
         no_hp           = sharedupdate.getString(TAG_NOMOR_HP,null);
 
 
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = true;
-            int scrollRange = -1;
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile);
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile);
 
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(nama);
-                    cv_profile.setVisibility(View.GONE);
-                    isShow = true;
-                } else if(isShow) {
-                    collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
-                    cv_profile.setVisibility(View.VISIBLE);
-                    getSupportActionBar().setTitle(nama);
-                    isShow = false;
-                }
-            }
-        });
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.school);
@@ -299,7 +281,7 @@ public class ProfileParent extends AppCompatActivity {
                             }
                         });
 
-                Intent intent = new Intent(ProfileParent.this, OpsiMasuk.class);
+                Intent intent = new Intent(ProfileParent.this, MenuGuest.class);
                 finish();
                 startActivity(intent);
             }
@@ -584,6 +566,27 @@ public class ProfileParent extends AppCompatActivity {
                     String imagefile = Base_url + picture;
                     Picasso.with(ProfileParent.this).load(imagefile).into(image_profil);
                     last_login.setText(lastlogin);
+                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                        boolean isShow = true;
+                        int scrollRange = -1;
+
+                        @Override
+                        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                            if (scrollRange == -1) {
+                                scrollRange = appBarLayout.getTotalScrollRange();
+                            }
+                            if (scrollRange + verticalOffset == 0) {
+                                collapsingToolbarLayout.setTitle(nama);
+                                cv_profile.setVisibility(View.GONE);
+                                isShow = true;
+                            } else if(isShow) {
+                                collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
+                                cv_profile.setVisibility(View.VISIBLE);
+                                getSupportActionBar().setTitle(nama);
+                                isShow = false;
+                            }
+                        }
+                    });
                 } else{
                     if (status == 0) {
                         Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
