@@ -276,9 +276,13 @@
         </activity>
         <activity
             android:name=".Activity.Anak.ProfilAnak"
-           android:screenOrientation="portrait"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".Activity.Anak.JadwalPelajaran"
             android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:screenOrientation="portrait">
 
         </activity>
 

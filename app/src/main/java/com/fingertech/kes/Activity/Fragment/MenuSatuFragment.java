@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -66,6 +67,14 @@ public class MenuSatuFragment extends Fragment {
                 intent.putExtra("parent_nik",parent_nik);
                 intent.putExtra("school_code",school_code);
                 intent.putExtra("student_id",student_id);
+                startActivity(intent);
+            }
+        });
+
+        btn_jadwal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), JadwalPelajaran.class);
                 startActivity(intent);
             }
         });

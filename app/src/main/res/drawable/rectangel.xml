@@ -7,7 +7,6 @@
             <stroke
                 android:width="2dp"
                 android:color="#ffffff" />
-            <!--<gradient android:startColor="#FF6800" android:centerColor="#FF8000" android:endColor="#FF9700" android:angle="90" />-->
         </shape>
     </item>
 </selector>

@@ -274,7 +274,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     kewarga_negaraan    = response.body().getData().getCitizen_status();
                     nomorrumah          = response.body().getData().getHome_phone();
                     nomorhp             = response.body().getData().getMobile_phone();
-                    Email               = response.body().getData().getAddress();
+                    Email               = response.body().getData().getEmail();
                     sk_un               = response.body().getData().getSkhun();
                     no_kps              = response.body().getData().getNo_kps();
                     penerimaankps       = response.body().getData().getPenerima_kps();

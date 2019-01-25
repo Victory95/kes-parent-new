@@ -3177,6 +3177,10 @@ public class JSONResponse{
         @SerializedName("transportasi")
         public String transportasi;
 
+
+        @SerializedName("email")
+        public String email;
+
         @SerializedName("address")
         public String address;
 
@@ -3339,6 +3343,14 @@ public class JSONResponse{
 
         public void setRw(String rw) {
             this.rw = rw;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
         }
 
         public String getDusun() {

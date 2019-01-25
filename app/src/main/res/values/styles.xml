@@ -87,4 +87,12 @@
         <item name="di_inAnimation">@anim/anim_scale_in</item>
         <item name="di_outAnimation">@anim/anim_scale_out</item>
     </style>
+
+    <style name="RecyclerTabLayoutTheme">
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/ic_logo_background</item>
+    </style>
+    <style name="RecyclerTabLayoutTheme.Basic">
+
+    </style>
 </resources>

@@ -229,7 +229,7 @@ public class KontakAnakFragment extends Fragment {
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     teleponrumah    = response.body().data.getHome_phone();
                     handphone       = response.body().data.getMobile_phone();
-                    email           = response.body().data.getMember_code();
+                    email           = response.body().data.getEmail();
                     skun            = response.body().data.getSkhun();
                     penerimaan_kps  = response.body().data.getPenerima_kps();
                     nomor_kps       = response.body().data.getNo_kps();
