@@ -264,27 +264,33 @@
             android:name=".Activity.JadiParent"
             android:label="Jadi Orang Tua"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Maps.TentangKami"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.ProfilAnak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Anak.JadwalPelajaran"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".Activity.Anak.KalenderKelas"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" >
 
         </activity>
-        <activity android:name=".Activity.Anak.JadwalPelajaran"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
-
-        </activity>
+        <activity android:name=".Activity.Anak.AbsensiAnak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Anak.JadwalUjian"
+            android:screenOrientation="portrait"
+            android:label="Jadwal Ujian"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />

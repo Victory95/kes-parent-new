@@ -13,6 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
+import com.fingertech.kes.Activity.Anak.JadwalUjian;
+import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -39,11 +41,13 @@ public class MenuSatuFragment extends Fragment {
         if(bundle!=null){
             authorization   = bundle.getString("authorization");
             parent_nik      = bundle.getString("parent_nik");
+            member_id       = bundle.getString("member_id");
             school_code     = bundle.getString("school_code");
             student_id      = bundle.getString("student_id");
+            classroom_id    = bundle.getString("classroom_id");
         }
     }
-    String authorization,parent_nik,school_code,student_id;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     FrameLayout frameLayout;
     @Override
@@ -75,10 +79,33 @@ public class MenuSatuFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), JadwalPelajaran.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("student_id",student_id);
+                intent.putExtra("classroom_id",classroom_id);
                 startActivity(intent);
             }
         });
 
+        btn_ujian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), JadwalUjian.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("student_id",student_id);
+                intent.putExtra("classroom_id",classroom_id);
+                startActivity(intent);
+            }
+        });
+
+        btn_absensi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), KalenderKelas.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

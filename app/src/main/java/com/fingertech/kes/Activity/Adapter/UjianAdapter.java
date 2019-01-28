@@ -8,19 +8,18 @@ import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ItemUjian;
-import com.fingertech.kes.Activity.Model.JadwalModel;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.JSONResponse;
 
 import java.util.List;
 
-public class JanuariAdapter extends RecyclerView.Adapter<JanuariAdapter.MyHolder> {
+public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
 
-    private List<JadwalModel> viewItemList;
+    private List<ItemUjian> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public JanuariAdapter(List<JadwalModel> viewItemList) {
+    public UjianAdapter(List<ItemUjian> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -31,7 +30,7 @@ public class JanuariAdapter extends RecyclerView.Adapter<JanuariAdapter.MyHolder
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_page, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ujian, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
@@ -42,12 +41,12 @@ public class JanuariAdapter extends RecyclerView.Adapter<JanuariAdapter.MyHolder
     public void onBindViewHolder(MyHolder holder, int position) {
 
         // Get car item dto in list.
-        JadwalModel viewItem = viewItemList.get(position);
+        ItemUjian viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.mapel.setText(viewItem.getCources_name());;
-        holder.lambel.setText(viewItem.getDuration() + " Menit");
-        holder.jambel.setText(viewItem.getSchedule_time());
-        holder.guru.setText(viewItem.getFullname());
+        holder.tanggal.setText(viewItem.getTanggal());;
+        holder.jam.setText(viewItem.getJam());
+        holder.mapel.setText(viewItem.getMapel());
+        holder.type_id.setText(viewItem.getType_id());
     }
 
     @Override
@@ -56,15 +55,15 @@ public class JanuariAdapter extends RecyclerView.Adapter<JanuariAdapter.MyHolder
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView mapel, lambel,jambel,guru;
+        TextView tanggal, jam,mapel,type_id;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            mapel = (TextView) itemView.findViewById(R.id.mapel);
-            lambel     = (TextView) itemView.findViewById(R.id.lamber);
-            jambel   = (TextView) itemView.findViewById(R.id.jambel);
-            guru = (TextView) itemView.findViewById(R.id.guru_ngajar);
+            tanggal = (TextView) itemView.findViewById(R.id.tanggal_ujian);
+            jam     = (TextView) itemView.findViewById(R.id.jam_ujian);
+            mapel   = (TextView) itemView.findViewById(R.id.mata_pelajaran);
+            type_id = (TextView) itemView.findViewById(R.id.type_id);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }

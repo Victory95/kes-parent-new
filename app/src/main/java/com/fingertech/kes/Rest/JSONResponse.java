@@ -1,10 +1,8 @@
 package com.fingertech.kes.Rest;
 
-import com.fingertech.kes.Activity.DetailSekolah;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.File;
 import java.util.List;
 
 public class JSONResponse{
@@ -3208,6 +3206,16 @@ public class JSONResponse{
         @SerializedName("picture")
         public String picture;
 
+        @SerializedName("classroom_id")
+        public String classroom_id;
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
 
         public String getMemberid() {
             return memberid;
@@ -3769,6 +3777,456 @@ public class JSONResponse{
 
         public String getPath() {
             return path;
+        }
+    }
+
+    public class  JadwalUjian{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataUjian> data;
+
+        public void setData(List<DataUjian> data) {
+            this.data = data;
+        }
+
+        public List<DataUjian> getData() {
+            return data;
+        }
+    }
+    public class DataUjian{
+
+        @SerializedName("exam_type")
+        private String exam_type;
+
+        @SerializedName("member_id")
+        private String member_id;
+
+        @SerializedName("exam_status")
+        private String exam_status;
+
+        @SerializedName("classroom_id")
+        private String classroom_id;
+
+        @SerializedName("exam_desc")
+        private String exam_desc;
+
+        @SerializedName("type_name")
+        private String type_name;
+
+        @SerializedName("datez")
+        private String datez;
+
+        @SerializedName("scyear_id")
+        private String scyear_id;
+
+        @SerializedName("cources_id")
+        private String cources_id;
+
+        @SerializedName("type_id")
+        private String type_id;
+
+        @SerializedName("class_stat")
+        private String class_stat;
+
+        @SerializedName("edulevel_id")
+        private String edulevel_id;
+
+        @SerializedName("exam_time_ok")
+        private String exam_time_ok;
+
+        @SerializedName("total_exam_file")
+        private int total_exam_file;
+
+        @SerializedName("exam_date_ok")
+        private String exam_date_ok;
+
+        @SerializedName("exam_time")
+        private String exam_time;
+
+        @SerializedName("score_value")
+        private String score_value;
+
+        @SerializedName("examid")
+        private String examid;
+
+        @SerializedName("exam_date")
+        private String exam_date;
+
+        @SerializedName("courcesreligion_id")
+        private String courcesreligion_id;
+
+        @SerializedName("edulevel_name")
+        private String edulevel_name;
+
+        @SerializedName("cources_name")
+        private String cources_name;
+
+        public String getEdulevel_name() {
+            return edulevel_name;
+        }
+
+        public void setEdulevel_name(String edulevel_name) {
+            this.edulevel_name = edulevel_name;
+        }
+
+        public String getCources_name() {
+            return cources_name;
+        }
+
+        public void setCources_name(String cources_name) {
+            this.cources_name = cources_name;
+        }
+
+        public String getExam_type() {
+            return exam_type;
+        }
+
+        public void setExam_type(String exam_type) {
+            this.exam_type = exam_type;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getExam_status() {
+            return exam_status;
+        }
+
+        public void setExam_status(String exam_status) {
+            this.exam_status = exam_status;
+        }
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
+
+        public String getExam_desc() {
+            return exam_desc;
+        }
+
+        public void setExam_desc(String exam_desc) {
+            this.exam_desc = exam_desc;
+        }
+
+        public String getType_name() {
+            return type_name;
+        }
+
+        public void setType_name(String type_name) {
+            this.type_name = type_name;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getScyear_id() {
+            return scyear_id;
+        }
+
+        public void setScyear_id(String scyear_id) {
+            this.scyear_id = scyear_id;
+        }
+
+        public String getCources_id() {
+            return cources_id;
+        }
+
+        public void setCources_id(String cources_id) {
+            this.cources_id = cources_id;
+        }
+
+        public String getType_id() {
+            return type_id;
+        }
+
+        public void setType_id(String type_id) {
+            this.type_id = type_id;
+        }
+
+        public String getClass_stat() {
+            return class_stat;
+        }
+
+        public void setClass_stat(String class_stat) {
+            this.class_stat = class_stat;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getExam_time_ok() {
+            return exam_time_ok;
+        }
+
+        public void setExam_time_ok(String exam_time_ok) {
+            this.exam_time_ok = exam_time_ok;
+        }
+
+        public int getTotal_exam_file() {
+            return total_exam_file;
+        }
+
+        public void setTotal_exam_file(int total_exam_file) {
+            this.total_exam_file = total_exam_file;
+        }
+
+        public String getExam_date_ok() {
+            return exam_date_ok;
+        }
+
+        public void setExam_date_ok(String exam_date_ok) {
+            this.exam_date_ok = exam_date_ok;
+        }
+
+        public String getExam_time() {
+            return exam_time;
+        }
+
+        public void setExam_time(String exam_time) {
+            this.exam_time = exam_time;
+        }
+
+        public String getScore_value() {
+            return score_value;
+        }
+
+        public void setScore_value(String score_value) {
+            this.score_value = score_value;
+        }
+
+        public String getExamid() {
+            return examid;
+        }
+
+        public void setExamid(String examid) {
+            this.examid = examid;
+        }
+
+        public String getExam_date() {
+            return exam_date;
+        }
+
+        public void setExam_date(String exam_date) {
+            this.exam_date = exam_date;
+        }
+
+        public String getCourcesreligion_id() {
+            return courcesreligion_id;
+        }
+
+        public void setCourcesreligion_id(String courcesreligion_id) {
+            this.courcesreligion_id = courcesreligion_id;
+        }
+    }
+
+    public class JadwalPelajaran{
+
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<JadwalData> data;
+
+        @SerializedName("status")
+        public int status;
+
+        public void setCode(String code){
+            this.code = code;
+        }
+
+        public String getCode(){
+            return code;
+        }
+
+        public void setData(List<JadwalData> data){
+            this.data = data;
+        }
+
+        public List<JadwalData> getData(){
+            return data;
+        }
+
+        public void setStatus(int status){
+            this.status = status;
+        }
+
+        public int getStatus(){
+            return status;
+        }
+    }
+
+    public class JadwalData{
+
+        @SerializedName("day_type")
+        public String dayType;
+
+        @SerializedName("schedule_class")
+        public List<ScheduleClassItem> scheduleClass;
+
+        @SerializedName("day_name")
+        public String dayName;
+
+        @SerializedName("dayid")
+        public String dayid;
+
+        @SerializedName("day_status")
+        public String dayStatus;
+
+        public void setDayType(String dayType){
+            this.dayType = dayType;
+        }
+
+        public String getDayType(){
+            return dayType;
+        }
+
+        public void setScheduleClass(List<ScheduleClassItem> scheduleClass){
+            this.scheduleClass = scheduleClass;
+        }
+
+        public List<ScheduleClassItem> getScheduleClass(){
+            return scheduleClass;
+        }
+
+        public void setDayName(String dayName){
+            this.dayName = dayName;
+        }
+
+        public String getDayName(){
+            return dayName;
+        }
+
+        public void setDayid(String dayid){
+            this.dayid = dayid;
+        }
+
+        public String getDayid(){
+            return dayid;
+        }
+
+        public void setDayStatus(String dayStatus){
+            this.dayStatus = dayStatus;
+        }
+
+        public String getDayStatus(){
+            return dayStatus;
+        }
+    }
+
+    public class ScheduleClassItem{
+
+
+        @SerializedName("timez_ok")
+        private String timezOk;
+
+        @SerializedName("teacher_name")
+        private String teacherName;
+
+        @SerializedName("schedule_time")
+        private String scheduleTime;
+
+        @SerializedName("cources_id")
+        private String courcesId;
+
+        @SerializedName("teacher_id")
+        private String teacherId;
+
+        @SerializedName("lesson_duration")
+        private int lessonDuration;
+
+        @SerializedName("cources_name")
+        private String courcesName;
+
+        @SerializedName("timez_finish")
+        private String timezFinish;
+
+        public void setTimezOk(String timezOk){
+            this.timezOk = timezOk;
+        }
+
+        public String getTimezOk(){
+            return timezOk;
+        }
+
+        public void setTeacherName(String teacherName){
+            this.teacherName = teacherName;
+        }
+
+        public String getTeacherName(){
+            return teacherName;
+        }
+
+        public void setScheduleTime(String scheduleTime){
+            this.scheduleTime = scheduleTime;
+        }
+
+        public String getScheduleTime(){
+            return scheduleTime;
+        }
+
+        public void setCourcesId(String courcesId){
+            this.courcesId = courcesId;
+        }
+
+        public String getCourcesId(){
+            return courcesId;
+        }
+
+        public void setTeacherId(String teacherId){
+            this.teacherId = teacherId;
+        }
+
+        public String getTeacherId(){
+            return teacherId;
+        }
+
+        public void setLessonDuration(int lessonDuration){
+            this.lessonDuration = lessonDuration;
+        }
+
+        public int getLessonDuration(){
+            return lessonDuration;
+        }
+
+        public void setCourcesName(String courcesName){
+            this.courcesName = courcesName;
+        }
+
+        public String getCourcesName(){
+            return courcesName;
+        }
+
+        public void setTimezFinish(String timezFinish){
+            this.timezFinish = timezFinish;
+        }
+
+        public String getTimezFinish(){
+            return timezFinish;
         }
     }
 }

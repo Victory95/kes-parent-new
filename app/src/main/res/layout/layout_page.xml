@@ -1,719 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="450dp"
+    android:background="@color/black_20"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <android.support.v4.widget.NestedScrollView
+        app:cardCornerRadius="8dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="50dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/black_12"
                 android:orientation="vertical">
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorPrimary"/>
                 <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Mata Pelajaran"
+                    android:gravity="center"
+                    android:textSize="16sp"
                     android:layout_marginTop="20dp"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="24sp"/>
-
-                <android.support.v7.widget.CardView
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginTop="40dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:id="@+id/mapel"
+                    android:textSize="16sp"
+                    android:background="@drawable/edt_bg_selector_black" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jam Belajar"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:id="@+id/jambel"
+                    android:background="@drawable/edt_bg_selector_black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lama Belajar"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:id="@+id/lamber"
+                    android:background="@drawable/edt_bg_selector_black"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guru yang mengajar"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="20dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:id="@+id/guru_ngajar"
+                    android:background="@drawable/edt_bg_selector_black"
+                    />
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/btn_download"
+                    android:layout_width="200dp"
+                    android:layout_margin="20dp"
+                    android:layout_height="40dp"
+                    android:clickable="true"
+                    android:layout_gravity="center"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    app:cardCornerRadius="15dp"
+                    app:layout_collapseMode="pin">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <LinearLayout
+                        android:background="@drawable/rectangel"
+                        android:orientation="horizontal">
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/show_data_anak"
-                            android:orientation="vertical">
+                            android:layout_height="match_parent"
+                            android:text="Download Materi"
+                            android:textColor="@color/ic_logo_background"
+                            android:textSize="20sp"
+                            android:gravity="center"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mata Pelajaran"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:id="@+id/mapel"
-                                android:textSize="16sp"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Jam Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/jambel"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Lama Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/lamber"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Guru yang mengajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/guru_ngajar"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/btn_download"
-                                android:layout_width="200dp"
-                                android:layout_margin="20dp"
-                                android:layout_height="40dp"
-                                android:clickable="true"
-                                android:layout_gravity="center"
-                                android:foreground="?android:attr/selectableItemBackground"
-                                android:scaleType="centerCrop"
-                                app:cardCornerRadius="15dp"
-                                app:layout_collapseMode="pin">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/rectangel"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Download Materi"
-                                        android:textColor="@color/ic_logo_background"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
-                        </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mata Pelajaran"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:id="@+id/mapel_kedua"
-                                android:textSize="16sp"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Jam Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/jambel_kedua"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Lama Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/lamber_kedua"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Guru yang mengajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/guru_ngajar_kedua"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/btn_download_kedua"
-                                android:layout_width="200dp"
-                                android:layout_margin="20dp"
-                                android:layout_height="40dp"
-                                android:clickable="true"
-                                android:layout_gravity="center"
-                                android:foreground="?android:attr/selectableItemBackground"
-                                android:scaleType="centerCrop"
-                                app:cardCornerRadius="15dp"
-                                app:layout_collapseMode="pin">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/rectangel"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Download Materi"
-                                        android:textColor="@color/ic_logo_background"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mata Pelajaran"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:id="@+id/mapel_ketiga"
-                                android:textSize="16sp"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Jam Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/jambel_ketiga"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Lama Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/lamber_ketiga"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Guru yang mengajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/guru_ngajar_ketiga"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/btn_download_ketiga"
-                                android:layout_width="200dp"
-                                android:layout_margin="20dp"
-                                android:layout_height="40dp"
-                                android:clickable="true"
-                                android:layout_gravity="center"
-                                android:foreground="?android:attr/selectableItemBackground"
-                                android:scaleType="centerCrop"
-                                app:cardCornerRadius="15dp"
-                                app:layout_collapseMode="pin">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/rectangel"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Download Materi"
-                                        android:textColor="@color/ic_logo_background"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mata Pelajaran"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:id="@+id/mapel_keempat"
-                                android:textSize="16sp"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Jam Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/jambel_keempat"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Lama Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/lamber_keempat"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Guru yang mengajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/guru_ngajar_keempat"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/btn_download_keempat"
-                                android:layout_width="200dp"
-                                android:layout_margin="20dp"
-                                android:layout_height="40dp"
-                                android:clickable="true"
-                                android:layout_gravity="center"
-                                android:foreground="?android:attr/selectableItemBackground"
-                                android:scaleType="centerCrop"
-                                app:cardCornerRadius="15dp"
-                                app:layout_collapseMode="pin">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/rectangel"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Download Materi"
-                                        android:textColor="@color/ic_logo_background"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="8dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginBottom="50dp"
-                    android:layout_marginRight="20dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Mata Pelajaran"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:id="@+id/mapel_kelima"
-                                android:textSize="16sp"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Jam Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/jambel_kelima"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Lama Belajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/lamber_kelima"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Guru yang mengajar"
-                                android:gravity="center"
-                                android:textSize="16sp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="5dp"
-                                android:layout_marginRight="20dp"
-                                android:paddingBottom="5dp"
-                                android:textSize="16sp"
-                                android:id="@+id/guru_ngajar_kelima"
-                                android:background="@drawable/edt_bg_selector_black"
-                                />
-
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/btn_download_kelima"
-                                android:layout_width="200dp"
-                                android:layout_margin="20dp"
-                                android:layout_height="40dp"
-                                android:clickable="true"
-                                android:layout_gravity="center"
-                                android:foreground="?android:attr/selectableItemBackground"
-                                android:scaleType="centerCrop"
-                                app:cardCornerRadius="15dp"
-                                app:layout_collapseMode="pin">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@drawable/rectangel"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="Download Materi"
-                                        android:textColor="@color/ic_logo_background"
-                                        android:textSize="20sp"
-                                        android:gravity="center"/>
-
-                                </LinearLayout>
-
-                            </android.support.v7.widget.CardView>
-                        </LinearLayout>
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-</FrameLayout>
+</LinearLayout>
