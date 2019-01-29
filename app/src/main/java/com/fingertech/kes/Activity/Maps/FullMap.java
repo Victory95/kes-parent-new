@@ -159,7 +159,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         findViewById(R.id.zoom_out).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    finish();
+                    onBackPressed();
             }
         });
         findViewById(R.id.refresh).setOnClickListener(new View.OnClickListener() {
@@ -1065,44 +1065,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         dialog.setCancelable(false);
     }
 
-
-    public void onClusterItemInfoWindowClick(ClusterItemSekolah item) {
-        Intent intent = new Intent(FullMap.this,DetailSekolah.class);
-        intent.putExtra("mLatitude", item.getLatitude());
-        intent.putExtra("mLongitude", item.getLongitude());
-
-        startActivity(intent);
-        finish();
-    }
-
-    public class MyCustomAdapterForItems implements GoogleMap.InfoWindowAdapter {
-
-        private final View myContentsView;
-
-        MyCustomAdapterForItems() {
-            myContentsView = getLayoutInflater().inflate(
-                    R.layout.snippet, null);
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            TextView tvTitle = ((TextView) myContentsView
-                    .findViewById(R.id.nama_sekolah_snippet));
-            TextView tvSnippet = ((TextView) myContentsView
-                    .findViewById(R.id.Alamat));
-
-            if (clusterItemSekolah != null) {
-                tvTitle.setText(clusterItemSekolah.getName());
-                tvSnippet.setText(clusterItemSekolah.getSnippet());
-            }
-            return myContentsView;
-        }
-    }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);

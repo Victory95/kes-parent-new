@@ -278,19 +278,34 @@
             android:name=".Activity.Anak.JadwalPelajaran"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".Activity.Anak.KalenderKelas"
+        <activity
+            android:name=".Activity.Anak.KalenderKelas"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity android:name=".Activity.Anak.AbsensiAnak"
+        <activity
+            android:name=".Activity.Anak.AbsensiAnak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.JadwalUjian"
-            android:screenOrientation="portrait"
+        <activity
+            android:name=".Activity.Anak.JadwalUjian"
             android:label="Jadwal Ujian"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Anak.TugasAnak"
+            android:label="Tugas Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".Activity.Anak.RaportAnak"
+            android:label="Raport Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />

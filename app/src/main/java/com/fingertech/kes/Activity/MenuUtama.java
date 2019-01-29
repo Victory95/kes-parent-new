@@ -35,6 +35,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -194,6 +195,7 @@ public class MenuUtama extends AppCompatActivity
     CircleImageView imageView;
     TextView namaanak;
     String Base_anak,classroom_id;
+    SwipeRefreshLayout swipeRefreshLayout;
     static int i;
 
     @Override
@@ -218,6 +220,7 @@ public class MenuUtama extends AppCompatActivity
         tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
         imageView           = (CircleImageView) findViewById(R.id.image_anak);
         namaanak            = (TextView)findViewById(R.id.nama_anak);
+        swipeRefreshLayout  = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
 
         setSupportActionBar(toolbar);
 
@@ -307,6 +310,17 @@ public class MenuUtama extends AppCompatActivity
             }
         });
         data_student_get();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                get_profile();
+                data_student_get();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -435,14 +449,19 @@ public class MenuUtama extends AppCompatActivity
                         String picture = response.body().getData().getPicture();
                         String nama    = response.body().getData().getFullname();
                         String member  = response.body().getData().getMember_Type();
+                        String count   = response.body().getData().getParent_Count();
                         tv_profile.setText(nama);
 
                         String imagefile = Base_url + picture;
                         Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
-                        viewpager.setVisibility(View.VISIBLE);
-                        view_group.setVisibility(View.VISIBLE);
+                        if (count.toString().equals("0")){
+                            view_group.setVisibility(View.VISIBLE);
+                        }else {
+                            viewpager.setVisibility(View.VISIBLE);
+                            view_group.setVisibility(View.VISIBLE);
+                        }
                     }else {
                         viewpager.setVisibility(View.GONE);
                         view_group.setVisibility(View.GONE);
@@ -509,18 +528,22 @@ public class MenuUtama extends AppCompatActivity
 
     public void send_data(){
         Bundle bundle = new Bundle();
-        bundle.putString("parent_nik",parent_nik);
-        bundle.putString("student_id",student_id);
-        bundle.putString("school_code",school_code);
-        bundle.putString("member_id",parent_id);
-        bundle.putString("authorization",authorization);
-        bundle.putString("classroom_id",classroom_id);
-        MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragMenuSatu,menuSatuFragment);
-        fragmentTransaction.commit();
-        menuSatuFragment.setArguments(bundle);
+        if (bundle != null) {
+            bundle.putString("parent_nik", parent_nik);
+            bundle.putString("student_id", student_id);
+            bundle.putString("school_code", school_code);
+            bundle.putString("member_id", parent_id);
+            bundle.putString("authorization", authorization);
+            bundle.putString("classroom_id", classroom_id);
+            MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragMenuSatu, menuSatuFragment);
+            fragmentTransaction.commit();
+            menuSatuFragment.setArguments(bundle);
+        }else {
+            Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
+        }
     }
 
     public class FragmentAdapter extends FragmentStatePagerAdapter {
@@ -608,8 +631,7 @@ public class MenuUtama extends AppCompatActivity
 
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-        updateLocation(location);
-        getAddress();
+
         dapat_map();
 
     }
@@ -642,65 +664,6 @@ public class MenuUtama extends AppCompatActivity
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-    }
-
-    void getAddress() {
-
-        try {
-
-            Geocoder gcd = new Geocoder(this
-                    , Locale.getDefault());
-
-            List<Address> addresses = gcd.getFromLocation(currentLatitude,
-
-                    currentLongitude, 100);
-
-            StringBuilder result = new StringBuilder();
-
-
-
-            if (addresses.size() > 0) {
-
-
-
-                Address address = addresses.get(1);
-
-                int maxIndex = address.getMaxAddressLineIndex();
-
-                for (int x = 0; x <= maxIndex; x++) {
-
-                    result.append(address.getAddressLine(x));
-
-                    result.append(",");
-
-                }
-
-
-
-            }
-
-            location = result.toString();
-
-        } catch (IOException ex) {
-
-            Toast.makeText(this, ex.getMessage(),
-
-                    Toast.LENGTH_LONG).show();
-
-
-
-        }
-
-    }
-
-    void updateLocation(Location location) {
-
-        lastLocation = location;
-
-        currentLatitude = lastLocation.getLatitude();
-
-        currentLongitude = lastLocation.getLongitude();
-
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
@@ -1195,6 +1158,7 @@ public class MenuUtama extends AppCompatActivity
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int)(dp * scale + 0.5f);
     }
+
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();

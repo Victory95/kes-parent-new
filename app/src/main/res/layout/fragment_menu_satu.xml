@@ -16,6 +16,7 @@
         android:clipToPadding="false"
         android:gravity="center"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <android.support.v7.widget.CardView
@@ -42,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
-                    android:text="Profil"/>
+                    android:text="Profil Anak"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

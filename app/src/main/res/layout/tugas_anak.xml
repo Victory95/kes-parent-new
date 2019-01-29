@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginBottom="20dp"
-    tools:context=".Activity.Anak.JadwalUjian">
+    tools:context=".Activity.Anak.TugasAnak">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_ujian"
+        android:id="@+id/toolbar_tugas"
         android:minHeight="?attr/actionBarSize"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
@@ -49,55 +49,24 @@
             android:layout_gravity="center"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="5dp"
-            android:id="@+id/btn_download_jadwal"
+            android:id="@+id/btn_download_tugas"
             android:layout_margin="20dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/ic_logo_background"
-                android:text="Download Jadwal"/>
+                android:text="Download Tugas"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/ic_logo_background"
-            android:text="Hari"
-            android:layout_weight="1"/>
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Mata Pelajaran"
-            android:textColor="@color/ic_logo_background"
-            android:gravity="center"
-            android:layout_weight="1"/>
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Jenis Ujian"
-            android:textColor="@color/ic_logo_background"
-            android:gravity="center"
-            android:layout_weight="1"/>
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"/>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recycle_ujian">
+        android:id="@+id/recycle_tugas">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

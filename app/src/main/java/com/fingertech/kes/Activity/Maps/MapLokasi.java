@@ -272,7 +272,7 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
 

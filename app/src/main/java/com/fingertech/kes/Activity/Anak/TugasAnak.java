@@ -1,10 +1,8 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.app.ProgressDialog;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -14,15 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Adapter.TugasAdapter;
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
-import com.fingertech.kes.Activity.DetailSekolah;
-import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ItemUjian;
+import com.fingertech.kes.Activity.Model.TugasModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -35,88 +31,92 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class JadwalUjian extends AppCompatActivity {
+public class TugasAnak extends AppCompatActivity {
+
 
     TextView wali_kelas;
     CardView btn_download;
     RecyclerView recyclerView;
-    private List<ItemUjian> itemlist;
-    private UjianAdapter ujianAdapter = null;
+    Toolbar toolbar;
     int status;
     Auth mApiInterface;
     String code;
-    String authorization,school_code,jam,tanggal,type_id,mapel,classroom_id,student_id;
-    Toolbar toolbar;
     ProgressDialog dialog;
+    String authorization,school_code,classroom_id,student_id;
+
+    TugasAdapter tugasAdapter;
+    private List<TugasModel> listTugas;
+    String mapel,tanggals,deskripsi,tipe,guru,nilai;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.jadwal_ujian);
+        setContentView(R.layout.tugas_anak);
 
-        wali_kelas      = (TextView)findViewById(R.id.wali_kelas);
-        btn_download    = (CardView)findViewById(R.id.btn_download_jadwal);
-        toolbar         = (Toolbar)findViewById(R.id.toolbar_ujian);
-
+        toolbar         = findViewById(R.id.toolbar_tugas);
+        wali_kelas      = findViewById(R.id.wali_kelas);
+        btn_download    = findViewById(R.id.btn_download_tugas);
+        recyclerView    = findViewById(R.id.recycle_tugas);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         authorization   = getIntent().getStringExtra("authorization");
         school_code     = getIntent().getStringExtra("school_code");
         classroom_id    = getIntent().getStringExtra("classroom_id");
         student_id      = getIntent().getStringExtra("student_id");
 
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
-
-        Jadwal_ujian();
+        Tugas_anak();
     }
-    private void Jadwal_ujian(){
+    private void Tugas_anak(){
         progressBar();
         showDialog();
-        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),student_id.toString(),classroom_id.toString());
+        Call<JSONResponse.TugasAnak> call = mApiInterface.kes_cources_score_get(authorization.toString(),school_code.toString().toLowerCase(),student_id.toString(),classroom_id.toString());
 
-        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
+        call.enqueue(new Callback<JSONResponse.TugasAnak>() {
 
             @Override
-            public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
+            public void onResponse(Call<JSONResponse.TugasAnak> call, final Response<JSONResponse.TugasAnak> response) {
                 Log.i("KES", response.code() + "");
                 hideDialog();
 
-                JSONResponse.JadwalUjian resource = response.body();
+                JSONResponse.TugasAnak resource = response.body();
 
                 status = resource.status;
                 code    = resource.code;
 
-                ItemUjian itemUjian= null;
+                TugasModel tugasModel= null;
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    itemlist = new ArrayList<ItemUjian>();
+                    listTugas = new ArrayList<TugasModel>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
-                        jam     = response.body().getData().get(i).getExam_time();
-                        tanggal = response.body().getData().get(i).getExam_date();
-                        mapel   = response.body().getData().get(i).getCources_name();
-                        type_id = response.body().getData().get(i).getType_name();
+                        tanggals     = response.body().getData().get(i).getExamDate();
+                        mapel       = response.body().getData().get(i).getCources_name();
+                        tipe        = response.body().getData().get(i).getExamTypeName();
+                        deskripsi   = response.body().getData().get(i).getExamDesc();
+                        guru        = response.body().getData().get(i).getTeacher_name();
+                        nilai       = response.body().getData().get(i).getScoreValue();
 
-                        itemUjian   = new ItemUjian();
-                        itemUjian.setJam(jam);
-                        itemUjian.setTanggal(tanggal);
-                        itemUjian.setMapel(mapel);
-                        itemUjian.setType_id(type_id);
-                        itemlist.add(itemUjian);
-
+                        tugasModel   = new TugasModel();
+                        tugasModel.setTanggal(tanggals);
+                        tugasModel.setMapel(mapel);
+                        tugasModel.setTipe(tipe);
+                        tugasModel.setDeskripsi(deskripsi);
+                        tugasModel.setGuru(guru);
+                        tugasModel.setNilai(nilai);
+                        listTugas.add(tugasModel);
                     }
-                    recyclerView    = (RecyclerView)findViewById(R.id.recycle_ujian);
-                    ujianAdapter    = new UjianAdapter(itemlist);
+                    tugasAdapter    = new TugasAdapter(listTugas);
 
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(TugasAnak.this);
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(ujianAdapter);
+                    recyclerView.setAdapter(tugasAdapter);
                 }
 
             }
 
             @Override
-            public void onFailure(Call<JSONResponse.JadwalUjian> call, Throwable t) {
+            public void onFailure(Call<JSONResponse.TugasAnak> call, Throwable t) {
                 Log.d("onFailure", t.toString());
                 hideDialog();
             }
@@ -134,7 +134,7 @@ public class JadwalUjian extends AppCompatActivity {
         dialog.setContentView(R.layout.progressbar);
     }
     public void progressBar(){
-        dialog = new ProgressDialog(JadwalUjian.this);
+        dialog = new ProgressDialog(TugasAnak.this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
@@ -154,4 +154,3 @@ public class JadwalUjian extends AppCompatActivity {
     }
 
 }
-

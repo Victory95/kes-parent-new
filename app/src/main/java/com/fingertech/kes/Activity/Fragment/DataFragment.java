@@ -196,16 +196,13 @@ public class DataFragment extends Fragment  {
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
         student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
-
-        school_code = "bpk01";
-        student_id = "418";
 
         data_parent_student_get();
 

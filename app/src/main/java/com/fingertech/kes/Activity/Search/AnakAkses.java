@@ -501,7 +501,8 @@ public class AnakAkses extends AppCompatActivity {
                 } else {
                     status_nik =0;
                     if(status == 0 && code.equals("CSN_ERR_0001")){
-                        tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.validate_nik_niora), Toast.LENGTH_SHORT).show();
+//                        tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
                         requestFocus(et_nik);
                         Toast.makeText(getApplicationContext(), CSN_ERR_0001, Toast.LENGTH_LONG).show();
                     }

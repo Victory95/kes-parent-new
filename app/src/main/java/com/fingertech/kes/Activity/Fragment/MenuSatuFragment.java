@@ -16,6 +16,8 @@ import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
+import com.fingertech.kes.Activity.Anak.RaportAnak;
+import com.fingertech.kes.Activity.Anak.TugasAnak;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
@@ -103,6 +105,29 @@ public class MenuSatuFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), KalenderKelas.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_tugas_anak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), TugasAnak.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("student_id",student_id);
+                intent.putExtra("classroom_id",classroom_id);
+                startActivity(intent);
+            }
+        });
+        btn_raport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), RaportAnak.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("student_id",student_id);
+                intent.putExtra("classroom_id",classroom_id);
                 startActivity(intent);
             }
         });

@@ -219,8 +219,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         hubungan            = sharedviewpager.getString(TAG_HUBUNGAN,"hubungan");
         kewarganegaraan     = sharedviewpager.getString(TAG_KEWARGANEGARAAN,"type_warga");
 
-        school_code = "bpk01";
-        student_id = "418";
 
         arros.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -271,6 +271,20 @@ public interface Auth {
                                                         @Query("student_id") String student_id,
                                                         @Query("classroom_id") String classroom_id);
 
+    @GET("students/kes_cources_score")
+    Call<JSONResponse.TugasAnak>kes_cources_score_get(@Header("Authorization") String authorization,
+                                                             @Query("school_code") String school_code,
+                                                             @Query("student_id") String student_id,
+                                                             @Query("classroom_id") String classroom_id);
+
+    @GET("students/kes_rapor_score")
+    Call<JSONResponse.Raport>kes_rapor_score_get(@Header("Authorization") String authorization,
+                                                 @Query("school_code") String school_code,
+                                                 @Query("student_id") String student_id,
+                                                      @Query("classroom_id") String classroom_id,
+                                                      @Query("semester_id") String semester_id);
+
+
 
 
 }
