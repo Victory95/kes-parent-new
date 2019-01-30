@@ -317,6 +317,7 @@ public class MenuUtama extends AppCompatActivity
             public void onRefresh() {
                 get_profile();
                 data_student_get();
+                send_data();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }

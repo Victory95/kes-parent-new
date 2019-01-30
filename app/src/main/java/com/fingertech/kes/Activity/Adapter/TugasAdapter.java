@@ -48,6 +48,7 @@ public class TugasAdapter extends RecyclerView.Adapter<TugasAdapter.MyHolder> {
         holder.deskripsi.setText(viewItem.getDeskripsi());
         holder.guru.setText(viewItem.getGuru());
         holder.nilai.setText(viewItem.getNilai());
+
     }
 
     @Override

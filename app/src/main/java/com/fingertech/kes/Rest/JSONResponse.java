@@ -4501,14 +4501,14 @@ public class JSONResponse{
     }
 
     public class Raport{
+        @SerializedName("status")
+        public int status;
+
         @SerializedName("code")
         public String code;
 
         @SerializedName("data")
         public RaportData data;
-
-        @SerializedName("status")
-        public int status;
 
         public String getCode() {
             return code;
@@ -4736,7 +4736,7 @@ public class JSONResponse{
         @SerializedName("scyear_id")
         private String scyearId;
 
-        @SerializedName("promote_rangking")
+        @SerializedName("promote_ranking")
         private String promoteRanking;
 
         @SerializedName("classroom_code")
@@ -4841,72 +4841,72 @@ public class JSONResponse{
     public class TypeExam{
 
         @SerializedName("1")
-        private JsonMember1 jsonMember1;
+        private UjianSekolah ujianSekolah;
 
         @SerializedName("2")
-        private JsonMember2 jsonMember2;
+        private UjianNegara ujianNegara;
 
         @SerializedName("3")
-        private JsonMember3 jsonMember3;
+        private UlanganHarian ulanganHarian;
 
         @SerializedName("4")
-        private JsonMember4 jsonMember4;
+        private LatihanTeori latihanTeori;
 
         @SerializedName("5")
-        private JsonMember5 jsonMember5;
+        private Praktikum praktikum;
 
         @SerializedName("6")
-        private JsonMember6 jsonMember6;
+        private Ekstrakulikuler ekstrakulikuler;
 
-        public void setJsonMember1(JsonMember1 jsonMember1){
-            this.jsonMember1 = jsonMember1;
+        public UjianSekolah getUjianSekolah() {
+            return ujianSekolah;
         }
 
-        public JsonMember1 getJsonMember1(){
-            return jsonMember1;
+        public void setUjianSekolah(UjianSekolah ujianSekolah) {
+            this.ujianSekolah = ujianSekolah;
         }
 
-        public void setJsonMember2(JsonMember2 jsonMember2){
-            this.jsonMember2 = jsonMember2;
+        public UjianNegara getUjianNegara() {
+            return ujianNegara;
         }
 
-        public JsonMember2 getJsonMember2(){
-            return jsonMember2;
+        public void setUjianNegara(UjianNegara ujianNegara) {
+            this.ujianNegara = ujianNegara;
         }
 
-        public void setJsonMember3(JsonMember3 jsonMember3){
-            this.jsonMember3 = jsonMember3;
+        public UlanganHarian getUlanganHarian() {
+            return ulanganHarian;
         }
 
-        public JsonMember3 getJsonMember3(){
-            return jsonMember3;
+        public void setUlanganHarian(UlanganHarian ulanganHarian) {
+            this.ulanganHarian = ulanganHarian;
         }
 
-        public void setJsonMember4(JsonMember4 jsonMember4){
-            this.jsonMember4 = jsonMember4;
+        public LatihanTeori getLatihanTeori() {
+            return latihanTeori;
         }
 
-        public JsonMember4 getJsonMember4(){
-            return jsonMember4;
+        public void setLatihanTeori(LatihanTeori latihanTeori) {
+            this.latihanTeori = latihanTeori;
         }
 
-        public void setJsonMember5(JsonMember5 jsonMember5){
-            this.jsonMember5 = jsonMember5;
+        public Praktikum getPraktikum() {
+            return praktikum;
         }
 
-        public JsonMember5 getJsonMember5(){
-            return jsonMember5;
+        public void setPraktikum(Praktikum praktikum) {
+            this.praktikum = praktikum;
         }
 
-        public void setJsonMember6(JsonMember6 jsonMember6){
-            this.jsonMember6 = jsonMember6;
+        public Ekstrakulikuler getEkstrakulikuler() {
+            return ekstrakulikuler;
         }
 
-        public JsonMember6 getJsonMember6(){
-            return jsonMember6;
+        public void setEkstrakulikuler(Ekstrakulikuler ekstrakulikuler) {
+            this.ekstrakulikuler = ekstrakulikuler;
         }
     }
-    public class JsonMember1{
+    public class UjianSekolah{
         @SerializedName("type_name")
         private String typeName;
 
@@ -4917,7 +4917,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -4943,16 +4943,16 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
 
-    public class JsonMember2{
+    public class UjianNegara{
 
         @SerializedName("type_name")
         private String typeName;
@@ -4964,7 +4964,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -4990,15 +4990,15 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
-    public class JsonMember3{
+    public class UlanganHarian{
         @SerializedName("type_name")
         private String typeName;
 
@@ -5009,7 +5009,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -5035,15 +5035,15 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
-    public class JsonMember4{
+    public class LatihanTeori{
         @SerializedName("type_name")
         private String typeName;
 
@@ -5054,7 +5054,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -5080,15 +5080,15 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
-    public class JsonMember5{
+    public class Praktikum{
         @SerializedName("type_name")
         private String typeName;
 
@@ -5099,7 +5099,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -5125,15 +5125,15 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
-    public class JsonMember6{
+    public class Ekstrakulikuler{
         @SerializedName("type_name")
         private String typeName;
 
@@ -5144,7 +5144,7 @@ public class JSONResponse{
         private int scoreStatus;
 
         @SerializedName("score_exam")
-        private int scoreExam;
+        private double scoreExam;
 
         public void setTypeName(String typeName){
             this.typeName = typeName;
@@ -5170,13 +5170,47 @@ public class JSONResponse{
             return scoreStatus;
         }
 
-        public void setScoreExam(int scoreExam){
+        public void setScoreExam(double scoreExam){
             this.scoreExam = scoreExam;
         }
 
-        public int getScoreExam(){
+        public double getScoreExam(){
             return scoreExam;
         }
     }
 
+    public class CheckSemester{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public String data;
+
+        public Integer getStatus() {
+            return status;
+        }
+
+        public void setStatus(Integer status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public String getData() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data = data;
+        }
+    }
 }

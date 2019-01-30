@@ -108,8 +108,10 @@ public class TugasAnak extends AppCompatActivity {
                     }
                     tugasAdapter    = new TugasAdapter(listTugas);
 
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(TugasAnak.this);
-                    recyclerView.setLayoutManager(layoutManager);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TugasAnak.this, LinearLayoutManager.VERTICAL, false);
+                    linearLayoutManager.setStackFromEnd(true);
+                    linearLayoutManager.setReverseLayout(true);
+                    recyclerView.setLayoutManager(linearLayoutManager);
                     recyclerView.setAdapter(tugasAdapter);
                 }
 

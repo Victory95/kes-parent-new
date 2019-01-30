@@ -281,8 +281,14 @@ public interface Auth {
     Call<JSONResponse.Raport>kes_rapor_score_get(@Header("Authorization") String authorization,
                                                  @Query("school_code") String school_code,
                                                  @Query("student_id") String student_id,
-                                                      @Query("classroom_id") String classroom_id,
-                                                      @Query("semester_id") String semester_id);
+                                                 @Query("classroom_id") String classroom_id,
+                                                 @Query("semester_id") String semester_id);
+    @GET("students/kes_check_semester")
+    Call<JSONResponse.CheckSemester>kes_check_semester_get(@Header("Authorization") String authorization,
+                                                 @Query("school_code") String school_code,
+                                                 @Query("classroom_id") String classroom_id,
+                                                 @Query("date_now") String date_now);
+
 
 
 

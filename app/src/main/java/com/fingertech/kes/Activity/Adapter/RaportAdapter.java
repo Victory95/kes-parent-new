@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.fingertech.kes.Activity.Model.RaporModel;
 import com.fingertech.kes.R;
 
+import java.util.Date;
 import java.util.List;
 
 public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder> {
@@ -48,6 +49,9 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder> 
         holder.ujian_sekolah.setText(viewItem.getUjian_sekolah());
         holder.eskul.setText(viewItem.getEskul());
         holder.praktikum.setText(viewItem.getPraktikum());
+        holder.nilai_akhir.setText(viewItem.getNilai_akhir());
+        holder.rata_rata.setText(viewItem.getRata_rata());
+
     }
 
     @Override
@@ -56,7 +60,7 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder> 
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel;
+        TextView teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel,nilai_akhir,rata_rata;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
@@ -68,6 +72,8 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder> 
             ujian_sekolah   = (TextView) itemView.findViewById(R.id.ujian_sekolah);
             ujian_negara    = (TextView) itemView.findViewById(R.id.ujian_negara);
             mapel           = (TextView) itemView.findViewById(R.id.mapel_raport);
+            rata_rata       = (TextView) itemView.findViewById(R.id.rata_rata);
+            nilai_akhir     = (TextView) itemView.findViewById(R.id.nilai_akhir);
 
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
@@ -82,4 +88,6 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder> 
 
         void onItemClick(View view, int position);
     }
+
+
 }

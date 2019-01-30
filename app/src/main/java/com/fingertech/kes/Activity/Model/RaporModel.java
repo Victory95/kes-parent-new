@@ -9,6 +9,26 @@ public class RaporModel {
     public String ujian_negara;
     public String mapel;
 
+
+    public String nilai_akhir,rata_rata;
+
+    public String getNilai_akhir() {
+        return nilai_akhir;
+    }
+
+    public void setNilai_akhir(String nilai_akhir) {
+        this.nilai_akhir = nilai_akhir;
+    }
+
+    public String getRata_rata() {
+        return rata_rata;
+    }
+
+    public void setRata_rata(String rata_rata) {
+        this.rata_rata = rata_rata;
+    }
+
+
     public String getTeori() {
         return teori;
     }
