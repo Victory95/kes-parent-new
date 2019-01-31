@@ -7,27 +7,53 @@
     tools:context=".Activity.Anak.KalenderKelas"
     android:orientation="vertical">
 
-    <!--<com.github.sundeepk.compactcalendarview.CompactCalendarView-->
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-        <!--android:id="@+id/compactcalendar_view"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:paddingRight="10dp"-->
-        <!--android:paddingLeft="10dp"-->
-        <!--android:layout_height="250dp"-->
-        <!--app:compactCalendarTargetHeight="250dp"-->
-        <!--app:compactCalendarTextSize="12sp"-->
-        <!--app:compactCalendarBackgroundColor="@color/ic_logo_background"-->
-        <!--app:compactCalendarTextColor="@color/black"-->
-        <!--app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimary"-->
-        <!--app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimaryDark"-->
-        <!--app:compactCalendarMultiEventIndicatorColor="#fff"-->
-        <!--/>-->
-
-    <CalendarView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:theme="@style/TextLabelView"
-        android:id="@+id/calender">
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/ic_left_arrow"
+            android:id="@+id/left_calender"
+            android:layout_margin="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/month_calender"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/right_calender"
+            android:background="@drawable/ic_arrow"
+            android:layout_weight="3"/>
+    </LinearLayout>
 
-    </CalendarView>
+    <com.github.sundeepk.compactcalendarview.CompactCalendarView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/compactcalendar_view"
+        android:layout_width="fill_parent"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:layout_height="250dp"
+        app:compactCalendarTargetHeight="250dp"
+        app:compactCalendarTextSize="12sp"
+        app:compactCalendarBackgroundColor="@color/ic_logo_background"
+        app:compactCalendarTextColor="@color/black"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimary"
+        app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimaryDark"
+        app:compactCalendarMultiEventIndicatorColor="#fff"
+        />
+
+    <!--<CalendarView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="250dp"-->
+        <!--android:theme="@style/TextLabelView"-->
+        <!--android:id="@+id/calender">-->
+
+    <!--</CalendarView>-->
 </LinearLayout>

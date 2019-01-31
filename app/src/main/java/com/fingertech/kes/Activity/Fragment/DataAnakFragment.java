@@ -222,16 +222,17 @@ public class DataAnakFragment extends Fragment {
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
         student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        school_code = "bpk01";
-        student_id = "418";
+        school_code = "bpk02";
+        student_id = "369";
+
 
         data_student_get();
 
@@ -253,10 +254,9 @@ public class DataAnakFragment extends Fragment {
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               send_data();
-////                submitForm();
+                submitForm();
 
-                ParentPager.setCurrentItem(getItem(+1),true);
+//                ParentPager.setCurrentItem(getItem(+1),true);
             }
         });
 
@@ -627,7 +627,7 @@ public class DataAnakFragment extends Fragment {
 
     private boolean validateNamaLengkap() {
         if (et_nama_lengkap.getText().toString().trim().isEmpty()) {
-            til_nama_lengkap.setError(getResources().getString(R.string.validate_name_depan));
+            Toast.makeText(getContext(),"Harap di isi nama anak",Toast.LENGTH_LONG).show();
             requestFocus(et_nama_lengkap);
             return false;
         } else {
@@ -638,7 +638,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateNis() {
         if (et_nis.getText().toString().trim().isEmpty()) {
-            til_nis.setError(getResources().getString(R.string.validate_nik));
+            Toast.makeText(getContext(),"Harap di isi Nis anak",Toast.LENGTH_LONG).show();
             requestFocus(et_nis);
             return false;
         } else {
@@ -649,7 +649,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateNisn() {
         if (et_nisn.getText().toString().trim().isEmpty()) {
-            til_nisn.setError(getResources().getString(R.string.validate_tempat_lahir));
+            Toast.makeText(getContext(),"Harap di isi nisn anak",Toast.LENGTH_LONG).show();
             requestFocus(et_nisn);
             return false;
         } else {
@@ -660,7 +660,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateNik() {
         if (et_nik.getText().toString().trim().isEmpty()) {
-            til_nik.setError(getResources().getString(R.string.validate_tanggal_lahir));
+            Toast.makeText(getContext(),"Harap di isi nik anak",Toast.LENGTH_LONG).show();
             requestFocus(et_nik);
             return false;
         } else {
@@ -671,7 +671,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateRombel() {
         if (et_rombel.getText().toString().trim().isEmpty()) {
-            til_rombel.setError(getResources().getString(R.string.validate_name_depan));
+            Toast.makeText(getContext(),"Harap di isi rombel anak",Toast.LENGTH_LONG).show();
             requestFocus(et_rombel);
             return false;
         } else {
@@ -682,6 +682,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateJeniskelamin() {
         if (jenis_kelamin.toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi jenis kelamin anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
         }
@@ -690,7 +691,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateTempatlahir() {
         if (et_tempat_lahir.getText().toString().trim().isEmpty()) {
-            til_tempat_lahir.setError(getResources().getString(R.string.validate_tempat_lahir));
+            Toast.makeText(getContext(),"Harap di isi tempat lahir anak",Toast.LENGTH_LONG).show();
             requestFocus(et_tempat_lahir);
             return false;
         } else {
@@ -701,7 +702,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateTanggallahir() {
         if (et_tanggal.getText().toString().trim().isEmpty()) {
-            til_tanggal_lahir.setError(getResources().getString(R.string.validate_tanggal_lahir));
+            Toast.makeText(getContext(),"Harap di isi tanggal lahir anak",Toast.LENGTH_LONG).show();
             requestFocus(et_tanggal);
             return false;
         } else {
@@ -712,6 +713,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateAgama() {
         if (sp_agama.getSelectedItem().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi agama anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
         }
@@ -720,7 +722,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateKebutuhankhusus() {
         if (et_kebutuhan_khusus.getText().toString().trim().isEmpty()) {
-            til_kebutuhan_khusus.setError(getResources().getString(R.string.validate_nik));
+            Toast.makeText(getContext(),"Harap di isi kebutuhan khusus anak",Toast.LENGTH_LONG).show();
             requestFocus(et_kebutuhan_khusus);
             return false;
         } else {
@@ -730,8 +732,8 @@ public class DataAnakFragment extends Fragment {
         return true;
     }
     private boolean validateNegara() {
-        if (kewarganegaraan.toString().trim().isEmpty()) {
-
+        if (negaraasal.toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi negara anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
         }
@@ -740,6 +742,7 @@ public class DataAnakFragment extends Fragment {
     }
     private boolean validateTingkatan() {
         if (sp_tingkatan.getSelectedItem().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi tingkatan anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
         }

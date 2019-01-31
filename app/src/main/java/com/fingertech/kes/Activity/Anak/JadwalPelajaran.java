@@ -32,7 +32,12 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -70,6 +75,7 @@ public class JadwalPelajaran extends AppCompatActivity {
     String jam_mulai;
     String jam_selesai;
     String guru,daysid,day_type,day_status;
+    String date,day;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +121,43 @@ public class JadwalPelajaran extends AppCompatActivity {
         }else {
             Toast.makeText(JadwalPelajaran.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
         }
+
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        date = df.format(Calendar.getInstance().getTime());
+
+
+        SimpleDateFormat inFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date dater = null;
+        try {
+            dater = inFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat outFormat = new SimpleDateFormat("EEEE");
+        day = outFormat.format(dater);
+
+        if (day.equals("Senin")){
+            hint_senin.setVisibility(View.GONE);
+            rv_senin.setVisibility(View.VISIBLE);
+            arrow_senin.setBackgroundResource(R.drawable.ic_up_arrow_white);
+        }else if (day.equals("Selasa")){
+            hint_selasa.setVisibility(View.GONE);
+            rv_selasa.setVisibility(View.VISIBLE);
+            arrow_selasa.setBackgroundResource(R.drawable.ic_up_arrow_white);
+        }else if (day.equals("Rabu")){
+            hint_rabu.setVisibility(View.GONE);
+            rv_rabu.setVisibility(View.VISIBLE);
+            arrow_rabu.setBackgroundResource(R.drawable.ic_up_arrow_white);
+        }else if (day.equals("Kamis")){
+            hint_kamis.setVisibility(View.GONE);
+            rv_kamis.setVisibility(View.VISIBLE);
+            arrow_kamis.setBackgroundResource(R.drawable.ic_up_arrow_white);
+        }else if (day.equals("Jumat")){
+            hint_jumat.setVisibility(View.GONE);
+            rv_jumat.setVisibility(View.VISIBLE);
+            arrow_jumat.setBackgroundResource(R.drawable.ic_up_arrow_white);
+        }
+
 
         btn_senin.setOnClickListener(new View.OnClickListener() {
             @Override

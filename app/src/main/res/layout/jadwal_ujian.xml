@@ -94,6 +94,14 @@
             android:gravity="center"
             android:layout_weight="1"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tidak ada jadwal ujian"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:id="@+id/no_ujian"/>
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

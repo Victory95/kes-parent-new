@@ -63,6 +63,15 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:id="@+id/no_tugas"
+        android:visibility="gone"
+        android:text="Tidak ada tugas yang diberikan oleh guru"
+        android:gravity="center"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

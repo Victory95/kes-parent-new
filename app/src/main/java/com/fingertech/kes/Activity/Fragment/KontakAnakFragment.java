@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -108,6 +110,7 @@ public class KontakAnakFragment extends Fragment {
     String code;
     ProgressDialog dialog;
     Auth mApiInterface;
+    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps,til_penerimaankps;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,12 +134,17 @@ public class KontakAnakFragment extends Fragment {
         et_skun             = (EditText)view.findViewById(R.id.et_skun);
         et_penerimaankps    = (EditText)view.findViewById(R.id.et_PKPS);
         et_nomorkps         = (EditText)view.findViewById(R.id.et_kps);
+        til_email           = view.findViewById(R.id.til_e_mail);
+        til_handphone       = view.findViewById(R.id.til_nomor_Ponsel);
+        til_nokps           = view.findViewById(R.id.til_kps);
+        til_teleponrumah    = view.findViewById(R.id.til_nomor_Rumah);
+        til_penerimaankps   = view.findViewById(R.id.til_PKPS);
+        til_skun            = view.findViewById(R.id.til_skun);
 
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                send_data();
-                ParentPager.setCurrentItem(getItem(+1), true); }
+                submitForm(); }
         });
 
         buttonKembali.setOnClickListener(new View.OnClickListener() {
@@ -158,11 +166,11 @@ public class KontakAnakFragment extends Fragment {
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
         student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-//        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
+        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-//        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
 
@@ -180,8 +188,8 @@ public class KontakAnakFragment extends Fragment {
         Agama               = sharedanak.getString(TAG_AGAMA,"");
         Negara              = sharedanak.getString(TAG_KEWARGANEGARAAN,"");
 
-        school_code = "bpk01";
-        student_id = "418";
+        school_code = "bpk02";
+        student_id = "369";
 
         data_student_get();
 
@@ -271,6 +279,104 @@ public class KontakAnakFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
+    }
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    public void submitForm() {
+
+        if (!validateEmail()) {
+            return;
+        }
+        if (!validateHandphone()) {
+            return;
+        }
+        if (!validateTelepon()) {
+            return;
+        }
+        if (!validateNomorkps()){
+            return;
+        }
+        if (!validatePenerimaan()){
+            return;
+        }
+        if (!validateSkun()){
+            return;
+
+        }else {
+            send_data();
+            ParentPager.setCurrentItem(getItem(+1), true);
+        }
+    }
+
+    private boolean validateEmail() {
+        if (et_email.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi email anak anda",Toast.LENGTH_LONG).show();
+            requestFocus(et_email);
+            return false;
+        } else {
+            til_email.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateHandphone() {
+        if (et_handphone.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi no hp anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_handphone);
+            return false;
+        } else {
+            til_handphone.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateTelepon() {
+        if (et_teleponrumah.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi telepon rumah anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_teleponrumah);
+            return false;
+        } else {
+            til_teleponrumah.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateNomorkps() {
+        if (et_nomorkps.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi no kps anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_nomorkps);
+            return false;
+        } else {
+            til_nokps.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validatePenerimaan() {
+        if (et_penerimaankps.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi penerimaan anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_penerimaankps);
+            return false;
+        } else {
+            til_penerimaankps.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateSkun() {
+        if (et_skun.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi skun anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_skun);
+            return false;
+        } else {
+            til_skun.setErrorEnabled(false);
+        }
+
+        return true;
     }
 
     public void send_data(){

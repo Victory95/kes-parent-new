@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class TugasAnak extends AppCompatActivity {
     String authorization,school_code,classroom_id,student_id;
 
     TugasAdapter tugasAdapter;
+    TextView no_tugas;
     private List<TugasModel> listTugas;
     String mapel,tanggals,deskripsi,tipe,guru,nilai;
     @Override
@@ -57,6 +59,7 @@ public class TugasAnak extends AppCompatActivity {
         btn_download    = findViewById(R.id.btn_download_tugas);
         recyclerView    = findViewById(R.id.recycle_tugas);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
+        no_tugas        = findViewById(R.id.no_tugas);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,30 +92,34 @@ public class TugasAnak extends AppCompatActivity {
                 TugasModel tugasModel= null;
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     listTugas = new ArrayList<TugasModel>();
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        tanggals     = response.body().getData().get(i).getExamDate();
-                        mapel       = response.body().getData().get(i).getCources_name();
-                        tipe        = response.body().getData().get(i).getExamTypeName();
-                        deskripsi   = response.body().getData().get(i).getExamDesc();
-                        guru        = response.body().getData().get(i).getTeacher_name();
-                        nilai       = response.body().getData().get(i).getScoreValue();
+                    if (response.body().getData() != null) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            tanggals = response.body().getData().get(i).getExamDate();
+                            mapel = response.body().getData().get(i).getCources_name();
+                            tipe = response.body().getData().get(i).getExamTypeName();
+                            deskripsi = response.body().getData().get(i).getExamDesc();
+                            guru = response.body().getData().get(i).getTeacher_name();
+                            nilai = response.body().getData().get(i).getScoreValue();
 
-                        tugasModel   = new TugasModel();
-                        tugasModel.setTanggal(tanggals);
-                        tugasModel.setMapel(mapel);
-                        tugasModel.setTipe(tipe);
-                        tugasModel.setDeskripsi(deskripsi);
-                        tugasModel.setGuru(guru);
-                        tugasModel.setNilai(nilai);
-                        listTugas.add(tugasModel);
+                            tugasModel = new TugasModel();
+                            tugasModel.setTanggal(tanggals);
+                            tugasModel.setMapel(mapel);
+                            tugasModel.setTipe(tipe);
+                            tugasModel.setDeskripsi(deskripsi);
+                            tugasModel.setGuru(guru);
+                            tugasModel.setNilai(nilai);
+                            listTugas.add(tugasModel);
+                        }
+                        tugasAdapter = new TugasAdapter(listTugas);
+                        no_tugas.setVisibility(View.GONE);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TugasAnak.this, LinearLayoutManager.VERTICAL, false);
+                        linearLayoutManager.setStackFromEnd(true);
+                        linearLayoutManager.setReverseLayout(true);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                        recyclerView.setAdapter(tugasAdapter);
+                    }else {
+                        no_tugas.setVisibility(View.VISIBLE);
                     }
-                    tugasAdapter    = new TugasAdapter(listTugas);
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TugasAnak.this, LinearLayoutManager.VERTICAL, false);
-                    linearLayoutManager.setStackFromEnd(true);
-                    linearLayoutManager.setReverseLayout(true);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(tugasAdapter);
                 }
 
             }

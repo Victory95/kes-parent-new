@@ -30,6 +30,9 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.rey.material.widget.Spinner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +49,7 @@ import retrofit2.Response;
 public class RaportAnak extends AppCompatActivity {
 
     TextView wali_kelas,no_rapor;
-    CardView btn_download;
+    CardView btn_download,btn_go;
     RecyclerView recyclerView;
     Toolbar toolbar;
     int status;
@@ -58,16 +62,14 @@ public class RaportAnak extends AppCompatActivity {
     RaportAdapter raportAdapter;
     private List<RaporModel> raporModels;
     String teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel,nilai_akhir,rata_rata;
-    private String[] listSemester = {
-            "Pilih Semester",
-            "Ganjil",
-            "Genap"
-    };
+
+    String semester_nama;
+    private List<JSONResponse.DataSemester> dataSemesters;
 
     Spinner sp_semester;
     TextView status_rapor,tv_peringkat,tv_kritik;
     TableLayout tableLayout;
-    String semester;
+
 
     String date;
     @Override
@@ -85,6 +87,7 @@ public class RaportAnak extends AppCompatActivity {
         tv_peringkat    = findViewById(R.id.peringkat);
         tv_kritik       = findViewById(R.id.kritik_saran);
         tableLayout     = findViewById(R.id.table_layout);
+        btn_go          = findViewById(R.id.btn_go);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,70 +103,71 @@ public class RaportAnak extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         date = df.format(Calendar.getInstance().getTime());
 
+        dapat_semester();
         Check_Semester();
 
-        final List<String> penghasil = new ArrayList<>(Arrays.asList(listSemester));
-        // Initializing an ArrayAdapter
-        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.spinner_text,penghasil){
-            @Override
-            public boolean isEnabled(int position){
-                if(position == 0)
-                {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView,
-                                        ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                if(position == 0){
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
-                }
-                else {
-                    tv.setTextColor(Color.BLACK);
-                }
-                return view;
-
-
-
-
-            }
-        };
-
-
-//        int spinnerPosition = ArrayAdapter.getPosition(semester);
-        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-        sp_semester.setAdapter(ArrayAdapter);
-
-//        sp_semester.setSelection(spinnerPosition);
         sp_semester.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(Spinner parent, View view, int position, long id) {
-                if (position > 0) {
-//                    semester = penghasil.get(position);
-//                    if (semester.equals("Genap")){
-//                        semester_id = "2";
-//                    }
-                    semester_id = String.valueOf(position);
-                    Toast.makeText(getApplicationContext(), semester_id, Toast.LENGTH_LONG).show();
-                }
+                semester_id = dataSemesters.get(position).getSemester_id();
             }
         });
-//        semester_id = sp_semester.getSelectedItem().toString();
-//        Toast.makeText(getApplicationContext(), semester_id, Toast.LENGTH_LONG).show();
-
-
+        btn_go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RaporAnak();
+            }
+        });
     }
+
+    public void dapat_semester(){
+
+        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester(authorization.toString(),school_code.toString(),classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ListSemester>() {
+
+            @Override
+            public void onResponse(Call<JSONResponse.ListSemester> call, final Response<JSONResponse.ListSemester> response) {
+                Log.i("KES", response.code() + "");
+
+                JSONResponse.ListSemester resource = response.body();
+
+                status = resource.status;
+                code = resource.code;
+
+                String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
+                String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
+
+                List<String> provinsi = null;
+                if (status == 1) {
+                    dataSemesters = response.body().getData();
+                    List<String> listSpinner = new ArrayList<String>();
+                    for (int i = 0; i < dataSemesters.size(); i++){
+                        semester_nama    = dataSemesters.get(i).getSemester_name();
+                        listSpinner.add(dataSemesters.get(i).getSemester_name());
+                    }
+                    final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(RaportAnak.this,R.layout.spinner_blue,listSpinner);
+                    int spinnerPosition = spinnerArrayAdapter.getPosition(semester_nama);
+                    spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    sp_semester.setAdapter(spinnerArrayAdapter);
+                    sp_semester.setSelection(spinnerPosition);
+
+                } else{
+                    if (status == 0) {
+                        Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ListSemester> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+            }
+
+        });
+    }
+
     private void Check_Semester(){
 
         Call<JSONResponse.CheckSemester> call = mApiInterface.kes_check_semester_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString(),date.toString());
@@ -178,13 +182,7 @@ public class RaportAnak extends AppCompatActivity {
                 status = resource.status;
                 code    = resource.code;
                 semester_id = response.body().getData();
-                Tugas_anak();
-                if (semester_id.equals("2") && semester_id.equals("4") && semester_id.equals("6") && semester_id.equals("8")){
-                    semester = "Genap";
-                }else if (semester_id.equals("1") && semester_id.equals("3") && semester_id.equals("5") && semester_id.equals("7")){
-                    semester = "Ganjil";
-                }
-
+                RaporAnak();
             }
 
             @Override
@@ -197,8 +195,7 @@ public class RaportAnak extends AppCompatActivity {
         });
     }
 
-
-    private void Tugas_anak(){
+    private void RaporAnak(){
         progressBar();
         showDialog();
         Call<JSONResponse.Raport> call = mApiInterface.kes_rapor_score_get(authorization.toString(),school_code.toString().toLowerCase(),student_id.toString(),classroom_id.toString(),semester_id.toString());
@@ -248,6 +245,8 @@ public class RaportAnak extends AppCompatActivity {
                         }
 
                         no_rapor.setVisibility(View.GONE);
+                        tableLayout.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.VISIBLE);
                         raportAdapter = new RaportAdapter(raporModels);
                         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(RaportAnak.this);
                         recyclerView.setLayoutManager(layoutManager);
@@ -256,6 +255,7 @@ public class RaportAnak extends AppCompatActivity {
                     else {
                         tableLayout.setVisibility(View.GONE);
                         no_rapor.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
                 }
 

@@ -73,6 +73,15 @@
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
+    <style name="TextLabelWhite" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/ic_logo_background</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/ic_logo_background</item>
+        <item name="colorControlNormal">@color/ic_logo_background</item>
+        <item name="colorControlActivated">@color/ic_logo_background</item>
+    </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>

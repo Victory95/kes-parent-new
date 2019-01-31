@@ -232,8 +232,8 @@ public interface Auth {
                                                @Field("birth_date") String birth_date);
 
     @FormUrlEncoded
-    @PUT("parents/kes_update_parent/{studentdetailid}")
-    Call<JSONResponse>update_student_put(@Header("Authorization") String authorization,
+    @PUT("students/kes_update_student_detail/{studentdetailid}")
+    Call<JSONResponse>update_student_detail_put(@Header("Authorization") String authorization,
                                         @Path("studentdetailid")String studentdetailid,
                                         @Field("school_code") String school_code,
                                         @Field("student_id") String student_id,
@@ -243,19 +243,31 @@ public interface Auth {
                                         @Field("rw") String rw,
                                         @Field("dusun") String dusun,
                                         @Field("kelurahan") String kelurahan,
-                                        @Field("parent_home_phone") String parent_home_phone,
-                                        @Field("parent_phone") String parent_phone,
-                                        @Field("parent_address") String parent_address,
-                                        @Field("parent_latitude") String parent_latitude,
-                                        @Field("parent_longitude") String parent_longitude,
-                                        @Field("parent_email") String parent_email,
-                                        @Field("parent_education") String parent_education,
-                                        @Field("company_name") String company_name,
-                                        @Field("employment") String employment,
-                                        @Field("parent_income") String parent_income,
-                                        @Field("workplace_address") String workplace_address,
-                                        @Field("office_latitude") String office_latitude,
-                                        @Field("office_longitude") String office_longitude);
+                                        @Field("kecamatan") String kecamatan,
+                                        @Field("post_code") String post_code,
+                                        @Field("jenis_tinggal") String jenis_tinggal,
+                                        @Field("transportasi") String transportasi,
+                                        @Field("latitude") String latitude,
+                                        @Field("longitude") String longitude,
+                                        @Field("home_phone") String home_phone,
+                                        @Field("skhun") String skhun,
+                                        @Field("penerima_kps") String penerima_kps,
+                                        @Field("no_kps") String no_kps);
+
+    @FormUrlEncoded
+    @PUT("students/kes_update_student_member/{student_id}")
+    Call<JSONResponse>update_student_member_put(@Header("Authorization") String authorization,
+                                         @Path("student_id")String student_id,
+                                         @Field("school_code") String school_code,
+                                         @Field("fullname") String fullname,
+                                         @Field("gender") String gender,
+                                         @Field("birth_place") String birth_place,
+                                         @Field("birth_date") String birth_date,
+                                         @Field("citizen_status") String dusun,
+                                         @Field("religion") String kelurahan,
+                                         @Field("address") String parent_home_phone,
+                                         @Field("mobile_phone") String parent_phone
+                                        );
 
     @GET("students/kes_exam_schedule")
     Call<JSONResponse.JadwalUjian>kes_exam_schedule_get(@Header("Authorization") String authorization,
@@ -288,6 +300,11 @@ public interface Auth {
                                                  @Query("school_code") String school_code,
                                                  @Query("classroom_id") String classroom_id,
                                                  @Query("date_now") String date_now);
+
+    @GET("students/kes_list_semester")
+    Call<JSONResponse.ListSemester>kes_list_semester(@Header("Authorization") String authorization,
+                                                             @Query("school_code") String school_code,
+                                                             @Query("classroom_id") String classroom_id);
 
 
 

@@ -374,7 +374,7 @@ public class Masuk extends AppCompatActivity {
                                 finish();
                                 startActivity(intent);
                             }else {
-                                Intent intent = new Intent(Masuk.this, MenuUtama.class);
+                                Intent intent = new Intent(Masuk.this, AnakMain.class);
                                 intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                                 intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                                 intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));

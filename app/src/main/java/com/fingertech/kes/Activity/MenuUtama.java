@@ -254,7 +254,7 @@ public class MenuUtama extends AppCompatActivity
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
-        Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
+        Base_anak     = "http://www.kes.co.id/dev/schoolc2/assets/images/profile/mm_";
 
 
         ParentPager.setAdapter(fragmentAdapter);

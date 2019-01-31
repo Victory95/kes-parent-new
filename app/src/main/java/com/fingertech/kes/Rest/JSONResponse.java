@@ -5213,4 +5213,63 @@ public class JSONResponse{
             this.data = data;
         }
     }
+
+    public class ListSemester{
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataSemester> data;
+
+        @SerializedName("status")
+        public int status;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataSemester> getData() {
+            return data;
+        }
+
+        public void setData(List<DataSemester> data) {
+            this.data = data;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+    public class DataSemester{
+
+        @SerializedName("semesterid")
+        public String semester_id;
+
+        @SerializedName("semester_name")
+        public String semester_name;
+
+        public String getSemester_id() {
+            return semester_id;
+        }
+
+        public void setSemester_id(String semester_id) {
+            this.semester_id = semester_id;
+        }
+
+        public String getSemester_name() {
+            return semester_name;
+        }
+
+        public void setSemester_name(String semester_name) {
+            this.semester_name = semester_name;
+        }
+    }
 }

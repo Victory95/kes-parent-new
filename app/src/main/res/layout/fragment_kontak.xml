@@ -56,6 +56,7 @@ Dan demi keamanan untuk si buah hati"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:theme="@style/TextLabelWhite"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp">
 
@@ -79,6 +80,7 @@ Dan demi keamanan untuk si buah hati"
                 android:layout_width="match_parent"
                 android:layout_marginTop="20dp"
                 android:layout_height="wrap_content"
+                android:theme="@style/TextLabelWhite"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp">
 

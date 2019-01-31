@@ -37,7 +37,7 @@ import retrofit2.Response;
 
 public class JadwalUjian extends AppCompatActivity {
 
-    TextView wali_kelas;
+    TextView wali_kelas,no_ujian;
     CardView btn_download;
     RecyclerView recyclerView;
     private List<ItemUjian> itemlist;
@@ -56,6 +56,7 @@ public class JadwalUjian extends AppCompatActivity {
         wali_kelas      = (TextView)findViewById(R.id.wali_kelas);
         btn_download    = (CardView)findViewById(R.id.btn_download_jadwal);
         toolbar         = (Toolbar)findViewById(R.id.toolbar_ujian);
+        no_ujian        = findViewById(R.id.no_ujian);
 
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
@@ -91,26 +92,30 @@ public class JadwalUjian extends AppCompatActivity {
                 ItemUjian itemUjian= null;
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     itemlist = new ArrayList<ItemUjian>();
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        jam     = response.body().getData().get(i).getExam_time();
-                        tanggal = response.body().getData().get(i).getExam_date();
-                        mapel   = response.body().getData().get(i).getCources_name();
-                        type_id = response.body().getData().get(i).getType_name();
+                    if (response.body().getData() != null) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            jam = response.body().getData().get(i).getExam_time();
+                            tanggal = response.body().getData().get(i).getExam_date();
+                            mapel = response.body().getData().get(i).getCources_name();
+                            type_id = response.body().getData().get(i).getType_name();
 
-                        itemUjian   = new ItemUjian();
-                        itemUjian.setJam(jam);
-                        itemUjian.setTanggal(tanggal);
-                        itemUjian.setMapel(mapel);
-                        itemUjian.setType_id(type_id);
-                        itemlist.add(itemUjian);
+                            itemUjian = new ItemUjian();
+                            itemUjian.setJam(jam);
+                            itemUjian.setTanggal(tanggal);
+                            itemUjian.setMapel(mapel);
+                            itemUjian.setType_id(type_id);
+                            itemlist.add(itemUjian);
 
+                        }
+                        no_ujian.setVisibility(View.GONE);
+                        recyclerView = (RecyclerView) findViewById(R.id.recycle_ujian);
+                        ujianAdapter = new UjianAdapter(itemlist);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(ujianAdapter);
+                    }else {
+                        no_ujian.setVisibility(View.VISIBLE);
                     }
-                    recyclerView    = (RecyclerView)findViewById(R.id.recycle_ujian);
-                    ujianAdapter    = new UjianAdapter(itemlist);
-
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(ujianAdapter);
                 }
 
             }

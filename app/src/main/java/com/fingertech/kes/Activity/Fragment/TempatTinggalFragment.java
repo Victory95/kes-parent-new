@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -87,6 +89,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     GoogleApiClient mGoogleApiClient;
     double CurrentLatitude;
     double CurrentLongitude;
+    TextInputLayout til_rt,til_rw,til_kelurahan,til_kecamatan,til_kodepos,til_jenistinggal,til_transportasi,til_alamat;
 
     public TempatTinggalFragment() {
         // Required empty public constructor
@@ -96,7 +99,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     ViewPager ParentPager;
     AnakMain anakMain;
     Button buttonBerikutnya,buttonKembali;
-    EditText et_rt,et_rw,et_kelurahan,et_kecamatan,et_kodepos,et_jenis_tinggal,et_trasnportasi,et_alamat;
+    EditText et_rt,et_rw,et_kelurahan,et_kecamatan,et_kodepos,et_jenis_tinggal,et_trasnportasi,et_alamat,et_dusun;
     private LinearLayout indicator;
     private int mDotCount;
     private LinearLayout[] mDots;
@@ -146,7 +149,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     SharedPreferences sharedpreferences,sharedanak;
     String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
-    String telepon_rumah,handphone,skun,penerimaan_kps,nokps;
+    String telepon_rumah,handphone,skun,penerimaan_kps,nokps,dusun;
+    String studentdetailId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -172,6 +176,15 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         et_jenis_tinggal    = (EditText)view.findViewById(R.id.et_status_tinggal);
         et_trasnportasi     = (EditText)view.findViewById(R.id.et_transportasi);
         et_alamat           = (EditText)view.findViewById(R.id.et_Alamat);
+        et_dusun            = view.findViewById(R.id.et_dusun);
+        til_alamat          = view.findViewById(R.id.til_Alamat);
+        til_jenistinggal    = view.findViewById(R.id.til_status_tinggal);
+        til_kecamatan       = view.findViewById(R.id.til_Kecamatan);
+        til_kelurahan       = view.findViewById(R.id.til_kelurahan);
+        til_kodepos         = view.findViewById(R.id.til_kode_pos);
+        til_rt              = view.findViewById(R.id.til_rt);
+        til_rw              = view.findViewById(R.id.til_rw);
+        til_transportasi    = view.findViewById(R.id.til_transportasi);
         fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
@@ -183,8 +196,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        school_code = "bpk01";
-        student_id = "418";
+        school_code = "bpk02";
+        student_id = "369";
 
         sharedanak  = getActivity().getSharedPreferences(DataAnakFragment.my_shared_anak,Context.MODE_PRIVATE);
         Nama_lengkap        = sharedanak.getString(TAG_NAMA_LENGKAP,"");
@@ -209,8 +222,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MenuUtama.class);
-                startActivity(intent);
+
+                submitForm();
             }
         });
 
@@ -295,6 +308,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
             mGoogleApiClient.connect();
         }
+        CurrentLatitude = latLng.latitude;
+        CurrentLongitude    = latLng.longitude;
 
     }
 
@@ -459,6 +474,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                 String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    studentdetailId     = response.body().getData().getStudentdetailid();
+                    dusun               = response.body().getData().getDusun();
                     rt                  = response.body().data.getRt();
                     rw                  = response.body().data.getRw();
                     kelurahan           = response.body().data.getKelurahan();
@@ -478,6 +495,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                     et_jenis_tinggal.setText(jenis_tinggal);
                     et_trasnportasi.setText(transportasi);
                     et_alamat.setText(alamat);
+                    et_dusun.setText(dusun);
 
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {
@@ -510,4 +528,190 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    public void submitForm() {
+
+        if (!validateAlamat()) {
+            return;
+        }
+        if (!validateRt()) {
+            return;
+        }
+        if (!validateRw()) {
+            return;
+        }
+        if (!validateKelurahan()){
+            return;
+        }
+        if (!validateKecamatan()){
+            return;
+        }
+        if (!validateKodepos()){
+            return;
+
+        }if (!validateJenistinggal()){
+            return;
+
+        }if (!validateTransportasi()){
+            return;
+
+        }else {
+            update_detail();
+        }
+    }
+
+    private boolean validateAlamat() {
+        if (et_alamat.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi alamat anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_alamat);
+            return false;
+        } else {
+            til_alamat.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateJenistinggal() {
+        if (et_jenis_tinggal.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi jenis tinggal anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_jenis_tinggal);
+            return false;
+        } else {
+            til_jenistinggal.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateKecamatan() {
+        if (et_kecamatan.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi kecamatan anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_kecamatan);
+            return false;
+        } else {
+            til_kecamatan.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateKelurahan() {
+        if (et_kelurahan.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi kelurahan anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_kelurahan);
+            return false;
+        } else {
+            til_kelurahan.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateKodepos() {
+        if (et_kodepos.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi kode pos anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_kodepos);
+            return false;
+        } else {
+            til_kodepos.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateRt() {
+        if (et_rt.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi rt anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_rt);
+            return false;
+        } else {
+            til_rt.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateRw() {
+        if (et_rw.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi rw anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_rw);
+            return false;
+        } else {
+            til_rw.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+    private boolean validateTransportasi() {
+        if (et_trasnportasi.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getContext(),"Harap di isi transportasi anak",Toast.LENGTH_LONG).show();
+            requestFocus(et_trasnportasi);
+            return false;
+        } else {
+            til_transportasi.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    public void update_detail(){
+
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),jenis_tinggal.toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),handphone.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                if (status == 1 && code.equals("UST_SCS_0001")){
+                    update_member();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+
+    public void update_member(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization.toString(),student_id.toString(), school_code.toString(), Nama_lengkap.toString(), Jenis_kelamin.toString(), Tempat_lahir.toString(), Tanggal_lahir.toString(),Negara.toString(),Agama.toString(),et_alamat.getText().toString(),handphone.toString());
+        postCall.enqueue(new Callback<JSONResponse>() {
+            @Override
+            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+                hideDialog();
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                if (status == 1 && code.equals("USTM_SCS_0001")){
+                    Intent intent = new Intent(getContext(), MenuUtama.class);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();
+                }
+
+            }
+            @Override
+            public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 }
