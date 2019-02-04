@@ -10,25 +10,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -37,13 +29,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -54,8 +44,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,24 +60,26 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
-import com.fingertech.kes.Activity.Anak.JadwalUjian;
+import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
-import android.view.ViewGroup.LayoutParams;
 
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
+import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
+import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Rest.StudentTable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -109,29 +99,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.joooonho.SelectableRoundedImageView;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
-import com.rey.material.widget.Spinner;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import github.chenupt.springindicator.SpringIndicator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.fingertech.kes.Activity.MenuGuest.getPixelsFromDp;
-import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
 public class MenuUtama extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -189,14 +170,18 @@ public class MenuUtama extends AppCompatActivity
     String code;
     String authorization;
     CardView btn_search,map_menu,tambah_anak;
-    LinearLayout recycle_menu,view_group,viewpager;
+    LinearLayout recycle_menu,view_group,viewpager,recycleview_ln;
     LinearLayout.LayoutParams layoutParams;
     LinearLayout ll;
+    RecyclerView recyclerView;
     CircleImageView imageView;
     TextView namaanak;
     String Base_anak,classroom_id;
     SwipeRefreshLayout swipeRefreshLayout;
     static int i;
+    List<ProfileModel> profileModels = new ArrayList<ProfileModel>();
+    ProfileAdapter profileAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,12 +200,13 @@ public class MenuUtama extends AppCompatActivity
         btn_search          = (CardView)findViewById(R.id.btn_search);
         map_menu            = (CardView)findViewById(R.id.map_menu);
         recycle_menu        = (LinearLayout)findViewById(R.id.recycler_view_menu);
-        view_group          = (LinearLayout)findViewById(R.id.view_group);
         viewpager           = (LinearLayout)findViewById(R.id.viewpager);
         tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
         imageView           = (CircleImageView) findViewById(R.id.image_anak);
         namaanak            = (TextView)findViewById(R.id.nama_anak);
         swipeRefreshLayout  = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        recycleview_ln      = findViewById(R.id.recycler_profile_view);
+        recyclerView        = findViewById(R.id.recycle_profile);
 
         setSupportActionBar(toolbar);
 
@@ -245,12 +231,12 @@ public class MenuUtama extends AppCompatActivity
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+//        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
-        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+//        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
@@ -309,17 +295,47 @@ public class MenuUtama extends AppCompatActivity
                 startActivity(mIntent);
             }
         });
-        data_student_get();
+        tambah_anak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuUtama.this, AnakAkses.class);
+                startActivity(intent);
+            }
+        });
 
+        get_children();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             int Refreshcounter = 1;
             @Override
             public void onRefresh() {
                 get_profile();
-                data_student_get();
+                get_children();
                 send_data();
+                send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        ParentPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            switch (position){
+                case 0:
+                    break;
+                case 1:
+                    send_data2();
+                    break;
+            }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
     }
@@ -356,30 +372,25 @@ public class MenuUtama extends AppCompatActivity
         }
 
     }
-    // To set custom views
+
     ViewListener viewListener = new ViewListener() {
-        @Override
-        public View setViewForPosition(final int position) {
+            @Override
+            public View setViewForPosition(final int position) {
+        View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
+        TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
+        ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
+        Button Baca     = (Button) customView.findViewById(R.id.baca);
+        fruitImageView.setImageResource(sampleImages[position]);
+        labelTextView.setText(sampleTitles[position]);
+        Baca.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
+            }
+                      });
+        customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
 
-            View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
-
-            TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
-            ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
-            Button Baca     = (Button) customView.findViewById(R.id.baca);
-
-            fruitImageView.setImageResource(sampleImages[position]);
-            labelTextView.setText(sampleTitles[position]);
-
-            Baca.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
-                }
-            });
-            customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
-
-            return customView;
+        return customView;
         }
     };
 
@@ -416,7 +427,8 @@ public class MenuUtama extends AppCompatActivity
 
             // Handle the camera action
         } else if (id == R.id.nav_user) {
-
+            Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
+            startActivity(intent);
         }else if (id == R.id.nav_tentang) {
             Intent intent = new Intent(MenuUtama.this, TentangKami.class);
             startActivity(intent);
@@ -429,6 +441,75 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
+
+    public void get_children(){
+        Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization.toString(),parent_id.toString());
+        call.enqueue(new Callback<JSONResponse.ListChildren>() {
+            @Override
+            public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
+                Log.d("TAG",response.code()+"");
+
+                JSONResponse.ListChildren resource = response.body();
+                status = resource.status;
+                code = resource.code;
+
+                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+
+                ProfileModel profileModel = null;
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    if (response.body().getData() != null){
+                        profileModels = new ArrayList<ProfileModel>();
+                        for (int i = 0;i < response.body().getData().size();i++) {
+                            student_id      = response.body().getData().get(i).getStudent_id();
+                            school_code     = response.body().getData().get(i).getSchool_code();
+                            nama_anak       = response.body().getData().get(i).getChildren_name();
+                            classroom_id    = response.body().getData().get(i).getClassroom_id();
+                            foto            = response.body().getData().get(i).getPicture();
+                            String imagefiles = Base_anak + foto;
+                            profileModel = new ProfileModel();
+                            profileModel.setStudent_id(student_id);
+                            profileModel.setSchool_code(school_code);
+                            profileModel.setNama(nama_anak);
+                            profileModel.setClassroom_id(classroom_id);
+                            profileModel.setPicture(imagefiles);
+                            profileModels.add(profileModel);
+                        }
+                        profileAdapter = new ProfileAdapter(profileModels);
+                        profileAdapter.notifyDataSetChanged();
+                        profileAdapter.selectRow(0);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
+                        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(profileAdapter);
+                        profileAdapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                profileAdapter.notifyDataSetChanged();
+                                profileAdapter.selectRow(position);
+                                student_id      = profileModels.get(position).getStudent_id();
+                                school_code     = profileModels.get(position).getSchool_code();
+                                classroom_id    = profileModels.get(position).getClassroom_id();
+                                send_data();
+                                send_data2();
+                            }
+                        });
+                    }else {
+
+                    }
+                } else {
+                    if(status == 0 && code.equals("DTS_ERR_0001")) {
+                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
+
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     public void get_profile(){
         progressBar();
@@ -458,14 +539,17 @@ public class MenuUtama extends AppCompatActivity
 
                     if (member.toString().equals("3")){
                         if (count.toString().equals("0")){
-                            view_group.setVisibility(View.VISIBLE);
+                            recycleview_ln.setVisibility(View.VISIBLE);
+                            viewpager.setVisibility(View.GONE);
                         }else {
+                            recycleview_ln.setVisibility(View.VISIBLE);
                             viewpager.setVisibility(View.VISIBLE);
-                            view_group.setVisibility(View.VISIBLE);
+
                         }
                     }else {
+                        recycleview_ln.setVisibility(View.GONE);
                         viewpager.setVisibility(View.GONE);
-                        view_group.setVisibility(View.GONE);
+
                     }
 
                 } else{
@@ -485,7 +569,6 @@ public class MenuUtama extends AppCompatActivity
         });
 
     }
-
 
     public void data_student_get(){
 
@@ -526,7 +609,6 @@ public class MenuUtama extends AppCompatActivity
         });
     }
 
-
     public void send_data(){
         Bundle bundle = new Bundle();
         if (bundle != null) {
@@ -547,13 +629,31 @@ public class MenuUtama extends AppCompatActivity
         }
     }
 
+    public void send_data2(){
+        Bundle bundle = new Bundle();
+        if (bundle != null) {
+            bundle.putString("parent_nik", parent_nik);
+            bundle.putString("student_id", student_id);
+            bundle.putString("school_code", school_code);
+            bundle.putString("member_id", parent_id);
+            bundle.putString("authorization", authorization);
+            bundle.putString("classroom_id", classroom_id);
+            MenuDuaFragment menuSatuFragment = new MenuDuaFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragMenuDua, menuSatuFragment);
+            fragmentTransaction.commit();
+            menuSatuFragment.setArguments(bundle);
+        }else {
+            Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
+        }
+    }
     public class FragmentAdapter extends FragmentStatePagerAdapter {
 
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
         }
-
 
         @Override
         public Fragment getItem(int position) {
@@ -562,6 +662,7 @@ public class MenuUtama extends AppCompatActivity
                     send_data();
                     return new MenuSatuFragment();
                 case 1:
+                    send_data2();
                     return new MenuDuaFragment();
             }
             return null;
@@ -576,8 +677,6 @@ public class MenuUtama extends AppCompatActivity
             return POSITION_NONE;
         }
     }
-
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -732,7 +831,6 @@ public class MenuUtama extends AppCompatActivity
         }
     }
 
-
     public void dapat_map(){
 
         Call<JSONResponse.Nearby_School> call = mApiInterface.nearby_radius_post(currentLatitude,currentLongitude,PROXIMITY_RADIUS);
@@ -844,6 +942,7 @@ public class MenuUtama extends AppCompatActivity
                         Item.setLng(lng);
                         itemList.add(Item);
                     }
+
                     // Create the recyclerview.
                     snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
                     // Create the grid layout manager with 2 columns.
@@ -1146,7 +1245,6 @@ public class MenuUtama extends AppCompatActivity
         }
 
     }
-
 
     private void setCameraWithCoordinationBounds(Route route) {
         LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();

@@ -32,9 +32,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 //import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import  com.rey.material.widget.Spinner;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -43,7 +43,6 @@ import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.fingertech.kes.Activity.Adapter.InfoWindow;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.ClusterItemSekolah;
 import com.fingertech.kes.Activity.MenuGuest;
@@ -258,7 +257,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                 mapF.setOnMarkerClickListener(mClusterManager);
                 mapF.setOnInfoWindowClickListener(mClusterManager);
                 mClusterManager.getMarkerCollection().setOnInfoWindowAdapter(
-                        new InfoWindow(FullMap.this));
+                        new InfoWindowAdapter(FullMap.this));
                 dapat_sekolah();
                 mClusterManager.setOnClusterClickListener(FullMap.this);
                 mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterItemSekolah>() {
@@ -556,8 +555,8 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                         info.setNama(placeName);
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
-                        InfoWindow customInfoWindow = new InfoWindow(FullMap.this);
-                        mapF.setInfoWindowAdapter(customInfoWindow);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(FullMap.this);
+                        mapF.setInfoWindowAdapter(customInfoWindowAdapter);
                         m.setTag(info);
 
                         Item = new ItemSekolah();

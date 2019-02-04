@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.fingertech.kes.Activity.Adapter.AdapterBookmark;
+import com.fingertech.kes.Activity.Adapter.BookmarkAdapter;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.R;
@@ -31,7 +31,7 @@ public class FilterActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     SearchView searchView;
-    AdapterBookmark bookmarkAdapter;
+    BookmarkAdapter bookmarkAdapter;
     List<Data> itemList = new ArrayList<Data>();
     BookmarkTabel bookmarkTabel = new BookmarkTabel();
     Data data = new Data();
@@ -52,7 +52,7 @@ public class FilterActivity extends AppCompatActivity {
         searchView             = (SearchView)findViewById(R.id.search_filter);
         layoutManager          = new LinearLayoutManager(this);
         ToolBarAtas2           = (Toolbar)findViewById(R.id.toolbar_back);
-        bookmarkAdapter        = new AdapterBookmark(itemList,FilterActivity.this);
+        bookmarkAdapter        = new BookmarkAdapter(itemList,FilterActivity.this);
         slidingUpPanelLayout   = (SlidingUpPanelLayout)findViewById(R.id.sliding);
         filter                 = (Button)findViewById(R.id.filter);
         arrof                  = (Button)findViewById(R.id.arrowF);
@@ -121,7 +121,7 @@ public class FilterActivity extends AppCompatActivity {
             itemList.add(data);
         }
         bookmarkAdapter.notifyDataSetChanged();
-        bookmarkAdapter.setOnItemClickListener(new AdapterBookmark.OnItemClickListener() {
+        bookmarkAdapter.setOnItemClickListener(new BookmarkAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 latitude     = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));

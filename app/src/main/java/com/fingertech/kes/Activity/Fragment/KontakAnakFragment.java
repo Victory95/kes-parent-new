@@ -188,8 +188,6 @@ public class KontakAnakFragment extends Fragment {
         Agama               = sharedanak.getString(TAG_AGAMA,"");
         Negara              = sharedanak.getString(TAG_KEWARGANEGARAAN,"");
 
-        school_code = "bpk02";
-        student_id = "369";
 
         data_student_get();
 

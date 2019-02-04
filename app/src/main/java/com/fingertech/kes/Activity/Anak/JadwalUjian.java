@@ -37,12 +37,13 @@ import retrofit2.Response;
 
 public class JadwalUjian extends AppCompatActivity {
 
-    TextView wali_kelas,no_ujian;
+    TextView wali_kelas,no_ujian,nama_kelas;
     CardView btn_download;
     RecyclerView recyclerView;
     private List<ItemUjian> itemlist;
     private UjianAdapter ujianAdapter = null;
     int status;
+    String walikelas,namakelas;
     Auth mApiInterface;
     String code;
     String authorization,school_code,jam,tanggal,type_id,mapel,classroom_id,student_id;
@@ -53,10 +54,11 @@ public class JadwalUjian extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jadwal_ujian);
 
-        wali_kelas      = (TextView)findViewById(R.id.wali_kelas);
+        wali_kelas      = (TextView)findViewById(R.id.wali_kelas_ujian);
         btn_download    = (CardView)findViewById(R.id.btn_download_jadwal);
         toolbar         = (Toolbar)findViewById(R.id.toolbar_ujian);
         no_ujian        = findViewById(R.id.no_ujian);
+        nama_kelas      = findViewById(R.id.nama_kelas_ujian);
 
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
@@ -69,8 +71,44 @@ public class JadwalUjian extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
-
+        Classroom_detail();
         Jadwal_ujian();
+
+    }
+    private void Classroom_detail(){
+
+        Call<JSONResponse.ClassroomDetail> call = mApiInterface.kes_classroom_detail_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ClassroomDetail>() {
+
+            @Override
+            public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
+                Log.i("KES", response.code() + "");
+                hideDialog();
+
+                JSONResponse.ClassroomDetail resource = response.body();
+
+                status = resource.status;
+                code    = resource.code;
+
+                ItemUjian itemUjian= null;
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                   walikelas    = response.body().getData().getHomeroom_teacher();
+                   namakelas    = response.body().getData().getClassroom_name();
+                   wali_kelas.setText(walikelas);
+                   nama_kelas.setText(namakelas);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ClassroomDetail> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+                Toast.makeText(JadwalUjian.this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+
+        });
     }
     private void Jadwal_ujian(){
         progressBar();

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class AdapterBookmark extends RecyclerView.Adapter<AdapterBookmark.MyHolder> {
+public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyHolder> {
 
     private List<Data> viewItemList;
     private Context context;
@@ -28,7 +28,7 @@ public class AdapterBookmark extends RecyclerView.Adapter<AdapterBookmark.MyHold
     public int row_index = 0;
     String searchString="";
 
-    public AdapterBookmark(List<Data> viewItemList,Context context) {
+    public BookmarkAdapter(List<Data> viewItemList, Context context) {
         this.viewItemList = viewItemList;
         this.mArrayList     = viewItemList;
         this.context        = context;

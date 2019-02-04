@@ -18,7 +18,10 @@
             android:layout_weight="3"
             android:background="@drawable/ic_left_arrow"
             android:id="@+id/left_calender"
-            android:layout_margin="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -44,16 +47,15 @@
         app:compactCalendarTextSize="12sp"
         app:compactCalendarBackgroundColor="@color/ic_logo_background"
         app:compactCalendarTextColor="@color/black"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimary"
-        app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimaryDark"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimaryDark"
+        app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimary"
         app:compactCalendarMultiEventIndicatorColor="#fff"
         />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylceview_calendar"
+        android:layout_below="@+id/compactcalendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 
-    <!--<CalendarView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="250dp"-->
-        <!--android:theme="@style/TextLabelView"-->
-        <!--android:id="@+id/calender">-->
-
-    <!--</CalendarView>-->
 </LinearLayout>

@@ -103,8 +103,9 @@ public class RaportAnak extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         date = df.format(Calendar.getInstance().getTime());
 
-        dapat_semester();
         Check_Semester();
+
+
 
         sp_semester.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
@@ -119,10 +120,9 @@ public class RaportAnak extends AppCompatActivity {
             }
         });
     }
-
     public void dapat_semester(){
 
-        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester(authorization.toString(),school_code.toString(),classroom_id.toString());
+        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester_get(authorization.toString(),school_code.toLowerCase(),classroom_id.toString());
 
         call.enqueue(new Callback<JSONResponse.ListSemester>() {
 
@@ -139,7 +139,7 @@ public class RaportAnak extends AppCompatActivity {
                 String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
 
                 List<String> provinsi = null;
-                if (status == 1) {
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
                     dataSemesters = response.body().getData();
                     List<String> listSpinner = new ArrayList<String>();
                     for (int i = 0; i < dataSemesters.size(); i++){
@@ -153,9 +153,8 @@ public class RaportAnak extends AppCompatActivity {
                     sp_semester.setSelection(spinnerPosition);
 
                 } else{
-                    if (status == 0) {
-                        Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+
                 }
 
             }
@@ -163,10 +162,12 @@ public class RaportAnak extends AppCompatActivity {
             @Override
             public void onFailure(Call<JSONResponse.ListSemester> call, Throwable t) {
                 Log.d("onFailure", t.toString());
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG).show();
             }
 
         });
     }
+
 
     private void Check_Semester(){
 
@@ -183,6 +184,7 @@ public class RaportAnak extends AppCompatActivity {
                 code    = resource.code;
                 semester_id = response.body().getData();
                 RaporAnak();
+                dapat_semester();
             }
 
             @Override

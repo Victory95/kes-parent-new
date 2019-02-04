@@ -84,4 +84,50 @@ public class Data {
     public void setJenjang(String jenjang) {
         this.jenjang = jenjang;
     }
+
+    public static class Student {
+
+        public static final String TABLE            = "student";
+        public static final String KEY_CourseId     = "studentid";
+        public static final String KEY_SchoolCode   = "school_code";
+        public static final String KEY_StudentId    = "student_id";
+        private String id, student_id,school_code;
+
+
+        public Student() {
+        }
+
+
+        public Student(String id, String student_id, String school_code) {
+            this.id                   = id;
+            this.student_id           = student_id;
+            this.school_code          = school_code;
+
+        }
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getStudent_id() {
+            return student_id;
+        }
+
+        public void setStudent_id(String student_id) {
+            this.student_id = student_id;
+        }
+
+        public String getSchool_code() {
+            return school_code;
+        }
+
+        public void setSchool_code(String school_code) {
+            this.school_code = school_code;
+        }
+
+
+    }
 }

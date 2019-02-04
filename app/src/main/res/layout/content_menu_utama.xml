@@ -32,69 +32,28 @@
                     app:strokeColor="#FF777777"
                     app:strokeWidth="1dp" />
 
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="135dp"
-                    android:visibility="gone"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:background="@drawable/tablayout"
-                    android:id="@+id/view_group">
-                    <LinearLayout
+                    android:id="@+id/recycler_profile_view">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycle_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="120dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="10dp"
-                        android:orientation="vertical">
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/profilanak"
-                            android:layout_width="80dp"
-                            android:layout_gravity="center"
-                            android:layout_height="80dp"
-                            app:cardCornerRadius="50dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
-                                android:id="@+id/image_anak"
-                                android:background="@drawable/ic_student"
-                                android:scaleType="centerCrop"
-                                app:border_color="@color/colorPrimary"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"/>
-                        </android.support.v7.widget.CardView>
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/namaanak"
-                            android:layout_width="80dp"
-                            android:layout_height="18dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="5dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/nama_anak"
-                                    android:text="Profile anak"
-                                    android:layout_gravity="center"
-                                    android:textSize="8dp"
-                                    android:gravity="center"/>
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
-
+                        android:layout_gravity="center" />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="29dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
                         android:orientation="vertical">
                         <android.support.v7.widget.CardView
                             android:foreground="?android:attr/selectableItemBackground"
@@ -135,107 +94,8 @@
                                 android:gravity="center"/>
                         </android.support.v7.widget.CardView>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tambah3"
-                        android:visibility="gone"
-                        android:orientation="vertical">
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/profilanak3"
-                            android:layout_width="60dp"
-                            android:layout_gravity="center"
-                            android:layout_height="60dp"
-                            app:cardCornerRadius="50dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
-                                android:id="@+id/image_profile3"
-                                android:background="@drawable/ic_add"
-                                android:scaleType="centerCrop"
-                                app:border_color="@color/colorPrimary"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"/>
-                        </android.support.v7.widget.CardView>
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/namaanak3"
-                            android:layout_width="60dp"
-                            android:layout_height="18dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="5dp">
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:id="@+id/nama_anak3"
-                                    android:layout_gravity="center"
-                                    android:text="Profile anak"
-                                    android:textSize="8dp"
-                                    android:gravity="center"/>
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tambah4"
-                        android:visibility="gone"
-                        android:orientation="vertical">
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/profilanak4"
-                            android:layout_width="60dp"
-                            android:layout_gravity="center"
-                            android:layout_height="60dp"
-                            app:cardCornerRadius="50dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                xmlns:app="http://schemas.android.com/apk/res-auto"
-                                android:id="@+id/image_profile4"
-                                android:background="@drawable/ic_add"
-                                android:scaleType="centerCrop"
-                                app:border_color="@color/colorPrimary"
-                                android:layout_gravity="center"
-                                android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"/>
-                        </android.support.v7.widget.CardView>
-                        <android.support.v7.widget.CardView
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:id="@+id/namaanak4"
-                            android:layout_width="60dp"
-                            android:layout_height="18dp"
-                            app:cardCornerRadius="10dp"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="5dp">
-
-                            <TextView
-                                android:id="@+id/nama_anak4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:text="Profile anak"
-                                android:textSize="8dp" />
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
                 </LinearLayout>
-
+                </android.support.v4.widget.NestedScrollView>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.Service.DatabaseManager;
@@ -12,12 +11,14 @@ import com.fingertech.kes.Service.DatabaseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class BookmarkTabel {
-    private Data data;
+public class StudentTable {
+
+    private Data.Student student;
     boolean check;
 
-    public BookmarkTabel(){
-        data = new Data();
+    public StudentTable(){
+
+        student = new Data.Student();
     }
 
     public static String createTable(){
@@ -31,49 +32,48 @@ public class BookmarkTabel {
                 Data.KEY_JENJANG + " STRING NOT NULL" +
                 " )";
     }
+    public static String create_table(){
+        return "CREATE TABLE " + Data.Student.TABLE + " (" +
+                Data.Student.KEY_CourseId + " INTEGER PRIMARY KEY autoincrement, " +
+                Data.Student.KEY_StudentId + " STRING NOT NULL, " +
+                Data.Student.KEY_SchoolCode + " STRING NOT NULL, " +
+                " )";
+    }
     public ArrayList<HashMap<String, String>> getAllData() {
-        ArrayList<HashMap<String, String>> wordList;
-        wordList = new ArrayList<HashMap<String, String>>();
-        String selectQuery = "SELECT * FROM " + Data.TABLE;
+        ArrayList<HashMap<String, String>> studentList;
+        studentList = new ArrayList<HashMap<String, String>>();
+        String selectQuery = "SELECT * FROM " + Data.Student.TABLE;
         SQLiteDatabase database = DatabaseManager.getInstance().openDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> map = new HashMap<String, String>();
-                map.put(Data.KEY_CourseId, cursor.getString(0));
-                map.put(Data.KEY_Name, cursor.getString(1));
-                map.put(Data.KEY_ALAMAT, cursor.getString(2));
-                map.put(Data.KEY_LATITUDE,cursor.getString(3));
-                map.put(Data.KEY_LONGITUDE,cursor.getString(4));
-                map.put(Data.KEY_SCHOOLDETAIL,cursor.getString(5));
-                map.put(Data.KEY_JENJANG,cursor.getString(6));
-                wordList.add(map);
+                map.put(Data.Student.KEY_CourseId, cursor.getString(0));
+                map.put(Data.Student.KEY_StudentId, cursor.getString(1));
+                map.put(Data.Student.KEY_SchoolCode, cursor.getString(2));
+                studentList.add(map);
             } while (cursor.moveToNext());
         }
 
-        Log.e("select sqlite ", "" + wordList);
+        Log.e("select sqlite ", "" + studentList);
 
         database.close();
-        return wordList;
+        return studentList;
     }
 
-    public void insert(Data data) {
+    public void insert(Data.Student data) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
         ContentValues values = new ContentValues();
-            values.put(Data.KEY_CourseId, data.getId());
-            values.put(Data.KEY_Name, data.getName());
-            values.put(Data.KEY_ALAMAT, data.getAddress());
-            values.put(Data.KEY_LATITUDE, data.getLat());
-            values.put(Data.KEY_LONGITUDE, data.getLng());
-            values.put(Data.KEY_SCHOOLDETAIL, data.getSchooldetailid());
-            values.put(Data.KEY_JENJANG, data.getJenjang());
+        values.put(Data.Student.KEY_CourseId, data.getId());
+        values.put(Data.Student.KEY_StudentId, data.getStudent_id());
+        values.put(Data.Student.KEY_SchoolCode, data.getSchool_code());
         // Inserting Row
-        db.insert(Data.TABLE, null, values);
+        db.insert(Data.Student.TABLE, null, values);
         DatabaseManager.getInstance().closeDatabase();
     }
     public void delete(String nama) {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
-        String updateQuery = "DELETE FROM " + Data.TABLE + " WHERE " + Data.KEY_Name + " = " + "'" + nama + "'";
+        String updateQuery = "DELETE FROM " + Data.Student.TABLE + " WHERE " + Data.Student.KEY_SchoolCode + " = " + "'" + nama + "'";
         Log.e("update sqlite ", updateQuery);
         db.execSQL(updateQuery);
         DatabaseManager.getInstance().closeDatabase();

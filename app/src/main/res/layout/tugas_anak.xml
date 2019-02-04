@@ -32,7 +32,7 @@
                 android:layout_height="match_parent"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:text="Jadwal Ujian"/>
+                android:text="Tugas Anak"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:id="@+id/no_tugas"
-        android:visibility="gone"
+        android:visibility="visible"
         android:text="Tidak ada tugas yang diberikan oleh guru"
         android:gravity="center"/>
 

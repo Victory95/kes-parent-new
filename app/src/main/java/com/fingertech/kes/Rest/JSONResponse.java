@@ -5219,6 +5219,7 @@ public class JSONResponse{
         public String code;
 
         @SerializedName("data")
+        @Expose
         public List<DataSemester> data;
 
         @SerializedName("status")
@@ -5270,6 +5271,484 @@ public class JSONResponse{
 
         public void setSemester_name(String semester_name) {
             this.semester_name = semester_name;
+        }
+    }
+
+    public class ListChildren{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataChildren> data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataChildren> getData() {
+            return data;
+        }
+
+        public void setData(List<DataChildren> data) {
+            this.data = data;
+        }
+    }
+    public class DataChildren{
+        @SerializedName("student_id")
+        public String student_id;
+
+        @SerializedName("school_id")
+        public String school_id;
+
+        @SerializedName("school_code")
+        public String school_code;
+
+        @SerializedName("children_name")
+        public String children_name;
+
+        @SerializedName("classroom_id")
+        public String classroom_id;
+
+        @SerializedName("classroom_name")
+        public String classroom_name;
+
+        @SerializedName("picture")
+        public String picture;
+
+        public String getStudent_id() {
+            return student_id;
+        }
+
+        public void setStudent_id(String student_id) {
+            this.student_id = student_id;
+        }
+
+        public String getSchool_id() {
+            return school_id;
+        }
+
+        public void setSchool_id(String school_id) {
+            this.school_id = school_id;
+        }
+
+        public String getSchool_code() {
+            return school_code;
+        }
+
+        public void setSchool_code(String school_code) {
+            this.school_code = school_code;
+        }
+
+        public String getChildren_name() {
+            return children_name;
+        }
+
+        public void setChildren_name(String children_name) {
+            this.children_name = children_name;
+        }
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
+
+        public String getClassroom_name() {
+            return classroom_name;
+        }
+
+        public void setClassroom_name(String classroom_name) {
+            this.classroom_name = classroom_name;
+        }
+
+        public String getPicture() {
+            return picture;
+        }
+
+        public void setPicture(String picture) {
+            this.picture = picture;
+        }
+    }
+
+    public class AbsenSiswa{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataJam> data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataJam> getData() {
+            return data;
+        }
+
+        public void setData(List<DataJam> data) {
+            this.data = data;
+        }
+    }
+    public class DataJam{
+        @SerializedName("schedule_time")
+        public String schedule_time;
+
+        @SerializedName("timez_start")
+        public String timez_start;
+
+
+        @SerializedName("timez_finish")
+        public String timez_finish;
+
+        @SerializedName("lesson_duration")
+        public String lesson_duration;
+
+        @SerializedName("total_attendance")
+        public String total_attendance;
+
+        @SerializedName("total_leave_sick")
+        public String total_leave_sick;
+
+        @SerializedName("days")
+        public List<DataHari> days;
+        public String getTimez_start() {
+            return timez_start;
+        }
+
+        public void setTimez_start(String timez_start) {
+            this.timez_start = timez_start;
+        }
+
+
+        public String getSchedule_time() {
+            return schedule_time;
+        }
+
+        public void setSchedule_time(String schedule_time) {
+            this.schedule_time = schedule_time;
+        }
+
+        public String getTimez_finish() {
+            return timez_finish;
+        }
+
+        public void setTimez_finish(String timez_finish) {
+            this.timez_finish = timez_finish;
+        }
+
+        public String getLesson_duration() {
+            return lesson_duration;
+        }
+
+        public void setLesson_duration(String lesson_duration) {
+            this.lesson_duration = lesson_duration;
+        }
+
+        public String getTotal_attendance() {
+            return total_attendance;
+        }
+
+        public void setTotal_attendance(String total_attendance) {
+            this.total_attendance = total_attendance;
+        }
+
+        public String getTotal_leave_sick() {
+            return total_leave_sick;
+        }
+
+        public void setTotal_leave_sick(String total_leave_sick) {
+            this.total_leave_sick = total_leave_sick;
+        }
+
+        public List<DataHari> getDays() {
+            return days;
+        }
+
+        public void setDays(List<DataHari> days) {
+            this.days = days;
+        }
+    }
+    public class DataHari{
+        @SerializedName("day_id")
+        public String day_id;
+
+        @SerializedName("day_type")
+        public String day_type;
+
+        @SerializedName("absent_status")
+        public String absen_status;
+
+        public String getDay_id() {
+            return day_id;
+        }
+
+        public void setDay_id(String day_id) {
+            this.day_id = day_id;
+        }
+
+        public String getDay_type() {
+            return day_type;
+        }
+
+        public void setDay_type(String day_type) {
+            this.day_type = day_type;
+        }
+
+        public String getAbsen_status() {
+            return absen_status;
+        }
+
+        public void setAbsen_status(String absen_status) {
+            this.absen_status = absen_status;
+        }
+    }
+
+    public class ClassCalendar{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataCalendar> data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataCalendar> getData() {
+            return data;
+        }
+
+        public void setData(List<DataCalendar> data) {
+            this.data = data;
+        }
+    }
+    public class DataCalendar{
+
+        @SerializedName("calendar_id")
+        public int calendar_id;
+
+        @SerializedName("calendar_title")
+        public String calendar_title;
+
+        @SerializedName("calendar_desc")
+        public String calendar_desc;
+
+        @SerializedName("calendar_date")
+        public String calendar_date;
+
+        @SerializedName("calendar_time")
+        public String calendar_time;
+
+        @SerializedName("calendar_type")
+        public String calendar_type;
+
+        public int getCalendar_id() {
+            return calendar_id;
+        }
+
+        public void setCalendar_id(int calendar_id) {
+            this.calendar_id = calendar_id;
+        }
+
+        public String getCalendar_title() {
+            return calendar_title;
+        }
+
+        public void setCalendar_title(String calendar_title) {
+            this.calendar_title = calendar_title;
+        }
+
+        public String getCalendar_desc() {
+            return calendar_desc;
+        }
+
+        public void setCalendar_desc(String calendar_desc) {
+            this.calendar_desc = calendar_desc;
+        }
+
+        public String getCalendar_date() {
+            return calendar_date;
+        }
+
+        public void setCalendar_date(String calendar_date) {
+            this.calendar_date = calendar_date;
+        }
+
+        public String getCalendar_time() {
+            return calendar_time;
+        }
+
+        public void setCalendar_time(String calendar_time) {
+            this.calendar_time = calendar_time;
+        }
+
+        public String getCalendar_type() {
+            return calendar_type;
+        }
+
+        public void setCalendar_type(String calendar_type) {
+            this.calendar_type = calendar_type;
+        }
+    }
+
+    public class ClassroomDetail{
+
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public DataClassroom data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public DataClassroom getData() {
+            return data;
+        }
+
+        public void setData(DataClassroom data) {
+            this.data = data;
+        }
+    }
+    public class DataClassroom{
+        @SerializedName("classroom_name")
+        public String classroom_name;
+
+        @SerializedName("teacher_id")
+        public String teacher_id;
+
+        @SerializedName("edulevel_id")
+        public String edulevel_id;
+
+        @SerializedName("scyear_id")
+        public String scyear_id;
+
+        @SerializedName("scyear_name")
+        public Object scyear_name;
+
+        @SerializedName("homeroom_teacher")
+        public String homeroom_teacher;
+
+        @SerializedName("edulevel_name")
+        public String edulevel_name;
+
+        public String getClassroom_name() {
+            return classroom_name;
+        }
+
+        public void setClassroom_name(String classroom_name) {
+            this.classroom_name = classroom_name;
+        }
+
+        public String getTeacher_id() {
+            return teacher_id;
+        }
+
+        public void setTeacher_id(String teacher_id) {
+            this.teacher_id = teacher_id;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getScyear_id() {
+            return scyear_id;
+        }
+
+        public void setScyear_id(String scyear_id) {
+            this.scyear_id = scyear_id;
+        }
+
+        public Object getScyear_name() {
+            return scyear_name;
+        }
+
+        public void setScyear_name(Object scyear_name) {
+            this.scyear_name = scyear_name;
+        }
+
+        public String getHomeroom_teacher() {
+            return homeroom_teacher;
+        }
+
+        public void setHomeroom_teacher(String homeroom_teacher) {
+            this.homeroom_teacher = homeroom_teacher;
+        }
+
+        public String getEdulevel_name() {
+            return edulevel_name;
+        }
+
+        public void setEdulevel_name(String edulevel_name) {
+            this.edulevel_name = edulevel_name;
         }
     }
 }

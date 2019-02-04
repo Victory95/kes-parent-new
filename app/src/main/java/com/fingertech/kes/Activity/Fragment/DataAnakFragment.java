@@ -230,10 +230,6 @@ public class DataAnakFragment extends Fragment {
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        school_code = "bpk02";
-        student_id = "369";
-
-
         data_student_get();
 
         sharedanak  = getActivity().getSharedPreferences(my_shared_anak, Context.MODE_PRIVATE);
@@ -765,7 +761,7 @@ public class DataAnakFragment extends Fragment {
         editor.putString(TAG_KEBUTUHAN_KHUSUS,et_kebutuhan_khusus.getText().toString());
         editor.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
         editor.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
-        editor.putString(TAG_KEWARGANEGARAAN,(String) negaraasal);
+        editor.putString(TAG_KEWARGANEGARAAN,(String) negaraasal.toString());
         editor.commit();
         KontakAnakFragment kontakAnakFragment = new KontakAnakFragment();
         Bundle kontakanak = new Bundle();
@@ -780,7 +776,7 @@ public class DataAnakFragment extends Fragment {
         kontakanak.putString(TAG_JENIS_KELAMIN,(String) jenis_kelamin);
         kontakanak.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
         kontakanak.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
-        kontakanak.putString(TAG_KEWARGANEGARAAN,(String)negaraasal);
+        kontakanak.putString(TAG_KEWARGANEGARAAN,(String)negaraasal.toString());
         kontakAnakFragment.setArguments(kontakanak);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

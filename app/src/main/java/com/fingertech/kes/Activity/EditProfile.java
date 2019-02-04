@@ -1,10 +1,13 @@
 package com.fingertech.kes.Activity;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -78,14 +82,15 @@ public class EditProfile extends AppCompatActivity {
     public static final String TAG_NOMOR_HP     = "nomor_hp";
     public static final String TAG_AGAMA        = "agama";
     public static final String TAG_GENDER       = "gender";
-    String nama_profile,no_hp,agama_profile,gender_profile;
-
-
+    public static final String TAG_TANGGAL      = "tanggal_lahir";
+    String nama_profile,no_hp,agama_profile,gender_profile,tanggal_lahir;
 
     int status;
     String code,last_update;
     String authorization;
     Button btn_update;
+    EditText et_tanggal;
+    ProgressDialog dialog;
 
 
     @Override
@@ -104,6 +109,8 @@ public class EditProfile extends AppCompatActivity {
         sp_religion         = (Spinner)findViewById(R.id.sp_religion);
         btn_update          = (Button)findViewById(R.id.btn_update);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
+        et_tanggal          = findViewById(R.id.et_tanggal);
+
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarprofil);
         setSupportActionBar(toolbar);
@@ -126,6 +133,7 @@ public class EditProfile extends AppCompatActivity {
         agama_profile   = sharedupdate.getString(TAG_AGAMA,"");
         gender_profile  = sharedupdate.getString(TAG_GENDER,"");
         no_hp           = sharedupdate.getString(TAG_NOMOR_HP,"");
+        tanggal_lahir   = sharedupdate.getString(TAG_TANGGAL,"");
 
         et_nama_lengkap.setText(nama_profile);
         et_email.setText(email);
@@ -137,6 +145,38 @@ public class EditProfile extends AppCompatActivity {
             rb_wanita.setChecked(true);
             rb_pria.setChecked(false);
         }
+
+        et_tanggal.setText(tanggal_lahir);
+
+        Calendar mcurrentDate = Calendar.getInstance();
+        int mYear = mcurrentDate.get(Calendar.YEAR);
+        int mMonth = mcurrentDate.get(Calendar.MONTH);
+        int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+        final DatePickerDialog mDatePicker;
+        mDatePicker = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                et_tanggal.setText(convertDate(selectedyear, selectedmonth, selectedday));
+            }
+        }, mYear, mMonth, mDay);
+
+
+        et_tanggal.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+//                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
+                mDatePicker.show();
+            }
+        });
+
+        et_tanggal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+//                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
+                    mDatePicker.show();
+                }
+            }
+        });
+
 
         final List<String> penghasil = new ArrayList<>(Arrays.asList(religion));
         // Initializing an ArrayAdapter
@@ -198,27 +238,45 @@ public class EditProfile extends AppCompatActivity {
                 gender = getResources().getString(R.string.rb_wanita);
             }
         });
-        DateFormat df = new SimpleDateFormat("EEEEEE, dd MMM yyyy, HH:mm");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         last_update = df.format(Calendar.getInstance().getTime());
 
         btn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                update_profile();
+                update_profile();
             }
         });
 
     }
 
+    //Konversi tanggal dari date dialog ke format yang kita inginkan
+    String convertDate(int year, int month, int day) {
+        Log.d("Tanggal", year + "/" + month + "/" + day);
+        String temp = year + "-" + (month + 1) + "-" + day;
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(temp));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
     public void update_profile(){
-        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization.toString(),parent_id.toString(),et_nama_lengkap.getText().toString(),et_email.getText().toString(),et_nomor_hp.getText().toString(),gender.toString(),agama.toString(),last_update);
+        progressBar();
+        showDialog();
+        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization.toString(),parent_id.toString(),et_email.getText().toString(),et_nama_lengkap.getText().toString(),et_nomor_hp.getText().toString(),last_update.toString(),gender.toString(),agama.toString(),et_tanggal.getText().toString());
 
         call.enqueue(new Callback<JSONResponse>() {
 
             @Override
             public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
                 Log.i("KES", response.code() + "");
-
+                hideDialog();
                 JSONResponse resource = response.body();
 
                 status = resource.status;
@@ -242,10 +300,27 @@ public class EditProfile extends AppCompatActivity {
             @Override
             public void onFailure(retrofit2.Call<JSONResponse> call, Throwable t) {
                 Log.d("onFailure", t.toString());
+                hideDialog();
             }
 
         });
 
+    }
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(EditProfile.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
     }
 
     @Override

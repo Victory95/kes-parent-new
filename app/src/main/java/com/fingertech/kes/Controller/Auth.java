@@ -134,15 +134,16 @@ public interface Auth {
 
     /////////////////////////////////////////////////////////////////////////////////////////////
     @FormUrlEncoded
-    @PUT("kes_update/{memberid}")
+    @PUT("auth/kes_update/{memberid}")
     Call<JSONResponse> kes_update_put(@Header("Authorization") String authorization,
                                      @Path("memberid") String memberid,
-                                     @Field("fullname") String fullname,
                                      @Field("email") String email,
+                                     @Field("fullname") String fullname,
                                      @Field("mobile_phone") String mobile_phone,
-                                     @Field("religion") String religion,
+                                     @Field("lastupdate") String lastupdate,
                                      @Field("gender") String gender,
-                                     @Field("lastupdate") String lastupdate);
+                                     @Field("religion") String religion,
+                                     @Field("birth_date") String birth_date);
 
     @FormUrlEncoded
     @HTTP(method = "DELETE", path = "public", hasBody = true)
@@ -302,12 +303,34 @@ public interface Auth {
                                                  @Query("date_now") String date_now);
 
     @GET("students/kes_list_semester")
-    Call<JSONResponse.ListSemester>kes_list_semester(@Header("Authorization") String authorization,
-                                                             @Query("school_code") String school_code,
-                                                             @Query("classroom_id") String classroom_id);
+    Call<JSONResponse.ListSemester>kes_list_semester_get(@Header("Authorization") String authorization,
+                                                     @Query("school_code") String school_code,
+                                                     @Query("classroom_id") String classroom_id);
 
+    @GET("parents/kes_list_children")
+    Call<JSONResponse.ListChildren>kes_list_children_get(@Header("Authorization") String authorization,
+                                                     @Query("parent_id") String parent_id);
 
+    @GET("students/kes_class_attendance")
+    Call<JSONResponse.AbsenSiswa>kes_class_attendance_get(@Header("Authorization") String authorization,
+                                                           @Query("school_code") String school_code,
+                                                           @Query("student_id") String student_id,
+                                                           @Query("classroom_id") String classroom_id,
+                                                           @Query("attendance_month") String attendance_month,
+                                                           @Query("attendance_year") String attendance_year);
 
+    @GET("students/kes_class_calendar")
+    Call<JSONResponse.ClassCalendar>kes_class_calendar_get(@Header("Authorization") String authorization,
+                                                          @Query("school_code") String school_code,
+                                                          @Query("student_id") String student_id,
+                                                          @Query("classroom_id") String classroom_id,
+                                                          @Query("calendar_month") String calendar_month,
+                                                          @Query("calendar_year") String calendar_year);
+
+    @GET("students/kes_classroom_detail")
+    Call<JSONResponse.ClassroomDetail>kes_classroom_detail_get(@Header("Authorization") String authorization,
+                                                         @Query("school_code") String school_code,
+                                                         @Query("classroom_id") String classroom_id);
 
 
 }

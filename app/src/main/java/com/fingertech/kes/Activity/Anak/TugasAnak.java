@@ -119,6 +119,7 @@ public class TugasAnak extends AppCompatActivity {
                         recyclerView.setAdapter(tugasAdapter);
                     }else {
                         no_tugas.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
                 }
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Anak.AbsensiAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
@@ -116,8 +117,16 @@ public class MenuSatuFragment extends Fragment {
         btn_absensi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), KalenderKelas.class);
-                startActivity(intent);
+                if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
+                    Intent intent = new Intent(getContext(), AbsensiAnak.class);
+                    intent.putExtra("authorization", authorization);
+                    intent.putExtra("school_code", school_code);
+                    intent.putExtra("student_id", student_id);
+                    intent.putExtra("classroom_id", classroom_id);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
+                }
             }
         });
 

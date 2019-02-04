@@ -1,26 +1,27 @@
+
 package com.fingertech.kes.Activity.Adapter;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+        import android.support.v7.widget.RecyclerView;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.TextView;
 
-import com.fingertech.kes.Activity.Model.CalendarModel;
-import com.fingertech.kes.Activity.Model.ItemSekolah;
-import com.fingertech.kes.Activity.Model.ItemUjian;
-import com.fingertech.kes.R;
-import com.fingertech.kes.Rest.JSONResponse;
+        import com.fingertech.kes.Activity.Model.CalendarModel;
+        import com.fingertech.kes.Activity.Model.ItemSekolah;
+        import com.fingertech.kes.Activity.Model.ItemUjian;
+        import com.fingertech.kes.R;
+        import com.fingertech.kes.Rest.JSONResponse;
 
-import java.util.List;
+        import java.util.List;
 
-public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
+public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHolder> {
 
-    private List<ItemUjian> viewItemList;
+    private List<CalendarModel> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public UjianAdapter(List<ItemUjian> viewItemList) {
+    public CalendarAdapter(List<CalendarModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -42,12 +43,12 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
     public void onBindViewHolder(MyHolder holder, int position) {
 
         // Get car item dto in list.
-        ItemUjian viewItem = viewItemList.get(position);
+        CalendarModel viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.tanggal.setText(viewItem.getTanggal());;
-        holder.jam.setText(viewItem.getJam());
-        holder.mapel.setText(viewItem.getMapel());
-        holder.type_id.setText(viewItem.getType_id());
+        holder.tanggal.setText(viewItem.getCalendar_date());;
+        holder.jam.setText(viewItem.getCalendar_time());
+        holder.mapel.setText(viewItem.getCalendar_title());
+        holder.type_id.setText(viewItem.getCalendar_desc());
     }
 
     @Override
@@ -56,7 +57,7 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tanggal, jam,mapel,type_id;
+        TextView tanggal,jam,mapel,type_id;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
@@ -65,13 +66,13 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
             jam     = (TextView) itemView.findViewById(R.id.jam_ujian);
             mapel   = (TextView) itemView.findViewById(R.id.mata_pelajaran);
             type_id = (TextView) itemView.findViewById(R.id.type_id);
-//            itemView.setOnClickListener(this);
-//            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+            this.onItemClickListener = onItemClickListener;
         }
 
         @Override
         public void onClick(View v) {
-//            onItemClickListener.onItemClick(v, getAdapterPosition());
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     public interface OnItemClickListener {

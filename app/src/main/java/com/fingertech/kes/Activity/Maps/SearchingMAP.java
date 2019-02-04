@@ -40,8 +40,8 @@ import android.widget.Toast;
 
 import com.etiennelawlor.discreteslider.library.ui.DiscreteSlider;
 import com.etiennelawlor.discreteslider.library.utilities.DisplayUtility;
-import com.fingertech.kes.Activity.Adapter.Adapter;
-import com.fingertech.kes.Activity.Adapter.InfoWindow;
+import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
+import com.fingertech.kes.Activity.Adapter.SearchMapAdapter;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.SquareFloatButton;
@@ -87,7 +87,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<JSONResponse.SData> arraylist;
-    private Adapter adapter;
+    private SearchMapAdapter searchMapAdapter;
     private ProgressDialog dialog;
     Marker m;
     GoogleApiClient mGoogleApiClient;
@@ -551,8 +551,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         info.setNama(placeName);
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
-                        InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                        mmap.setInfoWindowAdapter(customInfoWindow);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                         m.setTag(info);
                     }
 
@@ -596,12 +596,12 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
                 if (status == 1 && code.equals("SS_SCS_0001")) {
                     arraylist = response.body().getData();
-                    adapter = new Adapter(arraylist, SearchingMAP.this);
-                    recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    adapter.getFilter(key).filter(key);
-//                    adapter.setFilter(arraylist,key);
-                    adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+                    searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
+                    recyclerView.setAdapter(searchMapAdapter);
+                    searchMapAdapter.notifyDataSetChanged();
+                    searchMapAdapter.getFilter(key).filter(key);
+//                    searchMapAdapter.setFilter(arraylist,key);
+                    searchMapAdapter.setOnItemClickListener(new SearchMapAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             latitudeF   = response.body().getData().get(position).getLatitude();
@@ -666,8 +666,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                             infoWindowData.setNama(Namasekolah);
                             infoWindowData.setAlamat(Alamat);
                             infoWindowData.setSchooldetailid(Schooldetailid);
-                            InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                            mmap.setInfoWindowAdapter(customInfoWindow);
+                            InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                            mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                             m.setTag(infoWindowData);
                             tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
                             discreteSlider.setVisibility(View.VISIBLE);
@@ -752,8 +752,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     m = mmap.addMarker(markerOptions);
-                    InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindow);
+                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
 
                 }else if(jenjang.toString().equals("smp") || jenjang.toString().equals("BPK SMP")){
@@ -764,8 +764,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     m = mmap.addMarker(markerOptions);
-                    InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindow);
+                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
 
                 }else if(jenjang.toString().equals("smk")){
@@ -776,8 +776,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     m = mmap.addMarker(markerOptions);
-                    InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindow);
+                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
                 }else {
                     final MarkerOptions markerOptions = new MarkerOptions();
@@ -787,8 +787,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                     mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     m = mmap.addMarker(markerOptions);
-                    InfoWindow customInfoWindow = new InfoWindow(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindow);
+                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
                 }
                 requestFocus(searchView);

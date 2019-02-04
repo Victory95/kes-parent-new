@@ -98,7 +98,7 @@
     </style>
 
     <style name="RecyclerTabLayoutTheme">
-        <item name="android:textColorSecondary">@color/colorPrimary</item>
+        <item name="android:textColorSecondary">@color/black</item>
         <item name="colorAccent">@color/ic_logo_background</item>
     </style>
     <style name="RecyclerTabLayoutTheme.Basic">

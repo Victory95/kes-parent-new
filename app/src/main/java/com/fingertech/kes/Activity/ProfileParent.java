@@ -129,6 +129,7 @@ public class ProfileParent extends AppCompatActivity {
     public static final String TAG_NOMOR_HP     = "nomor_hp";
     public static final String TAG_AGAMA        = "agama";
     public static final String TAG_GENDER       = "gender";
+    public static final String TAG_TANGGAL      = "tanggal_lahir";
     String nama_profile,no_hp,religion,gender;
 
     public static final String TAG_EMAIL        = "email";
@@ -152,7 +153,7 @@ public class ProfileParent extends AppCompatActivity {
     int status;
     String code;
 
-    TextView email_profile,no_profile,jenis_kelamin_profile,tv_agama,last_login,member,jadi_parent;
+    TextView email_profile,no_profile,jenis_kelamin_profile,tv_agama,last_login,member,jadi_parent,tanggallahir;
     int bitmap_size = 40; // image quality 1 - 100;
     int max_resolution_image = 800;
     private static final int CAMERA_REQUEST_CODE = 7777;
@@ -162,8 +163,9 @@ public class ProfileParent extends AppCompatActivity {
     private FirebaseAuth mAuth;
     ProgressDialog dialog;
     Uri uri;
-    String encoded;
+    String tanggal_lahir;
     CollapsingToolbarLayout collapsingToolbarLayout;
+
     AppBarLayout appBarLayout;
 
     @Override
@@ -185,6 +187,7 @@ public class ProfileParent extends AppCompatActivity {
         jadi_parent             = (TextView)findViewById(R.id.jd_parent);
         mApiInterface           = ApiClient.getClient().create(Auth.class);
         logout                  = (Button)findViewById(R.id.btn_logout);
+        tanggallahir            = findViewById(R.id.tanggal_lahir);
 
 
         setSupportActionBar(toolbar);
@@ -252,38 +255,14 @@ public class ProfileParent extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
         mAuth = FirebaseAuth.getInstance();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putBoolean(Masuk.session_status, false);
-                editor.putString(TAG_EMAIL, null);
-                editor.putString(TAG_MEMBER_ID, null);
-                editor.putString(TAG_FULLNAME, null);
-                editor.putString(TAG_MEMBER_TYPE, null);
-                editor.putString(TAG_TOKEN, null);
-                editor.commit();
-
-                /////// Logout Facebook
-                LoginManager.getInstance().logOut();
-
-
-                ///// Google Logout
-                mAuth.signOut();
-                mGoogleSignInClient.signOut().addOnCompleteListener(ProfileParent.this,
-                        new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                FirebaseUser user = null;
-                            }
-                        });
-
-                Intent intent = new Intent(ProfileParent.this, MenuGuest.class);
-                finish();
-                startActivity(intent);
+                pilihan();
             }
         });
 
@@ -304,6 +283,7 @@ public class ProfileParent extends AppCompatActivity {
                 edit.putString(TAG_NOMOR_HP,nohp);
                 edit.putString(TAG_AGAMA,agama);
                 edit.putString(TAG_GENDER,jeniskelamin);
+                edit.putString(TAG_TANGGAL,tanggal_lahir);
                 edit.commit();
 
                 Intent intent = new Intent(ProfileParent.this, EditProfile.class);
@@ -550,6 +530,7 @@ public class ProfileParent extends AppCompatActivity {
                     agama           = response.body().getData().getReligion();
                     member_type     = response.body().getData().getMember_Type();
                     terakhirlogin   = response.body().getData().getLast_Login();
+                    tanggal_lahir   = response.body().getData().getBirth_Date();
 
                     email_profile.setText(email);
                     no_profile.setText(nohp);
@@ -562,6 +543,7 @@ public class ProfileParent extends AppCompatActivity {
                         member.setText("Sebagai User Biasa");
                         jadi_parent.setVisibility(View.VISIBLE);
                     }
+                    tanggallahir.setText(tanggal_lahir);
 
                     String imagefile = Base_url + picture;
                     Picasso.with(ProfileParent.this).load(imagefile).into(image_profil);
@@ -605,6 +587,52 @@ public class ProfileParent extends AppCompatActivity {
 
     }
 
+    private void pilihan() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileParent.this,R.style.DialogTheme);
+        builder.setTitle("Log out");
+        builder.setMessage("Apakah anda ingin keluar?");
+        builder.setIcon(R.drawable.ic_alarm);
+        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putBoolean(Masuk.session_status, false);
+                editor.putString(TAG_EMAIL, null);
+                editor.putString(TAG_MEMBER_ID, null);
+                editor.putString(TAG_FULLNAME, null);
+                editor.putString(TAG_MEMBER_TYPE, null);
+                editor.putString(TAG_TOKEN, null);
+                editor.commit();
+
+                /////// Logout Facebook
+                LoginManager.getInstance().logOut();
+
+
+                ///// Google Logout
+                mAuth.signOut();
+                mGoogleSignInClient.signOut().addOnCompleteListener(ProfileParent.this,
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                FirebaseUser user = null;
+                            }
+                        });
+
+                Intent intent = new Intent(ProfileParent.this, MenuGuest.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
 
     private void showDialog() {
         if (!dialog.isShowing())

@@ -16,12 +16,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -36,25 +38,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
-import com.fingertech.kes.Activity.Adapter.Adapter;
-import com.fingertech.kes.Activity.Adapter.InfoWindow;
 import com.fingertech.kes.Activity.Adapter.SearchAdapter;
-import com.fingertech.kes.Activity.AksesAnak;
 import com.fingertech.kes.Activity.CameraScanning;
 import com.fingertech.kes.Activity.KodeAksesAnak;
 import com.fingertech.kes.Activity.MainActivity;
-import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Masuk;
-import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.RecommendSchool;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -194,16 +187,15 @@ public class AnakAkses extends AppCompatActivity {
         if (!validateNikNiora()) {
             return;
         }
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putBoolean(session_status, true);
-            editor.putString(TAG_STUDENT_ID, (String) student_id);
-            editor.putString(TAG_STUDENT_NIK, (String) student_nik);
-            editor.putString(TAG_SCHOOL_ID, (String) school_id);
-            editor.putString(TAG_NAMA_ANAK, tvinfo.getText().toString());
-            editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
-            editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
-            editor.commit();
-
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean(session_status, true);
+        editor.putString(TAG_STUDENT_ID, (String) student_id);
+        editor.putString(TAG_STUDENT_NIK, (String) student_nik);
+        editor.putString(TAG_SCHOOL_ID, (String) school_id);
+        editor.putString(TAG_NAMA_ANAK, tvinfo.getText().toString());
+        editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
+        editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
+        editor.commit();
             status_nik=0;
             recyclerView.setVisibility(View.GONE);
             search.setText("");
@@ -365,6 +357,7 @@ public class AnakAkses extends AppCompatActivity {
         String language = Locale.getDefault().getLanguage();
         if (language.equals("en")) {
             SpannableString ss = new SpannableString("The school hasn't joined KES. Recommend the school to join KES");
+
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -376,7 +369,9 @@ public class AnakAkses extends AppCompatActivity {
                     ds.setUnderlineText(true);
                 }
             };
+
             ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 32, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tvkodejoin.setText(ss);
             tvkodejoin.setMovementMethod(LinkMovementMethod.getInstance());
             tvkodejoin.setHighlightColor(Color.TRANSPARENT);
@@ -395,6 +390,7 @@ public class AnakAkses extends AppCompatActivity {
                 }
             };
             ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 32, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tvkodejoin.setText(ss);
             tvkodejoin.setMovementMethod(LinkMovementMethod.getInstance());
             tvkodejoin.setHighlightColor(Color.TRANSPARENT);
@@ -417,6 +413,7 @@ public class AnakAkses extends AppCompatActivity {
                 }
             };
             ss.setSpan(clickableSpan, 150, 160, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 150, 160, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tvinfo.setText(ss);
             tvinfo.setMovementMethod(LinkMovementMethod.getInstance());
             tvinfo.setHighlightColor(Color.TRANSPARENT);
@@ -435,6 +432,7 @@ public class AnakAkses extends AppCompatActivity {
                 }
             };
             ss.setSpan(clickableSpan, 154, 166, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 154, 166, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tvinfo.setText(ss);
             tvinfo.setMovementMethod(LinkMovementMethod.getInstance());
             tvinfo.setHighlightColor(Color.TRANSPARENT);
@@ -545,7 +543,15 @@ public class AnakAkses extends AppCompatActivity {
 
                 if (status == 1 && code.equals("RCA_SCS_0001")) {
                     Toast.makeText(getApplicationContext(), RCA_SCS_0001, Toast.LENGTH_LONG).show();
+
                     Intent intent = new Intent(getApplicationContext(), KodeAksesAnak.class);
+//                    intent.putExtra(TAG_STUDENT_ID,student_id);
+//                    intent.putExtra(TAG_STUDENT_NIK,student_nik);
+//                    intent.putExtra(TAG_SCHOOL_ID,school_id);
+//                    intent.putExtra(TAG_NAMA_ANAK,tvinfo.getText().toString());
+//                    intent.putExtra(TAG_NAMA_SEKOLAH,school_name);
+//                    intent.putExtra(TAG_SCHOOL_CODE,sekolah_kode.toLowerCase());
+
                     startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RCA_ERR_0001")){

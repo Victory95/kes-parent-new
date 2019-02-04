@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.R;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
+public class SearchMapAdapter extends RecyclerView.Adapter<SearchMapAdapter.MyHolder> {
 
     private List<JSONResponse.SData> viewItemList;
     private List<JSONResponse.SData> mArrayList;
@@ -34,7 +33,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyHolder> {
     Data data = new Data();
     private Boolean clicked = false;
 
-    public Adapter(List<JSONResponse.SData> viewItemList, Context context) {
+    public SearchMapAdapter(List<JSONResponse.SData> viewItemList, Context context) {
         this.viewItemList = viewItemList;
         this.mArrayList = viewItemList;
         this.context = context;

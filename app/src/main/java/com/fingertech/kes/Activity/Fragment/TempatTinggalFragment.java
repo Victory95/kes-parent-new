@@ -39,10 +39,13 @@ import com.fingertech.kes.Activity.AnakMain;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.Model.Data;
+import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Rest.StudentTable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -60,8 +63,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -150,7 +153,11 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     SharedPreferences sharedpreferences,sharedanak;
     String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
     String telepon_rumah,handphone,skun,penerimaan_kps,nokps,dusun;
-    String studentdetailId;
+    String studentdetailId,classroom_id,picture;
+
+    StudentTable studentTable = new StudentTable();
+    Data.Student student    = new Data.Student();
+    List<ProfileModel> profileModels = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -196,8 +203,6 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        school_code = "bpk02";
-        student_id = "369";
 
         sharedanak  = getActivity().getSharedPreferences(DataAnakFragment.my_shared_anak,Context.MODE_PRIVATE);
         Nama_lengkap        = sharedanak.getString(TAG_NAMA_LENGKAP,"");
@@ -219,6 +224,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         penerimaan_kps      = sharedanak.getString(TAG_PENERIMAANKPS,"");
         nokps               = sharedanak.getString(TAG_NOKPS,"");
 
+        school_code = "bpk02";
+        student_id = "369";
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -486,6 +493,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                     alamat              = response.body().data.getAddress();
                     CurrentLatitude     = response.body().data.getLatitude();
                     CurrentLongitude    = response.body().data.getLongitude();
+                    classroom_id        = response.body().getData().getClassroom_id();
+                    picture             = response.body().getData().getPicture();
 
                     et_rt.setText(rt);
                     et_rw.setText(rw);
@@ -697,9 +706,11 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
-
+                ProfileModel profileModel;
                 if (status == 1 && code.equals("USTM_SCS_0001")){
+
                     Intent intent = new Intent(getContext(), MenuUtama.class);
+//                    intent.putExtra("profile",profileModel);
                     startActivity(intent);
                 }else {
                     Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();

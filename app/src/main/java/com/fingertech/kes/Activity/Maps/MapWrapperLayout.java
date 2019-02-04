@@ -17,9 +17,9 @@ public class MapWrapperLayout extends RelativeLayout {
     private GoogleMap map;
 
     /**
-     * Vertical offset in pixels between the bottom edge of our InfoWindow
+     * Vertical offset in pixels between the bottom edge of our InfoWindowAdapter
      * and the marker position (by default it's bottom edge too).
-     * It's a good idea to use custom markers and also the InfoWindow frame,
+     * It's a good idea to use custom markers and also the InfoWindowAdapter frame,
      * because we probably can't rely on the sizes of the default marker and frame.
      */
     private int bottomOffsetPixels;

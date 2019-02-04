@@ -13,11 +13,11 @@ import com.fingertech.kes.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
-public class InfoWindow implements GoogleMap.InfoWindowAdapter {
+public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private Context context;
 
-    public InfoWindow(Context ctx){
+    public InfoWindowAdapter(Context ctx){
         context = ctx;
     }
 

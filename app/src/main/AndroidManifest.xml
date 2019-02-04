@@ -285,10 +285,10 @@
             android:name=".Activity.Anak.KalenderKelas"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
         <activity
             android:name=".Activity.Anak.AbsensiAnak"
+            android:label="Absensi Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
