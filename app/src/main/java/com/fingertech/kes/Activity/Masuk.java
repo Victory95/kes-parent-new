@@ -30,8 +30,10 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -155,6 +157,9 @@ public class Masuk extends AppCompatActivity {
                 ActivityCompat.requestPermissions(Masuk.this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
             }
         }
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         ////// Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -374,7 +379,7 @@ public class Masuk extends AppCompatActivity {
                                 finish();
                                 startActivity(intent);
                             }else {
-                                Intent intent = new Intent(Masuk.this, AnakMain.class);
+                                Intent intent = new Intent(Masuk.this, MenuUtama.class);
                                 intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                                 intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                                 intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
@@ -465,7 +470,7 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 Log.d("FB Response :", "Error" + exception);
-                Toast.makeText(Masuk.this, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Masuk.this, "Error" + exception, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -332,5 +332,25 @@ public interface Auth {
                                                          @Query("school_code") String school_code,
                                                          @Query("classroom_id") String classroom_id);
 
+    @GET("students/kes_calendar_detail")
+    Call<JSONResponse.CalendarDetail>kes_calendar_detail_get(@Header("Authorization") String authorization,
+                                                               @Query("school_code") String school_code,
+                                                               @Query("calendar_id") String calendar_id);
+    @GET("parents/kes_message_inbox")
+    Call<JSONResponse.PesanAnak>kes_message_inbox_get(@Header("Authorization") String authorization,
+                                                           @Query("school_code") String school_code,
+                                                           @Query("parent_id") String parent_id,
+                                                           @Query("date_from") String date_from,
+                                                           @Query("date_to") String date_to);
+    @GET("parents/kes_message_inbox_detail")
+    Call<JSONResponse.PesanDetail>kes_message_inbox_detail_get(@Header("Authorization") String authorization,
+                                                      @Query("school_code") String school_code,
+                                                      @Query("parent_id") String parent_id,
+                                                      @Query("message_id") String message_id,
+                                                      @Query("parent_message_id") String parent_message_id);
+    @GET("parents/kes_notification_list")
+    Call<JSONResponse.ListNotification>kes_notification_list_get(@Header("Authorization") String authorization,
+                                                               @Query("school_code") String school_code,
+                                                               @Query("student_id") String parent_id);
 
 }

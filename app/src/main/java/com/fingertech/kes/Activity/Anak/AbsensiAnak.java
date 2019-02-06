@@ -1,8 +1,11 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.fingertech.kes.Activity.Adapter.AbsenAdapter;
@@ -59,6 +63,10 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
     int daye;
     TextView month;
     Toolbar toolbar;
+    String namakelas,walikelas;
+    TextView nama_kelas,wali_kelas;
+    ProgressDialog dialog;
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +77,9 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
         month           = findViewById(R.id.bulan);
         recyclerTabLayout = findViewById(R.id.recycler_tab_layout);
         toolbar         = findViewById(R.id.toolbar_absen);
+        nama_kelas      = findViewById(R.id.nama_kelas_absen);
+        wali_kelas      = findViewById(R.id.wali_kelas_absen);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         authorization   = getIntent().getStringExtra("authorization");
         school_code     = getIntent().getStringExtra("school_code");
         student_id      = getIntent().getStringExtra("student_id");
@@ -101,6 +112,16 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
         month.setText(Month);
         mViewPager.addOnPageChangeListener(this);
         dapat_absen();
+        Classroom_detail();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                dapat_absen();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     @Override
@@ -123,12 +144,14 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
     }
 
     public void dapat_absen(){
+        progressBar();
+        showDialog();
         Call<JSONResponse.AbsenSiswa> call = mApiInterface.kes_class_attendance_get(authorization.toString(),school_code.toLowerCase(),student_id.toString(),classroom_id.toString(),bulan.toString(),tahun.toString());
         call.enqueue(new Callback<JSONResponse.AbsenSiswa>() {
             @Override
             public void onResponse(Call<JSONResponse.AbsenSiswa> call, Response<JSONResponse.AbsenSiswa> response) {
                 Log.i("KES",response.code() + "");
-
+                hideDialog();
                 JSONResponse.AbsenSiswa resource = response.body();
                 status = resource.status;
                 code   = resource.code;
@@ -142,16 +165,6 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
                         absenModel.setTimes_finish(timez_finish);
                         absenModel.setDays(response.body().getData().get(i).getDays());
                         absenModels.add(absenModel);
-//                        for (int o = 0; o < response.body().getData().size();o++){
-//                            day_id      = response.body().getData().get(i).getDays().get(o).getDay_id();
-//                            day_type    = response.body().getData().get(i).getDays().get(o).getDay_type();
-//                            day_status  = response.body().getData().get(i).getDays().get(o).getAbsen_status();
-//                            dataAbsensi = new AbsenModel.DataAbsensi();
-//                            dataAbsensi.setDay_id(day_id);
-//                            dataAbsensi.setDay_type(day_type);
-//                            dataAbsensi.setAbsent_status(day_status);
-//                            dataAbsensis.add(dataAbsensi);
-//                        }
                     }
                     mAdapter = new AbsenAdapter(absenModels);
                     mAdapter.addAll(mItems);
@@ -163,9 +176,60 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
 
             @Override
             public void onFailure(Call<JSONResponse.AbsenSiswa> call, Throwable t) {
-
+            hideDialog();
             }
         });
+    }
+    private void Classroom_detail(){
+
+        Call<JSONResponse.ClassroomDetail> call = mApiInterface.kes_classroom_detail_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ClassroomDetail>() {
+
+            @Override
+            public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
+                Log.i("KES", response.code() + "");
+
+
+                JSONResponse.ClassroomDetail resource = response.body();
+
+                status = resource.status;
+                code    = resource.code;
+
+
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    walikelas    = response.body().getData().getHomeroom_teacher();
+                    namakelas    = response.body().getData().getClassroom_name();
+                    wali_kelas.setText("Wali kelas: "+walikelas);
+                    nama_kelas.setText("Kelas: "+namakelas);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ClassroomDetail> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+                Toast.makeText(AbsensiAnak.this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+    }
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(AbsensiAnak.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -48,9 +48,10 @@ public class MenuSatuFragment extends Fragment {
             school_code     = bundle.getString("school_code");
             student_id      = bundle.getString("student_id");
             classroom_id    = bundle.getString("classroom_id");
+            school_name     = bundle.getString("school_name");
         }
     }
-    String authorization,parent_nik,school_code,student_id,member_id,classroom_id;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     FrameLayout frameLayout;
     @Override
@@ -75,6 +76,7 @@ public class MenuSatuFragment extends Fragment {
                     intent.putExtra("parent_nik", parent_nik);
                     intent.putExtra("school_code", school_code);
                     intent.putExtra("student_id", student_id);
+                    intent.putExtra("school_name",school_name);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();

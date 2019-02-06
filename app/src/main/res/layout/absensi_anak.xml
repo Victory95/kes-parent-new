@@ -14,91 +14,109 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view_absen"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:text="Absensi Siswa"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:text="Wali Kelas"
-                android:id="@+id/wali_kelas"/>
-        </LinearLayout>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/green_300"
-            android:clickable="true"
-            android:layout_gravity="center"
-            android:foreground="?android:attr/selectableItemBackground"
-            app:cardCornerRadius="5dp"
-            android:id="@+id/btn_download_jadwal"
-            android:layout_margin="20dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textColor="@color/ic_logo_background"
-                android:text="Download Jadwal"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tabel_ujian"
-            android:id="@+id/tbl">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/bulan"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_margin="10dp"
-            android:textColor="@color/ic_logo_background"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tbl"
-            android:orientation="vertical">
-
-            <com.nshmura.recyclertablayout.RecyclerTabLayout
-                android:id="@+id/recycler_tab_layout"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/tablayout"
-                android:theme="@style/RecyclerTabLayoutTheme.Basic"
-                app:rtl_tabMaxWidth="300dp"
-                app:rtl_tabSelectedTextColor="@color/colorPrimary" />
-        </LinearLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/header"/>
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_absen"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="Absensi Siswa"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:text="Wali Kelas"
+                        android:paddingStart="10dp"
+                        android:id="@+id/wali_kelas_absen"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:text="Wali Kelas"
+                        android:paddingStart="10dp"
+                        android:id="@+id/nama_kelas_absen"/>
+                </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/green_300"
+                    android:clickable="true"
+                    android:layout_gravity="center"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="5dp"
+                    android:id="@+id/btn_download_jadwal"
+                    android:layout_margin="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/ic_logo_background"
+                        android:text="Download Jadwal"/>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tabel_ujian"
+                    android:id="@+id/tbl">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/bulan"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/ic_logo_background"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tbl"
+                    android:orientation="vertical">
+
+                    <com.nshmura.recyclertablayout.RecyclerTabLayout
+                        android:id="@+id/recycler_tab_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/tablayout"
+                        android:theme="@style/RecyclerTabLayoutTheme.Basic"
+                        app:rtl_tabMaxWidth="300dp"
+                        app:rtl_tabSelectedTextColor="@color/colorPrimary" />
+                </LinearLayout>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/header"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

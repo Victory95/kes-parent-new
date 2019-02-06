@@ -8,6 +8,7 @@
     android:layout_marginBottom="20dp"
     tools:context=".Activity.Anak.JadwalUjian">
 
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_ujian"
         android:minHeight="?attr/actionBarSize"
@@ -15,104 +16,112 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay" />
-
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/view_ujian"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_ujian"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:paddingStart="10dp"
+                        android:text="Jadwal Ujian"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:paddingStart="10dp"
+                        android:id="@+id/wali_kelas_ujian"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:paddingStart="10dp"
+                        android:id="@+id/nama_kelas_ujian"/>
+                </LinearLayout>
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="@color/green_300"
+                    android:clickable="true"
+                    android:layout_gravity="center"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="5dp"
+                    android:id="@+id/btn_download_jadwal"
+                    android:layout_margin="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textColor="@color/ic_logo_background"
+                        android:text="Download Jadwal"/>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/colorPrimary"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/ic_logo_background"
+                    android:text="Hari"
+                    android:layout_weight="3"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Mata Pelajaran"
+                    android:textColor="@color/ic_logo_background"
+                    android:gravity="center"
+                    android:layout_weight="2"/>
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorPrimary"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Jenis Ujian"
+                    android:textColor="@color/ic_logo_background"
+                    android:gravity="center"
+                    android:layout_weight="3"/>
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:paddingStart="10dp"
-                android:text="Jadwal Ujian"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:paddingStart="10dp"
-                android:id="@+id/wali_kelas_ujian"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:paddingStart="10dp"
-                android:id="@+id/nama_kelas_ujian"/>
-        </LinearLayout>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/green_300"
-            android:clickable="true"
-            android:layout_gravity="center"
-            android:foreground="?android:attr/selectableItemBackground"
-            app:cardCornerRadius="5dp"
-            android:id="@+id/btn_download_jadwal"
-            android:layout_margin="20dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tidak ada jadwal ujian"
+                android:layout_margin="20dp"
+                android:visibility="gone"
                 android:gravity="center"
-                android:textColor="@color/ic_logo_background"
-                android:text="Download Jadwal"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/ic_logo_background"
-            android:text="Hari"
-            android:layout_weight="1"/>
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Mata Pelajaran"
-            android:textColor="@color/ic_logo_background"
-            android:gravity="center"
-            android:layout_weight="1"/>
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimary"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Jenis Ujian"
-            android:textColor="@color/ic_logo_background"
-            android:gravity="center"
-            android:layout_weight="1"/>
-    </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tidak ada jadwal ujian"
-        android:layout_margin="20dp"
-        android:visibility="gone"
-        android:gravity="center"
-        android:id="@+id/no_ujian"/>
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/recycle_ujian">
-    </android.support.v7.widget.RecyclerView>
-
+                android:id="@+id/no_ujian"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycle_ujian">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

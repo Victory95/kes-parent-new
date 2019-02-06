@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -49,6 +50,7 @@ public class JadwalUjian extends AppCompatActivity {
     String authorization,school_code,jam,tanggal,type_id,mapel,classroom_id,student_id;
     Toolbar toolbar;
     ProgressDialog dialog;
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class JadwalUjian extends AppCompatActivity {
         toolbar         = (Toolbar)findViewById(R.id.toolbar_ujian);
         no_ujian        = findViewById(R.id.no_ujian);
         nama_kelas      = findViewById(R.id.nama_kelas_ujian);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
 
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
@@ -73,6 +76,16 @@ public class JadwalUjian extends AppCompatActivity {
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
         Classroom_detail();
         Jadwal_ujian();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                Classroom_detail();
+                Jadwal_ujian();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
     }
     private void Classroom_detail(){
@@ -84,19 +97,19 @@ public class JadwalUjian extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
                 Log.i("KES", response.code() + "");
-                hideDialog();
+
 
                 JSONResponse.ClassroomDetail resource = response.body();
 
                 status = resource.status;
                 code    = resource.code;
 
-                ItemUjian itemUjian= null;
+
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                    walikelas    = response.body().getData().getHomeroom_teacher();
                    namakelas    = response.body().getData().getClassroom_name();
-                   wali_kelas.setText(walikelas);
-                   nama_kelas.setText(namakelas);
+                   wali_kelas.setText("Wali kelas: "+walikelas);
+                   nama_kelas.setText("Kelas: "+namakelas);
                 }
 
             }

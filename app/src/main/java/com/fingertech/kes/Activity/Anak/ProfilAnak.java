@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,11 +59,11 @@ import retrofit2.Response;
 public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback {
 
     Toolbar toolbar;
-    CardView cv_profile,cv_data,cv_kontak,cv_alamat,btn_editanak,btn_alamat,btn_kontak;
+    CardView cv_profile;
+    Button cv_data,cv_kontak,cv_alamat;
     LinearLayout show_data,show_kontak,show_alamat;
-    ImageView arrow_data,arrow_kontak,arrow_alamat;
-    TextView hint_data,hint_alamat,hint_kontak,kelas_anak,jenis_kelamin,nis,nisn,tempat_lahir,tanggal_lahir,kewarganegaraan,nama_anak_profile;
-    TextView nomor_rumah,nomor_hp,email,skun,nokps,penerimaan_kps,alamat,rt,kelurahan,kecamatan,kode_pos,status_tinggal,transportasi,Agama,kebutuhan_khusus,rombongan_belajar;
+    TextView hint_data,hint_alamat,hint_kontak,kelas_anak,jenis_kelamin,nik,nis,nisn,tempat_lahir,tanggal_lahir,kewarganegaraan,nama_anak_profile;
+    TextView nomor_rumah,nomor_hp,email,skun,nokps,nama_anak,penerimaan_kps,alamat,rt,kelurahan,kecamatan,kode_pos,status_tinggal,transportasi,Agama,kebutuhan_khusus,rombongan_belajar;
     GoogleMap mapAnak;
     CircleImageView image_anak;
     private Boolean clicked = false;
@@ -73,33 +74,29 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     CollapsingToolbarLayout collapsingToolbarLayout;
     AppBarLayout appBarLayout;
     ProgressDialog dialog;
-    String authorization,school_code,student_id,parent_nik;
+    String authorization,school_code,student_id,parent_nik,school_name;
     String Base_anak,kelas,rombel,kebutuhankhusus,agama;
-    String namalengkap,jeniskelamin,Nis,Nisn,tempatlahir,tanggallahir,kewarga_negaraan,nomorrumah,nomorhp,Email,sk_un,no_kps,penerimaankps,Alamat,Rt,Kelurahan,Kecamatan,kodepos,statustinggal,rw,transport,foto;
+    String namalengkap,jeniskelamin,Nik,Sekolah,Nis,Nisn,tempatlahir,tanggallahir,kewarga_negaraan,nomorrumah,nomorhp,Email,sk_un,no_kps,penerimaankps,Alamat,Rt,Kelurahan,Kecamatan,kodepos,statustinggal,rw,transport,foto;
+    private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profil_anak);
         toolbar         = (Toolbar)findViewById(R.id.toolbar_profile_anak);
         cv_profile      = (CardView)findViewById(R.id.btn_image_anak);
-        cv_data         = (CardView)findViewById(R.id.klik_data_anak);
-        cv_kontak       = (CardView)findViewById(R.id.klik_kontak);
-        cv_alamat       = (CardView)findViewById(R.id.klik_alamat);
-        btn_editanak    = (CardView)findViewById(R.id.btn_edit_data);
-        btn_kontak      = (CardView)findViewById(R.id.btn_edit_kontak);
-        btn_alamat      = (CardView)findViewById(R.id.btn_edit_alamat);
+        cv_data         = findViewById(R.id.btn_data);
+        cv_kontak       = findViewById(R.id.btn_kontak);
+        cv_alamat       = findViewById(R.id.btn_alamat);
         show_data       = (LinearLayout)findViewById(R.id.show_data_anak);
         show_kontak     = (LinearLayout)findViewById(R.id.show_kontak);
         show_alamat     = (LinearLayout)findViewById(R.id.show_alamat);
-        arrow_data      = (ImageView)findViewById(R.id.arrow_data);
-        arrow_kontak    = (ImageView)findViewById(R.id.arrow_kontak);
-        arrow_alamat    = (ImageView)findViewById(R.id.arrow_alamat);
-        hint_data       = (TextView)findViewById(R.id.hint_data);
-        hint_kontak     = (TextView)findViewById(R.id.hint_kontak);
-        hint_alamat     = (TextView)findViewById(R.id.hint_alamat);
-        kelas_anak      = (TextView)findViewById(R.id.kelas_anak);
+        kelas_anak      = (TextView)findViewById(R.id.sekolah_anak);
+        nama_anak_profile   = findViewById(R.id.namaanak);
         jenis_kelamin   = (TextView)findViewById(R.id.jenis_kelamin_anak);
-        nis             = (TextView)findViewById(R.id.nis_anak);
+        nis             = (TextView)findViewById(R.id.nis);
+        nik             = findViewById(R.id.nik);
         nisn            = (TextView)findViewById(R.id.nisn_anak);
         tanggal_lahir   = (TextView)findViewById(R.id.tanggal_lahir_anak);
         tempat_lahir    = (TextView)findViewById(R.id.tempat_lahir_anak);
@@ -120,69 +117,100 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         Agama           = (TextView)findViewById(R.id.agama);
         kebutuhan_khusus= (TextView)findViewById(R.id.kebutuhan_khusus);
         rombongan_belajar   = (TextView)findViewById(R.id.rombel);
-        image_anak      = (CircleImageView)findViewById(R.id.image_profile_anak);
+        tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
+        image_anak      = (CircleImageView)findViewById(R.id.image_profil_anak);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
+        cv_data.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
+        cv_data.setTextColor(getResources().getColor(R.color.default_background));
+        tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.default_background));
 
+        ////// deactive
+        cv_kontak.setBackgroundColor(Color.TRANSPARENT);
+        cv_kontak.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        cv_alamat.setBackgroundColor(Color.TRANSPARENT);
+        cv_alamat.setTextColor(getResources().getColor(R.color.colorPrimary));
+        show_data.setVisibility(View.VISIBLE);
+        show_alamat.setVisibility(View.GONE);
+        show_kontak.setVisibility(View.GONE);
 
         cv_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clicked) {
-                    hint_data.setVisibility(View.VISIBLE);
-                    show_data.setVisibility(View.GONE);
-                    arrow_data.setBackgroundResource(R.drawable.ic_arrow_down_white);
-                    clicked = false;
-                }else {
-                    clicked = true;
-                    hint_data.setVisibility(View.GONE);
-                    show_data.setVisibility(View.VISIBLE);
-                    arrow_data.setBackgroundResource(R.drawable.ic_up_arrow_white);
+                /////// active
+                cv_data.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
+                cv_data.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.default_background));
 
-                }
+                ////// deactive
+                cv_kontak.setBackgroundColor(Color.TRANSPARENT);
+                cv_kontak.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                cv_alamat.setBackgroundColor(Color.TRANSPARENT);
+                cv_alamat.setTextColor(getResources().getColor(R.color.colorPrimary));
+                show_data.setVisibility(View.VISIBLE);
+                show_alamat.setVisibility(View.GONE);
+                show_kontak.setVisibility(View.GONE);
             }
         });
+
         cv_kontak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clicked) {
-                    hint_kontak.setVisibility(View.VISIBLE);
-                    show_kontak.setVisibility(View.GONE);
-                    arrow_kontak.setBackgroundResource(R.drawable.ic_arrow_down_white);
-                    clicked = false;
-                }else {
-                    clicked = true;
-                    hint_kontak.setVisibility(View.GONE);
-                    show_kontak.setVisibility(View.VISIBLE);
-                    arrow_kontak.setBackgroundResource(R.drawable.ic_up_arrow_white);
+                /////// active
+                cv_kontak.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
+                cv_kontak.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                }
+                ////// deactive
+                cv_data.setBackgroundColor(Color.TRANSPARENT);
+                cv_data.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.default_background));
+
+                cv_alamat.setBackgroundColor(Color.TRANSPARENT);
+                cv_alamat.setTextColor(getResources().getColor(R.color.colorPrimary));
+                show_data.setVisibility(View.GONE);
+                show_alamat.setVisibility(View.GONE);
+                show_kontak.setVisibility(View.VISIBLE);
             }
         });
 
         cv_alamat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (clicked) {
-                    hint_alamat.setVisibility(View.VISIBLE);
-                    show_alamat.setVisibility(View.GONE);
-                    arrow_alamat.setBackgroundResource(R.drawable.ic_arrow_down_white);
-                    clicked = false;
-                }else {
-                    clicked = true;
-                    hint_alamat.setVisibility(View.GONE);
-                    show_alamat.setVisibility(View.VISIBLE);
-                    arrow_alamat.setBackgroundResource(R.drawable.ic_up_arrow_white);
+                /////// active
+                cv_alamat.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
+                cv_alamat.setTextColor(getResources().getColor(R.color.default_background));
+                tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                }
+                ////// deactive
+                cv_data.setBackgroundColor(Color.TRANSPARENT);
+                cv_data.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+                cv_kontak.setBackgroundColor(Color.TRANSPARENT);
+                cv_kontak.setTextColor(getResources().getColor(R.color.colorPrimary));
+                show_data.setVisibility(View.GONE);
+                show_alamat.setVisibility(View.VISIBLE);
+                show_kontak.setVisibility(View.GONE);
             }
         });
+
 
         authorization = getIntent().getStringExtra("authorization");
         school_code   = getIntent().getStringExtra("school_code");
         student_id    = getIntent().getStringExtra("student_id");
         parent_nik    = getIntent().getStringExtra("parent_nik");
+        school_name   = getIntent().getStringExtra("school_name");
 
         data_student_get();
 
@@ -201,11 +229,28 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAnak);
         mapFragment.getMapAsync(this);
 
-
-
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile_anak);
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile_anak);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
 
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle("Profile Anak");
+                    cv_profile.setVisibility(View.GONE);
+                    isShow = true;
+                } else if(isShow) {
+                    collapsingToolbarLayout.setTitle("");//carefull there should a space between double quote otherwise it wont work
+                    cv_profile.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.school);
 
@@ -264,7 +309,9 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     namalengkap         = response.body().getData().getFullname();
                     jeniskelamin        = response.body().getData().getGender();
                     kelas               = response.body().getData().getEdulevel_id();
-                    Nis                 = response.body().getData().getNik();
+                    Nis                 = response.body().getData().getMember_code();
+                    Sekolah             = response.body().getData().getClassroom_id();
+                    Nik                 = response.body().getData().getNik();
                     Nisn                = response.body().getData().getNisn();
                     rombel              = response.body().getData().getRombel();
                     tempatlahir         = response.body().getData().getBirth_place();
@@ -291,33 +338,33 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     longitudeanak       = response.body().getData().getLongitude();
 
                     if (kelas.toString().equals("4")){
-                        kelas = "SD 1";
+                        kelas = "1 SD";
                     }else if (kelas.toString().equals("5")){
-                        kelas = "SD 2";
+                        kelas = "2 SD";
                     }else if (kelas.toString().equals("6")){
-                        kelas = "SD 3";
+                        kelas = "3 SD";
                     }else if (kelas.toString().equals("7")){
-                        kelas = "SD 4";
+                        kelas = "4 SD";
                     }else if (kelas.toString().equals("8")){
-                        kelas = "SD 5";
+                        kelas = "5 SD";
                     }else if (kelas.toString().equals("9")){
-                        kelas = "SD 6";
+                        kelas = "6 SD";
                     }else if (kelas.toString().equals("10")){
-                        kelas = "SMP 1";
+                        kelas = "1 SMP";
                     }else if (kelas.toString().equals("11")){
-                        kelas = "SMP 2";
+                        kelas = "2 SMP";
                     }else if (kelas.toString().equals("12")){
-                        kelas = "SMP 3";
+                        kelas = "3 SMP";
                     }else if (kelas.toString().equals("13")){
-                        kelas = "SMA 1";
+                        kelas = "1 SMA";
                     }else if (kelas.toString().equals("14")){
-                        kelas = "SMA 2";
+                        kelas = "2 SMA";
                     }else if (kelas.toString().equals("15")){
-                        kelas = "SMA 3";
+                        kelas = "3 SMA";
                     }
-                    kelas_anak.setText(kelas);
+                    kelas_anak.setText("Sedang bersekolah di "+school_name+" Kelas "+kelas);
                     jenis_kelamin.setText(jeniskelamin);
-                    nis.setText(Nis);
+                    nis.setText("Nis : "+Nis);
                     nisn.setText(Nisn);
                     tempat_lahir.setText(tempatlahir);
                     tanggal_lahir.setText(tanggallahir);
@@ -338,30 +385,12 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     kode_pos.setText(kodepos);
                     status_tinggal.setText(statustinggal);
                     transportasi.setText(transport);
-
+                    nama_anak_profile.setText(namalengkap);
+                    nik.setText("Nik : "+Nik);
                     String imagefiles = Base_anak + foto;
                     Picasso.with(ProfilAnak.this).load(imagefiles).into(image_anak);
 
-                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-                        boolean isShow = true;
-                        int scrollRange = -1;
 
-                        @Override
-                        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                            if (scrollRange == -1) {
-                                scrollRange = appBarLayout.getTotalScrollRange();
-                            }
-                            if (scrollRange + verticalOffset == 0) {
-                                collapsingToolbarLayout.setTitle(namalengkap);
-                                cv_profile.setVisibility(View.GONE);
-                                isShow = true;
-                            } else if(isShow) {
-                                collapsingToolbarLayout.setTitle(namalengkap);//carefull there should a space between double quote otherwise it wont work
-                                cv_profile.setVisibility(View.VISIBLE);
-                                isShow = false;
-                            }
-                        }
-                    });
 
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {

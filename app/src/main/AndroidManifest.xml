@@ -45,7 +45,7 @@
             android:value="@string/facebook_app_id" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5754924071196554~8765667683"/>
+            android:value="ca-app-pub-5754924071196554~8765667683" />
 
         <service android:name=".Service.FirebaseMessaging">
             <intent-filter>
@@ -283,9 +283,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.KalenderKelas"
+            android:label="Kalendar Kelas"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.AbsensiAnak"
             android:label="Absensi Anak"
@@ -310,6 +310,27 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".Activity.Anak.PesanAnak"
+            android:label="Pesan Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".Activity.Anak.KalendarDetail"
+            android:label="Kalender Detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".Activity.Anak.PesanDetail"
+            android:label="Detail Pesan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

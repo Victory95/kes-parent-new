@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity.Anak;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -35,7 +36,7 @@ import retrofit2.Response;
 public class TugasAnak extends AppCompatActivity {
 
 
-    TextView wali_kelas;
+    TextView wali_kelas,nama_kelas;
     CardView btn_download;
     RecyclerView recyclerView;
     Toolbar toolbar;
@@ -48,18 +49,21 @@ public class TugasAnak extends AppCompatActivity {
     TugasAdapter tugasAdapter;
     TextView no_tugas;
     private List<TugasModel> listTugas;
-    String mapel,tanggals,deskripsi,tipe,guru,nilai;
+    String mapel,tanggals,deskripsi,tipe,guru,nilai,namakelas,walikelas;
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tugas_anak);
 
         toolbar         = findViewById(R.id.toolbar_tugas);
-        wali_kelas      = findViewById(R.id.wali_kelas);
+        wali_kelas      = findViewById(R.id.wali_kelas_tugas);
+        nama_kelas      = findViewById(R.id.nama_kelas_tugas);
         btn_download    = findViewById(R.id.btn_download_tugas);
         recyclerView    = findViewById(R.id.recycle_tugas);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         no_tugas        = findViewById(R.id.no_tugas);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,7 +75,18 @@ public class TugasAnak extends AppCompatActivity {
         student_id      = getIntent().getStringExtra("student_id");
 
         Tugas_anak();
+        Classroom_detail();
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                Tugas_anak();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
+
     private void Tugas_anak(){
         progressBar();
         showDialog();
@@ -149,6 +164,7 @@ public class TugasAnak extends AppCompatActivity {
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -163,4 +179,39 @@ public class TugasAnak extends AppCompatActivity {
         return true;
     }
 
+    private void Classroom_detail(){
+
+        Call<JSONResponse.ClassroomDetail> call = mApiInterface.kes_classroom_detail_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ClassroomDetail>() {
+
+            @Override
+            public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
+                Log.i("KES", response.code() + "");
+
+
+                JSONResponse.ClassroomDetail resource = response.body();
+
+                status = resource.status;
+                code    = resource.code;
+
+
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    walikelas    = response.body().getData().getHomeroom_teacher();
+                    namakelas    = response.body().getData().getClassroom_name();
+                    wali_kelas.setText("Wali kelas: "+walikelas);
+                    nama_kelas.setText("Kelas: "+namakelas);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ClassroomDetail> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+                Toast.makeText(TugasAnak.this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+    }
 }

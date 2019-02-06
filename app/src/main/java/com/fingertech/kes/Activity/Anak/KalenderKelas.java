@@ -1,12 +1,17 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +26,8 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,10 +48,9 @@ public class KalenderKelas extends AppCompatActivity {
     private SimpleDateFormat dateFormat     = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     private SimpleDateFormat bulanFormat    = new SimpleDateFormat("MM", Locale.getDefault());
     private SimpleDateFormat tahunFormat    = new SimpleDateFormat("yyyy", Locale.getDefault());
-    private SimpleDateFormat dayformat      = new SimpleDateFormat("EEEE",Locale.getDefault());
 
     private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
-    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     TextView month_calender;
     ImageView left_month,right_month;
     Auth mApiInterface;
@@ -53,10 +59,13 @@ public class KalenderKelas extends AppCompatActivity {
     String authorization,school_code,student_id,classroom_id,calendar_month,calendar_year;
     RecyclerView recyclerView;
     CalendarAdapter calendarAdapter;
+    List<Event> eventList,events;
 
     CalendarModel calendarModel;
     List<CalendarModel> calendarModelList;
+    Date date;
     String calendar_id,calendar_type,calendar_desc,calendar_time,calendar_date,calendar_title;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,10 +77,15 @@ public class KalenderKelas extends AppCompatActivity {
         right_month         = findViewById(R.id.right_calender);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
         recyclerView        = findViewById(R.id.recylceview_calendar);
+        toolbar             = findViewById(R.id.toolbar_kalendar);
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         classroom_id        = getIntent().getStringExtra("classroom_id");
         student_id          = getIntent().getStringExtra("student_id");
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
@@ -86,7 +100,7 @@ public class KalenderKelas extends AppCompatActivity {
             @Override
             public void onDayClick(Date dateClicked) {
                 Context context = getApplicationContext();
-                Toast.makeText(context,dayformat.format(dateClicked),Toast.LENGTH_LONG).show();
+                Toast.makeText(context,""+dateClicked,Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -114,15 +128,24 @@ public class KalenderKelas extends AppCompatActivity {
             }
         });
         calendarModelList = new ArrayList<CalendarModel>();
-        loadEvents();
         dapat_calendar();
 
         calendarAdapter = new CalendarAdapter(calendarModelList);
         calendarAdapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                calendar_date = calendarModelList.get(position).getCalendar_date();
-                Toast.makeText(KalenderKelas.this,calendar_date,Toast.LENGTH_LONG).show();
+                if (calendarModelList.get(position).getCalendar_type().equals("4")) {
+                    Toast.makeText(getApplicationContext(),calendarModelList.get(position).getCalendar_title(),Toast.LENGTH_LONG).show();
+                }else {
+                    calendar_date = calendarModelList.get(position).getCalendar_date();
+                    calendar_time = calendarModelList.get(position).getCalendar_time();
+                    calendar_id = calendarModelList.get(position).getCalendar_id();
+                    Intent intent = new Intent(KalenderKelas.this, KalendarDetail.class);
+                    intent.putExtra("authorization", authorization);
+                    intent.putExtra("school_code", school_code);
+                    intent.putExtra("calendar_id", calendar_id);
+                    startActivity(intent);
+                }
             }
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(KalenderKelas.this);
@@ -130,51 +153,7 @@ public class KalenderKelas extends AppCompatActivity {
         recyclerView.setAdapter(calendarAdapter);
 
     }
-    private void loadEvents() {
-        addEvents(-1, -1);
-        addEvents(Calendar.DECEMBER, -1);
-        addEvents(Calendar.AUGUST, -1);
-        addEvents(Calendar.FEBRUARY, -1);
-        addEvents(Calendar.SEPTEMBER, -1);
-    }
 
-    private void addEvents(int month, int year) {
-        currentCalender.setTime(new Date());
-        currentCalender.set(Calendar.DAY_OF_MONTH, 1);
-        Date firstDayOfMonth = currentCalender.getTime();
-        for (int i = 0; i < 10; i++) {
-            currentCalender.setTime(firstDayOfMonth);
-            if (month > -1) {
-                currentCalender.set(Calendar.MONTH, month);
-            }
-            if (year > -1) {
-                currentCalender.set(Calendar.ERA, GregorianCalendar.AD);
-                currentCalender.set(Calendar.YEAR, year);
-            }
-            currentCalender.add(Calendar.DATE, i);
-            setToMidnight(currentCalender);
-            long timeInMillis = currentCalender.getTimeInMillis();
-
-            List<Event> events = getEvents(timeInMillis, i);
-
-            compactCalendarView.addEvents(events);
-        }
-    }
-
-    private List<Event> getEvents(long timeInMillis, int day) {
-        if (day < 2) {
-            return Arrays.asList(new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis)));
-        } else if ( day > 2 && day <= 4) {
-            return Arrays.asList(
-                    new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis)),
-                    new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Event 2 at " + new Date(timeInMillis)));
-        } else {
-            return Arrays.asList(
-                    new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis) ),
-                    new Event(Color.argb(255, 100, 68, 65), timeInMillis, "Event 2 at " + new Date(timeInMillis)),
-                    new Event(Color.argb(255, 70, 68, 65), timeInMillis, "Event 3 at " + new Date(timeInMillis)));
-        }
-    }
     private void setToMidnight(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -194,15 +173,48 @@ public class KalenderKelas extends AppCompatActivity {
                 if (status == 1 & code.equals("DTS_SCS_0001")){
 
                     List<JSONResponse.DataCalendar> calendarList = response.body().getData();
-
                         if (calendarModelList != null) {
                             calendarModelList.clear();
                             for (JSONResponse.DataCalendar calendar : calendarList) {
+                                Calendar cal = Calendar.getInstance();
+                                calendar_date = calendar.getCalendar_date();
+                                calendar_time = calendar.getCalendar_time();
+                                calendar_type = calendar.getCalendar_type();
+                                if (calendar_type.equals("3")){
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.getDefault());
+                                    try {
+                                        date = format.parse(calendar_date+" "+calendar_time);
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    cal.setTime(date);
+                                    setToMidnight(cal);
+                                    Long times = cal.getTimeInMillis();
+                                    eventList = getevent(times);
+                                    compactCalendarView.addEvents(eventList);
+                                }else if (calendar_type.equals("4")){
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+                                    try {
+                                        date = format.parse(calendar_date);
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    cal.setTime(date);
+                                    setToMidnight(cal);
+                                    Long times = cal.getTimeInMillis();
+                                    events  = getEventList(times);
+                                    compactCalendarView.addEvents(events);
+                                }
+
                                 calendarModel = new CalendarModel();
+                                calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
                                 calendarModel.setCalendar_time(calendar.getCalendar_time());
                                 calendarModel.setCalendar_date(calendar.getCalendar_date());
                                 calendarModel.setCalendar_title(calendar.getCalendar_title());
                                 calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                calendarModel.setCalendar_type(calendar.getCalendar_type());
                                 calendarModelList.add(calendarModel);
                             }
                             calendarAdapter.notifyDataSetChanged();
@@ -216,4 +228,24 @@ public class KalenderKelas extends AppCompatActivity {
             }
         });
     }
+    private List<Event> getevent(long timeinMilis){
+        return Arrays.asList(new Event(Color.parseColor("#40bfe8"),timeinMilis));
+    }
+    private List<Event>getEventList(long timeinMilis){
+        return Arrays.asList(new Event(Color.RED,timeinMilis));
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
 }

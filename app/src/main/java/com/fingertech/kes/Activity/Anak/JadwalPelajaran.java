@@ -280,7 +280,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                     JadwalRabu jadwalRabu = null;
                     JadwalKamis jadwalKamis = null;
                     JadwalJumat jadwalJumat = null;
-                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    if (status == 1 && code.equals("CSCH_SCS_0001")) {
                         itemlist = new ArrayList<JadwalSenin>();
                         itemselasa = new ArrayList<JadwalSelasa>();
                         itemRabu = new ArrayList<JadwalRabu>();

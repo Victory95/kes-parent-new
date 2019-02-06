@@ -32,7 +32,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ujian, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tester, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
@@ -64,8 +64,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
             super(itemView);
             tanggal = (TextView) itemView.findViewById(R.id.tanggal_ujian);
             jam     = (TextView) itemView.findViewById(R.id.jam_ujian);
-            mapel   = (TextView) itemView.findViewById(R.id.mata_pelajaran);
-            type_id = (TextView) itemView.findViewById(R.id.type_id);
+            mapel   = (TextView) itemView.findViewById(R.id.title_kalender);
+            type_id = (TextView) itemView.findViewById(R.id.desc_kalender);
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;
         }

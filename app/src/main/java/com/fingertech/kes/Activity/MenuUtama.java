@@ -45,6 +45,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -114,6 +115,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class MenuUtama extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -181,6 +185,10 @@ public class MenuUtama extends AppCompatActivity
     static int i;
     List<ProfileModel> profileModels = new ArrayList<ProfileModel>();
     ProfileAdapter profileAdapter;
+    private FrameLayout redCircle;
+    private TextView countTextView;
+    private int alertCount = 0;
+    List<JSONResponse.DataList>dataLists = new ArrayList<>();
 
 
     @Override
@@ -309,7 +317,6 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onRefresh() {
                 get_profile();
-                get_children();
                 send_data();
                 send_data2();
                 Refreshcounter = Refreshcounter + 1;
@@ -338,6 +345,7 @@ public class MenuUtama extends AppCompatActivity
 
             }
         });
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -403,19 +411,38 @@ public class MenuUtama extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem alertMenuItem = menu.findItem(R.id.activity_main_alerts_menu_item);
+        FrameLayout rootView = (FrameLayout) alertMenuItem.getActionView();
+
+        redCircle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
+        countTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(alertMenuItem);
+            }
+        });
+        return super.onPrepareOptionsMenu(menu);
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.activity_main_update_menu_item:
+                // TODO update alert menu icon
+                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
+                updateAlertIcon();
+                return true;
+            case R.id.activity_main_alerts_menu_item:
+                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -441,6 +468,45 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
+    public void get_list(){
+        Call<JSONResponse.ListNotification> call = mApiInterface.kes_notification_list_get(authorization.toString(),school_code.toLowerCase().toString(),student_id.toString());
+        call.enqueue(new Callback<JSONResponse.ListNotification>() {
+            @Override
+            public void onResponse(Call<JSONResponse.ListNotification> call, Response<JSONResponse.ListNotification> response) {
+                JSONResponse.ListNotification resource = response.body();
+                status = resource.status;
+                code   = resource.code;
+                if (status == 1 && code.equals("DTS_SCS_0001")){
+                    dataLists   = response.body().getData();
+                    alertCount = response.body().getData().size();
+                    Toast.makeText(getApplicationContext(),""+alertCount,Toast.LENGTH_LONG).show();
+                    if (0 < alertCount && alertCount < dataLists.size()) {
+                        countTextView.setText(String.valueOf(alertCount));
+                    } else {
+                        countTextView.setText("");
+                    }
+
+                    redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ListNotification> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void updateAlertIcon() {
+        // if alert count extends into two digits, just show the red circle
+        if (0 < alertCount && alertCount < dataLists.size()) {
+            countTextView.setText(String.valueOf(alertCount));
+        } else {
+            countTextView.setText("");
+        }
+
+        redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
+    }
 
     public void get_children(){
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization.toString(),parent_id.toString());
@@ -465,16 +531,19 @@ public class MenuUtama extends AppCompatActivity
                             school_code     = response.body().getData().get(i).getSchool_code();
                             nama_anak       = response.body().getData().get(i).getChildren_name();
                             classroom_id    = response.body().getData().get(i).getClassroom_id();
+                            school_name     = response.body().getData().get(i).getSchool_name();
                             foto            = response.body().getData().get(i).getPicture();
                             String imagefiles = Base_anak + foto;
                             profileModel = new ProfileModel();
                             profileModel.setStudent_id(student_id);
                             profileModel.setSchool_code(school_code);
                             profileModel.setNama(nama_anak);
+                            profileModel.setSchool_name(school_name);
                             profileModel.setClassroom_id(classroom_id);
                             profileModel.setPicture(imagefiles);
                             profileModels.add(profileModel);
                         }
+//                        get_list();
                         profileAdapter = new ProfileAdapter(profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
@@ -490,8 +559,10 @@ public class MenuUtama extends AppCompatActivity
                                 student_id      = profileModels.get(position).getStudent_id();
                                 school_code     = profileModels.get(position).getSchool_code();
                                 classroom_id    = profileModels.get(position).getClassroom_id();
+                                school_name     = profileModels.get(position).getSchool_name();
                                 send_data();
                                 send_data2();
+//                                get_list();
                             }
                         });
                     }else {
@@ -535,20 +606,21 @@ public class MenuUtama extends AppCompatActivity
                         tv_profile.setText(nama);
 
                         String imagefile = Base_url + picture;
+
                         Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
                         if (count.toString().equals("0")){
-                            recycleview_ln.setVisibility(View.VISIBLE);
-                            viewpager.setVisibility(View.GONE);
+                            recycleview_ln.setVisibility(VISIBLE);
+                            viewpager.setVisibility(GONE);
                         }else {
-                            recycleview_ln.setVisibility(View.VISIBLE);
-                            viewpager.setVisibility(View.VISIBLE);
+                            recycleview_ln.setVisibility(VISIBLE);
+                            viewpager.setVisibility(VISIBLE);
 
                         }
                     }else {
-                        recycleview_ln.setVisibility(View.GONE);
-                        viewpager.setVisibility(View.GONE);
+                        recycleview_ln.setVisibility(GONE);
+                        viewpager.setVisibility(GONE);
 
                     }
 
@@ -570,45 +642,6 @@ public class MenuUtama extends AppCompatActivity
 
     }
 
-    public void data_student_get(){
-
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString().toLowerCase(), student_id.toString(),parent_nik.toString());
-        call.enqueue(new Callback<JSONResponse.DetailStudent>() {
-            @Override
-            public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
-                Log.d("TAG",response.code()+"");
-
-                JSONResponse.DetailStudent resource = response.body();
-                status = resource.status;
-                code = resource.code;
-
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
-
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    nama_anak        = response.body().getData().getFullname();
-                    foto             = response.body().getData().getPicture();
-                    classroom_id     = response.body().getData().getClassroom_id();
-
-
-                    namaanak.setText(nama_anak);
-                    String imagefiles = Base_anak + foto;
-                    Picasso.with(MenuUtama.this).load(imagefiles).into(imageView);
-
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<JSONResponse.DetailStudent> call, Throwable t) {
-
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
     public void send_data(){
         Bundle bundle = new Bundle();
         if (bundle != null) {
@@ -618,6 +651,7 @@ public class MenuUtama extends AppCompatActivity
             bundle.putString("member_id", parent_id);
             bundle.putString("authorization", authorization);
             bundle.putString("classroom_id", classroom_id);
+            bundle.putString("school_name",school_name);
             MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -48,7 +49,7 @@ import retrofit2.Response;
 
 public class RaportAnak extends AppCompatActivity {
 
-    TextView wali_kelas,no_rapor;
+    TextView wali_kelas,no_rapor,nama_kelas;
     CardView btn_download,btn_go;
     RecyclerView recyclerView;
     Toolbar toolbar;
@@ -70,14 +71,15 @@ public class RaportAnak extends AppCompatActivity {
     TextView status_rapor,tv_peringkat,tv_kritik;
     TableLayout tableLayout;
 
-
-    String date;
+    SwipeRefreshLayout swipeRefreshLayout;
+    String date,namakelas,walikelas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rapor_anak);
         toolbar         = findViewById(R.id.toolbar_rapor);
-        wali_kelas      = findViewById(R.id.wali_kelas);
+        wali_kelas      = findViewById(R.id.wali_kelas_raport);
+        nama_kelas      = findViewById(R.id.nama_kelas_raport);
         btn_download    = findViewById(R.id.btn_download_raport);
         recyclerView    = findViewById(R.id.recycle_raport);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
@@ -88,6 +90,7 @@ public class RaportAnak extends AppCompatActivity {
         tv_kritik       = findViewById(R.id.kritik_saran);
         tableLayout     = findViewById(R.id.table_layout);
         btn_go          = findViewById(R.id.btn_go);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,7 +107,7 @@ public class RaportAnak extends AppCompatActivity {
         date = df.format(Calendar.getInstance().getTime());
 
         Check_Semester();
-
+        Classroom_detail();
 
 
         sp_semester.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
@@ -117,6 +120,15 @@ public class RaportAnak extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RaporAnak();
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                RaporAnak();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -138,7 +150,7 @@ public class RaportAnak extends AppCompatActivity {
                 String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
                 String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
 
-                List<String> provinsi = null;
+
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     dataSemesters = response.body().getData();
                     List<String> listSpinner = new ArrayList<String>();
@@ -305,6 +317,40 @@ public class RaportAnak extends AppCompatActivity {
         return true;
     }
 
+    private void Classroom_detail(){
 
+        Call<JSONResponse.ClassroomDetail> call = mApiInterface.kes_classroom_detail_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ClassroomDetail>() {
+
+            @Override
+            public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
+                Log.i("KES", response.code() + "");
+
+
+                JSONResponse.ClassroomDetail resource = response.body();
+
+                status = resource.status;
+                code    = resource.code;
+
+
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    walikelas    = response.body().getData().getHomeroom_teacher();
+                    namakelas    = response.body().getData().getClassroom_name();
+                    wali_kelas.setText("Wali kelas: "+walikelas);
+                    nama_kelas.setText("Kelas: "+namakelas);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ClassroomDetail> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+                Toast.makeText(RaportAnak.this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+
+        });
+    }
 
 }

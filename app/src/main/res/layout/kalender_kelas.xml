@@ -7,16 +7,24 @@
     tools:context=".Activity.Anak.KalenderKelas"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_kalendar"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
-        android:background="@color/colorPrimary">
+        android:background="@drawable/tab_semester">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:background="@drawable/ic_left_arrow"
+            android:background="@drawable/ic_left_arrow_black"
             android:id="@+id/left_calender"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -26,13 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:textColor="@color/black"
             android:id="@+id/month_calender"
             android:layout_weight="1"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/right_calender"
-            android:background="@drawable/ic_arrow"
+            android:background="@drawable/ic_arrow_black"
             android:layout_weight="3"/>
     </LinearLayout>
 
@@ -51,11 +60,17 @@
         app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimary"
         app:compactCalendarMultiEventIndicatorColor="#fff"
         />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recylceview_calendar"
-        android:layout_below="@+id/compactcalendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recylceview_calendar"
+            android:layout_below="@+id/compactcalendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

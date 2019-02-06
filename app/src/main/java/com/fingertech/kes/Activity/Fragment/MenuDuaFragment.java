@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
+import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.R;
 
 /**
@@ -41,16 +42,14 @@ public class MenuDuaFragment extends Fragment {
         }
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id;
-    CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
-    FrameLayout frameLayout;
-
-    CardView btn_kalender;
+    CardView btn_kalender,btn_pesan;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_dua, container, false);
         btn_kalender    = view.findViewById(R.id.btn_kalender);
+        btn_pesan       = view.findViewById(R.id.btn_pesan);
         btn_kalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +59,20 @@ public class MenuDuaFragment extends Fragment {
                     intent.putExtra("school_code", school_code);
                     intent.putExtra("student_id", student_id);
                     intent.putExtra("classroom_id", classroom_id);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getContext(),"Harap refresh kembali", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        btn_pesan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (authorization != null  && school_code != null && member_id != null) {
+                    Intent intent = new Intent(getContext(), PesanAnak.class);
+                    intent.putExtra("authorization", authorization);
+                    intent.putExtra("school_code", school_code);
+                    intent.putExtra("member_id", member_id);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"Harap refresh kembali", Toast.LENGTH_LONG).show();
