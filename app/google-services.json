@@ -1,29 +1,21 @@
 {
   "project_info": {
-    "project_number": "238640789322",
-    "firebase_url": "https://kes-app-1538992577763.firebaseio.com",
-    "project_id": "kes-app-1538992577763",
-    "storage_bucket": "kes-app-1538992577763.appspot.com"
+    "project_number": "860440761767",
+    "firebase_url": "https://kids-education-s-1546584357597.firebaseio.com",
+    "project_id": "kids-education-s-1546584357597",
+    "storage_bucket": "kids-education-s-1546584357597.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:238640789322:android:1ff667e16d1d8914",
+        "mobilesdk_app_id": "1:860440761767:android:1ff667e16d1d8914",
         "android_client_info": {
           "package_name": "com.fingertech.kes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "238640789322-earh6ev5tp1nn7pflfi4gr4l35jc44hv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fingertech.kes",
-            "certificate_hash": "479e89e5f3d765f60452703d469016ab51997121"
-          }
-        },
-        {
-          "client_id": "238640789322-vm9buqt5u09u9tj87ik685to7akg74tg.apps.googleusercontent.com",
+          "client_id": "860440761767-hqq4n3ma5hpudplm36qupoumqgcai46g.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fingertech.kes",
@@ -31,13 +23,13 @@
           }
         },
         {
-          "client_id": "238640789322-04s2pm29u7brk4tqtkvdm2smqoh7ibck.apps.googleusercontent.com",
+          "client_id": "860440761767-r6qds1du7aqrifjieguujinflr5t9drp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCATixJoj8ft-lBZc1BAw3cy-XYOY0ehMM"
+          "current_key": "AIzaSyCVxYSS7nrWk04eC4FGaE5Bpzs8srukUqo"
         }
       ],
       "services": {
@@ -48,8 +40,15 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "238640789322-v0cm6dqitk61890rse28g0h6thsuhgqi.apps.googleusercontent.com",
+              "client_id": "860440761767-r6qds1du7aqrifjieguujinflr5t9drp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "860440761767-42n9a8jvf835rvgu1676b2c3v406npst.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.fingertech.kes"
+              }
             }
           ]
         },

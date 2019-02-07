@@ -4,6 +4,8 @@
 
     <string name="facebook_app_id">287281171956441</string>
     <string name="fb_login_protocol_scheme">fb287281171956441</string>
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+
 
     ///////// Manifest
     <string name="app_name">KES</string>
@@ -179,6 +181,8 @@
     <string name="data_anak">Data Anak</string>
     <string name="informasi_kontak_anak_anda">Informasi Kontak anak anda</string>
     <string name="informasi_mengenai_alamat_tempat_tinggal_anak_anda">Informasi mengenai alamat tempat tinggal anak anda</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="fcm_message">FCM Message</string>
     <!--<string name="firebase_database_url" translatable="false">https://123.firebaseio.com</string>-->
     <!--<string name="gcm_defaultSenderId" translatable="false">123</string>-->
     <!--<string name="google_api_key" translatable="false">123</string>-->

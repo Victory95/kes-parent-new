@@ -106,7 +106,7 @@ public class MenuGuest extends AppCompatActivity
 
 
     CarouselView customCarouselView;
-    int[] sampleImages = {R.drawable.image_1, R.drawable.image_2, R.drawable.image_1, R.drawable.image_4, R.drawable.image_5};
+    int[] sampleImages = {R.drawable.icon_header, R.drawable.icon_header_2, R.drawable.icon_header_3};
     String[] sampleTitles = {"Orange", "Grapes", "Strawberry", "Cherry", "Apricot"};
 
 
@@ -254,7 +254,7 @@ public class MenuGuest extends AppCompatActivity
             ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
 
             fruitImageView.setImageResource(sampleImages[position]);
-            labelTextView.setText(sampleTitles[position]);
+//            labelTextView.setText(sampleTitles[position]);
             Button Baca = (Button) customView.findViewById(R.id.baca);
                 Baca.setOnClickListener(new View.OnClickListener() {
                 @Override

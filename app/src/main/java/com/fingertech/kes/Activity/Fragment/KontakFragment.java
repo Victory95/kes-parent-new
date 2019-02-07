@@ -467,7 +467,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 final MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng1);
                 markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map));
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map));
 
                 //move map camera
                 mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

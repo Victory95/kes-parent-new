@@ -13,6 +13,16 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
+    <!-- GCM requires a Google account to use push notifications. -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <!-- Keeps the processor from sleeping when a message is received. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Prevents other applications from registering and receiving the application's messages. -->
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -52,6 +62,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

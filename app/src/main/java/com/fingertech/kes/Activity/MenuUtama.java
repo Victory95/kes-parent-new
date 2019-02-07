@@ -100,6 +100,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
@@ -124,8 +128,8 @@ public class MenuUtama extends AppCompatActivity
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     CarouselView customCarouselView;
-    int[] sampleImages = {R.drawable.image_1, R.drawable.image_2, R.drawable.image_1, R.drawable.image_4, R.drawable.image_5};
-    String[] sampleTitles = {"Orange", "Grapes", "Strawberry", "Cherry", "Apricot"};
+    int[] sampleImages = {R.drawable.icon_header, R.drawable.icon_header_2, R.drawable.icon_header_3};
+    String[] sampleTitles = {"Orange", "Grapes", "Strawberry"};
 
     private ViewPager ParentPager;
     private FragmentAdapter fragmentAdapter;
@@ -239,12 +243,12 @@ public class MenuUtama extends AppCompatActivity
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-//        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
         student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         email         = sharedpreferences.getString(TAG_EMAIL,"email");
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
-//        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
@@ -346,6 +350,23 @@ public class MenuUtama extends AppCompatActivity
             }
         });
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("coba", "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        String msg = getString(R.string.msg_token_fmt, token);
+                        Log.d("Token", msg);
+                    }
+                });
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -389,7 +410,7 @@ public class MenuUtama extends AppCompatActivity
         ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
         Button Baca     = (Button) customView.findViewById(R.id.baca);
         fruitImageView.setImageResource(sampleImages[position]);
-        labelTextView.setText(sampleTitles[position]);
+//        labelTextView.setText(sampleTitles[position]);
         Baca.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -410,35 +431,35 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem alertMenuItem = menu.findItem(R.id.activity_main_alerts_menu_item);
-        FrameLayout rootView = (FrameLayout) alertMenuItem.getActionView();
-
-        redCircle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
-        countTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(alertMenuItem);
-            }
-        });
-        return super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        final MenuItem alertMenuItem = menu.findItem(R.id.activity_main_alerts_menu_item);
+//        FrameLayout rootView = (FrameLayout) alertMenuItem.getActionView();
+//
+//        redCircle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
+//        countTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
+//        rootView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onOptionsItemSelected(alertMenuItem);
+//            }
+//        });
+//        return super.onPrepareOptionsMenu(menu);
+//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.activity_main_update_menu_item:
-                // TODO update alert menu icon
-                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
-                updateAlertIcon();
-                return true;
-            case R.id.activity_main_alerts_menu_item:
-                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
-                return true;
+//            case R.id.activity_main_update_menu_item:
+//                // TODO update alert menu icon
+//                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
+//                updateAlertIcon();
+//                return true;
+//            case R.id.activity_main_alerts_menu_item:
+//                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -496,6 +517,7 @@ public class MenuUtama extends AppCompatActivity
             }
         });
     }
+
 
     private void updateAlertIcon() {
         // if alert count extends into two digits, just show the red circle
