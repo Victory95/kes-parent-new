@@ -165,7 +165,7 @@ public class MenuGuest extends AppCompatActivity
         customCarouselView.setImageClickListener(new ImageClickListener() {
             @Override
             public void onClick(int position) {
-                Toast.makeText(MenuGuest.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MenuGuest.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -255,11 +255,13 @@ public class MenuGuest extends AppCompatActivity
 
             fruitImageView.setImageResource(sampleImages[position]);
 //            labelTextView.setText(sampleTitles[position]);
+
             Button Baca = (Button) customView.findViewById(R.id.baca);
+            Baca.setVisibility(View.GONE);
                 Baca.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(MenuGuest.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MenuGuest.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
                     }
                 });
             customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);

@@ -233,7 +233,7 @@ public class MenuUtama extends AppCompatActivity
         customCarouselView.setImageClickListener(new ImageClickListener() {
             @Override
             public void onClick(int position) {
-                Toast.makeText(MenuUtama.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MenuUtama.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -409,12 +409,13 @@ public class MenuUtama extends AppCompatActivity
         TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
         ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
         Button Baca     = (Button) customView.findViewById(R.id.baca);
+        Baca.setVisibility(View.GONE);
         fruitImageView.setImageResource(sampleImages[position]);
 //        labelTextView.setText(sampleTitles[position]);
         Baca.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
             }
                       });
         customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
@@ -545,7 +546,7 @@ public class MenuUtama extends AppCompatActivity
                 String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
                 ProfileModel profileModel = null;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                if (status == 1 && code.equals("LCH_SCS_0001")) {
                     if (response.body().getData() != null){
                         profileModels = new ArrayList<ProfileModel>();
                         for (int i = 0;i < response.body().getData().size();i++) {
@@ -565,7 +566,6 @@ public class MenuUtama extends AppCompatActivity
                             profileModel.setPicture(imagefiles);
                             profileModels.add(profileModel);
                         }
-//                        get_list();
                         profileAdapter = new ProfileAdapter(profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
@@ -582,9 +582,9 @@ public class MenuUtama extends AppCompatActivity
                                 school_code     = profileModels.get(position).getSchool_code();
                                 classroom_id    = profileModels.get(position).getClassroom_id();
                                 school_name     = profileModels.get(position).getSchool_name();
+                                Toast.makeText(getApplicationContext(),profileModels.get(position).getNama(),Toast.LENGTH_LONG).show();
                                 send_data();
                                 send_data2();
-//                                get_list();
                             }
                         });
                     }else {
@@ -607,7 +607,6 @@ public class MenuUtama extends AppCompatActivity
     public void get_profile(){
         progressBar();
         showDialog();
-
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
 
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
@@ -638,7 +637,7 @@ public class MenuUtama extends AppCompatActivity
                         }else {
                             recycleview_ln.setVisibility(VISIBLE);
                             viewpager.setVisibility(VISIBLE);
-
+                            recyclerView.setVisibility(VISIBLE);
                         }
                     }else {
                         recycleview_ln.setVisibility(GONE);
@@ -646,10 +645,7 @@ public class MenuUtama extends AppCompatActivity
 
                     }
 
-                } else{
-                    if (status == 0) {
-                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
-                    }
+
                 }
 
             }

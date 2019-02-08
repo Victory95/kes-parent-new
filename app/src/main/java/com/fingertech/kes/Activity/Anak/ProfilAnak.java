@@ -16,6 +16,7 @@ import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -59,7 +60,7 @@ import retrofit2.Response;
 public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback {
 
     Toolbar toolbar;
-    CardView cv_profile;
+    CardView cv_profile,edit_profile;
     Button cv_data,cv_kontak,cv_alamat;
     LinearLayout show_data,show_kontak,show_alamat;
     TextView hint_data,hint_alamat,hint_kontak,kelas_anak,jenis_kelamin,nik,nis,nisn,tempat_lahir,tanggal_lahir,kewarganegaraan,nama_anak_profile;
@@ -78,7 +79,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     String Base_anak,kelas,rombel,kebutuhankhusus,agama;
     String namalengkap,jeniskelamin,Nik,Sekolah,Nis,Nisn,tempatlahir,tanggallahir,kewarga_negaraan,nomorrumah,nomorhp,Email,sk_un,no_kps,penerimaankps,Alamat,Rt,Kelurahan,Kecamatan,kodepos,statustinggal,rw,transport,foto;
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
-
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +121,9 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
         tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
         image_anak      = (CircleImageView)findViewById(R.id.image_profil_anak);
+        edit_profile    = findViewById(R.id.btn_edit);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
         cv_data.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
@@ -139,6 +142,26 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         show_alamat.setVisibility(View.GONE);
         show_kontak.setVisibility(View.GONE);
 
+        edit_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),EditProfileAnak.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("student_id",student_id);
+                intent.putExtra("parent_nik",parent_nik);
+                startActivity(intent);
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                data_student_get();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         cv_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,15 +227,17 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 show_kontak.setVisibility(View.GONE);
             }
         });
-
-
         authorization = getIntent().getStringExtra("authorization");
-        school_code   = getIntent().getStringExtra("school_code");
-        student_id    = getIntent().getStringExtra("student_id");
-        parent_nik    = getIntent().getStringExtra("parent_nik");
-        school_name   = getIntent().getStringExtra("school_name");
-
-        data_student_get();
+        school_code = getIntent().getStringExtra("school_code");
+        student_id = getIntent().getStringExtra("student_id");
+        parent_nik = getIntent().getStringExtra("parent_nik");
+        school_name = getIntent().getStringExtra("school_name");
+        if (authorization != null || school_code != null || student_id != null || parent_nik != null) {
+            data_student_get();
+        }else {
+            Toast.makeText(getApplicationContext(),authorization+"/"+school_code+"/"+student_id+"/"+parent_nik,Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -291,7 +316,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     public void data_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString().toLowerCase(), student_id.toString(),parent_nik.toString());
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toLowerCase().toString(),student_id.toString(),parent_nik.toString());
         call.enqueue(new Callback<JSONResponse.DetailStudent>() {
             @Override
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {

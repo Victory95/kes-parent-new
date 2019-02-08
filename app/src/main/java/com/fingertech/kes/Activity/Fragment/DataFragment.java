@@ -323,7 +323,7 @@ public class DataFragment extends Fragment  {
     }
     private boolean validateNamaDepan() {
         if (et_namadepan.getText().toString().trim().isEmpty()) {
-            til_namadepan.setError(getResources().getString(R.string.validate_name_depan));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(et_namadepan);
             return false;
         } else {
@@ -334,7 +334,7 @@ public class DataFragment extends Fragment  {
     }
     private boolean validateNIK() {
         if (et_Nik.getText().toString().trim().isEmpty()) {
-            til_Nik.setError(getResources().getString(R.string.validate_nik));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(et_Nik);
             return false;
         } else {
@@ -355,7 +355,7 @@ public class DataFragment extends Fragment  {
     }
     private boolean validateTempatLahir() {
         if (et_tempat_lahir.getText().toString().trim().isEmpty()) {
-            til_tempat_lahir.setError(getResources().getString(R.string.validate_tempat_lahir));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(et_tempat_lahir);
             return false;
         } else {
@@ -366,7 +366,7 @@ public class DataFragment extends Fragment  {
     }
     private boolean validateTanggalLahir() {
         if (et_tanggal_lahir.getText().toString().trim().isEmpty()) {
-            til_tanggal_lahir.setError(getResources().getString(R.string.validate_tanggal_lahir));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(et_tanggal_lahir);
             return false;
         } else {
@@ -404,7 +404,7 @@ public class DataFragment extends Fragment  {
         Log.d("Tanggal", year + "/" + month + "/" + day);
         String temp = year + "-" + (month + 1) + "-" + day;
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
             return e;
@@ -417,7 +417,7 @@ public class DataFragment extends Fragment  {
     public void data_parent_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toString(), parent_nik.toString(), student_id.toString());
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toLowerCase().toString(), parent_nik.toString(), student_id.toString());
         call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
@@ -532,7 +532,8 @@ public class DataFragment extends Fragment  {
             @Override
             public void onFailure(Call<JSONResponse.Data_parent_student> call, Throwable t) {
                 hideDialog();
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+                Log.i("onFailure",t.toString());
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }

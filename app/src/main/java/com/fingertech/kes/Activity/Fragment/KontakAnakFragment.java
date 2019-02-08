@@ -106,12 +106,11 @@ public class KontakAnakFragment extends Fragment {
     String teleponrumah,handphone,email,skun,penerimaan_kps,nomor_kps;
     EditText et_teleponrumah,et_handphone,et_email,et_skun,et_penerimaankps,et_nomorkps;
     String parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
+    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps,til_penerimaankps;
     int status;
     String code;
     ProgressDialog dialog;
     Auth mApiInterface;
-    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps,til_penerimaankps;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

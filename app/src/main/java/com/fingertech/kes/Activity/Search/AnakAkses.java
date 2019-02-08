@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spannable;
@@ -26,6 +27,8 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -73,7 +76,7 @@ public class AnakAkses extends AppCompatActivity {
     String authorization;
     ImageView iv_camera;
     Integer status_nik = 0;
-    String email, member_id, fullname, member_type, student_id, student_nik, school_id,school_name,school_code,sekolah_kode;
+    String email, member_id, fullname, member_type,nama_anak, student_id, student_nik, school_id,school_name,school_code,sekolah_kode;
 
     TextView tvnamajoin,tvkodejoin,tvinfo,tvnamaanak;
     TextInputLayout tl_input_noira;
@@ -94,7 +97,7 @@ public class AnakAkses extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
-
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +114,10 @@ public class AnakAkses extends AppCompatActivity {
         tl_input_noira  = (TextInputLayout)findViewById(R.id.til_nik_niora_siswa);
         tvinfo          = (TextView)findViewById(R.id.tv_info_nama_anak);
         tvnamaanak      = (TextView)findViewById(R.id.tv_nama_anak);
+        toolbar         = findViewById(R.id.toolbar_anak);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -127,7 +134,8 @@ public class AnakAkses extends AppCompatActivity {
         Kodeakses.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitForm();
+                check_student_nik_post();
+
             }
         });
         search.addTextChangedListener(new TextWatcher() {
@@ -139,7 +147,6 @@ public class AnakAkses extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 search_school_post(String.valueOf(s));
                 recyclerView.setVisibility(View.VISIBLE);
 
@@ -171,13 +178,27 @@ public class AnakAkses extends AppCompatActivity {
                     if (!validateNikNiora()==false) {
                         hideKeyboard(AnakAkses.this);
                         et_nik.clearFocus();
-                        check_student_nik_post();
+
                         return true;
                     }
                 }
                 return false;
             } });
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 
     private void submitForm() {
@@ -187,28 +208,13 @@ public class AnakAkses extends AppCompatActivity {
         if (!validateNikNiora()) {
             return;
         }
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putBoolean(session_status, true);
-        editor.putString(TAG_STUDENT_ID, (String) student_id);
-        editor.putString(TAG_STUDENT_NIK, (String) student_nik);
-        editor.putString(TAG_SCHOOL_ID, (String) school_id);
-        editor.putString(TAG_NAMA_ANAK, tvinfo.getText().toString());
-        editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
-        editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
-        editor.commit();
-            status_nik=0;
-            recyclerView.setVisibility(View.GONE);
-            search.setText("");
-            tvinfo.setText("_____");
-            et_nik.setText("");
             request_code_acsess_post();
 
     }
 
     private boolean validatenamasekolah() {
         if (search.getText().toString().trim().isEmpty()) {
-        //    tvnamajoin.setVisibility(View.VISIBLE);
-            tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora_ortu));
+            Toast.makeText(getApplicationContext(),"* NIK / NIORA anak tidak cokok dengan orangtua",Toast.LENGTH_LONG).show();
             requestFocus(search);
             return false;
         }else {
@@ -220,6 +226,7 @@ public class AnakAkses extends AppCompatActivity {
 
     private boolean validateNikNiora() {
         if (et_nik.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getApplicationContext(),"* Masukan NIK / NIORA",Toast.LENGTH_LONG).show();
             tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora_anak));
             requestFocus(et_nik);
             return false;
@@ -477,10 +484,12 @@ public class AnakAkses extends AppCompatActivity {
                     List<SearchSuggestion> list = new ArrayList<SearchSuggestion>();
                     for (final String item : AL_CHECK_NIK_GETFULLNAME) {
                         if (item.contains(item)) {
+                            nama_anak = item;
                             list.add(new SimpleSuggestions(item));
                             tvnamaanak.setText(item);
                             status_nik =1;
                             tl_input_noira.setErrorEnabled(false);
+
                             Toast.makeText(getApplicationContext(), CSN_SCS_0001, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -496,6 +505,8 @@ public class AnakAkses extends AppCompatActivity {
                             student_nik = item;
                         }
                     }
+                    submitForm();
+
                 } else {
                     status_nik =0;
                     if(status == 0 && code.equals("CSN_ERR_0001")){
@@ -543,15 +554,27 @@ public class AnakAkses extends AppCompatActivity {
 
                 if (status == 1 && code.equals("RCA_SCS_0001")) {
                     Toast.makeText(getApplicationContext(), RCA_SCS_0001, Toast.LENGTH_LONG).show();
-
+                    status_nik=0;
+                    recyclerView.setVisibility(View.GONE);
+                    search.setText("");
+                    tvinfo.setText("_____");
+                    et_nik.setText("");
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putBoolean(session_status, true);
+                    editor.putString(TAG_STUDENT_ID, (String) student_id);
+                    editor.putString(TAG_STUDENT_NIK, (String) student_nik);
+                    editor.putString(TAG_SCHOOL_ID, (String) school_id);
+                    editor.putString(TAG_NAMA_ANAK, (String) nama_anak);
+                    editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
+                    editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
+                    editor.commit();
                     Intent intent = new Intent(getApplicationContext(), KodeAksesAnak.class);
-//                    intent.putExtra(TAG_STUDENT_ID,student_id);
-//                    intent.putExtra(TAG_STUDENT_NIK,student_nik);
-//                    intent.putExtra(TAG_SCHOOL_ID,school_id);
-//                    intent.putExtra(TAG_NAMA_ANAK,tvinfo.getText().toString());
-//                    intent.putExtra(TAG_NAMA_SEKOLAH,school_name);
-//                    intent.putExtra(TAG_SCHOOL_CODE,sekolah_kode.toLowerCase());
-
+                    intent.putExtra(TAG_STUDENT_ID,student_id);
+                    intent.putExtra(TAG_STUDENT_NIK,student_nik);
+                    intent.putExtra(TAG_SCHOOL_ID,school_id);
+                    intent.putExtra(TAG_NAMA_ANAK,(String) nama_anak);
+                    intent.putExtra(TAG_NAMA_SEKOLAH,school_name);
+                    intent.putExtra(TAG_SCHOOL_CODE,sekolah_kode.toLowerCase());
                     startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RCA_ERR_0001")){

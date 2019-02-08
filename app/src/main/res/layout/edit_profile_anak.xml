@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbaredit"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                android:clickable="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="5dp"
+                android:id="@+id/btn_simpan">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/ic_logo_background"
+                    android:text="Simpan "/>
+            </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:background="@drawable/rectangle_line_blue"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_height="30dp">
+                <Button
+                    android:textSize="16dp"
+                    android:id="@+id/btn_data"
+                    android:layout_weight="1"
+                    android:text="Data Siswa"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_line_boundaryLeft"
+                    android:gravity="center"
+                    android:textSize="15dp"
+                    android:text="|"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_weight="1.48"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:paddingBottom="2dp"
+                    android:layout_height="match_parent" />
+                <Button
+                    android:textSize="16dp"
+                    android:id="@+id/btn_alamat"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:text="Alamat Siswa"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tv_line_boundaryRight"
+                    android:gravity="center"
+                    android:textSize="15dp"
+                    android:text="|"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_weight="1.48"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:paddingBottom="2dp"
+                    android:layout_height="match_parent" />
+                <Button
+                    android:textSize="16dp"
+                    android:id="@+id/btn_kontak"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:text="Kontak Siswa"
+                    android:textColor="@color/colorPrimary"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:id="@+id/show_data_anak"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.rey.material.widget.Spinner
+                        style="@style/Material.Widget.Spinner"
+                        android:id="@+id/sp_tingkatan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown"
+                        app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                        app:spn_arrowAnimClockwise="true"
+                        app:spn_dividerColor="@color/black"
+                        app:spn_dividerHeight="1dp"
+                        app:spn_arrowSwitchMode="true"
+                        app:spn_arrowAnimDuration="300"
+                        app:spn_arrowColor="@color/black"/>
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_nama_lengkap_anak"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginTop="20dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_nama_lengkap_anak"
+                        android:hint="Nama Lengkap"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Nama Lengkap
+                </android.support.design.widget.TextInputLayout>Nama Lengkap
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_weight="1"
+                        android:id="@+id/til_nis"
+                        android:layout_marginRight="5dp"
+                        android:textColorHint="@color/textColor_Grey"
+                        android:layout_width="match_parent"
+                        android:theme="@style/TextLabelView"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:theme="@style/TextLabel"
+                            android:id="@+id/et_nama_nis"
+                            android:hint="NIS"
+                            android:textSize="16dp"
+                            android:inputType="textEmailAddress"
+                            android:background="@drawable/edt_bg_selector_black"
+                            android:paddingBottom="6dp"
+                            android:textColor="@color/black"
+                            android:paddingTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />NIS
+                    </android.support.design.widget.TextInputLayout>NIS
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_nisn"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:textColorHint="@color/textColor_Grey"
+                        android:layout_width="match_parent"
+                        android:theme="@style/TextLabelView"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:theme="@style/TextLabel"
+                            android:id="@+id/et_nama_nisn"
+                            android:hint="Nisn"
+                            android:textSize="16dp"
+                            android:inputType="textEmailAddress"
+                            android:background="@drawable/edt_bg_selector_black"
+                            android:paddingBottom="6dp"
+                            android:textColor="@color/black"
+                            android:paddingTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />NISN
+                    </android.support.design.widget.TextInputLayout>NISN
+                </LinearLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_Nik"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_Nik"
+                        android:hint="NIK/NOIRA"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />NIK/NOIRA
+                </android.support.design.widget.TextInputLayout>NIK/NOIRA
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_rombel"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_rombel"
+                        android:hint="Rombel"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Rombel
+                </android.support.design.widget.TextInputLayout>Rombel
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:text="Jenis Kelamin"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"/>
+                <RadioGroup
+                    android:id="@+id/jenis_kelamiN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp">
+
+                    <RadioButton
+                        android:buttonTint="@color/colorPrimary"
+                        android:id="@+id/rb_laki_lakI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="Pria"
+                        android:textColor="@color/black"/>
+
+                    <RadioButton
+                        android:buttonTint="@color/colorPrimary"
+                        android:id="@+id/rb_perempuaN"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Wanita"
+                        android:textColor="@color/black"/>
+
+                </RadioGroup>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_tempatlahiR"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_tempatlahiR"
+                        android:hint="Tempat Lahir"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Tempat Lahir
+                </android.support.design.widget.TextInputLayout>Tempat Lahir
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_tanggallahiR"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_tanggallahiR"
+                        android:hint="Tanggal Lahir"
+                        android:textSize="16dp"
+                        android:inputType="date"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Tanggal Lahir
+                </android.support.design.widget.TextInputLayout>Tanggal Lahir
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.rey.material.widget.Spinner
+                        style="@style/Material.Widget.Spinner"
+                        android:id="@+id/sp_agama"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown"
+                        app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                        app:spn_arrowAnimClockwise="true"
+                        app:spn_dividerColor="@color/black"
+                        app:spn_dividerHeight="1dp"
+                        app:spn_arrowSwitchMode="true"
+                        app:spn_arrowAnimDuration="300"
+                        app:spn_arrowColor="@color/black"/>
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_kebutuhan_khusus"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_kebutuhan_khusus"
+                        android:hint="Kebutuhan Khusus"
+                        android:textSize="16dp"
+                        android:inputType="date"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Kebutuhan Khusus
+                </android.support.design.widget.TextInputLayout>Kebutuhan Khusus
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="Kewarganegaraan"
+                    android:textColor="@color/black"/>
+
+                <RadioGroup
+                    android:id="@+id/kewarga_negaraan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp">
+
+                    <RadioButton
+                        android:buttonTint="@color/colorPrimary"
+                        android:id="@+id/rb_wnI"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="WNI"
+                        android:layout_marginRight="5dp"
+                        android:textColor="@color/black"/>
+
+                    <RadioButton
+                        android:buttonTint="@color/colorPrimary"
+                        android:id="@+id/rb_wnA"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="WNA"
+                        android:textColor="@color/black"/>
+                </RadioGroup>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="40dp">
+
+                    <com.rey.material.widget.Spinner
+                        style="@style/Material.Widget.Spinner"
+                        android:id="@+id/sp_negara_asal"
+                        android:layout_width="match_parent"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown"
+                        app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                        app:spn_arrowAnimClockwise="true"
+                        app:spn_dividerColor="@color/colorPrimary"
+                        app:spn_dividerHeight="1dp"
+                        app:spn_arrowSwitchMode="true"
+                        app:spn_arrowAnimDuration="300"
+                        app:spn_arrowColor="@color/colorPrimary"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_kontak"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_marginTop="20dp"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_nomor_Rumah"
+                        android:hint="Nomor Rumah"
+                        android:textSize="16dp"
+                        android:inputType="phone"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Nomor Rumah
+                </android.support.design.widget.TextInputLayout>Nomor Rumah
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_nomor_Ponsel"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_nomor_Ponsel"
+                        android:hint="Nomor Ponsel"
+                        android:textSize="16dp"
+                        android:inputType="phone"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Nomor Ponsel
+                </android.support.design.widget.TextInputLayout>Nomor Ponsel
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_e_mail"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_email_student"
+                        android:hint="E-Mail"
+                        android:textSize="16dp"
+                        android:inputType="textEmailAddress"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />E-Mail
+                </android.support.design.widget.TextInputLayout>E-Mail
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_skun"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_skun"
+                        android:hint="Surat Keterangan Ujian Negara"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Surat Keterangan Negara
+                </android.support.design.widget.TextInputLayout>Surat Keterangan Negara
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_kps"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_kps"
+                        android:hint="Nomor KPS"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Nomor KPS
+                </android.support.design.widget.TextInputLayout>Nomor KPS
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_PKPS"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="50dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_PKPS"
+                        android:hint="Penerimaan KPS"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Penerimaan KPS
+                </android.support.design.widget.TextInputLayout>Penerimaan KPS
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/show_alamat"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_Alamat"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_Alamat"
+                        android:hint="Alamat"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Alamat
+                </android.support.design.widget.TextInputLayout>Alamat
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_weight="1"
+                        android:id="@+id/til_rt"
+                        android:layout_marginRight="5dp"
+                        android:textColorHint="@color/textColor_Grey"
+                        android:theme="@style/TextLabelView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:theme="@style/TextLabel"
+                            android:id="@+id/et_rt"
+                            android:hint="RT"
+                            android:textSize="16dp"
+                            android:background="@drawable/edt_bg_selector_black"
+                            android:paddingBottom="6dp"
+                            android:textColor="@color/black"
+                            android:paddingTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />RT
+                    </android.support.design.widget.TextInputLayout>RT
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_rw"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"
+                        android:textColorHint="@color/textColor_Grey"
+                        android:theme="@style/TextLabelView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:theme="@style/TextLabel"
+                            android:id="@+id/et_rw"
+                            android:hint="RW"
+                            android:textSize="16dp"
+                            android:background="@drawable/edt_bg_selector_black"
+                            android:paddingBottom="6dp"
+                            android:textColor="@color/black"
+                            android:paddingTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />NISN
+                    </android.support.design.widget.TextInputLayout>NISN
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_dusun"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_dusun"
+                        android:hint="Desa"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/> Kelurahan/Desa
+                </android.support.design.widget.TextInputLayout>Kelurahan/Desa
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_kelurahan"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_kelurahan"
+                        android:hint="Kelurahan"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/> Kelurahan/Desa
+                </android.support.design.widget.TextInputLayout>Kelurahan/Desa
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_Kecamatan"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    android:theme="@style/TextLabelView"
+
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_Kecamatan"
+                        android:hint="Kecamatan"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Kecamatan
+                </android.support.design.widget.TextInputLayout>Kecamatan
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_kode_pos"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_kode_pos"
+                        android:hint="Kode Pos"
+                        android:textSize="16dp"
+                        android:inputType="phone"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Kode Pos
+                </android.support.design.widget.TextInputLayout>Kode Pos
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_status_tinggal"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_status_tinggal"
+                        android:hint="Status tinggal"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Status tinggal
+                </android.support.design.widget.TextInputLayout>Status tinggal
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_transportasi"
+                    android:textColorHint="@color/textColor_Grey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:theme="@style/TextLabelView"
+                    android:layout_marginLeft="30dp">
+
+                    <EditText
+                        android:theme="@style/TextLabel"
+                        android:id="@+id/et_transportasi"
+                        android:hint="Transportasi"
+                        android:textSize="16dp"
+                        android:background="@drawable/edt_bg_selector_black"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/black"
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />Alamat
+                </android.support.design.widget.TextInputLayout>Alamat
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/btn_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    app:cardCornerRadius="15dp"
+                    app:layout_collapseMode="pin">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/maps"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:textColor="@color/black"
+                            android:id="@+id/nama_rumah"
+                            android:text="Lokasi Rumah"/>
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/ic_arrow_black"
+                            android:id="@+id/arrom"/>
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="12dp">
+
+                    <fragment
+                        android:id="@+id/mapTinggal"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rectangle_line"
+                        android:layout_marginTop="180dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginRight="20dp"
+                        android:id="@+id/alamat_rumah_anak"
+                        android:hint="Silahkan pilih lokasi tempat tinggal anak anda"
+                        android:gravity="center"/>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

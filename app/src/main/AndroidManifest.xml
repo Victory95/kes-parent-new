@@ -11,17 +11,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-
-    <!-- GCM requires a Google account to use push notifications. -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
-    <!-- Keeps the processor from sleeping when a message is received. -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Prevents other applications from registering and receiving the application's messages. -->
+    <uses-permission android:name="android.permission.READ_SMS" /> <!-- GCM requires a Google account to use push notifications. -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- Keeps the processor from sleeping when a message is received. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Prevents other applications from registering and receiving the application's messages. -->
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
@@ -32,6 +25,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -53,16 +47,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5754924071196554~8765667683" />
 
         <service android:name=".Service.FirebaseMessaging">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -253,7 +243,9 @@
             android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Search.AnakAkses"
-            android:label="Akses Siswa atau Siswi" />
+            android:label="Akses Siswa atau Siswi"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.AnakMain"
             android:label=""
@@ -311,36 +303,36 @@
             android:name=".Activity.Anak.TugasAnak"
             android:label="Tugas Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Activity.Anak.RaportAnak"
             android:label="Raport Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Activity.Anak.PesanAnak"
             android:label="Pesan Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Activity.Anak.KalendarDetail"
             android:label="Kalender Detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".Activity.Anak.PesanDetail"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activity.Anak.PesanDetail"
             android:label="Detail Pesan"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activity.Anak.EditProfileAnak"
+            android:label="Edit Data Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Anak.BalasPesan"
+            android:label="Balas Pesan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />

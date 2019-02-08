@@ -353,4 +353,12 @@ public interface Auth {
                                                                @Query("school_code") String school_code,
                                                                @Query("student_id") String parent_id);
 
+    @FormUrlEncoded
+    @POST("parents/kes_reply_message")
+    Call<JSONResponse.BalasPesan>kes_reply_message_post(@Header("Authorization") String authorization,
+                                            @Field("school_code") String school_code,
+                                            @Field("parent_id") String parent_id,
+                                            @Field("message_id") String message_id,
+                                            @Field("message_cont") String message_cont);
+
 }

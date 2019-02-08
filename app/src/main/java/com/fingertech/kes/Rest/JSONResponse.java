@@ -928,17 +928,17 @@ public class JSONResponse{
         @SerializedName("workplace_address")
         public String workplace_address;
         @SerializedName("office_latitude")
-        public double office_latitude;
+        public String  office_latitude;
         @SerializedName("office_longitude")
-        public double office_longitude;
+        public String office_longitude;
         @SerializedName("parent_income")
         public String parent_income;
         @SerializedName("parent_address")
         public String parent_address;
         @SerializedName("parent_latitude")
-        public double parent_latitude;
+        public String  parent_latitude;
         @SerializedName("parent_longitude")
-        public double parent_longitude;
+        public String parent_longitude;
 
 
         public String getStudentparentid() {
@@ -1061,19 +1061,19 @@ public class JSONResponse{
             this.workplace_address = workplace_address;
         }
 
-        public double getOffice_latitude() {
+        public String getOffice_latitude() {
             return office_latitude;
         }
 
-        public void setOffice_latitude(double office_latitude) {
+        public void setOffice_latitude(String office_latitude) {
             this.office_latitude = office_latitude;
         }
 
-        public double getOffice_longitude() {
+        public String getOffice_longitude() {
             return office_longitude;
         }
 
-        public void setOffice_longitude(double office_longitude) {
+        public void setOffice_longitude(String office_longitude) {
             this.office_longitude = office_longitude;
         }
 
@@ -1093,19 +1093,19 @@ public class JSONResponse{
             this.parent_address = parent_address;
         }
 
-        public double getParent_latitude() {
+        public String getParent_latitude() {
             return parent_latitude;
         }
 
-        public void setParent_latitude(double parent_latitude) {
+        public void setParent_latitude(String parent_latitude) {
             this.parent_latitude = parent_latitude;
         }
 
-        public double getParent_longitude() {
+        public String getParent_longitude() {
             return parent_longitude;
         }
 
-        public void setParent_longitude(double parent_longitude) {
+        public void setParent_longitude(String parent_longitude) {
             this.parent_longitude = parent_longitude;
         }
 
@@ -7084,5 +7084,17 @@ public class JSONResponse{
         public void setTitle(String title) {
             this.title = title;
         }
+    }
+
+    public class BalasPesan{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public Integer data;
+
     }
 }

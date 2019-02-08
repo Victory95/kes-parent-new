@@ -718,7 +718,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapClick(LatLng latLng) {
         refress.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.GONE);
         tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
         discreteSlider.setVisibility(View.VISIBLE);
         hideKeyboard(this);

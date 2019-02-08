@@ -141,7 +141,7 @@ public class JadwalUjian extends AppCompatActivity {
                 code    = resource.code;
 
                 ItemUjian itemUjian= null;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                if (status == 1 && code.equals("ESCH_SCS_0001")) {
                     itemlist = new ArrayList<ItemUjian>();
                     if (response.body().getData() != null) {
                         for (int i = 0; i < response.body().getData().size(); i++) {

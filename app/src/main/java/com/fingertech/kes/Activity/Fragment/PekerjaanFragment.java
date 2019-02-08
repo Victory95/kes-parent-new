@@ -500,7 +500,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void data_parent_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toString(), parent_nik.toString(), student_id.toString());
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(),school_code.toLowerCase().toString(),parent_nik.toString(),student_id.toString());
         call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
@@ -521,8 +521,8 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                     namaperusahaan          = response.body().data.getCompany_name();
                     jabatan                 = response.body().data.getEmployment();
                     penghasilan             = response.body().data.getParent_income();
-                    latitude_kerja          = response.body().data.getOffice_latitude();
-                    longitude_kerja         = response.body().data.getOffice_longitude();
+                    latitude_kerja          = Double.parseDouble(response.body().data.getOffice_latitude());
+                    longitude_kerja         = Double.parseDouble(response.body().data.getOffice_longitude());
                     studentparentid         = response.body().data.getStudentparentid();
                     Namaperusahaan.setText(namaperusahaan);
                     Jabatan.setText(jabatan);
@@ -630,6 +630,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onFailure(Call<JSONResponse.Data_parent_student> call, Throwable t) {
                 hideDialog();
+                Log.i("onfailure",t.toString());
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -707,7 +708,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
     private boolean validateJabatan() {
         if (Jabatan.getText().toString().trim().isEmpty()) {
-            til_jabatan.setError(getResources().getString(R.string.validate_jabatan));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(Jabatan);
             return false;
         } else {
@@ -719,7 +720,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
 
     private boolean validateNamaPerusahaan() {
         if (Namaperusahaan.getText().toString().trim().isEmpty()) {
-            til_nama_perusahaan.setError(getResources().getString(R.string.validate_nama_perusahaan));
+            Toast.makeText(getContext(),"Harap di isi data nya ",Toast.LENGTH_LONG).show();
             requestFocus(Namaperusahaan);
             return false;
         } else {
@@ -765,7 +766,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void update_parent(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_parent_put(authorization.toString(),studentparentid.toString(), school_code.toString(), student_id.toString(), namaparent.toString(), nikparent.toString(), hubungan.toString(),tanggallahir.toString(),tempatlahir.toString(),kewarganegaraan.toString(),nomorrumah.toString(),nomorponsel.toString(),alamatrumah.toString(),String.valueOf(latitude_parent),String.valueOf(longitude_parent),emailparent.toString(),et_pekerjaan.getSelectedItem().toString(),Namaperusahaan.getText().toString(),Jabatan.getText().toString(),et_penghasilan.getSelectedItem().toString(),alamatkerja.getText().toString(),String.valueOf(latitude_kerja),String.valueOf(longitude_kerja));
+        Call<JSONResponse> postCall = mApiInterface.update_parent_put(authorization.toString(),studentparentid.toString(),school_code.toLowerCase().toString(),student_id.toString(),namaparent.toString(),nikparent.toString(), hubungan.toString(),tanggallahir.toString(),tempatlahir.toString(),kewarganegaraan.toString(),nomorrumah.toString(),nomorponsel.toString(),alamatrumah.toString(),String.valueOf(latitude_parent),String.valueOf(longitude_parent),emailparent.toString(),et_pekerjaan.getSelectedItem().toString(),Namaperusahaan.getText().toString(),Jabatan.getText().toString(),et_penghasilan.getSelectedItem().toString(),alamatkerja.getText().toString(),String.valueOf(latitude_kerja),String.valueOf(longitude_kerja));
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

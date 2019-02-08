@@ -155,10 +155,6 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     String telepon_rumah,handphone,skun,penerimaan_kps,nokps,dusun;
     String studentdetailId,classroom_id,picture;
 
-    StudentTable studentTable = new StudentTable();
-    Data.Student student    = new Data.Student();
-    List<ProfileModel> profileModels = new ArrayList<>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -224,8 +220,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         penerimaan_kps      = sharedanak.getString(TAG_PENERIMAANKPS,"");
         nokps               = sharedanak.getString(TAG_NOKPS,"");
 
-        school_code = "bpk02";
-        student_id = "369";
+
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -666,7 +661,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     public void update_detail(){
 
-        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),handphone.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),telepon_rumah.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

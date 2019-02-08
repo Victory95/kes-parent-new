@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.fingertech.kes.Controller.Auth;
@@ -52,6 +54,24 @@ public class PesanDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
         dapat_pesan();
+
+        balas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PesanDetail.this,BalasPesan.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("parent_id",parent_id);
+                intent.putExtra("message_id",message_id);
+                intent.putExtra("parent_message_id",parent_message_id);
+                intent.putExtra("guru",dibuat.getText().toString());
+                intent.putExtra("sekolah",sekolah.getText().toString());
+                intent.putExtra("anak",anak.getText().toString());
+                intent.putExtra("kelas",kelas.getText().toString());
+                intent.putExtra("mapel",mapel.getText().toString());
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

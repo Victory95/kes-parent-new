@@ -75,9 +75,12 @@ public class PesanAnak extends AppCompatActivity {
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
 
+
         authorization   = getIntent().getStringExtra("authorization");
         school_code     = getIntent().getStringExtra("school_code");
         parent_id       = getIntent().getStringExtra("member_id");
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
@@ -131,7 +134,7 @@ public class PesanAnak extends AppCompatActivity {
                 }
             }
         });
-        dapat_pesan();
+
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +150,13 @@ public class PesanAnak extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
+        if (authorization != null || school_code != null || parent_id != null || date_from.getText().toString().equals("") || date_to.getText().toString().equals("")){
+            date_from.setText("2018-12-12");
+            date_to.setText(dateFormat.format(Calendar.getInstance().getTime()));
+            dapat_pesan();
+        }else {
+            Toast.makeText(getApplicationContext(),authorization+"/"+school_code+"/"+parent_id,Toast.LENGTH_LONG).show();
+        }
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,6 +197,7 @@ public class PesanAnak extends AppCompatActivity {
                 Log.d("onRespone",response.code()+"");
                 hideDialog();
                 JSONResponse.PesanAnak resource = response.body();
+
                 status  = resource.status;
                 code    = resource.code;
 

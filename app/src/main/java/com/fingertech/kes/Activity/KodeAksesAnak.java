@@ -122,7 +122,12 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         count_student= sharedpreferences.getString(TAG_COUNT,"");
 
-
+        iv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;

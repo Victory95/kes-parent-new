@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     tools:context=".Activity.Maps.FullMap"
-    app:umanoPanelHeight="70dp"
-    app:umanoShadowHeight="5dp">
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"

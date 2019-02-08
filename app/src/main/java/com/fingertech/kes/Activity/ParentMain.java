@@ -107,12 +107,7 @@ public class ParentMain extends AppCompatActivity {
         ParentPager = (ViewPager) findViewById(R.id.PagerParent);
         fragmentAdapter = new FragmentAdapter(getSupportFragmentManager());
         ParentPager.setAdapter(fragmentAdapter);
-//        ParentPager.setOnPageChangeListener(this);
-//        ParentPager.addOnPageChangeListener(this);
-
-//
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-//        checkLocationPermission();
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
         session = sharedpreferences.getBoolean(session_status, false);
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
@@ -127,7 +122,6 @@ public class ParentMain extends AppCompatActivity {
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        //data_parent_student_get();
     }
 
     public static class FragmentAdapter extends FragmentStatePagerAdapter {

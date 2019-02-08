@@ -229,7 +229,7 @@ public class Masuk extends AppCompatActivity {
     private boolean validateEmail() {
         String email = et_email.getText().toString().trim();
         if (email.isEmpty() || !isValidEmail(email)) {
-            til_email.setError(getResources().getString(R.string.validate_email));
+            Toast.makeText(getApplicationContext(),"Email Tidak sesuai",Toast.LENGTH_LONG).show();
             requestFocus(et_email);
             return false;
         } else {
@@ -239,11 +239,11 @@ public class Masuk extends AppCompatActivity {
     }
     private boolean validatePassword() {
         if (et_kata_sandi.getText().toString().trim().isEmpty()) {
-            til_kata_sandi.setError(getResources().getString(R.string.validate_pass));
+            Toast.makeText(getApplicationContext(),"Masukan kata sandi anda",Toast.LENGTH_LONG).show();
             requestFocus(et_kata_sandi);
             return false;
         }else if(et_kata_sandi.length()<6) {
-            til_kata_sandi.setError(getResources().getString(R.string.validate_pass_lengh));
+            Toast.makeText(getApplicationContext(),"Minimal 6 karakter",Toast.LENGTH_LONG).show();
             requestFocus(et_kata_sandi);
             return false;
         } else {
@@ -470,7 +470,6 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onError(FacebookException exception) {
                 Log.d("FB Response :", "Error" + exception);
-                Toast.makeText(Masuk.this, "Error" + exception, Toast.LENGTH_SHORT).show();
             }
         });
     }

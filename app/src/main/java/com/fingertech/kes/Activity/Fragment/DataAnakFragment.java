@@ -179,18 +179,16 @@ public class DataAnakFragment extends Fragment {
         til_tanggal_lahir   = (TextInputLayout)view.findViewById(R.id.til_tanggallahiR);
         til_kebutuhan_khusus= (TextInputLayout)view.findViewById(R.id.til_kebutuhan_khusus);
 
-
         Calendar calendar = Calendar.getInstance();
 
 
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
                 //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
                 et_tanggal.setText(convertDate(i, i1, i2));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        //calendar.get(Calendar.YEAR) memberikan nilai tahun awal pada dialog sesuai tahun yang didapat dari calendar
 
         et_tanggal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -251,8 +249,6 @@ public class DataAnakFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 submitForm();
-
-//                ParentPager.setCurrentItem(getItem(+1),true);
             }
         });
 
@@ -728,7 +724,7 @@ public class DataAnakFragment extends Fragment {
         return true;
     }
     private boolean validateNegara() {
-        if (negaraasal.toString().trim().isEmpty()) {
+        if (negaraasal == null) {
             Toast.makeText(getContext(),"Harap di isi negara anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
