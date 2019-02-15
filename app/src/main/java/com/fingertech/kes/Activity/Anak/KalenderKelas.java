@@ -66,6 +66,7 @@ public class KalenderKelas extends AppCompatActivity {
     Date date;
     String calendar_id,calendar_type,calendar_desc,calendar_time,calendar_date,calendar_title;
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,14 @@ public class KalenderKelas extends AppCompatActivity {
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
+                if (eventList != null){
+                    compactCalendarView.removeAllEvents();
+                    compactCalendarView.removeEvents(eventList);
+                }
+                if (events != null){
+                    compactCalendarView.removeAllEvents();
+                    compactCalendarView.removeEvents(events);
+                }
                 month_calender.setText(dateFormat.format(firstDayOfNewMonth));
                 calendar_month = bulanFormat.format(firstDayOfNewMonth);
                 if(calendar_month.substring(0,1).equals("0"))
@@ -180,7 +189,7 @@ public class KalenderKelas extends AppCompatActivity {
                                 calendar_date = calendar.getCalendar_date();
                                 calendar_time = calendar.getCalendar_time();
                                 calendar_type = calendar.getCalendar_type();
-                                if (calendar_type.equals("3")){
+                                if (calendar_type.equals("1")){
                                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.getDefault());
                                     try {
                                         date = format.parse(calendar_date+" "+calendar_time);
@@ -193,6 +202,7 @@ public class KalenderKelas extends AppCompatActivity {
                                     Long times = cal.getTimeInMillis();
                                     eventList = getevent(times);
                                     compactCalendarView.addEvents(eventList);
+
                                 }else if (calendar_type.equals("4")){
                                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
                                     try {

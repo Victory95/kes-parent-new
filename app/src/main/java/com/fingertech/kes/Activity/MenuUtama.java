@@ -70,7 +70,6 @@ import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
-import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
@@ -80,7 +79,6 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Rest.StudentTable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -111,7 +109,6 @@ import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -252,8 +249,7 @@ public class MenuUtama extends AppCompatActivity
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
-        Base_anak     = "http://www.kes.co.id/dev/schoolc2/assets/images/profile/mm_";
-
+        Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
         ParentPager.setAdapter(fragmentAdapter);
         InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
@@ -432,21 +428,6 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//        final MenuItem alertMenuItem = menu.findItem(R.id.activity_main_alerts_menu_item);
-//        FrameLayout rootView = (FrameLayout) alertMenuItem.getActionView();
-//
-//        redCircle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
-//        countTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
-//        rootView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onOptionsItemSelected(alertMenuItem);
-//            }
-//        });
-//        return super.onPrepareOptionsMenu(menu);
-//    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

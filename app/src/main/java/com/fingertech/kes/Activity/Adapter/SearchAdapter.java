@@ -13,14 +13,13 @@ import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Model.Data;
+
 import com.fingertech.kes.R;
-import com.fingertech.kes.Rest.BookmarkTabel;
 import com.fingertech.kes.Rest.JSONResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> {
@@ -30,10 +29,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> 
     private Context context;
     private OnItemClickListener onItemClickListener;
     String searchString = "";
-    BookmarkTabel bookmarkTabel = new BookmarkTabel();
-    Data data = new Data();
-    private Boolean clicked = false;
-
     public SearchAdapter(List<JSONResponse.SData> viewItemList, Context context) {
         this.viewItemList = viewItemList;
         this.mArrayList = viewItemList;

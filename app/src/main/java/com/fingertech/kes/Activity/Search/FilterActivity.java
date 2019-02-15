@@ -68,6 +68,7 @@ public class FilterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
+
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

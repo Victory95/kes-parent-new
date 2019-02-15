@@ -79,7 +79,6 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
         toolbar         = findViewById(R.id.toolbar_absen);
         nama_kelas      = findViewById(R.id.nama_kelas_absen);
         wali_kelas      = findViewById(R.id.wali_kelas_absen);
-        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         authorization   = getIntent().getStringExtra("authorization");
         school_code     = getIntent().getStringExtra("school_code");
         student_id      = getIntent().getStringExtra("student_id");
@@ -113,15 +112,7 @@ public class AbsensiAnak extends AppCompatActivity implements ViewPager.OnPageCh
         mViewPager.addOnPageChangeListener(this);
         dapat_absen();
         Classroom_detail();
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            int Refreshcounter = 1;
-            @Override
-            public void onRefresh() {
-                dapat_absen();
-                Refreshcounter = Refreshcounter + 1;
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
     }
 
     @Override

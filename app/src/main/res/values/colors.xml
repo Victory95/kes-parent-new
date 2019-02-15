@@ -71,4 +71,11 @@
     <color name="splash_top">#1E5649</color>
     <color name="splash_bottom">#222222</color>
 
+
+    <color name="mint_color">#1abd9c</color>
+    <color name="ForestGreenDarkColor">#2C4F33</color>
+    <color name="Primary_alpha_04">#6650C4FA</color>
+    <color name="primaryAlpha03">#0050C4FA</color>
+    <color name="NavyColor">#2F475E</color>
+
 </resources>

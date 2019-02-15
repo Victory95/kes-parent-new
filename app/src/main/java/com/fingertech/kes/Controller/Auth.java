@@ -270,12 +270,13 @@ public interface Auth {
                                          @Field("mobile_phone") String parent_phone
                                         );
 
+    ///// Jadwal Ujian
     @GET("students/kes_exam_schedule")
     Call<JSONResponse.JadwalUjian>kes_exam_schedule_get(@Header("Authorization") String authorization,
-                                                       @Query("school_code") String school_code,
-                                                       @Query("student_id") String member_id,
-                                                       @Query("classroom_id") String classroom_id
-                                                        );
+                                                        @Query("school_code") String school_code,
+                                                        @Query("student_id") String member_id,
+                                                        @Query("classroom_id") String classroom_id,
+                                                        @Query("semester_id") String semester_id);
 
 
     @GET("students/kes_class_schedule")
@@ -360,5 +361,12 @@ public interface Auth {
                                             @Field("parent_id") String parent_id,
                                             @Field("message_id") String message_id,
                                             @Field("message_cont") String message_cont);
+
+    ///// List Mata Pelajaran
+    @GET("students/kes_list_cources")
+    Call<JSONResponse.ListMapel>kes_list_cources_get(@Header("Authorization") String authorization,
+                                                     @Query("school_code") String school_code,
+                                                     @Query("classroom_id") String classroom_id);
+
 
 }

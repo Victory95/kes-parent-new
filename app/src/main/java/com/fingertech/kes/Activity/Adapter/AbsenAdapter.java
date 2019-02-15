@@ -56,13 +56,6 @@ public class AbsenAdapter extends PagerAdapter {
 
 
         TextView textView = view.findViewById(R.id.hari);
-//        jam7              = view.findViewById(R.id.jam7);
-//        jam8              = view.findViewById(R.id.jam8);
-//        jam9              = view.findViewById(R.id.jam9);
-//        jam10             = view.findViewById(R.id.jam10);
-//        jam12             = view.findViewById(R.id.jam12);
-//        no_absen          = view.findViewById(R.id.no_absen);
-//        card              = view.findViewById(R.id.card);
         recyclerView    = view.findViewById(R.id.absen);
 
         DateFormat df = new SimpleDateFormat("-MM-yyyy", Locale.getDefault());

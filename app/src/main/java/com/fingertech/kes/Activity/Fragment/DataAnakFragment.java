@@ -524,7 +524,7 @@ public class DataAnakFragment extends Fragment {
                     rb_wni.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            negaraasal = getResources().getString(R.string.rb_wni);
+                            kewarganegaraan = getResources().getString(R.string.rb_wni);
                             et_negara_asal.setVisibility(View.GONE);
                         }
                     });
@@ -533,7 +533,7 @@ public class DataAnakFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             et_negara_asal.setVisibility(View.VISIBLE);
-                            negaraasal = et_negara_asal.getSelectedItem().toString();
+                            kewarganegaraan = et_negara_asal.getSelectedItem().toString();
                         }
                     });
 
@@ -757,7 +757,7 @@ public class DataAnakFragment extends Fragment {
         editor.putString(TAG_KEBUTUHAN_KHUSUS,et_kebutuhan_khusus.getText().toString());
         editor.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
         editor.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
-        editor.putString(TAG_KEWARGANEGARAAN,(String) negaraasal.toString());
+        editor.putString(TAG_KEWARGANEGARAAN,(String) kewarganegaraan.toString());
         editor.commit();
         KontakAnakFragment kontakAnakFragment = new KontakAnakFragment();
         Bundle kontakanak = new Bundle();
@@ -772,7 +772,7 @@ public class DataAnakFragment extends Fragment {
         kontakanak.putString(TAG_JENIS_KELAMIN,(String) jenis_kelamin);
         kontakanak.putString(TAG_TINGKATAN,sp_tingkatan.getSelectedItem().toString());
         kontakanak.putString(TAG_AGAMA,sp_agama.getSelectedItem().toString());
-        kontakanak.putString(TAG_KEWARGANEGARAAN,(String)negaraasal.toString());
+        kontakanak.putString(TAG_KEWARGANEGARAAN,(String)kewarganegaraan.toString());
         kontakAnakFragment.setArguments(kontakanak);
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

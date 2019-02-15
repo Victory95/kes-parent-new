@@ -14,13 +14,10 @@ import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.AbsensiAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
-import com.fingertech.kes.Activity.Anak.JadwalUjian;
-import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Anak.RaportAnak;
 import com.fingertech.kes.Activity.Anak.TugasAnak;
-import com.fingertech.kes.Activity.Maps.TentangKami;
-import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.R;
 
 /**

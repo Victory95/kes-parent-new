@@ -408,7 +408,7 @@ public class DataFragment extends Fragment  {
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
             return e;
-                } catch (java.text.ParseException e) {
+        } catch (java.text.ParseException e) {
             e.printStackTrace();
             return "";
         }

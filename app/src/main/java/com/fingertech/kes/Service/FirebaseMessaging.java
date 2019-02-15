@@ -13,7 +13,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.fingertech.kes.Activity.MainActivity;
-import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -49,17 +48,23 @@ public class FirebaseMessaging extends FirebaseMessagingService {
                 .setSound(soundUri)
                 .setContentIntent(pendingIntent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
+        initChannels(FirebaseMessaging.this);
          notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
-
+    public void initChannels(Context context) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return;
+        }
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = new NotificationChannel("default",
+                "Channel name",
+                NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription("Channel description");
+        notificationManager.createNotificationChannel(channel);
+    }
     @Override
     public void onNewToken(String token) {
         Log.d("", "Refreshed token: " + token);

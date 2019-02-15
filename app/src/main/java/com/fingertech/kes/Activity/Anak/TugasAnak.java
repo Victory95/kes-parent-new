@@ -109,7 +109,7 @@ public class TugasAnak extends AppCompatActivity {
                     listTugas = new ArrayList<TugasModel>();
                     if (response.body().getData() != null) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
-                            tanggals = response.body().getData().get(i).getExamDate();
+                            tanggals = response.body().getData().get(i).getExamDateOk();
                             mapel = response.body().getData().get(i).getCources_name();
                             tipe = response.body().getData().get(i).getExamTypeName();
                             deskripsi = response.body().getData().get(i).getExamDesc();

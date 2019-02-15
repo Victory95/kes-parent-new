@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Anak.JadwalUjian"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_ujian"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="20dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:id="@+id/tv_semester"
+            android:textColor="@color/ic_logo_background"/>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_kata_kunci"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textColorHint="@color/ic_logo_background"
+            android:theme="@style/LoginTextInputLayoutWhite"
+            style="@style/LoginTextInputLayoutWhite">
+
+            <EditText
+                android:id="@+id/et_kata_kunci"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/edt_bg_selector"
+                android:hint="Kata Kunci"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:singleLine="true"
+                android:textColor="@color/ic_logo_background"
+                android:textSize="16sp"
+                android:theme="@style/TextLabel" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter"
+            android:textColor="@color/ic_logo_background"
+            android:layout_gravity="end"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="18sp"
+            android:id="@+id/tv_filter"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="@color/NavyColor">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/ic_logo_background"
+            android:id="@+id/tv_start"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:textColor="@color/ic_logo_background"
+            android:text="Sampai"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/ic_logo_background"
+            android:id="@+id/tv_end"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="Tidak ada ujian"
+        android:gravity="center"
+        android:id="@+id/tv_no_ujian"
+        android:visibility="gone"
+        android:textSize="20sp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycleview_ujian">
+
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

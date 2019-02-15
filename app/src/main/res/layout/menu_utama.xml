@@ -19,11 +19,11 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="#46bfee"
-        app:itemTextColor="#ffffff"
+        android:background="@color/colorPrimary"
+        app:itemTextColor="@color/ic_logo_background"
+        app:itemIconTint="@color/ic_logo_background"
         app:headerLayout="@layout/nav_header_menu_utama"
         app:itemIconPadding="@dimen/fab_margin"
         app:menu="@menu/menu_utama_drawer" />
-
 
 </android.support.v4.widget.DrawerLayout>

@@ -295,44 +295,45 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.JadwalUjian"
-            android:label="Jadwal Ujian"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.TugasAnak"
             android:label="Tugas Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.RaportAnak"
             android:label="Raport Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.PesanAnak"
             android:label="Pesan Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.KalendarDetail"
             android:label="Kalender Detail"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.PesanDetail"
             android:label="Detail Pesan"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.EditProfileAnak"
             android:label="Edit Data Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.BalasPesan"
+        <activity
+            android:name=".Activity.Anak.BalasPesan"
             android:label="Balas Pesan"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Anak.JadwalUjian"
+            android:label="Jadwal Ujian"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />

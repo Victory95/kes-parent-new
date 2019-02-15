@@ -5214,6 +5214,7 @@ public class JSONResponse{
         }
     }
 
+    ///// Response List Semester
     public class ListSemester{
         @SerializedName("code")
         public String code;
@@ -5254,8 +5255,129 @@ public class JSONResponse{
         @SerializedName("semesterid")
         public String semester_id;
 
+        @SerializedName("zedulevel_id")
+        public String zedulevel_id;
+
+        @SerializedName("semester_publish")
+        public String semester_publish;
+
         @SerializedName("semester_name")
         public String semester_name;
+
+        @SerializedName("start_date")
+        public String start_date;
+
+        @SerializedName("end_date")
+        public String end_date;
+
+        @SerializedName("datez")
+        public String datez;
+
+        @SerializedName("member_id")
+        public String member_id;
+
+        @SerializedName("lastupdate")
+        public String lastupdate;
+
+        @SerializedName("zedulevelid")
+        public String zedulevelid;
+
+        @SerializedName("edulevel_name")
+        public String edulevel_name;
+
+        @SerializedName("edulevel_id")
+        public String edulevel_id;
+
+        @SerializedName("scyear_id")
+        public String scyear_id;
+
+        public String getZedulevel_id() {
+            return zedulevel_id;
+        }
+
+        public void setZedulevel_id(String zedulevel_id) {
+            this.zedulevel_id = zedulevel_id;
+        }
+
+        public String getSemester_publish() {
+            return semester_publish;
+        }
+
+        public void setSemester_publish(String semester_publish) {
+            this.semester_publish = semester_publish;
+        }
+
+        public String getStart_date() {
+            return start_date;
+        }
+
+        public void setStart_date(String start_date) {
+            this.start_date = start_date;
+        }
+
+        public String getEnd_date() {
+            return end_date;
+        }
+
+        public void setEnd_date(String end_date) {
+            this.end_date = end_date;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getLastupdate() {
+            return lastupdate;
+        }
+
+        public void setLastupdate(String lastupdate) {
+            this.lastupdate = lastupdate;
+        }
+
+        public String getZedulevelid() {
+            return zedulevelid;
+        }
+
+        public void setZedulevelid(String zedulevelid) {
+            this.zedulevelid = zedulevelid;
+        }
+
+        public String getEdulevel_name() {
+            return edulevel_name;
+        }
+
+        public void setEdulevel_name(String edulevel_name) {
+            this.edulevel_name = edulevel_name;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getScyear_id() {
+            return scyear_id;
+        }
+
+        public void setScyear_id(String scyear_id) {
+            this.scyear_id = scyear_id;
+        }
 
         public String getSemester_id() {
             return semester_id;
@@ -7096,5 +7218,165 @@ public class JSONResponse{
         @SerializedName("data")
         public Integer data;
 
+    }
+
+    ///// Response List Mata Pelajaran
+    public class ListMapel{
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        @Expose
+        public List<DataMapel> data;
+
+        @SerializedName("status")
+        public int status;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataMapel> getData() {
+            return data;
+        }
+
+        public void setData(List<DataMapel> data) {
+            this.data = data;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+    public class DataMapel{
+
+        @SerializedName("courcesid")
+        public String courcesid;
+
+        @SerializedName("cources_code")
+        public String cources_code;
+
+        @SerializedName("cources_name")
+        public String cources_name;
+
+        @SerializedName("cources_publish")
+        public String cources_publish;
+
+        @SerializedName("cources_type")
+        public String cources_type;
+
+        @SerializedName("datez")
+        public String datez;
+
+        @SerializedName("member_id")
+        public String member_id;
+
+        @SerializedName("lastupdate")
+        public String lastupdate;
+
+        @SerializedName("colour_id")
+        public String colour_id;
+
+        @SerializedName("cources_spec")
+        public String cources_spec;
+
+        @SerializedName("religion_type")
+        public String religion_type;
+
+        public String getCourcesid() {
+            return courcesid;
+        }
+
+        public void setCourcesid(String courcesid) {
+            this.courcesid = courcesid;
+        }
+
+        public String getCources_code() {
+            return cources_code;
+        }
+
+        public void setCources_code(String cources_code) {
+            this.cources_code = cources_code;
+        }
+
+        public String getCources_name() {
+            return cources_name;
+        }
+
+        public void setCources_name(String cources_name) {
+            this.cources_name = cources_name;
+        }
+
+        public String getCources_publish() {
+            return cources_publish;
+        }
+
+        public void setCources_publish(String cources_publish) {
+            this.cources_publish = cources_publish;
+        }
+
+        public String getCources_type() {
+            return cources_type;
+        }
+
+        public void setCources_type(String cources_type) {
+            this.cources_type = cources_type;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getLastupdate() {
+            return lastupdate;
+        }
+
+        public void setLastupdate(String lastupdate) {
+            this.lastupdate = lastupdate;
+        }
+
+        public String getColour_id() {
+            return colour_id;
+        }
+
+        public void setColour_id(String colour_id) {
+            this.colour_id = colour_id;
+        }
+
+        public String getCources_spec() {
+            return cources_spec;
+        }
+
+        public void setCources_spec(String cources_spec) {
+            this.cources_spec = cources_spec;
+        }
+
+        public String getReligion_type() {
+            return religion_type;
+        }
+
+        public void setReligion_type(String religion_type) {
+            this.religion_type = religion_type;
+        }
     }
 }

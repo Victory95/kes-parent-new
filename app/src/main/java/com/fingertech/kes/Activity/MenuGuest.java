@@ -651,8 +651,6 @@ public class MenuGuest extends AppCompatActivity
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                     snappyRecyclerView.setLayoutManager(new SnappyLinearLayoutManager(MenuGuest.this));
 
-                    //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
-                    // Set layout manager.
                     snappyRecyclerView.setLayoutManager(layoutManager);
 
                     // Create car recycler view data adapter with car item list.
