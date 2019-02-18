@@ -1,113 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="370dp"
-    android:background="@color/black_12"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-
-    <android.support.v7.widget.CardView
+    android:layout_height="60dp"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="8dp">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
+            android:layout_weight="2">
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
+                android:layout_height="match_parent"
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mata Pelajaran"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:gravity="center"
-                    android:paddingBottom="5dp"
-                    android:id="@+id/mapel"
-                    android:textSize="16sp"
-                    android:background="@drawable/edt_bg_selector_black" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Jam Belajar"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:paddingBottom="5dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:id="@+id/jambel"
-                    android:background="@drawable/edt_bg_selector_black" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Lama Belajar"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:paddingBottom="5dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:id="@+id/lamber"
-                    android:background="@drawable/edt_bg_selector_black"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Guru yang mengajar"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="20dp"
-                    android:paddingBottom="5dp"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:id="@+id/guru_ngajar"
-                    android:background="@drawable/edt_bg_selector_black"
-                    />
-
-            </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="jam"
+                        android:id="@+id/jam"
+                        android:textColor="@color/ic_logo_background"
+                        android:gravity="center"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="jam"
+                        android:id="@+id/lamber"
+                        android:textColor="@color/ic_logo_background"
+                        android:gravity="center"/>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/mapel"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="tester"
+                android:textColor="@color/red_300"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:paddingStart="10dp"
+                android:text="tester"
+                android:gravity="center_vertical"
+                android:id="@+id/guru"/>
+        </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

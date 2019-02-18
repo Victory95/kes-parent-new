@@ -25,9 +25,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
 
 
     private List<ProfileModel> profileModels;
+    int focusedItem = 0;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = -1;
+
     public ProfileAdapter(List<ProfileModel> viewItemList) {
         this.profileModels = viewItemList;
     }
@@ -63,6 +65,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
             holder.namaprofile.setTextColor(Color.parseColor("#000000"));
             holder.namaanak.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
         }
+
     }
 
     @Override

@@ -34,7 +34,6 @@ public class SeninAdapter extends RecyclerView.Adapter<SeninAdapter.MyHolder> {
         return myHolder;
     }
 
-
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
 
@@ -60,8 +59,8 @@ public class SeninAdapter extends RecyclerView.Adapter<SeninAdapter.MyHolder> {
             super(itemView);
             mapel = (TextView) itemView.findViewById(R.id.mapel);
             lambel     = (TextView) itemView.findViewById(R.id.lamber);
-            jambel   = (TextView) itemView.findViewById(R.id.jambel);
-            guru = (TextView) itemView.findViewById(R.id.guru_ngajar);
+            jambel   = (TextView) itemView.findViewById(R.id.jam);
+            guru = (TextView) itemView.findViewById(R.id.guru);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }

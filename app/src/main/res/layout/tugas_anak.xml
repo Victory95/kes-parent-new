@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginBottom="20dp"
-    tools:context=".Activity.Anak.TugasAnak">
+    tools:context=".Activity.Anak.TugasAnak"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_tugas"
@@ -16,83 +15,102 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/pullToRefresh">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/view_ujian"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="Tugas Anak"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:paddingStart="10dp"
-                    android:text="Wali Kelas"
-                    android:id="@+id/wali_kelas_tugas"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
-                    android:paddingStart="10dp"
-                    android:text="Wali Kelas"
-                    android:id="@+id/nama_kelas_tugas"/>
-            </LinearLayout>
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                app:cardBackgroundColor="@color/green_300"
-                android:clickable="true"
-                android:layout_gravity="center"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="5dp"
-                android:id="@+id/btn_download_tugas"
-                android:layout_margin="20dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/ic_logo_background"
-                    android:text="Download Tugas"/>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorPrimary"/>
+        android:layout_height="160dp"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary">
+
         <TextView
             android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_margin="15dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:id="@+id/tv_semester"
+            android:textColor="@color/ic_logo_background"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_kata_kunci"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:textColorHint="@color/ic_logo_background"
+            android:theme="@style/LoginTextInputLayoutWhite"
+            style="@style/LoginTextInputLayoutWhite">
+
+            <EditText
+                android:id="@+id/et_kata_kunci"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Kata Kunci"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:singleLine="true"
+                android:textColor="@color/ic_logo_background"
+                android:textSize="16sp"
+                android:theme="@style/TextLabel" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:id="@+id/no_tugas"
-            android:visibility="visible"
-            android:text="Tidak ada tugas yang diberikan oleh guru"
+            android:text="Filter"
+            android:textColor="@color/ic_logo_background"
+            android:layout_gravity="end"
+            android:layout_marginRight="35dp"
+            android:layout_marginLeft="35dp"
+            android:textSize="18sp"
+            android:id="@+id/tv_filter"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="@color/NavyColor">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/ic_logo_background"
+            android:id="@+id/tv_start"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.4"
+            android:textColor="@color/ic_logo_background"
+            android:text="Sampai"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/ic_logo_background"
+            android:id="@+id/tv_end"
             android:gravity="center"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recycle_tugas">
-        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:text="Tidak ada ujian"
+        android:gravity="center"
+        android:id="@+id/tv_no_ujian"
+        android:visibility="gone"
+        android:textSize="20sp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_tugas">
+
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

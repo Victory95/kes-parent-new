@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
         holder.mapel.setText(viewItem.getMapel());
         holder.type_id.setText(viewItem.getType_id());
         holder.nilai.setText(viewItem.getNilai());
-        holder.deskripsi.setText(viewItem.getDeskripsi());
+        holder.deskripsi.setText(Html.fromHtml(viewItem.getDeskripsi()));
     }
 
     @Override

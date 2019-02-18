@@ -109,7 +109,6 @@ public class RaportAnak extends AppCompatActivity {
         Check_Semester();
         Classroom_detail();
 
-
         sp_semester.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(Spinner parent, View view, int position, long id) {

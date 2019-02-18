@@ -6,19 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.fingertech.kes.Activity.Model.HariModel.JadwalKamis;
-import com.fingertech.kes.Activity.Model.HariModel.JadwalSenin;
+import com.fingertech.kes.Activity.Model.HariModel.JadwalSabtu;
 import com.fingertech.kes.R;
 
 import java.util.List;
 
-public class KamisAdapter extends RecyclerView.Adapter<KamisAdapter.MyHolder> {
+public class SabtuAdapter extends RecyclerView.Adapter<SabtuAdapter.MyHolder> {
 
-    private List<JadwalKamis> viewItemList;
+    private List<JadwalSabtu> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public KamisAdapter(List<JadwalKamis> viewItemList) {
+    public SabtuAdapter(List<JadwalSabtu> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -40,7 +39,7 @@ public class KamisAdapter extends RecyclerView.Adapter<KamisAdapter.MyHolder> {
     public void onBindViewHolder(MyHolder holder, int position) {
 
         // Get car item dto in list.
-        JadwalKamis viewItem = viewItemList.get(position);
+        JadwalSabtu viewItem = viewItemList.get(position);
         // Set car item title.
         holder.mapel.setText(viewItem.getCources_name());;
         holder.lambel.setText(viewItem.getDuration() + " Menit");

@@ -1,6 +1,8 @@
 package com.fingertech.kes.Activity.Adapter;
 
+import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +41,14 @@ public class PesanAdapter extends RecyclerView.Adapter<PesanAdapter.MyHolder> {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(MyHolder holder, int position) {
 
         // Get car item dto in list.
         PesanModel viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.tanggal.setText(viewItem.getTanggal());;
+        holder.tanggal.setText(Html.fromHtml(viewItem.getTanggal()));
         holder.mapel.setText(viewItem.getMapel());
         holder.guru.setText(viewItem.getDari());
         holder.pesan.setText(viewItem.getPesan());

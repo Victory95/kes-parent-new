@@ -257,20 +257,14 @@ public class MenuUtama extends AppCompatActivity
 
         get_profile();
 
-        tv_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
-                startActivity(intent);
-            }
+        tv_profile.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
+            startActivity(intent);
         });
 
-        image_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
-                startActivity(intent);
-            }
+        image_profile.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
+            startActivity(intent);
         });
 
 
@@ -287,28 +281,19 @@ public class MenuUtama extends AppCompatActivity
         else {
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
-        findViewById(R.id.squareFab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        findViewById(R.id.squareFab).setOnClickListener(view -> {
 
-                Intent mIntent = new Intent(MenuUtama.this, FullMap.class);
-                startActivity(mIntent);
+            Intent mIntent = new Intent(MenuUtama.this, FullMap.class);
+            startActivity(mIntent);
 
-            }
         });
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(MenuUtama.this, SearchingMAP.class);
-                startActivity(mIntent);
-            }
+        btn_search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(MenuUtama.this, SearchingMAP.class);
+            startActivity(mIntent);
         });
-        tambah_anak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuUtama.this, AnakAkses.class);
-                startActivity(intent);
-            }
+        tambah_anak.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuUtama.this, AnakAkses.class);
+            startActivity(intent);
         });
 
         get_children();
@@ -347,21 +332,18 @@ public class MenuUtama extends AppCompatActivity
         });
 
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("coba", "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d("Token", msg);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("coba", "getInstanceId failed", task.getException());
+                        return;
                     }
+
+                    // Get new Instance ID token
+                    String token = task.getResult().getToken();
+
+                    // Log and toast
+                    String msg = getString(R.string.msg_token_fmt, token);
+                    Log.d("Token", msg);
                 });
     }
 
@@ -387,11 +369,7 @@ public class MenuUtama extends AppCompatActivity
             new AlertDialog.Builder(this)
                     .setMessage("Apa kalian ingin Exit?")
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            moveTaskToBack(true);
-                        }
-                    })
+                    .setPositiveButton("Yes", (dialog, id) -> moveTaskToBack(true))
                     .setNegativeButton("No", null)
                     .show();
         }
@@ -408,12 +386,9 @@ public class MenuUtama extends AppCompatActivity
         Baca.setVisibility(View.GONE);
         fruitImageView.setImageResource(sampleImages[position]);
 //        labelTextView.setText(sampleTitles[position]);
-        Baca.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+        Baca.setOnClickListener(view -> {
 //            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
-            }
-                      });
+});
         customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
 
         return customView;
@@ -550,26 +525,29 @@ public class MenuUtama extends AppCompatActivity
                         profileAdapter = new ProfileAdapter(profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
+                        student_id      = profileModels.get(0).getStudent_id();
+                        school_code     = profileModels.get(0).getSchool_code();
+                        classroom_id    = profileModels.get(0).getClassroom_id();
+                        school_name     = profileModels.get(0).getSchool_name();
+                        send_data();
+                        send_data2();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(profileAdapter);
-                        profileAdapter.setOnItemClickListener(new ProfileAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                profileAdapter.notifyDataSetChanged();
-                                profileAdapter.selectRow(position);
-                                student_id      = profileModels.get(position).getStudent_id();
-                                school_code     = profileModels.get(position).getSchool_code();
-                                classroom_id    = profileModels.get(position).getClassroom_id();
-                                school_name     = profileModels.get(position).getSchool_name();
-                                Toast.makeText(getApplicationContext(),profileModels.get(position).getNama(),Toast.LENGTH_LONG).show();
-                                send_data();
-                                send_data2();
-                            }
+                        profileAdapter.setOnItemClickListener((view, position) -> {
+                            profileAdapter.notifyDataSetChanged();
+                            profileAdapter.selectRow(position);
+                            student_id      = profileModels.get(position).getStudent_id();
+                            school_code     = profileModels.get(position).getSchool_code();
+                            classroom_id    = profileModels.get(position).getClassroom_id();
+                            school_name     = profileModels.get(position).getSchool_name();
+                            Toast.makeText(getApplicationContext(),profileModels.get(position).getNama(),Toast.LENGTH_LONG).show();
+                            send_data();
+                            send_data2();
                         });
                     }else {
-
+                        recyclerView.setVisibility(GONE);
                     }
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {

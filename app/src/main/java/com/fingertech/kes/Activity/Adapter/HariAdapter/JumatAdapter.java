@@ -61,8 +61,8 @@ public class JumatAdapter extends RecyclerView.Adapter<JumatAdapter.MyHolder> {
             super(itemView);
             mapel = (TextView) itemView.findViewById(R.id.mapel);
             lambel     = (TextView) itemView.findViewById(R.id.lamber);
-            jambel   = (TextView) itemView.findViewById(R.id.jambel);
-            guru = (TextView) itemView.findViewById(R.id.guru_ngajar);
+            jambel   = (TextView) itemView.findViewById(R.id.jam);
+            guru = (TextView) itemView.findViewById(R.id.guru);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }
