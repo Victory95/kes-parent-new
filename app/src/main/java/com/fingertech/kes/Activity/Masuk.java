@@ -166,9 +166,6 @@ public class Masuk extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
 
-
-
-
         ////// Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -185,6 +182,20 @@ public class Masuk extends AppCompatActivity {
             }
         });
 
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.fingertech.kes",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.d("nama not found : ", ""+e.fillInStackTrace());
+        } catch (NoSuchAlgorithmException e) {
+            Log.d("gala not found : ", ""+e.fillInStackTrace());
+        }
         tvb_lupa_pass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,7 +215,9 @@ public class Masuk extends AppCompatActivity {
         btn_facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(Masuk.this, Arrays.asList("public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(Masuk.
+                        this,
+                        Arrays.asList("email", "public_profile"));
                 loginFacebook();
             }
         });
@@ -440,24 +453,28 @@ public class Masuk extends AppCompatActivity {
         }
     }
     public void loginFacebook(){
-        loginButton.setReadPermissions(Arrays.asList(
-                "public_profile", "email", "user_birthday", "user_friends"));
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
-                        (object, response) -> {
-                            Log.v("LoginActivity", response.toString());
-                            try {
-                                id = object.getString("id");
-                                fullname = object.getString("name");
-                                email = object.getString("email");
-                                getDeviceID();
-                                register_sosmed_post();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+                                //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
+                                // Application code
+                                try {
+                                    id = object.getString("id");
+                                    email = object.getString("email");
+                                    fullname = object.getString("name");
+                                    getDeviceID();
+                                    register_sosmed_post();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         });
                 Bundle parameters = new Bundle();
