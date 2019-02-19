@@ -558,7 +558,6 @@ public class MenuGuest extends AppCompatActivity
                 if (status == 1 && code.equals("NR_SCS_0001")) {
                     itemList = new ArrayList<ItemSekolah>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
-                        Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
                         double lat                  = response.body().getData().get(i).getLatitude();
                         double lng                  = response.body().getData().get(i).getLongitude();
                         final String placeName      = response.body().getData().get(i).getSchool_name();
@@ -800,8 +799,6 @@ public class MenuGuest extends AppCompatActivity
                     });
                     // Set data adapter.
                     snappyRecyclerView.setAdapter(itemSekolahAdapter);
-
-
                 } else{
                     if (status == 0 && code.equals("NR_ERR_0001")) {
                         Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
