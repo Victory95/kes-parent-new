@@ -215,7 +215,9 @@ public class Masuk extends AppCompatActivity {
         btn_facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginManager.getInstance().logInWithReadPermissions(Masuk.this, Arrays.asList("public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(Masuk.
+                        this,
+                        Arrays.asList("email", "public_profile"));
                 loginFacebook();
             }
         });
@@ -451,6 +453,7 @@ public class Masuk extends AppCompatActivity {
         }
     }
     public void loginFacebook(){
+
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
