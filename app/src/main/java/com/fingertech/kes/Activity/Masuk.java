@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -56,6 +57,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -215,9 +217,11 @@ public class Masuk extends AppCompatActivity {
         btn_facebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 LoginManager.getInstance().logInWithReadPermissions(Masuk.
                         this,
                         Arrays.asList("email", "public_profile"));
+
                 loginFacebook();
             }
         });
@@ -458,29 +462,45 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
+//
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
+
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.v("LoginActivity", response.toString());
                                 //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
                                 // Application code
+                                Log.i(TAG, "LoginButton FacebookCallback onSuccess");
+                                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                         if(isLoggedIn ){
+                             
                                 try {
+
+
+                                    Log.d(id, "id");
                                     id = object.getString("id");
                                     email = object.getString("email");
                                     fullname = object.getString("name");
                                     getDeviceID();
                                     register_sosmed_post();
+
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
+                                    Log.v("facebook eror",e.getMessage());
                                 }
-                            }
+
+                            }}
                         });
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email");
                 request.setParameters(parameters);
                 request.executeAsync();
+
             }
 
             @Override
@@ -495,6 +515,7 @@ public class Masuk extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

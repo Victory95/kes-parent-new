@@ -2,8 +2,8 @@
     <!--<string name="facebook_app_id">1955989994447935</string>-->
     <!--<string name="fb_login_protocol_scheme">fb1955989994447935</string>-->
 
-    <string name="facebook_app_id">287281171956441</string>
-    <string name="fb_login_protocol_scheme" tools:ignore="ExtraTranslation">fb287281171956441</string>
+    <string name="facebook_app_id">1955989994447935</string>
+    <string name="fb_login_protocol_scheme" tools:ignore="ExtraTranslation">fb1955989994447935</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
 
