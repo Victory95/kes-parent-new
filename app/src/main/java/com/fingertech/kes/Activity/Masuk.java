@@ -35,8 +35,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -167,6 +169,8 @@ public class Masuk extends AppCompatActivity {
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+
+
 
         ////// Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -462,7 +466,8 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
-//
+                AccessToken accessToken = loginResult.getAccessToken();
+                Profile profile = Profile.getCurrentProfile();
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
 
@@ -474,12 +479,10 @@ public class Masuk extends AppCompatActivity {
                                 // Application code
                                 Log.i(TAG, "LoginButton FacebookCallback onSuccess");
                                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
-
-                                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
                          if(isLoggedIn ){
                              
                                 try {
-
 
                                     Log.d(id, "id");
                                     id = object.getString("id");
@@ -491,7 +494,6 @@ public class Masuk extends AppCompatActivity {
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Log.v("facebook eror",e.getMessage());
                                 }
 
                             }}
