@@ -481,7 +481,7 @@ public class Masuk extends AppCompatActivity {
                                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
                          if(isLoggedIn ){
-                             
+
                                 try {
 
                                     Log.d(id, "id");

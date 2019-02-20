@@ -202,20 +202,20 @@ public class MenuUtama extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_utama);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ParentPager         = (ViewPager) findViewById(R.id.PagerUtama);
+        toolbar             = findViewById(R.id.toolbar);
+        ParentPager         = findViewById(R.id.PagerUtama);
         fragmentAdapter     = new FragmentAdapter(getSupportFragmentManager());
-        drawer              = (DrawerLayout) findViewById(R.id.drawer_layout);
-        customCarouselView  = (CarouselView) findViewById(R.id.customCarouselView);
-        navigationView      = (NavigationView) findViewById(R.id.nav_view);
+        drawer              = findViewById(R.id.drawer_layout);
+        customCarouselView  = findViewById(R.id.customCarouselView);
+        navigationView      = findViewById(R.id.nav_view);
         header              = navigationView.getHeaderView(0);
-        tv_profile          = (TextView)header.findViewById(R.id.tv_profil);
+        tv_profile          = header.findViewById(R.id.tv_profil);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
-        image_profile       = (CircleImageView)header.findViewById(R.id.image_profile);
-        btn_search          = (CardView)findViewById(R.id.btn_search);
-        map_menu            = (CardView)findViewById(R.id.map_menu);
-        recycle_menu        = (LinearLayout)findViewById(R.id.recycler_view_menu);
-        viewpager           = (LinearLayout)findViewById(R.id.viewpager);
+        image_profile       = header.findViewById(R.id.image_profile);
+        btn_search          = findViewById(R.id.btn_search);
+        map_menu            = findViewById(R.id.map_menu);
+        recycle_menu        = findViewById(R.id.recycler_view_menu);
+        viewpager           = findViewById(R.id.viewpager);
         tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
         imageView           = (CircleImageView) findViewById(R.id.image_anak);
         namaanak            = (TextView)findViewById(R.id.nama_anak);
@@ -255,10 +255,10 @@ public class MenuUtama extends AppCompatActivity
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
-        Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
+        Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
         ParentPager.setAdapter(fragmentAdapter);
-        InkPageIndicator inkPageIndicator = (InkPageIndicator) findViewById(R.id.indicators);
+        InkPageIndicator inkPageIndicator = findViewById(R.id.indicators);
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
@@ -610,7 +610,6 @@ public class MenuUtama extends AppCompatActivity
                     }else {
                         recycleview_ln.setVisibility(GONE);
                         viewpager.setVisibility(GONE);
-
                     }
 
 
