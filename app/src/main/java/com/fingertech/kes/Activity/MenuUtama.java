@@ -299,6 +299,7 @@ public class MenuUtama extends AppCompatActivity
         });
         tambah_anak.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this, AnakAkses.class);
+            intent.putExtra("parent_nik",parent_nik);
             startActivity(intent);
         });
 
@@ -308,8 +309,9 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onRefresh() {
                 get_profile();
-                send_data();
-                send_data2();
+                get_children();
+//                send_data();
+//                send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -591,7 +593,7 @@ public class MenuUtama extends AppCompatActivity
                         String member  = response.body().getData().getMember_Type();
                         String count   = response.body().getData().getTotal_Children();
                         tv_profile.setText(nama);
-
+                        parent_nik = response.body().getData().getParent_NIK();
                         String imagefile = Base_url + picture;
                         if (picture.equals("")){
                             Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);

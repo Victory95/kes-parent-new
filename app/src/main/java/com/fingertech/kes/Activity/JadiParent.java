@@ -260,11 +260,21 @@ public class JadiParent extends AppCompatActivity {
             return "";
         }
     }
-
+    String convertTanggal(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
     public void switch_parent(){
         progressBar();
         showDialog();
-        retrofit2.Call<JSONResponse> call = mApiInterface.kes_switch_to_parent_put(authorization.toString(),parent_id.toString(),et_nik.getText().toString(),relation.toString(),jenis_kelamin.toString(),et_tanggal.getText().toString());
+        retrofit2.Call<JSONResponse> call = mApiInterface.kes_switch_to_parent_put(authorization.toString(),parent_id.toString(),et_nik.getText().toString(),relation.toString(),jenis_kelamin.toString(),convertTanggal(et_tanggal.getText().toString()));
 
         call.enqueue(new Callback<JSONResponse>() {
 

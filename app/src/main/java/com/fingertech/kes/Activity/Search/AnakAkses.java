@@ -76,7 +76,7 @@ public class AnakAkses extends AppCompatActivity {
     String authorization;
     ImageView iv_camera;
     Integer status_nik = 0;
-    String email, member_id, fullname, member_type,nama_anak, student_id, student_nik, school_id,school_name,school_code,sekolah_kode;
+    String email, member_id, fullname, member_type,nama_anak, student_id,parent_nik, student_nik, school_id,school_name,school_code,sekolah_kode;
 
     TextView tvnamajoin,tvkodejoin,tvinfo,tvnamaanak;
     TextInputLayout tl_input_noira;
@@ -130,14 +130,12 @@ public class AnakAkses extends AppCompatActivity {
         fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
         member_type   = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        if (parent_nik.equals("")){
+            parent_nik = getIntent().getStringExtra("parent_nik");
+        }
 
-        Kodeakses.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                check_student_nik_post();
-
-            }
-        });
+        Kodeakses.setOnClickListener(v -> check_student_nik_post());
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -566,6 +564,7 @@ public class AnakAkses extends AppCompatActivity {
                     editor.putString(TAG_SCHOOL_ID, (String) school_id);
                     editor.putString(TAG_NAMA_ANAK, (String) nama_anak);
                     editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
+                    editor.putString(TAG_PARENT_NIK,parent_nik);
                     editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
                     editor.commit();
                     Intent intent = new Intent(getApplicationContext(), KodeAksesAnak.class);
@@ -574,6 +573,7 @@ public class AnakAkses extends AppCompatActivity {
                     intent.putExtra(TAG_SCHOOL_ID,school_id);
                     intent.putExtra(TAG_NAMA_ANAK,(String) nama_anak);
                     intent.putExtra(TAG_NAMA_SEKOLAH,school_name);
+                    intent.putExtra(TAG_PARENT_NIK,parent_nik);
                     intent.putExtra(TAG_SCHOOL_CODE,sekolah_kode.toLowerCase());
                     startActivity(intent);
                 } else {

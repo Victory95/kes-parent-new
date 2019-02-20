@@ -54,7 +54,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     private ImageView iv_copy_paste,iv_close,iv_foto_profile;
     private TextView tv_val_kode_aa,tv_kode_akses_anak_sekolah,tv_kode_akses_anak_nama,mintakode;
     private ProgressDialog dialog;
-    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,member_id,school_code;
+    String verification_code,parent_id,student_id,student_nik,school_id,parent_nik,childrenname,school_name,email,fullname,member_id,school_code;
     Integer status;
     String code;
 
@@ -73,6 +73,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     public static final String TAG_NAMA_SEKOLAH = "school_name";
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_COUNT        = "count_children";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
 
     String authorization,count_student;
 
@@ -82,20 +83,20 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kode_akses_anak);
 
-        editTextone     =(EditText)findViewById(R.id.editTextone);
-        editTexttwo     =(EditText)findViewById(R.id.editTexttwo);
-        editTextthree   =(EditText)findViewById(R.id.editTextthree);
-        editTextfour    =(EditText)findViewById(R.id.editTextfour);
-        editTextfive    =(EditText)findViewById(R.id.editTextfive);
-        editTextsix     =(EditText)findViewById(R.id.editTextsix);
-        btn_submit      =(Button)findViewById(R.id.btn_submit);
-        iv_copy_paste   =(ImageView)findViewById(R.id.iv_copy_paste);
-        iv_close        =(ImageView)findViewById(R.id.iv_close);
-        iv_foto_profile =(ImageView)findViewById(R.id.iv_foto_profile);
-        tv_val_kode_aa  =(TextView)findViewById(R.id.tv_val_kode_aa);
-        mintakode       =(TextView)findViewById(R.id.kirim_kode);
-        tv_kode_akses_anak_sekolah  =(TextView)findViewById(R.id.tv_kode_akses_anak_sekolah);
-        tv_kode_akses_anak_nama     =(TextView)findViewById(R.id.tv_kode_akses_anak_nama);
+        editTextone     = findViewById(R.id.editTextone);
+        editTexttwo     = findViewById(R.id.editTexttwo);
+        editTextthree   = findViewById(R.id.editTextthree);
+        editTextfour    = findViewById(R.id.editTextfour);
+        editTextfive    = findViewById(R.id.editTextfive);
+        editTextsix     = findViewById(R.id.editTextsix);
+        btn_submit      = findViewById(R.id.btn_submit);
+        iv_copy_paste   = findViewById(R.id.iv_copy_paste);
+        iv_close        = findViewById(R.id.iv_close);
+        iv_foto_profile = findViewById(R.id.iv_foto_profile);
+        tv_val_kode_aa  = findViewById(R.id.tv_val_kode_aa);
+        mintakode       = findViewById(R.id.kirim_kode);
+        tv_kode_akses_anak_sekolah  = findViewById(R.id.tv_kode_akses_anak_sekolah);
+        tv_kode_akses_anak_nama     = findViewById(R.id.tv_kode_akses_anak_nama);
 
         editTextone.addTextChangedListener(this);
         editTexttwo.addTextChangedListener( this);
@@ -120,14 +121,10 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
-        count_student= sharedpreferences.getString(TAG_COUNT,"");
+        count_student = sharedpreferences.getString(TAG_COUNT,"");
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        iv_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        iv_close.setOnClickListener(v -> finish());
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
@@ -231,171 +228,147 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 return true;
             }
         });
-        editTexttwo.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                editTexttwo.onTouchEvent(event);
-                editTexttwo.setSelection(editTexttwo.getText().length());
-                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTexttwo.setOnTouchListener((v, event) -> {
+            editTexttwo.onTouchEvent(event);
+            editTexttwo.setSelection(editTexttwo.getText().length());
+            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+            editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextone.setTextColor(Color.WHITE);
-                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextthree.setTextColor(Color.WHITE);
-                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfour.setTextColor(Color.WHITE);
-                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfive.setTextColor(Color.WHITE);
-                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextsix.setTextColor(Color.WHITE);
-                return true;
-            }
+            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextone.setTextColor(Color.WHITE);
+            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextthree.setTextColor(Color.WHITE);
+            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfour.setTextColor(Color.WHITE);
+            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfive.setTextColor(Color.WHITE);
+            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextsix.setTextColor(Color.WHITE);
+            return true;
         });
-        editTextthree.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                editTextthree.onTouchEvent(event);
-                editTextthree.setSelection(editTextthree.getText().length());
-                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextthree.setOnTouchListener((v, event) -> {
+            editTextthree.onTouchEvent(event);
+            editTextthree.setSelection(editTextthree.getText().length());
+            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+            editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextone.setTextColor(Color.WHITE);
-                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTexttwo.setTextColor(Color.WHITE);
-                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfour.setTextColor(Color.WHITE);
-                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfive.setTextColor(Color.WHITE);
-                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextsix.setTextColor(Color.WHITE);
-                return true;
-            }
+            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextone.setTextColor(Color.WHITE);
+            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTexttwo.setTextColor(Color.WHITE);
+            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfour.setTextColor(Color.WHITE);
+            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfive.setTextColor(Color.WHITE);
+            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextsix.setTextColor(Color.WHITE);
+            return true;
         });
-        editTextfour.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                editTextfour.onTouchEvent(event);
-                editTextfour.setSelection(editTextfour.getText().length());
-                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextfour.setOnTouchListener((v, event) -> {
+            editTextfour.onTouchEvent(event);
+            editTextfour.setSelection(editTextfour.getText().length());
+            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+            editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextone.setTextColor(Color.WHITE);
-                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTexttwo.setTextColor(Color.WHITE);
-                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextthree.setTextColor(Color.WHITE);
-                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfive.setTextColor(Color.WHITE);
-                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextsix.setTextColor(Color.WHITE);
-                return true;
-            }
+            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextone.setTextColor(Color.WHITE);
+            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTexttwo.setTextColor(Color.WHITE);
+            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextthree.setTextColor(Color.WHITE);
+            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfive.setTextColor(Color.WHITE);
+            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextsix.setTextColor(Color.WHITE);
+            return true;
         });
-        editTextfive.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                editTextfive.onTouchEvent(event);
-                editTextfive.setSelection(editTextfive.getText().length());
-                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextfive.setOnTouchListener((v, event) -> {
+            editTextfive.onTouchEvent(event);
+            editTextfive.setSelection(editTextfive.getText().length());
+            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+            editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextone.setTextColor(Color.WHITE);
-                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTexttwo.setTextColor(Color.WHITE);
-                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextthree.setTextColor(Color.WHITE);
-                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfour.setTextColor(Color.WHITE);
-                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextsix.setTextColor(Color.WHITE);
-                return true;
-            }
+            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextone.setTextColor(Color.WHITE);
+            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTexttwo.setTextColor(Color.WHITE);
+            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextthree.setTextColor(Color.WHITE);
+            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfour.setTextColor(Color.WHITE);
+            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextsix.setTextColor(Color.WHITE);
+            return true;
         });
-        editTextsix.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                editTextsix.onTouchEvent(event);
-                editTextsix.setSelection(editTextsix.getText().length());
-                editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                editTextsix.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextsix.setOnTouchListener((v, event) -> {
+            editTextsix.onTouchEvent(event);
+            editTextsix.setSelection(editTextsix.getText().length());
+            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+            editTextsix.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextone.setTextColor(Color.WHITE);
-                editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTexttwo.setTextColor(Color.WHITE);
-                editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextthree.setTextColor(Color.WHITE);
-                editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfour.setTextColor(Color.WHITE);
-                editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                editTextfive.setTextColor(Color.WHITE);
-                return true;
-            }
+            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextone.setTextColor(Color.WHITE);
+            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTexttwo.setTextColor(Color.WHITE);
+            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextthree.setTextColor(Color.WHITE);
+            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfour.setTextColor(Color.WHITE);
+            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+            editTextfive.setTextColor(Color.WHITE);
+            return true;
         });
 
-        iv_copy_paste.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                String pasteData = "";
-                if (!(clipboard.hasPrimaryClip())) {
-                } else if (!(clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN))) {
-                } else {
-                    ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                    pasteData = item.getText().toString();
-                }
-                String val=pasteData;
-                String[] arr=String.valueOf(val).split("(?<=.)");
-                int[] intArr=new int[6];
-                intArr[0]=Integer.parseInt(arr[0]);
-                intArr[1]=Integer.parseInt(arr[1]);
-                intArr[2]=Integer.parseInt(arr[2]);
-                intArr[3]=Integer.parseInt(arr[3]);
-                intArr[4]=Integer.parseInt(arr[4]);
-                intArr[5]=Integer.parseInt(arr[5]);
-                editTextone.setText(String.valueOf(intArr[0]));
-                editTexttwo.setText(String.valueOf(intArr[1]));
-                editTextthree.setText(String.valueOf(intArr[2]));
-                editTextfour.setText(String.valueOf(intArr[3]));
-                editTextfive.setText(String.valueOf(intArr[4]));
-                editTextsix.setText(String.valueOf(intArr[5]));
+        iv_copy_paste.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            String pasteData = "";
+            if (!(clipboard.hasPrimaryClip())) {
+            } else if (!(clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN))) {
+            } else {
+                ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+                pasteData = item.getText().toString();
             }
+            String val=pasteData;
+            String[] arr=String.valueOf(val).split("(?<=.)");
+            int[] intArr=new int[6];
+            intArr[0]=Integer.parseInt(arr[0]);
+            intArr[1]=Integer.parseInt(arr[1]);
+            intArr[2]=Integer.parseInt(arr[2]);
+            intArr[3]=Integer.parseInt(arr[3]);
+            intArr[4]=Integer.parseInt(arr[4]);
+            intArr[5]=Integer.parseInt(arr[5]);
+            editTextone.setText(String.valueOf(intArr[0]));
+            editTexttwo.setText(String.valueOf(intArr[1]));
+            editTextthree.setText(String.valueOf(intArr[2]));
+            editTextfour.setText(String.valueOf(intArr[3]));
+            editTextfive.setText(String.valueOf(intArr[4]));
+            editTextsix.setText(String.valueOf(intArr[5]));
         });
 
-        mintakode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                request_code_acsess_post();
-                editTextone.getText().clear();
-                editTexttwo.getText().clear();
-                editTextthree.getText().clear();
-                editTextfour.getText().clear();
-                editTextfive.getText().clear();
-                editTextsix.getText().clear();
-                editTextone.addTextChangedListener(KodeAksesAnak.this);
-                editTexttwo.addTextChangedListener( KodeAksesAnak.this);
-                editTextthree.addTextChangedListener(KodeAksesAnak.this);
-                editTextfour.addTextChangedListener(KodeAksesAnak.this);
-                editTextfive.addTextChangedListener(KodeAksesAnak.this);
-                editTextsix.addTextChangedListener(KodeAksesAnak.this);
-            }
+        mintakode.setOnClickListener(v -> {
+            request_code_acsess_post();
+            editTextone.getText().clear();
+            editTexttwo.getText().clear();
+            editTextthree.getText().clear();
+            editTextfour.getText().clear();
+            editTextfive.getText().clear();
+            editTextsix.getText().clear();
+            editTextone.addTextChangedListener(KodeAksesAnak.this);
+            editTexttwo.addTextChangedListener( KodeAksesAnak.this);
+            editTextthree.addTextChangedListener(KodeAksesAnak.this);
+            editTextfour.addTextChangedListener(KodeAksesAnak.this);
+            editTextfive.addTextChangedListener(KodeAksesAnak.this);
+            editTextsix.addTextChangedListener(KodeAksesAnak.this);
         });
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(editTextone.length()==0 && editTexttwo.length()==0 && editTextthree.length()==0 && editTextfour.length()==0 && editTextfive.length()==0 && editTextsix.length()==0){
-                    tv_val_kode_aa.setVisibility(View.VISIBLE);
-                }else {
-                    tv_val_kode_aa.setVisibility(View.GONE);
-                    masuk_code_acsess_post();
-
-                }
+        btn_submit.setOnClickListener(v -> {
+            if(editTextone.length()==0 && editTexttwo.length()==0 && editTextthree.length()==0 && editTextfour.length()==0 && editTextfive.length()==0 && editTextsix.length()==0){
+                tv_val_kode_aa.setVisibility(View.VISIBLE);
+            }else {
+                tv_val_kode_aa.setVisibility(View.GONE);
+                masuk_code_acsess_post();
 
             }
+
         });
 
     }
@@ -459,105 +432,90 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 hideKeyboard(KodeAksesAnak.this);
             }
         }
-        editTexttwo.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                InputFilter filter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                        if (end == 0 || dstart < dend && editTextone.length() == 0 && editTextone.length() == 0) {
-                            editTextone.requestFocus();
-                            editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                            editTextone.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTexttwo.setOnKeyListener((v, keyCode, event) -> {
+            InputFilter filter = new InputFilter() {
+                public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    if (end == 0 || dstart < dend && editTextone.length() == 0 && editTextone.length() == 0) {
+                        editTextone.requestFocus();
+                        editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                        editTextone.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                            editTexttwo.setTextColor(Color.WHITE);
-                        }
-                        return source;
+                        editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                        editTexttwo.setTextColor(Color.WHITE);
                     }
-                };
-                editTexttwo.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
-                return false;
-            }
+                    return source;
+                }
+            };
+            editTexttwo.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
+            return false;
         });
-        editTextthree.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                InputFilter filter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                        if (end == 0 || dstart < dend && editTexttwo.length() == 0) {
-                            editTexttwo.requestFocus();
-                            editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                            editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextthree.setOnKeyListener((v, keyCode, event) -> {
+            InputFilter filter = new InputFilter() {
+                public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    if (end == 0 || dstart < dend && editTexttwo.length() == 0) {
+                        editTexttwo.requestFocus();
+                        editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                        editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                            editTextthree.setTextColor(Color.WHITE);
-                        }
-                        return source;
+                        editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                        editTextthree.setTextColor(Color.WHITE);
                     }
-                };
-                editTextthree.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
-                return false;
-            }
+                    return source;
+                }
+            };
+            editTextthree.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
+            return false;
         });
-        editTextfour.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                InputFilter filter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                        if (end == 0 || dstart < dend && editTextthree.length() == 0) {
-                            editTextthree.requestFocus();
-                            editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                            editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextfour.setOnKeyListener((v, keyCode, event) -> {
+            InputFilter filter = new InputFilter() {
+                public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    if (end == 0 || dstart < dend && editTextthree.length() == 0) {
+                        editTextthree.requestFocus();
+                        editTextthree.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                        editTextthree.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                            editTextfour.setTextColor(Color.WHITE);
-                        }
-                        return source;
+                        editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                        editTextfour.setTextColor(Color.WHITE);
                     }
-                };
-                editTextfour.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
-                return false;
-            }
+                    return source;
+                }
+            };
+            editTextfour.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
+            return false;
         });
-        editTextfive.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                InputFilter filter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                        if (end == 0 || dstart < dend && editTextfour.length() == 0) {
-                            editTextfour.requestFocus();
-                            editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                            editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextfive.setOnKeyListener((v, keyCode, event) -> {
+            InputFilter filter = new InputFilter() {
+                public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    if (end == 0 || dstart < dend && editTextfour.length() == 0) {
+                        editTextfour.requestFocus();
+                        editTextfour.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                        editTextfour.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                            editTextfive.setTextColor(Color.WHITE);
-                        }
-                        return source;
+                        editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                        editTextfive.setTextColor(Color.WHITE);
                     }
-                };
-                editTextfive.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
-                return false;
-            }
+                    return source;
+                }
+            };
+            editTextfive.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
+            return false;
         });
-        editTextsix.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                InputFilter filter = new InputFilter() {
-                    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                        if (end == 0 || dstart < dend && editTextfive.length() == 0) {
-                            editTextfive.requestFocus();
-                            editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
-                            editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
+        editTextsix.setOnKeyListener((v, keyCode, event) -> {
+            InputFilter filter = new InputFilter() {
+                public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                    if (end == 0 || dstart < dend && editTextfive.length() == 0) {
+                        editTextfive.requestFocus();
+                        editTextfive.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
+                        editTextfive.setTextColor(getResources().getColor(R.color.colorPrimary));
 
-                            editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
-                            editTextsix.setTextColor(Color.WHITE);
-                        }
-                        return source;
+                        editTextsix.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
+                        editTextsix.setTextColor(Color.WHITE);
                     }
-                };
-                editTextsix.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
-                return false;
-            }
+                    return source;
+                }
+            };
+            editTextsix.setFilters(new InputFilter[]{filter,new InputFilter.LengthFilter(1)});
+            return false;
         });
     }
     public static void hideKeyboard(Activity activity) {
@@ -724,21 +682,15 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         builder.setTitle("Update Data Orang Tua");
         builder.setMessage("Apakah anda ingin mengubah data anda?");
         builder.setIcon(R.drawable.ic_alarm);
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), ParentMain.class);
-                delete_code();
-                startActivity(intent);
-            }
+        builder.setPositiveButton("Ya", (dialog, which) -> {
+            Intent intent = new Intent(getApplicationContext(), ParentMain.class);
+            delete_code();
+            startActivity(intent);
         });
-        builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getApplicationContext(), AnakMain.class);
-                delete_code();
-                startActivity(intent);
-            }
+        builder.setNegativeButton("Tidak", (dialog, which) -> {
+            Intent intent = new Intent(getApplicationContext(), AnakMain.class);
+            delete_code();
+            startActivity(intent);
         });
         builder.show();
 
