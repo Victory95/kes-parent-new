@@ -132,7 +132,7 @@ public interface Auth {
                                                                   @Query("parent_nik") String parent_nik,
                                                                   @Query("student_id") String student_id);
 
-    /////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Update Member
     @FormUrlEncoded
     @PUT("auth/kes_update/{memberid}")
     Call<JSONResponse> kes_update_put(@Header("Authorization") String authorization,
@@ -149,28 +149,33 @@ public interface Auth {
     @HTTP(method = "DELETE", path = "public", hasBody = true)
     Call<JSONResponse> deletePublic(@Field("memberid") String memberid);
 
+    //// Cari sekolah per Radius
     @FormUrlEncoded
     @POST("auth/kes_nearby_radius")
     Call<JSONResponse.Nearby_School>nearby_radius_post(@Field("latitude") Double latitude,
                                                        @Field("longitude") Double longitude,
                                                        @Field("radius") Double radius);
 
+    ///// Sekolah per Provinsi
     @GET("school/kes_school_onprov")
     Call<JSONResponse.School_Provinsi>school_onprov_get(@Query("id_prov") String id_prov,
                                                         @Query("jp") String jp);
 
 
+    ///// Provinsi
     @GET("school/kes_provinsi")
     Call<JSONResponse.Provinsi>provinsi_get();
 
+    //// Detail Sekolah
     @GET("auth/kes_detail_school")
     Call<JSONResponse.DetailSchool>detail_school_get(@Query("sch") String sch);
 
-    //////// search_school
+    //////// Delete Cerification
     @FormUrlEncoded
     @POST("auth/kes_delete_verification")
     Call<JSONResponse.DeleteCode>delete_verification_post(@Field("verification_code") String verification_code);
 
+    ////// Update Orang Tua
     @FormUrlEncoded
     @PUT("parents/kes_update_parent/{studentparentid}")
     Call<JSONResponse>update_parent_put(@Header("Authorization") String authorization,
@@ -197,32 +202,33 @@ public interface Auth {
                                         @Field("office_latitude") String office_latitude,
                                         @Field("office_longitude") String office_longitude);
 
-    //////DetailStudent
+    //////Detail Student
     @GET("students/kes_detail_student")
     Call<JSONResponse.DetailStudent>kes_detail_student_get(@Header("Authorization") String authorization,
                                                            @Query("school_code") String school_code,
                                                            @Query("student_id") String student_id,
                                                            @Query("parent_nik") String parent_nik);
 
-    //////GETPROFILE
+    //////Get Profile
     @GET("auth/kes_profile")
     Call<JSONResponse.GetProfile>kes_profile_get(@Header("Authorization") String authorization,
                                                   @Query("mem") String mem);
 
+    ///// Upload Foto
     @Multipart
     @POST("auth/kes_update_picture")
     Call<JSONResponse.UpdatePicture> kes_update_picture_post(@Header("Authorization") String authorization,
                                                             @Part("memberid") RequestBody memberid,
                                                             @Part MultipartBody.Part picture_old,
                                                             @Part("pic_type") RequestBody pic_type);
-
+    ///// Ganti Password
     @FormUrlEncoded
     @PUT("auth/kes_change_password/{memberid}")
     Call<JSONResponse>kes_change_password_post(@Header("Authorization") String authorization,
                                                @Path("memberid") String memberid,
                                                @Field("password") String password,
                                                @Field("old_pass") String old_pass);
-
+    ///// Jadi Orang Tua
     @FormUrlEncoded
     @PUT("auth/kes_switch_to_parent/{member_id}")
     Call<JSONResponse>kes_switch_to_parent_put(@Header("Authorization") String authorization,
@@ -232,43 +238,44 @@ public interface Auth {
                                                @Field("gender") String gender,
                                                @Field("birth_date") String birth_date);
 
+    ///// Update Student Detail
     @FormUrlEncoded
     @PUT("students/kes_update_student_detail/{studentdetailid}")
     Call<JSONResponse>update_student_detail_put(@Header("Authorization") String authorization,
-                                        @Path("studentdetailid")String studentdetailid,
-                                        @Field("school_code") String school_code,
-                                        @Field("student_id") String student_id,
-                                        @Field("rombel") String rombel,
-                                        @Field("special_needs") String special_needs,
-                                        @Field("rt") String rt,
-                                        @Field("rw") String rw,
-                                        @Field("dusun") String dusun,
-                                        @Field("kelurahan") String kelurahan,
-                                        @Field("kecamatan") String kecamatan,
-                                        @Field("post_code") String post_code,
-                                        @Field("jenis_tinggal") String jenis_tinggal,
-                                        @Field("transportasi") String transportasi,
-                                        @Field("latitude") String latitude,
-                                        @Field("longitude") String longitude,
-                                        @Field("home_phone") String home_phone,
-                                        @Field("skhun") String skhun,
-                                        @Field("penerima_kps") String penerima_kps,
-                                        @Field("no_kps") String no_kps);
+                                                @Path("studentdetailid")String studentdetailid,
+                                                @Field("school_code") String school_code,
+                                                @Field("student_id") String student_id,
+                                                @Field("rombel") String rombel,
+                                                @Field("special_needs") String special_needs,
+                                                @Field("rt") String rt,
+                                                @Field("rw") String rw,
+                                                @Field("dusun") String dusun,
+                                                @Field("kelurahan") String kelurahan,
+                                                @Field("kecamatan") String kecamatan,
+                                                @Field("post_code") String post_code,
+                                                @Field("jenis_tinggal") String jenis_tinggal,
+                                                @Field("transportasi") String transportasi,
+                                                @Field("latitude") String latitude,
+                                                @Field("longitude") String longitude,
+                                                @Field("home_phone") String home_phone,
+                                                @Field("skhun") String skhun,
+                                                @Field("penerima_kps") String penerima_kps,
+                                                @Field("no_kps") String no_kps);
 
+    ///// Update Student Member
     @FormUrlEncoded
     @PUT("students/kes_update_student_member/{student_id}")
     Call<JSONResponse>update_student_member_put(@Header("Authorization") String authorization,
-                                         @Path("student_id")String student_id,
-                                         @Field("school_code") String school_code,
-                                         @Field("fullname") String fullname,
-                                         @Field("gender") String gender,
-                                         @Field("birth_place") String birth_place,
-                                         @Field("birth_date") String birth_date,
-                                         @Field("citizen_status") String dusun,
-                                         @Field("religion") String kelurahan,
-                                         @Field("address") String parent_home_phone,
-                                         @Field("mobile_phone") String parent_phone
-                                        );
+                                                @Path("student_id")String student_id,
+                                                @Field("school_code") String school_code,
+                                                @Field("fullname") String fullname,
+                                                @Field("gender") String gender,
+                                                @Field("birth_place") String birth_place,
+                                                @Field("birth_date") String birth_date,
+                                                @Field("citizen_status") String dusun,
+                                                @Field("religion") String kelurahan,
+                                                @Field("address") String parent_home_phone,
+                                                @Field("mobile_phone") String parent_phone);
 
     ///// Jadwal Ujian
     @GET("students/kes_exam_schedule")
@@ -279,12 +286,14 @@ public interface Auth {
                                                         @Query("semester_id") String semester_id);
 
 
+    ///// Jadwal Pelajaran
     @GET("students/kes_class_schedule")
     Call<JSONResponse.JadwalPelajaran>kes_class_schedule_get(@Header("Authorization") String authorization,
                                                         @Query("school_code") String school_code,
                                                         @Query("student_id") String student_id,
                                                         @Query("classroom_id") String classroom_id);
 
+    ///// Tugas Anak
     @GET("students/kes_cources_score")
     Call<JSONResponse.TugasAnak>kes_cources_score_get(@Header("Authorization") String authorization,
                                                       @Query("school_code") String school_code,
@@ -292,27 +301,34 @@ public interface Auth {
                                                       @Query("classroom_id") String classroom_id,
                                                       @Query("semester_id") String semester_id);
 
+    ///// Raport Anak
     @GET("students/kes_rapor_score")
     Call<JSONResponse.Raport>kes_rapor_score_get(@Header("Authorization") String authorization,
                                                  @Query("school_code") String school_code,
                                                  @Query("student_id") String student_id,
                                                  @Query("classroom_id") String classroom_id,
                                                  @Query("semester_id") String semester_id);
+
+    ////  Check Semester
     @GET("students/kes_check_semester")
     Call<JSONResponse.CheckSemester>kes_check_semester_get(@Header("Authorization") String authorization,
-                                                 @Query("school_code") String school_code,
-                                                 @Query("classroom_id") String classroom_id,
-                                                 @Query("date_now") String date_now);
+                                                           @Query("school_code") String school_code,
+                                                           @Query("classroom_id") String classroom_id,
+                                                           @Query("date_now") String date_now);
 
+    ///// List Semester
     @GET("students/kes_list_semester")
     Call<JSONResponse.ListSemester>kes_list_semester_get(@Header("Authorization") String authorization,
                                                      @Query("school_code") String school_code,
                                                      @Query("classroom_id") String classroom_id);
 
+    //// List Anak
     @GET("parents/kes_list_children")
     Call<JSONResponse.ListChildren>kes_list_children_get(@Header("Authorization") String authorization,
                                                      @Query("parent_id") String parent_id);
 
+
+    //// Absen Anak
     @GET("students/kes_class_attendance")
     Call<JSONResponse.AbsenSiswa>kes_class_attendance_get(@Header("Authorization") String authorization,
                                                            @Query("school_code") String school_code,
@@ -321,6 +337,7 @@ public interface Auth {
                                                            @Query("attendance_month") String attendance_month,
                                                            @Query("attendance_year") String attendance_year);
 
+    //// Kalendar Kelas
     @GET("students/kes_class_calendar")
     Call<JSONResponse.ClassCalendar>kes_class_calendar_get(@Header("Authorization") String authorization,
                                                           @Query("school_code") String school_code,
@@ -329,45 +346,72 @@ public interface Auth {
                                                           @Query("calendar_month") String calendar_month,
                                                           @Query("calendar_year") String calendar_year);
 
+    ///// Detail Kelas
     @GET("students/kes_classroom_detail")
     Call<JSONResponse.ClassroomDetail>kes_classroom_detail_get(@Header("Authorization") String authorization,
-                                                         @Query("school_code") String school_code,
-                                                         @Query("classroom_id") String classroom_id);
+                                                               @Query("school_code") String school_code,
+                                                               @Query("classroom_id") String classroom_id);
 
+    ///// Detail Kalendar
     @GET("students/kes_calendar_detail")
     Call<JSONResponse.CalendarDetail>kes_calendar_detail_get(@Header("Authorization") String authorization,
-                                                               @Query("school_code") String school_code,
-                                                               @Query("calendar_id") String calendar_id);
+                                                             @Query("school_code") String school_code,
+                                                             @Query("calendar_id") String calendar_id);
+
+    ///// Pesan
     @GET("parents/kes_message_inbox")
     Call<JSONResponse.PesanAnak>kes_message_inbox_get(@Header("Authorization") String authorization,
-                                                           @Query("school_code") String school_code,
-                                                           @Query("parent_id") String parent_id,
-                                                           @Query("date_from") String date_from,
-                                                           @Query("date_to") String date_to);
-    @GET("parents/kes_message_inbox_detail")
-    Call<JSONResponse.PesanDetail>kes_message_inbox_detail_get(@Header("Authorization") String authorization,
                                                       @Query("school_code") String school_code,
                                                       @Query("parent_id") String parent_id,
-                                                      @Query("message_id") String message_id,
-                                                      @Query("parent_message_id") String parent_message_id);
+                                                      @Query("date_from") String date_from,
+                                                      @Query("date_to") String date_to);
+
+    //// Detail Pesan
+    @GET("parents/kes_message_inbox_detail")
+    Call<JSONResponse.PesanDetail>kes_message_inbox_detail_get(@Header("Authorization") String authorization,
+                                                               @Query("school_code") String school_code,
+                                                               @Query("parent_id") String parent_id,
+                                                               @Query("message_id") String message_id,
+                                                               @Query("parent_message_id") String parent_message_id);
+
+    ///// List Notifikasi
     @GET("parents/kes_notification_list")
     Call<JSONResponse.ListNotification>kes_notification_list_get(@Header("Authorization") String authorization,
-                                                               @Query("school_code") String school_code,
-                                                               @Query("student_id") String parent_id);
+                                                                 @Query("school_code") String school_code,
+                                                                 @Query("student_id") String parent_id);
 
+    ///// Balas Pesan
     @FormUrlEncoded
     @POST("parents/kes_reply_message")
     Call<JSONResponse.BalasPesan>kes_reply_message_post(@Header("Authorization") String authorization,
-                                            @Field("school_code") String school_code,
-                                            @Field("parent_id") String parent_id,
-                                            @Field("message_id") String message_id,
-                                            @Field("message_cont") String message_cont);
+                                                        @Field("school_code") String school_code,
+                                                        @Field("parent_id") String parent_id,
+                                                        @Field("message_id") String message_id,
+                                                        @Field("message_cont") String message_cont);
 
     ///// List Mata Pelajaran
     @GET("students/kes_list_cources")
     Call<JSONResponse.ListMapel>kes_list_cources_get(@Header("Authorization") String authorization,
                                                      @Query("school_code") String school_code,
                                                      @Query("classroom_id") String classroom_id);
+
+    ///// List Guru
+    @GET("students/kes_list_teacher")
+    Call<JSONResponse.ListTeacher>kes_list_teacher_get(@Header("Authorization") String authorization,
+                                                       @Query("school_code") String school_code,
+                                                       @Query("classroom_id") String classroom_id);
+
+    //// Kirim Pesan
+    @FormUrlEncoded
+    @POST("parents/kes_send_message")
+    Call<JSONResponse.KirimPesan>kes_send_message_post(@Header("Authorization") String authorization,
+                                                       @Field("school_code") String school_code,
+                                                       @Field("parent_id") String parent_id,
+                                                       @Field("student_id") String student_id,
+                                                       @Field("classroom_id") String classroom_id,
+                                                       @Field("teacher_id") String teacher_id,
+                                                       @Field("cources_id") String cources_id,
+                                                       @Field("message") String message);
 
 
 }

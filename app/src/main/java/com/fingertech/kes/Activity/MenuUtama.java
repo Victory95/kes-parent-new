@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,6 +34,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -61,6 +64,7 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
@@ -108,6 +112,8 @@ import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -345,6 +351,7 @@ public class MenuUtama extends AppCompatActivity
                     String msg = getString(R.string.msg_token_fmt, token);
                     Log.d("Token", msg);
                 });
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -582,11 +589,13 @@ public class MenuUtama extends AppCompatActivity
                         String picture = response.body().getData().getPicture();
                         String nama    = response.body().getData().getFullname();
                         String member  = response.body().getData().getMember_Type();
-                        String count   = response.body().getData().getParent_Count();
+                        String count   = response.body().getData().getTotal_Children();
                         tv_profile.setText(nama);
 
                         String imagefile = Base_url + picture;
-
+                        if (picture.equals("")){
+                            Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);
+                        }
                         Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
@@ -649,6 +658,7 @@ public class MenuUtama extends AppCompatActivity
             bundle.putString("member_id", parent_id);
             bundle.putString("authorization", authorization);
             bundle.putString("classroom_id", classroom_id);
+            bundle.putString("school_name",school_name);
             MenuDuaFragment menuSatuFragment = new MenuDuaFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

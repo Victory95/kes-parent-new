@@ -18,7 +18,6 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/image_anak"
-            android:background="@drawable/ic_student"
             android:scaleType="centerCrop"
             app:border_color="@color/colorPrimary"
             android:layout_gravity="center"

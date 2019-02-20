@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.DaftarParent;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -52,10 +53,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 
+import java.util.Random;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.fingertech.kes.Service.App.getContext;
 
 public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -66,7 +71,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     TextView hint_data,hint_alamat,hint_kontak,kelas_anak,jenis_kelamin,nik,nis,nisn,tempat_lahir,tanggal_lahir,kewarganegaraan,nama_anak_profile;
     TextView nomor_rumah,nomor_hp,email,skun,nokps,nama_anak,penerimaan_kps,alamat,rt,kelurahan,kecamatan,kode_pos,status_tinggal,transportasi,Agama,kebutuhan_khusus,rombongan_belajar;
     GoogleMap mapAnak;
-    CircleImageView image_anak;
+    ImageView image_anak;
     private Boolean clicked = false;
     Auth mApiInterface;
     int status;
@@ -120,10 +125,9 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         rombongan_belajar   = (TextView)findViewById(R.id.rombel);
         tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
         tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
-        image_anak      = (CircleImageView)findViewById(R.id.image_profil_anak);
+        image_anak      = findViewById(R.id.image_profil_anak);
         edit_profile    = findViewById(R.id.btn_edit);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
         cv_data.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
@@ -151,15 +155,6 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 intent.putExtra("student_id",student_id);
                 intent.putExtra("parent_nik",parent_nik);
                 startActivity(intent);
-            }
-        });
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            int Refreshcounter = 1;
-            @Override
-            public void onRefresh() {
-                data_student_get();
-                Refreshcounter = Refreshcounter + 1;
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
         cv_data.setOnClickListener(new View.OnClickListener() {
@@ -331,6 +326,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
+
                     namalengkap         = response.body().getData().getFullname();
                     jeniskelamin        = response.body().getData().getGender();
                     kelas               = response.body().getData().getEdulevel_id();
@@ -413,6 +409,13 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     nama_anak_profile.setText(namalengkap);
                     nik.setText("Nik : "+Nik);
                     String imagefiles = Base_anak + foto;
+                    int[] androidColors = getContext().getResources().getIntArray(R.array.androidcolors);
+                    int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
+                    String random  = String.valueOf(randomAndroidColor);
+
+                    if (foto.equals("")){
+                        Glide.with(ProfilAnak.this).load("https://ui-avatars.com/api/?name="+namalengkap+"&background=40bfe8&color=fff").into(image_anak);
+                    }
                     Picasso.with(ProfilAnak.this).load(imagefiles).into(image_anak);
 
 

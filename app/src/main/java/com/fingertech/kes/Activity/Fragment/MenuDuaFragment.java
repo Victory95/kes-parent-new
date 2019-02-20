@@ -39,9 +39,10 @@ public class MenuDuaFragment extends Fragment {
             school_code     = bundle.getString("school_code");
             student_id      = bundle.getString("student_id");
             classroom_id    = bundle.getString("classroom_id");
+            school_name     = bundle.getString("school_name");
         }
     }
-    String authorization,parent_nik,school_code,student_id,member_id,classroom_id;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_kalender,btn_pesan;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +74,9 @@ public class MenuDuaFragment extends Fragment {
                     intent.putExtra("authorization", authorization);
                     intent.putExtra("school_code", school_code);
                     intent.putExtra("member_id", member_id);
+                    intent.putExtra("classroom_id", classroom_id);
+                    intent.putExtra("school_name",school_name);
+                    intent.putExtra("student_id", student_id);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"Harap refresh kembali", Toast.LENGTH_LONG).show();

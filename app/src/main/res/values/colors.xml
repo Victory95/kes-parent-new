@@ -78,4 +78,15 @@
     <color name="primaryAlpha03">#0050C4FA</color>
     <color name="NavyColor">#2F475E</color>
 
+    <integer-array name="androidcolors">
+        <item>@color/NavyColor</item>
+        <item>@color/mint_color</item>
+        <item>@color/colorAccent</item>
+        <item>@color/pink</item>
+        <item>@color/green</item>
+        <item>@color/yellow_500</item>
+        <item>@color/deeppurple</item>
+        <item>@color/blue_600</item>
+    </integer-array>
+
 </resources>

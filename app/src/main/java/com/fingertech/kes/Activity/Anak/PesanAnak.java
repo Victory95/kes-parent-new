@@ -1,13 +1,14 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,16 +19,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.PesanAdapter;
-import com.fingertech.kes.Activity.Adapter.TugasAdapter;
 import com.fingertech.kes.Activity.Model.PesanModel;
-import com.fingertech.kes.Activity.Model.TugasModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -58,10 +59,11 @@ public class PesanAnak extends AppCompatActivity {
     List<PesanModel>pesanModelList;
     PesanModel pesanModel;
     DateFormat dateFormat  = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    String tanggal,kelas,mapel,pesan,guru;
+    String tanggal,kelas,mapel,pesan,guru,classroom_id,school_name,student_id;
     ProgressDialog dialog;
     TextView no_pesan;
     SwipeRefreshLayout swipeRefreshLayout;
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +76,14 @@ public class PesanAnak extends AppCompatActivity {
         no_pesan        = findViewById(R.id.no_pesan);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
-
+        fab             = findViewById(R.id.fab);
 
         authorization   = getIntent().getStringExtra("authorization");
         school_code     = getIntent().getStringExtra("school_code");
         parent_id       = getIntent().getStringExtra("member_id");
-
+        classroom_id    = getIntent().getStringExtra("classroom_id");
+        school_name     = getIntent().getStringExtra("school_name");
+        student_id      = getIntent().getStringExtra("student_id");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,6 +94,17 @@ public class PesanAnak extends AppCompatActivity {
         int mMonth = mcurrentDate.get(Calendar.MONTH);
         int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(PesanAnak.this,KirimPesan.class);
+            intent.putExtra("authorization",authorization);
+            intent.putExtra("school_code",school_code);
+            intent.putExtra("member_id",parent_id);
+            intent.putExtra("classroom_id",classroom_id);
+            intent.putExtra("school_name",school_name);
+            intent.putExtra("student_id", student_id);
+            startActivity(intent);
+        });
+
         final DatePickerDialog mDatePicker;
         mDatePicker = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
@@ -98,49 +113,30 @@ public class PesanAnak extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
 
-        date_from.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        date_from.setOnClickListener(view -> mDatePicker.show());
+
+        date_from.setOnFocusChangeListener((view, b) -> {
+            if (b) {
                 mDatePicker.show();
             }
         });
 
-        date_from.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    mDatePicker.show();
-                }
-            }
-        });
-
         final DatePickerDialog datePickerDialog;
-        datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
-                date_to.setText(convertDate(selectedyear, selectedmonth, selectedday));
-            }
-        }, mYear, mMonth, mDay);
+        datePickerDialog = new DatePickerDialog(this, R.style.DialogTheme,
+                (datepicker, selectedyear, selectedmonth, selectedday) ->
+                        date_to.setText(convertDate(selectedyear, selectedmonth, selectedday)), mYear, mMonth, mDay);
 
         date_to.setText(dateFormat.format(Calendar.getInstance().getTime()));
 
-        date_to.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        date_to.setOnClickListener(view -> datePickerDialog.show());
+
+        date_to.setOnFocusChangeListener((view, b) -> {
+            if (b) {
                 datePickerDialog.show();
             }
         });
 
-        date_to.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    datePickerDialog.show();
-                }
-            }
-        });
-
-        go.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dapat_pesan();
-            }
-        });
+        go.setOnClickListener(v -> dapat_pesan());
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             int Refreshcounter = 1;
             @Override
@@ -204,7 +200,7 @@ public class PesanAnak extends AppCompatActivity {
                 if (status == 1 & code.equals("DTS_SCS_0001")){
                     pesanModelList  = new ArrayList<PesanModel>();
                     for (int i = 0; i < response.body().getData().size();i++){
-                        tanggal     = response.body().getData().get(i).getDatez_ok();
+                        tanggal     = response.body().getData().get(i).getMessage_date();
                         mapel       = response.body().getData().get(i).getCources_name();
                         pesan       = response.body().getData().get(i).getMessage_cont();
                         guru        = response.body().getData().get(i).getSender_name();
@@ -266,4 +262,21 @@ public class PesanAnak extends AppCompatActivity {
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
+
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
 }
