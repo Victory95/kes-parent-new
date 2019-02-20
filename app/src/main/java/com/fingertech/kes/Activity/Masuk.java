@@ -76,6 +76,8 @@ import java.util.Calendar;
 import java.util.Date;
 import com.facebook.ProfileTracker;
 import com.facebook.AccessTokenTracker;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -123,7 +125,7 @@ public class Masuk extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton sign_in_button;
-
+    String firebase_token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -243,6 +245,21 @@ public class Masuk extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("EEEEEE, dd MMM yyyy, HH:mm");
         last_login = df.format(Calendar.getInstance().getTime());
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("coba", "getInstanceId failed", task.getException());
+                        return;
+                    }
+
+                    // Get new Instance ID token
+                    firebase_token = task.getResult().getToken();
+
+                    // Log and toast
+                    String msg = getString(R.string.msg_token_fmt, token);
+                    Log.d("Token", msg);
+                });
+
     }
 
     ///// check editext
@@ -342,7 +359,7 @@ public class Masuk extends AppCompatActivity {
     public void login_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), deviceid.toString());
+        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), deviceid.toString(),firebase_token);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

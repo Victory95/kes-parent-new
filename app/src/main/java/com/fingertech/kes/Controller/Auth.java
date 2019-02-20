@@ -40,7 +40,8 @@ public interface Auth {
     @POST("auth/kes_login")
     Call<JSONResponse>login_post(@Field("email") String email,
                                  @Field("password") String password,
-                                 @Field("device_id") String device_id);
+                                 @Field("device_id") String device_id,
+                                 @Field("firebase_token") String firebase_token);
 
     //////// Register Parent
     @FormUrlEncoded
