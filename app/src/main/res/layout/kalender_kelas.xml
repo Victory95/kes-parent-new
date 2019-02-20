@@ -61,6 +61,15 @@
         app:compactCalendarMultiEventIndicatorColor="#fff"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tidak ada event"
+        android:layout_margin="30dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:id="@+id/no_kalendar"
+        />
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_margin="20dp"

@@ -2,9 +2,13 @@ package com.fingertech.kes.Activity.Fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
 /**
@@ -25,32 +30,35 @@ public class MenuDuaFragment extends Fragment {
     public MenuDuaFragment() {
         // Required empty public constructor
     }
-
-
-    @SuppressLint("ResourceType")
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle bundle = this.getArguments();
-        if(bundle!=null){
-            authorization   = bundle.getString("authorization");
-            parent_nik      = bundle.getString("parent_nik");
-            member_id       = bundle.getString("member_id");
-            school_code     = bundle.getString("school_code");
-            student_id      = bundle.getString("student_id");
-            classroom_id    = bundle.getString("classroom_id");
-            school_name     = bundle.getString("school_name");
-        }
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        getActivity().setContentView(R.layout.fragment_menu_dua);
+//        ViewPager vp = new ViewPager(getContext());
+//        vp.setId(R.id.PagerUtama);
+//
+//    }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_kalender,btn_pesan;
+    SharedPreferences sharedPreferences;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_dua, container, false);
+
         btn_kalender    = view.findViewById(R.id.btn_kalender);
         btn_pesan       = view.findViewById(R.id.btn_pesan);
+
+        sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        member_id           = sharedPreferences.getString("member_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        parent_nik          = sharedPreferences.getString("parent_nik",null);
+
         btn_kalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
