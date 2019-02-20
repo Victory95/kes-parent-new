@@ -479,10 +479,6 @@ public class DataFragment extends Fragment  {
                                 tv.setTextColor(Color.BLACK);
                             }
                             return view;
-
-
-
-
                         }
                     };
 

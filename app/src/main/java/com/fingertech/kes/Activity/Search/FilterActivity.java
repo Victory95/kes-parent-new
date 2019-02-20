@@ -49,13 +49,13 @@ public class FilterActivity extends AppCompatActivity {
 
         recyclerView           = findViewById(R.id.recycleBookmark);
         delete                 = recyclerView.findViewById(R.id.BookMark);
-        searchView             = (SearchView)findViewById(R.id.search_filter);
+        searchView             = findViewById(R.id.search_filter);
         layoutManager          = new LinearLayoutManager(this);
-        ToolBarAtas2           = (Toolbar)findViewById(R.id.toolbar_back);
+        ToolBarAtas2           = findViewById(R.id.toolbar_back);
         bookmarkAdapter        = new BookmarkAdapter(itemList,FilterActivity.this);
-        slidingUpPanelLayout   = (SlidingUpPanelLayout)findViewById(R.id.sliding);
-        filter                 = (Button)findViewById(R.id.filter);
-        arrof                  = (Button)findViewById(R.id.arrowF);
+        slidingUpPanelLayout   = findViewById(R.id.sliding);
+        filter                 = findViewById(R.id.filter);
+        arrof                  = findViewById(R.id.arrowF);
         searchManager          = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
 
         recyclerView.setLayoutManager(layoutManager);
@@ -69,25 +69,14 @@ public class FilterActivity extends AppCompatActivity {
         slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
 
-        filter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-            }
-        });
-        slidingUpPanelLayout.setFadeOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-            }
-        });
+        filter.setOnClickListener(v ->
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED));
 
-        arrof.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-            }
-        });
+        slidingUpPanelLayout.setFadeOnClickListener(view ->
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN));
+
+        arrof.setOnClickListener(v ->
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN));
 
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
@@ -122,26 +111,23 @@ public class FilterActivity extends AppCompatActivity {
             itemList.add(data);
         }
         bookmarkAdapter.notifyDataSetChanged();
-        bookmarkAdapter.setOnItemClickListener(new BookmarkAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                latitude     = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
-                longitude    = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
-                String poster   = row.get(position).get(Data.KEY_Name);
-                String title    = row.get(position).get(Data.KEY_ALAMAT);
-                String jenjang  = row.get(position).get(Data.KEY_JENJANG);
-                String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
+        bookmarkAdapter.setOnItemClickListener((view, position) -> {
+            latitude     = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
+            longitude    = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
+            String poster   = row.get(position).get(Data.KEY_Name);
+            String title    = row.get(position).get(Data.KEY_ALAMAT);
+            String jenjang  = row.get(position).get(Data.KEY_JENJANG);
+            String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
 
-                Intent intent = new Intent(FilterActivity.this,SearchingMAP.class);
-                intent.putExtra("latitude",latitude);
-                intent.putExtra("longitude", longitude);
-                intent.putExtra("jenjang",jenjang);
-                intent.putExtra("schoolid",schoolid);
-                intent.putExtra("namasekolah",poster);
-                intent.putExtra("alamat",title);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+            Intent intent = new Intent(FilterActivity.this,SearchingMAP.class);
+            intent.putExtra("latitude",latitude);
+            intent.putExtra("longitude", longitude);
+            intent.putExtra("jenjang",jenjang);
+            intent.putExtra("schoolid",schoolid);
+            intent.putExtra("namasekolah",poster);
+            intent.putExtra("alamat",title);
+            setResult(RESULT_OK, intent);
+            finish();
         });
     }
 

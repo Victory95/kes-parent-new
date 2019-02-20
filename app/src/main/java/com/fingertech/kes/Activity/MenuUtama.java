@@ -64,6 +64,7 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
@@ -350,20 +351,7 @@ public class MenuUtama extends AppCompatActivity
                     String msg = getString(R.string.msg_token_fmt, token);
                     Log.d("Token", msg);
                 });
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.fingertech.kes",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.d("nama not found : ", ""+e.fillInStackTrace());
-        } catch (NoSuchAlgorithmException e) {
-            Log.d("gala not found : ", ""+e.fillInStackTrace());
-        }
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -601,11 +589,13 @@ public class MenuUtama extends AppCompatActivity
                         String picture = response.body().getData().getPicture();
                         String nama    = response.body().getData().getFullname();
                         String member  = response.body().getData().getMember_Type();
-                        String count   = response.body().getData().getParent_Count();
+                        String count   = response.body().getData().getTotal_Children();
                         tv_profile.setText(nama);
 
                         String imagefile = Base_url + picture;
-
+                        if (picture.equals("")){
+                            Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);
+                        }
                         Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
@@ -668,6 +658,7 @@ public class MenuUtama extends AppCompatActivity
             bundle.putString("member_id", parent_id);
             bundle.putString("authorization", authorization);
             bundle.putString("classroom_id", classroom_id);
+            bundle.putString("school_name",school_name);
             MenuDuaFragment menuSatuFragment = new MenuDuaFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

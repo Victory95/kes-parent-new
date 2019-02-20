@@ -956,7 +956,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
                 if (status == 1 && code.equals("SOP_SCS_0001")) {
                     for (int i = 0; i < response.body().getData().size(); i++) {
-                        Toast.makeText(getApplicationContext(), SOP_SCS_0001, Toast.LENGTH_LONG).show();
                         double lat          = response.body().getData().get(i).getLatitude();
                         double lng          = response.body().getData().get(i).getLongitude();
                         String nama         = response.body().getData().get(i).getSchoolName();

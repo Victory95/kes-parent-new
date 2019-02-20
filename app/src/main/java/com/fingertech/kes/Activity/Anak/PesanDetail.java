@@ -55,22 +55,19 @@ public class PesanDetail extends AppCompatActivity {
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
         dapat_pesan();
 
-        balas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PesanDetail.this,BalasPesan.class);
-                intent.putExtra("authorization",authorization);
-                intent.putExtra("school_code",school_code);
-                intent.putExtra("parent_id",parent_id);
-                intent.putExtra("message_id",message_id);
-                intent.putExtra("parent_message_id",parent_message_id);
-                intent.putExtra("guru",dibuat.getText().toString());
-                intent.putExtra("sekolah",sekolah.getText().toString());
-                intent.putExtra("anak",anak.getText().toString());
-                intent.putExtra("kelas",kelas.getText().toString());
-                intent.putExtra("mapel",mapel.getText().toString());
-                startActivity(intent);
-            }
+        balas.setOnClickListener(v -> {
+            Intent intent = new Intent(PesanDetail.this,BalasPesan.class);
+            intent.putExtra("authorization",authorization);
+            intent.putExtra("school_code",school_code);
+            intent.putExtra("parent_id",parent_id);
+            intent.putExtra("message_id",message_id);
+            intent.putExtra("parent_message_id",parent_message_id);
+            intent.putExtra("guru",dibuat.getText().toString());
+            intent.putExtra("sekolah",sekolah.getText().toString());
+            intent.putExtra("anak",anak.getText().toString());
+            intent.putExtra("kelas",kelas.getText().toString());
+            intent.putExtra("mapel",mapel.getText().toString());
+            startActivity(intent);
         });
     }
     @Override
@@ -80,7 +77,6 @@ public class PesanDetail extends AppCompatActivity {
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
     public boolean onCreateOptionsMenu(Menu menu) {

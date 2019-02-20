@@ -3575,6 +3575,18 @@ public class JSONResponse{
 
         @SerializedName("Publish")
         private String publish;
+
+        @SerializedName("Total_Children")
+        private String Total_Children;
+
+        public String getTotal_Children() {
+            return Total_Children;
+        }
+
+        public void setTotal_Children(String total_Children) {
+            Total_Children = total_Children;
+        }
+
         public String getMember_Code() {
             return Member_Code;
         }
@@ -7256,9 +7268,6 @@ public class JSONResponse{
             this.status = status;
         }
     }
-
-
-
     public class DataMapel{
 
         @SerializedName("courcesid")
@@ -7382,4 +7391,92 @@ public class JSONResponse{
             this.religion_type = religion_type;
         }
     }
+
+    ///// Response List Guru
+    public class ListTeacher{
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        @Expose
+        public List<DataGuru> data;
+
+        @SerializedName("status")
+        public int status;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataGuru> getData() {
+            return data;
+        }
+
+        public void setData(List<DataGuru> data) {
+            this.data = data;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+    public class DataGuru {
+        @SerializedName("teacher_id")
+        public String teacher_id;
+
+        @SerializedName("nig")
+        public String nig;
+
+        @SerializedName("fullname")
+        public String fullname;
+
+        public String getTeacher_id() {
+            return teacher_id;
+        }
+
+        public void setTeacher_id(String teacher_id) {
+            this.teacher_id = teacher_id;
+        }
+
+        public String getNig() {
+            return nig;
+        }
+
+        public void setNig(String nig) {
+            this.nig = nig;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
+        }
+    }
+
+    ///// Response Kirim Pesan
+    public class KirimPesan{
+        @SerializedName("status")
+        public Integer status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public String data;
+
+    }
+
+
+
+
 }

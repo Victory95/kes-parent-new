@@ -46,7 +46,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/sekolah_pesan"/>
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:paddingStart="10dp"
+                        android:id="@+id/sekolah_pesan"
+                        tools:ignore="RtlSymmetry" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -69,7 +73,11 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/kelas_pesan"/>
+                        android:gravity="center_vertical"
+                        android:textColor="@color/black"
+                        android:paddingStart="10dp"
+                        android:id="@+id/kelas_pesan"
+                        tools:ignore="RtlSymmetry" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -91,21 +99,23 @@
                     android:background="@drawable/tab_semester">
 
                     <com.rey.material.widget.Spinner
-                    style="@style/Material.Widget.Spinner"
-                    android:id="@+id/sp_guru"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:background="@android:color/transparent"
-                    android:spinnerMode="dropdown"
-                    app:rd_style="@style/Material.Drawable.Ripple.Wave"
-                    app:spn_arrowAnimClockwise="true"
-                    app:spn_dividerColor="@color/colorPrimary"
-                    app:spn_dividerHeight="1dp"
-                    app:spn_arrowSwitchMode="true"
-                    app:spn_arrowAnimDuration="300"
-                    app:spn_arrowColor="@color/colorPrimary"/>
+                        style="@style/Material.Widget.Spinner"
+                        android:id="@+id/sp_guru"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:background="@android:color/transparent"
+                        android:spinnerMode="dropdown"
+                        app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                        app:spn_arrowAnimClockwise="true"
+                        app:spn_dividerColor="@color/colorPrimary"
+                        app:spn_dividerHeight="1dp"
+                        app:spn_arrowSwitchMode="true"
+                        app:spn_arrowAnimDuration="300"
+                        app:spn_arrowColor="@color/colorPrimary"
+                        tools:ignore="RtlSymmetry" />
             </LinearLayout>
             </LinearLayout>
                 <LinearLayout
@@ -132,6 +142,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
+                            android:paddingStart="10dp"
                             android:background="@android:color/transparent"
                             android:spinnerMode="dropdown"
                             app:rd_style="@style/Material.Drawable.Ripple.Wave"
@@ -140,7 +151,8 @@
                             app:spn_dividerHeight="1dp"
                             app:spn_arrowSwitchMode="true"
                             app:spn_arrowAnimDuration="300"
-                            app:spn_arrowColor="@color/colorPrimary"/>
+                            app:spn_arrowColor="@color/colorPrimary"
+                            tools:ignore="RtlSymmetry" />
                     </LinearLayout>
                 </LinearLayout>
         <TextView
@@ -165,6 +177,7 @@
                 android:paddingBottom="10dp"
                 android:gravity="start"
                 android:textSize="13sp"
+                android:id="@+id/et_pesan"
                 android:background="@drawable/tab_semester"
                 android:theme="@style/TextLabelView"/>
         </android.support.v7.widget.CardView>

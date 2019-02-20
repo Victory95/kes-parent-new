@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity.Adapter;
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,9 @@ import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.JSONResponse;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class PesanAdapter extends RecyclerView.Adapter<PesanAdapter.MyHolder> {
 
@@ -48,7 +51,7 @@ public class PesanAdapter extends RecyclerView.Adapter<PesanAdapter.MyHolder> {
         // Get car item dto in list.
         PesanModel viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.tanggal.setText(Html.fromHtml(viewItem.getTanggal()));
+        holder.tanggal.setText(convertDate(viewItem.getTanggal()));
         holder.mapel.setText(viewItem.getMapel());
         holder.guru.setText(viewItem.getDari());
         holder.pesan.setText(viewItem.getPesan());
@@ -69,9 +72,9 @@ public class PesanAdapter extends RecyclerView.Adapter<PesanAdapter.MyHolder> {
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
             tanggal = (TextView) itemView.findViewById(R.id.tanggal_pesan);
-            mapel   = (TextView) itemView.findViewById(R.id.mata_pelajaran_pesan);
-            guru    = itemView.findViewById(R.id.guru);
-            pesan   = itemView.findViewById(R.id.pesan);
+            mapel   = (TextView) itemView.findViewById(R.id.mapel_pesan);
+            guru    = itemView.findViewById(R.id.pengirim_pesan);
+            pesan   = itemView.findViewById(R.id.desc_pesan);
             kelas   = itemView.findViewById(R.id.kelas);
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;
@@ -85,5 +88,16 @@ public class PesanAdapter extends RecyclerView.Adapter<PesanAdapter.MyHolder> {
     public interface OnItemClickListener {
 
         void onItemClick(View view, int position);
+    }
+    String convertDate(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }
