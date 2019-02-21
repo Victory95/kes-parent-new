@@ -62,7 +62,6 @@ public class PesanAnak extends AppCompatActivity {
     String tanggal,kelas,mapel,pesan,guru,classroom_id,school_name,student_id;
     ProgressDialog dialog;
     TextView no_pesan;
-    SwipeRefreshLayout swipeRefreshLayout;
     FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +71,9 @@ public class PesanAnak extends AppCompatActivity {
         date_from       = findViewById(R.id.et_dari);
         date_to         = findViewById(R.id.et_sampai);
         go              = findViewById(R.id.btn_go);
-        recyclerView    = findViewById(R.id.recycle_pesan);
-        no_pesan        = findViewById(R.id.no_pesan);
+        recyclerView    = findViewById(R.id.rv_pesan);
+        no_pesan        = findViewById(R.id.tv_no_pesan);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         fab             = findViewById(R.id.fab);
 
         authorization   = getIntent().getStringExtra("authorization");
@@ -126,7 +124,7 @@ public class PesanAnak extends AppCompatActivity {
                 (datepicker, selectedyear, selectedmonth, selectedday) ->
                         date_to.setText(convertDate(selectedyear, selectedmonth, selectedday)), mYear, mMonth, mDay);
 
-        date_to.setText(dateFormat.format(Calendar.getInstance().getTime()));
+        date_to.setText(converDate(dateFormat.format(Calendar.getInstance().getTime())));
 
         date_to.setOnClickListener(view -> datePickerDialog.show());
 
@@ -137,18 +135,10 @@ public class PesanAnak extends AppCompatActivity {
         });
 
         go.setOnClickListener(v -> dapat_pesan());
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            int Refreshcounter = 1;
-            @Override
-            public void onRefresh() {
-                dapat_pesan();
-                Refreshcounter = Refreshcounter + 1;
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+
         if (authorization != null || school_code != null || parent_id != null || date_from.getText().toString().equals("") || date_to.getText().toString().equals("")){
-            date_from.setText("2018-12-12");
-            date_to.setText(dateFormat.format(Calendar.getInstance().getTime()));
+            date_from.setText(converDate("2018-12-30"));
+            date_to.setText(converDate(dateFormat.format(Calendar.getInstance().getTime())));
             dapat_pesan();
         }else {
             Toast.makeText(getApplicationContext(),authorization+"/"+school_code+"/"+parent_id,Toast.LENGTH_LONG).show();
@@ -172,10 +162,34 @@ public class PesanAnak extends AppCompatActivity {
     String convertDate(int year, int month, int day) {
         Log.d("Tanggal", year + "/" + month + "/" + day);
         String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    String converDate(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTanggal(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();
@@ -186,7 +200,7 @@ public class PesanAnak extends AppCompatActivity {
     public void dapat_pesan(){
         progressBar();
         showDialog();
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.getText().toString(),date_to.getText().toString());
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),convertTanggal(date_from.getText().toString()),convertTanggal(date_to.getText().toString()));
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {

@@ -65,6 +65,8 @@
             android:layout_marginLeft="35dp"
             android:textSize="18sp"
             android:id="@+id/tv_filter"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
 

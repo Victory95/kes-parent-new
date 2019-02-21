@@ -767,8 +767,8 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     jenis_tinggal       = response.body().data.getJenis_tinggal();
                     transportasi        = response.body().data.getTransportasi();
                     alamat              = response.body().data.getAddress();
-                    CurrentLatitude     = response.body().data.getLatitude();
-                    CurrentLongitude    = response.body().data.getLongitude();
+                    CurrentLatitude     = Double.parseDouble(response.body().data.getLatitude());
+                    CurrentLongitude    = Double.parseDouble(response.body().data.getLongitude());
                     classroom_id        = response.body().getData().getClassroom_id();
                     picture             = response.body().getData().getPicture();
 

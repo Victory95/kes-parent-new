@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +67,7 @@ public class KalenderKelas extends AppCompatActivity {
     Date date;
     String calendar_id,calendar_type,calendar_desc,calendar_time,calendar_date,calendar_title;
     Toolbar toolbar;
+    CardView cv_event;
     TextView kalendar;
 
     @Override
@@ -73,7 +75,7 @@ public class KalenderKelas extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kalender_kelas);
 
-        compactCalendarView = (CompactCalendarView)findViewById(R.id.compactcalendar_view);
+        compactCalendarView = findViewById(R.id.compactcalendar_view);
         month_calender      = findViewById(R.id.month_calender);
         left_month          = findViewById(R.id.left_calender);
         right_month         = findViewById(R.id.right_calender);
@@ -81,6 +83,7 @@ public class KalenderKelas extends AppCompatActivity {
         recyclerView        = findViewById(R.id.recylceview_calendar);
         toolbar             = findViewById(R.id.toolbar_kalendar);
         kalendar            = findViewById(R.id.no_kalendar);
+        cv_event            = findViewById(R.id.event);
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         classroom_id        = getIntent().getStringExtra("classroom_id");
@@ -102,8 +105,7 @@ public class KalenderKelas extends AppCompatActivity {
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
-                Context context = getApplicationContext();
-                Toast.makeText(context,""+dateClicked,Toast.LENGTH_LONG).show();
+                compactCalendarView.setCurrentDayBackgroundColor(R.color.transparent);
             }
 
             @Override
@@ -126,37 +128,24 @@ public class KalenderKelas extends AppCompatActivity {
                 dapat_calendar();
             }
         });
-        left_month.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                compactCalendarView.scrollLeft();
-            }
-        });
-        right_month.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                compactCalendarView.scrollRight();
-            }
-        });
+        left_month.setOnClickListener(v -> compactCalendarView.scrollLeft());
+        right_month.setOnClickListener(v -> compactCalendarView.scrollRight());
         calendarModelList = new ArrayList<CalendarModel>();
         dapat_calendar();
 
         calendarAdapter = new CalendarAdapter(calendarModelList);
-        calendarAdapter.setOnItemClickListener(new CalendarAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (calendarModelList.get(position).getCalendar_type().equals("4")) {
-                    Toast.makeText(getApplicationContext(),calendarModelList.get(position).getCalendar_title(),Toast.LENGTH_LONG).show();
-                }else {
-                    calendar_date = calendarModelList.get(position).getCalendar_date();
-                    calendar_time = calendarModelList.get(position).getCalendar_time();
-                    calendar_id = calendarModelList.get(position).getCalendar_id();
-                    Intent intent = new Intent(KalenderKelas.this, KalendarDetail.class);
-                    intent.putExtra("authorization", authorization);
-                    intent.putExtra("school_code", school_code);
-                    intent.putExtra("calendar_id", calendar_id);
-                    startActivity(intent);
-                }
+        calendarAdapter.setOnItemClickListener((view, position) -> {
+            if (calendarModelList.get(position).getCalendar_type().equals("4")) {
+                Toast.makeText(getApplicationContext(),calendarModelList.get(position).getCalendar_title(),Toast.LENGTH_LONG).show();
+            }else {
+                calendar_date = calendarModelList.get(position).getCalendar_date();
+                calendar_time = calendarModelList.get(position).getCalendar_time();
+                calendar_id = calendarModelList.get(position).getCalendar_id();
+                Intent intent = new Intent(KalenderKelas.this, KalendarDetail.class);
+                intent.putExtra("authorization", authorization);
+                intent.putExtra("school_code", school_code);
+                intent.putExtra("calendar_id", calendar_id);
+                startActivity(intent);
             }
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(KalenderKelas.this);
@@ -182,7 +171,8 @@ public class KalenderKelas extends AppCompatActivity {
                 status = resource.status;
                 code   = resource.code;
                 if (status == 1 & code.equals("DTS_SCS_0001")) {
-
+                    recyclerView.setVisibility(View.VISIBLE);
+                    kalendar.setVisibility(View.GONE);
                     if (response.body().getData() != null) {
                         List<JSONResponse.DataCalendar> calendarList = response.body().getData();
                         if (calendarModelList != null) {
@@ -232,24 +222,21 @@ public class KalenderKelas extends AppCompatActivity {
                             }
                             calendarAdapter.notifyDataSetChanged();
                             kalendar.setVisibility(View.GONE);
-                        } else if (calendarModelList.size() == 0) {
-                            calendarModelList.clear();
-                            kalendar.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.GONE);
-                            calendarAdapter.notifyDataSetChanged();
                         }
-                    }else {
-                        calendarModelList.clear();
-                        kalendar.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                        calendarAdapter.notifyDataSetChanged();
                     }
+                }
+                else if (status == 0 &&code.equals("DTS_ERR_0001")){
+//                    calendarModelList.clear();
+                    kalendar.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    cv_event.setVisibility(View.GONE);
+//                    calendarAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onFailure(Call<JSONResponse.ClassCalendar> call, Throwable t) {
-
+                Log.d("onFailure",t.toString());
             }
         });
     }

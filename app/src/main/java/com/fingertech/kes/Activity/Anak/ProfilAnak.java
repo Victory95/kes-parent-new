@@ -355,8 +355,8 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     statustinggal       = response.body().getData().getJenis_tinggal();
                     transport           = response.body().getData().getTransportasi();
                     foto                = response.body().getData().getPicture();
-                    latitudeanak        = response.body().getData().getLatitude();
-                    longitudeanak       = response.body().getData().getLongitude();
+                    latitudeanak        = Double.parseDouble(response.body().getData().getLatitude());
+                    longitudeanak       = Double.parseDouble(response.body().getData().getLongitude());
 
                     if (kelas.toString().equals("4")){
                         kelas = "1 SD";

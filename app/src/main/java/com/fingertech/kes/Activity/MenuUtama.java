@@ -34,6 +34,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
@@ -354,7 +355,6 @@ public class MenuUtama extends AppCompatActivity
                 String msg = getString(R.string.msg_token_fmt, token);
                 Log.d("Token", msg);
             });
-
     }
 
     private boolean isGooglePlayServicesAvailable() {

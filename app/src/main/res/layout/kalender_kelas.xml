@@ -19,12 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:background="@drawable/tab_semester">
+        android:background="@drawable/tab_bulan">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:background="@drawable/ic_left_arrow_black"
+            android:background="@drawable/ic_left_arrow"
             android:id="@+id/left_calender"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
@@ -34,14 +34,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="@color/black"
+            android:textColor="@color/ic_logo_background"
             android:id="@+id/month_calender"
             android:layout_weight="1"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/right_calender"
-            android:background="@drawable/ic_arrow_black"
+            android:background="@drawable/ic_arrow"
             android:layout_weight="3"/>
     </LinearLayout>
 
@@ -54,11 +54,15 @@
         android:layout_height="250dp"
         app:compactCalendarTargetHeight="250dp"
         app:compactCalendarTextSize="12sp"
-        app:compactCalendarBackgroundColor="@color/ic_logo_background"
-        app:compactCalendarTextColor="@color/black"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimaryDark"
-        app:compactCalendarCurrentDayBackgroundColor="@color/colorPrimary"
+        app:compactCalendarBackgroundColor="@color/colorPrimary"
+        app:compactCalendarTextColor="@color/ic_logo_background"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/ic_logo_background"
+        app:compactCalendarCurrentDayBackgroundColor="@color/ic_logo_background"
         app:compactCalendarMultiEventIndicatorColor="#fff"
+        app:compactCalendarCurrentDayTextColor="@color/black"
+        app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
+        app:compactCalendarCurrentSelectedDayTextColor="@color/colorPrimary"
+        app:compactCalendarOtherMonthDaysTextColor="@color/red_500"
         />
 
     <TextView
@@ -74,6 +78,7 @@
         android:layout_width="match_parent"
         android:layout_margin="20dp"
         android:layout_height="wrap_content"
+        android:id="@+id/event"
         app:cardCornerRadius="10dp">
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recylceview_calendar"

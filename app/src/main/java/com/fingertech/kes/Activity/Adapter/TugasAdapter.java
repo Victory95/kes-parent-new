@@ -105,6 +105,44 @@ public class TugasAdapter extends RecyclerView.Adapter<TugasAdapter.MyHolder> {
             }
         };
     }
+    public Filter getfilter(String searchString) {
+        this.searchString = searchString;
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+
+                    viewItemList = itemUjianList;
+                } else {
+
+                    ArrayList<TugasModel> filteredList = new ArrayList<>();
+
+                    for (TugasModel androidVersion : itemUjianList) {
+
+                        if (androidVersion.getMapel().toLowerCase().contains(searchString) && androidVersion.getType_id().toLowerCase().contains(charString) ) {
+
+                            filteredList.add(androidVersion);
+                        }
+                    }
+
+                    viewItemList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = viewItemList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                viewItemList = (ArrayList<TugasModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tanggal,mapel,type_id,nilai,guru,deskripsi;
         OnItemClickListener onItemClickListener;
