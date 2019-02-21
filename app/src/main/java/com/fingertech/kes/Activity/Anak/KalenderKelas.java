@@ -66,6 +66,7 @@ public class KalenderKelas extends AppCompatActivity {
     Date date;
     String calendar_id,calendar_type,calendar_desc,calendar_time,calendar_date,calendar_title;
     Toolbar toolbar;
+    TextView kalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class KalenderKelas extends AppCompatActivity {
         mApiInterface       = ApiClient.getClient().create(Auth.class);
         recyclerView        = findViewById(R.id.recylceview_calendar);
         toolbar             = findViewById(R.id.toolbar_kalendar);
+        kalendar            = findViewById(R.id.no_kalendar);
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         classroom_id        = getIntent().getStringExtra("classroom_id");
@@ -179,9 +181,10 @@ public class KalenderKelas extends AppCompatActivity {
                 JSONResponse.ClassCalendar resource = response.body();
                 status = resource.status;
                 code   = resource.code;
-                if (status == 1 & code.equals("DTS_SCS_0001")){
+                if (status == 1 & code.equals("DTS_SCS_0001")) {
 
-                    List<JSONResponse.DataCalendar> calendarList = response.body().getData();
+                    if (response.body().getData() != null) {
+                        List<JSONResponse.DataCalendar> calendarList = response.body().getData();
                         if (calendarModelList != null) {
                             calendarModelList.clear();
                             for (JSONResponse.DataCalendar calendar : calendarList) {
@@ -189,10 +192,10 @@ public class KalenderKelas extends AppCompatActivity {
                                 calendar_date = calendar.getCalendar_date();
                                 calendar_time = calendar.getCalendar_time();
                                 calendar_type = calendar.getCalendar_type();
-                                if (calendar_type.equals("1")){
-                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm",Locale.getDefault());
+                                if (calendar_type.equals("1")) {
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
                                     try {
-                                        date = format.parse(calendar_date+" "+calendar_time);
+                                        date = format.parse(calendar_date + " " + calendar_time);
 
                                     } catch (ParseException e) {
                                         e.printStackTrace();
@@ -203,8 +206,8 @@ public class KalenderKelas extends AppCompatActivity {
                                     eventList = getevent(times);
                                     compactCalendarView.addEvents(eventList);
 
-                                }else if (calendar_type.equals("4")){
-                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+                                } else if (calendar_type.equals("4")) {
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                                     try {
                                         date = format.parse(calendar_date);
 
@@ -214,7 +217,7 @@ public class KalenderKelas extends AppCompatActivity {
                                     cal.setTime(date);
                                     setToMidnight(cal);
                                     Long times = cal.getTimeInMillis();
-                                    events  = getEventList(times);
+                                    events = getEventList(times);
                                     compactCalendarView.addEvents(events);
                                 }
 
@@ -228,7 +231,19 @@ public class KalenderKelas extends AppCompatActivity {
                                 calendarModelList.add(calendarModel);
                             }
                             calendarAdapter.notifyDataSetChanged();
+                            kalendar.setVisibility(View.GONE);
+                        } else if (calendarModelList.size() == 0) {
+                            calendarModelList.clear();
+                            kalendar.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            calendarAdapter.notifyDataSetChanged();
                         }
+                    }else {
+                        calendarModelList.clear();
+                        kalendar.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        calendarAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 

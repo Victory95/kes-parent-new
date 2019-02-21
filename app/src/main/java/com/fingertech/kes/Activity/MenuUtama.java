@@ -77,6 +77,7 @@ import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
+import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Controller.Auth;
@@ -150,7 +151,9 @@ public class MenuUtama extends AppCompatActivity
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
 
     Auth mApiInterface;
-    SharedPreferences sharedpreferences;
+    SharedPreferences sharedpreferences,sharedviewpager;
+
+    public static final String my_viewpager_preferences = "my_viewpager_preferences";
 
     public static final String TAG_EMAIL        = "email";
     public static final String TAG_FULLNAME     = "fullname";
@@ -196,7 +199,8 @@ public class MenuUtama extends AppCompatActivity
     private TextView countTextView;
     private int alertCount = 0;
     List<JSONResponse.DataList>dataLists = new ArrayList<>();
-
+    InkPageIndicator inkPageIndicator;
+    MapWrapperLayout mapWrapperLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,28 +220,25 @@ public class MenuUtama extends AppCompatActivity
         map_menu            = findViewById(R.id.map_menu);
         recycle_menu        = findViewById(R.id.recycler_view_menu);
         viewpager           = findViewById(R.id.viewpager);
-        tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
-        imageView           = (CircleImageView) findViewById(R.id.image_anak);
-        namaanak            = (TextView)findViewById(R.id.nama_anak);
-        swipeRefreshLayout  = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        tambah_anak         = findViewById(R.id.btn_tambah);
+        imageView           = findViewById(R.id.image_anak);
+        namaanak            = findViewById(R.id.nama_anak);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         recycleview_ln      = findViewById(R.id.recycler_profile_view);
         recyclerView        = findViewById(R.id.recycle_profile);
-
+        inkPageIndicator    = findViewById(R.id.indicators);
+        mapWrapperLayout    = findViewById(R.id.map_relative_layout);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         customCarouselView.setPageCount(sampleImages.length);
         customCarouselView.setSlideInterval(4000);
         customCarouselView.setViewListener(viewListener);
-        customCarouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
+        customCarouselView.setImageClickListener(position -> {
 //                Toast.makeText(MenuUtama.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
-            }
         });
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -257,8 +258,10 @@ public class MenuUtama extends AppCompatActivity
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
+        sharedviewpager = getSharedPreferences(my_viewpager_preferences,Context.MODE_PRIVATE);
+
         ParentPager.setAdapter(fragmentAdapter);
-        InkPageIndicator inkPageIndicator = findViewById(R.id.indicators);
+
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
@@ -274,7 +277,7 @@ public class MenuUtama extends AppCompatActivity
         });
 
 
-        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+
         mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
@@ -316,6 +319,7 @@ public class MenuUtama extends AppCompatActivity
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
         ParentPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -339,20 +343,17 @@ public class MenuUtama extends AppCompatActivity
             }
         });
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("coba", "getInstanceId failed", task.getException());
-                        return;
-                    }
-
-                    // Get new Instance ID token
-                    String token = task.getResult().getToken();
-
-                    // Log and toast
-                    String msg = getString(R.string.msg_token_fmt, token);
-                    Log.d("Token", msg);
-                });
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w("coba", "getInstanceId failed", task.getException());
+                    return;
+                }
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+                // Log and toast
+                String msg = getString(R.string.msg_token_fmt, token);
+                Log.d("Token", msg);
+            });
 
     }
 
@@ -371,7 +372,7 @@ public class MenuUtama extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -386,20 +387,19 @@ public class MenuUtama extends AppCompatActivity
     }
 
     ViewListener viewListener = new ViewListener() {
-            @Override
-            public View setViewForPosition(final int position) {
-        View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
-        TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
-        ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
-        Button Baca     = (Button) customView.findViewById(R.id.baca);
-        Baca.setVisibility(View.GONE);
-        fruitImageView.setImageResource(sampleImages[position]);
-//        labelTextView.setText(sampleTitles[position]);
-        Baca.setOnClickListener(view -> {
+        @Override
+        public View setViewForPosition(final int position) {
+            View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
+            TextView labelTextView      = customView.findViewById(R.id.labelTextView);
+            ImageView fruitImageView    = customView.findViewById(R.id.fruitImageView);
+            Button Baca                 = customView.findViewById(R.id.baca);
+            Baca.setVisibility(View.GONE);
+            fruitImageView.setImageResource(sampleImages[position]);
+//          labelTextView.setText(sampleTitles[position]);
+            Baca.setOnClickListener(view -> {
 //            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
-});
-        customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
-
+            });
+            customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
         return customView;
         }
     };
@@ -450,7 +450,7 @@ public class MenuUtama extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -613,8 +613,6 @@ public class MenuUtama extends AppCompatActivity
                         recycleview_ln.setVisibility(GONE);
                         viewpager.setVisibility(GONE);
                     }
-
-
                 }
 
             }
@@ -632,6 +630,15 @@ public class MenuUtama extends AppCompatActivity
     public void send_data(){
         Bundle bundle = new Bundle();
         if (bundle != null) {
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putString("member_id",parent_id);
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("parent_nik",parent_nik);
+            editor.putString("school_name",school_name);
+            editor.putString("student_id",student_id);
+            editor.commit();
             bundle.putString("parent_nik", parent_nik);
             bundle.putString("student_id", student_id);
             bundle.putString("school_code", school_code);
@@ -639,13 +646,13 @@ public class MenuUtama extends AppCompatActivity
             bundle.putString("authorization", authorization);
             bundle.putString("classroom_id", classroom_id);
             bundle.putString("school_name",school_name);
-            MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
+            Fragment menuSatuFragment = null;
+            menuSatuFragment = new MenuSatuFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragMenuSatu, menuSatuFragment);
-            fragmentTransaction.addToBackStack(null);
-            Log.d("APPTAG", "Fragment: "+ getSupportFragmentManager().findFragmentById(R.id.fragMenuSatu));
-            fragmentTransaction.commit();
+            fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
+            fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
+            fragmentTransaction.commitAllowingStateLoss();
             menuSatuFragment.setArguments(bundle);
         }else {
             Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
@@ -654,9 +661,16 @@ public class MenuUtama extends AppCompatActivity
 
     public void send_data2(){
         Bundle bundle = new Bundle();
-
         if (bundle != null) {
-
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putString("member_id",parent_id);
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("parent_nik",parent_nik);
+            editor.putString("school_name",school_name);
+            editor.putString("student_id",student_id);
+            editor.commit();
             bundle.putString("parent_nik", parent_nik);
             bundle.putString("student_id", student_id);
             bundle.putString("school_code", school_code);
@@ -664,21 +678,19 @@ public class MenuUtama extends AppCompatActivity
             bundle.putString("authorization", authorization);
             bundle.putString("classroom_id", classroom_id);
             bundle.putString("school_name",school_name);
-            MenuDuaFragment menuSatuFragment = new MenuDuaFragment();
+            Fragment menuDuaFragment = null;
+            menuDuaFragment = new MenuDuaFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragMenu2, menuSatuFragment);
-            Log.d("APPTAG", "Fragment: "+ getSupportFragmentManager().findFragmentById(R.id.fragMenu2));
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-            menuSatuFragment.setArguments(bundle);
-
+            fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
+            fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
+            fragmentTransaction.commitAllowingStateLoss();
+            menuDuaFragment.setArguments(bundle);
         }else {
             Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
         }
     }
-    public class FragmentAdapter extends FragmentStatePagerAdapter {
-
+    public static class FragmentAdapter extends FragmentStatePagerAdapter {
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -686,13 +698,10 @@ public class MenuUtama extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
-
             switch (position){
                 case 0:
-                    send_data();
                     return new MenuSatuFragment();
                 case 1:
-                    send_data2();
                     return new MenuDuaFragment();
             }
             return null;
@@ -975,7 +984,6 @@ public class MenuUtama extends AppCompatActivity
 
                     // Create the recyclerview.
                     snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
-                    snappyRecyclerView.setAdapter(profileAdapter);
                     // Create the grid layout manager with 2 columns.
                     final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -1158,124 +1166,6 @@ public class MenuUtama extends AppCompatActivity
         });
     }
 
-    public class SnappyLinearLayoutManager extends LinearLayoutManager implements MenuGuest.ISnappyLayoutManager {
-        // These variables are from android.widget.Scroller, which is used, via ScrollerCompat, by
-        // Recycler View. The scrolling distance calculation logic originates from the same place. Want
-        // to use their variables so as to approximate the look of normal Android scrolling.
-        // Find the Scroller fling implementation in android.widget.Scroller.fling().
-        private static final float INFLEXION = 0.35f; // Tension lines cross at (INFLEXION, 1)
-        private float DECELERATION_RATE = (float) (Math.log(0.78) / Math.log(0.9));
-        private  double FRICTION = 0.84;
-
-        private double deceleration;
-
-        public SnappyLinearLayoutManager(Context context) {
-            super(context);
-            calculateDeceleration(context);
-        }
-
-        public SnappyLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-            super(context, orientation, reverseLayout);
-            calculateDeceleration(context);
-        }
-
-        private void calculateDeceleration(Context context) {
-            deceleration = SensorManager.GRAVITY_EARTH // g (m/s^2)
-                    * 39.3700787 // inches per meter
-                    // pixels per inch. 160 is the "default" dpi, i.e. one dip is one pixel on a 160 dpi
-                    // screen
-                    * context.getResources().getDisplayMetrics().density * 160.0f * FRICTION;
-        }
-
-        @Override
-        public int getPositionForVelocity(int velocityX, int velocityY) {
-            if (getChildCount() == 0) {
-                return 0;
-            }
-            if (getOrientation() == HORIZONTAL) {
-                return calcPosForVelocity(velocityX, getChildAt(0).getLeft(), getChildAt(0).getWidth(),
-                        getPosition(getChildAt(0)));
-            } else {
-                return calcPosForVelocity(velocityY, getChildAt(0).getTop(), getChildAt(0).getHeight(),
-                        getPosition(getChildAt(0)));
-            }
-        }
-
-        private int calcPosForVelocity(int velocity, int scrollPos, int childSize, int currPos) {
-            final double dist = getSplineFlingDistance(velocity);
-
-            final double tempScroll = scrollPos + (velocity > 0 ? dist : -dist);
-
-            if (velocity < 0) {
-                // Not sure if I need to lower bound this here.
-                return (int) Math.max(currPos + tempScroll / childSize, 0);
-            } else {
-                return (int) (currPos + (tempScroll / childSize) + 1);
-            }
-        }
-
-        @Override
-        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-            final LinearSmoothScroller linearSmoothScroller =
-                    new LinearSmoothScroller(recyclerView.getContext()) {
-
-                        // I want a behavior where the scrolling always snaps to the beginning of
-                        // the list. Snapping to end is also trivial given the default implementation.
-                        // If you need a different behavior, you may need to override more
-                        // of the LinearSmoothScrolling methods.
-                        protected int getHorizontalSnapPreference() {
-                            return SNAP_TO_START;
-                        }
-
-                        protected int getVerticalSnapPreference() {
-                            return SNAP_TO_START;
-                        }
-
-                        @Override
-                        public PointF computeScrollVectorForPosition(int targetPosition) {
-                            return SnappyLinearLayoutManager.this
-                                    .computeScrollVectorForPosition(targetPosition);
-                        }
-                    };
-            linearSmoothScroller.setTargetPosition(position);
-            startSmoothScroll(linearSmoothScroller);
-
-        }
-
-        private double getSplineFlingDistance(double velocity) {
-            final double l = getSplineDeceleration(velocity);
-            final double decelMinusOne = DECELERATION_RATE - 1.0;
-            return ViewConfiguration.getScrollFriction() * deceleration
-                    * Math.exp(DECELERATION_RATE / decelMinusOne * l);
-        }
-
-        private double getSplineDeceleration(double velocity) {
-            return Math.log(INFLEXION * Math.abs(velocity)
-                    / (ViewConfiguration.getScrollFriction() * deceleration));
-        }
-
-        @Override
-        public int getFixScrollPos() {
-            if (this.getChildCount() == 0) {
-                return 0;
-            }
-
-            final View child = getChildAt(0);
-            final int childPos = getPosition(child);
-
-            if (getOrientation() == HORIZONTAL
-                    && Math.abs(child.getLeft()) > child.getMeasuredWidth() / 2) {
-                // Scrolled first view more than halfway offscreen
-                return childPos + 1;
-            } else if (getOrientation() == VERTICAL
-                    && Math.abs(child.getTop()) > child.getMeasuredWidth() / 2) {
-                // Scrolled first view more than halfway offscreen
-                return childPos + 1;
-            }
-            return childPos;
-        }
-
-    }
 
     private void setCameraWithCoordinationBounds(Route route) {
         LatLng southwest = route.getBound().getSouthwestCoordination().getCoordination();

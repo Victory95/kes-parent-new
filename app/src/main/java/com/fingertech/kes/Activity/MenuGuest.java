@@ -58,6 +58,7 @@ import com.fingertech.kes.Activity.Maps.OnInfoWindowElemTouchListener;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
+import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
@@ -824,141 +825,6 @@ public class MenuGuest extends AppCompatActivity
         });
     }
 
-    public interface ISnappyLayoutManager {
-
-        /**
-         * @param velocityX
-         * @param velocityY
-         * @return the resultant position from a fling of the given velocity.
-         */
-        int getPositionForVelocity(int velocityX, int velocityY);
-
-        /**
-         * @return the position this list must scroll to to fix a state where the
-         * views are not snapped to grid.
-         */
-        int getFixScrollPos();
-
-    }
-
-    public class SnappyLinearLayoutManager extends LinearLayoutManager implements ISnappyLayoutManager {
-        // These variables are from android.widget.Scroller, which is used, via ScrollerCompat, by
-        // Recycler View. The scrolling distance calculation logic originates from the same place. Want
-        // to use their variables so as to approximate the look of normal Android scrolling.
-        // Find the Scroller fling implementation in android.widget.Scroller.fling().
-        private static final float INFLEXION = 0.35f; // Tension lines cross at (INFLEXION, 1)
-        private float DECELERATION_RATE = (float) (Math.log(0.78) / Math.log(0.9));
-        private  double FRICTION = 0.84;
-
-        private double deceleration;
-
-        public SnappyLinearLayoutManager(Context context) {
-            super(context);
-            calculateDeceleration(context);
-        }
-
-        public SnappyLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
-            super(context, orientation, reverseLayout);
-            calculateDeceleration(context);
-        }
-
-        private void calculateDeceleration(Context context) {
-            deceleration = SensorManager.GRAVITY_EARTH // g (m/s^2)
-                    * 39.3700787 // inches per meter
-                    // pixels per inch. 160 is the "default" dpi, i.e. one dip is one pixel on a 160 dpi
-                    // screen
-                    * context.getResources().getDisplayMetrics().density * 160.0f * FRICTION;
-        }
-
-        @Override
-        public int getPositionForVelocity(int velocityX, int velocityY) {
-            if (getChildCount() == 0) {
-                return 0;
-            }
-            if (getOrientation() == HORIZONTAL) {
-                return calcPosForVelocity(velocityX, getChildAt(0).getLeft(), getChildAt(0).getWidth(),
-                        getPosition(getChildAt(0)));
-            } else {
-                return calcPosForVelocity(velocityY, getChildAt(0).getTop(), getChildAt(0).getHeight(),
-                        getPosition(getChildAt(0)));
-            }
-        }
-
-        private int calcPosForVelocity(int velocity, int scrollPos, int childSize, int currPos) {
-            final double dist = getSplineFlingDistance(velocity);
-
-            final double tempScroll = scrollPos + (velocity > 0 ? dist : -dist);
-
-            if (velocity < 0) {
-                // Not sure if I need to lower bound this here.
-                return (int) Math.max(currPos + tempScroll / childSize, 0);
-            } else {
-                return (int) (currPos + (tempScroll / childSize) + 1);
-            }
-        }
-
-        @Override
-        public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
-            final LinearSmoothScroller linearSmoothScroller =
-                    new LinearSmoothScroller(recyclerView.getContext()) {
-
-                        // I want a behavior where the scrolling always snaps to the beginning of
-                        // the list. Snapping to end is also trivial given the default implementation.
-                        // If you need a different behavior, you may need to override more
-                        // of the LinearSmoothScrolling methods.
-                        protected int getHorizontalSnapPreference() {
-                            return SNAP_TO_START;
-                        }
-
-                        protected int getVerticalSnapPreference() {
-                            return SNAP_TO_START;
-                        }
-
-                        @Override
-                        public PointF computeScrollVectorForPosition(int targetPosition) {
-                            return SnappyLinearLayoutManager.this
-                                    .computeScrollVectorForPosition(targetPosition);
-                        }
-                    };
-            linearSmoothScroller.setTargetPosition(position);
-            startSmoothScroll(linearSmoothScroller);
-
-        }
-
-        private double getSplineFlingDistance(double velocity) {
-            final double l = getSplineDeceleration(velocity);
-            final double decelMinusOne = DECELERATION_RATE - 1.0;
-            return ViewConfiguration.getScrollFriction() * deceleration
-                    * Math.exp(DECELERATION_RATE / decelMinusOne * l);
-        }
-
-        private double getSplineDeceleration(double velocity) {
-            return Math.log(INFLEXION * Math.abs(velocity)
-                    / (ViewConfiguration.getScrollFriction() * deceleration));
-        }
-
-        @Override
-        public int getFixScrollPos() {
-            if (this.getChildCount() == 0) {
-                return 0;
-            }
-
-            final View child = getChildAt(0);
-            final int childPos = getPosition(child);
-
-            if (getOrientation() == HORIZONTAL
-                    && Math.abs(child.getLeft()) > child.getMeasuredWidth() / 2) {
-                // Scrolled first view more than halfway offscreen
-                return childPos + 1;
-            } else if (getOrientation() == VERTICAL
-                    && Math.abs(child.getTop()) > child.getMeasuredWidth() / 2) {
-                // Scrolled first view more than halfway offscreen
-                return childPos + 1;
-            }
-            return childPos;
-        }
-
-    }
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,

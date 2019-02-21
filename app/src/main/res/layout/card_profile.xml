@@ -1,7 +1,6 @@
 <LinearLayout android:layout_width="wrap_content"
     android:layout_height="120dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/lib/com.app.chasebank"    android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
     android:layout_marginLeft="20dp"
     android:orientation="vertical"
@@ -16,8 +15,7 @@
         app:cardCornerRadius="50dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/image_anak"
+            xmlns:app="http://schemas.android.com/apk/lib/com.app.chasebank"            android:id="@+id/image_anak"
             android:scaleType="centerCrop"
             app:border_color="@color/colorPrimary"
             android:layout_gravity="center"

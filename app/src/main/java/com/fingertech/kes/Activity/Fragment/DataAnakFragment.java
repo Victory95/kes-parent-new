@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -149,58 +150,51 @@ public class DataAnakFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view           = inflater.inflate(R.layout.fragment_data_anak, container, false);
-        et_negara_asal      = (Spinner) view.findViewById(R.id.sp_negara_asal);
-        et_tanggal          = (EditText)view.findViewById(R.id.et_tanggallahiR);
-        et_nama_lengkap     = (EditText)view.findViewById(R.id.et_nama_lengkap_anak);
-        et_nis              = (EditText)view.findViewById(R.id.et_nama_nis);
-        et_nisn             = (EditText)view.findViewById(R.id.et_nama_nisn);
-        et_rombel           = (EditText)view.findViewById(R.id.et_rombel);
-        et_tempat_lahir     = (EditText)view.findViewById(R.id.et_tempatlahiR);
-        et_nik              = (EditText)view.findViewById(R.id.et_Nik);
-        et_kebutuhan_khusus = (EditText)view.findViewById(R.id.et_kebutuhan_khusus);
+        et_negara_asal      = view.findViewById(R.id.sp_negara_asal);
+        et_tanggal          = view.findViewById(R.id.et_tanggallahiR);
+        et_nama_lengkap     = view.findViewById(R.id.et_nama_lengkap_anak);
+        et_nis              = view.findViewById(R.id.et_nama_nis);
+        et_nisn             = view.findViewById(R.id.et_nama_nisn);
+        et_rombel           = view.findViewById(R.id.et_rombel);
+        et_tempat_lahir     = view.findViewById(R.id.et_tempatlahiR);
+        et_nik              = view.findViewById(R.id.et_Nik);
+        et_kebutuhan_khusus = view.findViewById(R.id.et_kebutuhan_khusus);
         anakMain            = (AnakMain)getActivity();
-        ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
-        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
-        buttonKembali       = (Button)view.findViewById(R.id.btn_kembali);
-        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_berikut);
+        ParentPager         = anakMain.findViewById(R.id.PagerAnak);
+        indicator           = view.findViewById(R.id.indicators);
+        buttonKembali       = view.findViewById(R.id.btn_kembali);
+        buttonBerikutnya    = view.findViewById(R.id.btn_berikut);
         fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        sp_tingkatan        = (Spinner)view.findViewById(R.id.sp_tingkatan);
-        sp_agama            = (Spinner)view.findViewById(R.id.sp_agama);
-        rb_laki             = (RadioButton)view.findViewById(R.id.rb_laki_lakI);
-        rb_wanita           = (RadioButton)view.findViewById(R.id.rb_perempuaN);
-        rb_wni              = (RadioButton)view.findViewById(R.id.rb_wnI);
-        rb_wna              = (RadioButton)view.findViewById(R.id.rb_wnA);
-        til_nama_lengkap    = (TextInputLayout)view.findViewById(R.id.til_nama_lengkap_anak);
-        til_nis             = (TextInputLayout)view.findViewById(R.id.til_nis);
-        til_nisn            = (TextInputLayout)view.findViewById(R.id.til_nisn);
-        til_nik             = (TextInputLayout)view.findViewById(R.id.til_Nik);
-        til_rombel          = (TextInputLayout)view.findViewById(R.id.til_rombel);
-        til_tempat_lahir    = (TextInputLayout)view.findViewById(R.id.til_tempatlahiR);
-        til_tanggal_lahir   = (TextInputLayout)view.findViewById(R.id.til_tanggallahiR);
-        til_kebutuhan_khusus= (TextInputLayout)view.findViewById(R.id.til_kebutuhan_khusus);
+        sp_tingkatan        = view.findViewById(R.id.sp_tingkatan);
+        sp_agama            = view.findViewById(R.id.sp_agama);
+        rb_laki             = view.findViewById(R.id.rb_laki_lakI);
+        rb_wanita           = view.findViewById(R.id.rb_perempuaN);
+        rb_wni              = view.findViewById(R.id.rb_wnI);
+        rb_wna              = view.findViewById(R.id.rb_wnA);
+        til_nama_lengkap    = view.findViewById(R.id.til_nama_lengkap_anak);
+        til_nis             = view.findViewById(R.id.til_nis);
+        til_nisn            = view.findViewById(R.id.til_nisn);
+        til_nik             = view.findViewById(R.id.til_Nik);
+        til_rombel          = view.findViewById(R.id.til_rombel);
+        til_tempat_lahir    = view.findViewById(R.id.til_tempatlahiR);
+        til_tanggal_lahir   = view.findViewById(R.id.til_tanggallahiR);
+        til_kebutuhan_khusus= view.findViewById(R.id.til_kebutuhan_khusus);
 
         Calendar calendar = Calendar.getInstance();
 
 
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
-                //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
-                et_tanggal.setText(convertDate(i, i1, i2));
-            }
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, (datePicker, i, i1, i2) -> {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
+            //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
+            et_tanggal.setText(convertDate(i, i1, i2));
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
-        et_tanggal.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
-            }
+        et_tanggal.setOnClickListener(view1 -> {
+            datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
         });
 
-        et_tanggal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
-                }
+        et_tanggal.setOnFocusChangeListener((view12, b) -> {
+            if (b) {
+                datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
             }
         });
 
@@ -245,19 +239,9 @@ public class DataAnakFragment extends Fragment {
         Tanggal_lahir       = sharedanak.getString(TAG_TANGGAL_LAHIR,null);
 
 
-        buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submitForm();
-            }
-        });
+        buttonBerikutnya.setOnClickListener(view13 -> submitForm());
 
-        buttonKembali.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ParentPager.setCurrentItem(getItem(-1), true);
-            }
-        });
+        buttonKembali.setOnClickListener(view14 -> ParentPager.setCurrentItem(getItem(-1), true));
 
         return view;
     }
@@ -266,8 +250,8 @@ public class DataAnakFragment extends Fragment {
     String convertDate(int year, int month, int day) {
         Log.d("Tanggal", year + "/" + month + "/" + day);
         String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
             return e;
@@ -286,12 +270,8 @@ public class DataAnakFragment extends Fragment {
         //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         et_negara_asal.setAdapter(spinnerArrayAdapter);
-        et_negara_asal.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(Spinner parent, View view, int position, long id) {
-                negaraasal = myData.get(position).toString();
-            }
-        });
+        et_negara_asal.setOnItemSelectedListener((parent, view, position, id) ->
+                negaraasal = myData.get(position).toString());
 
     }
     private int getItem(int i) {
@@ -501,18 +481,11 @@ public class DataAnakFragment extends Fragment {
                         rb_wanita.setChecked(true);
                         rb_laki.setChecked(false);
                     }
-                    rb_laki.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            jenis_kelamin = getResources().getString(R.string.rb_laki);
-                        }
-                    });
-                    rb_wanita.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
-                        }
-                    });
+                    rb_laki.setOnClickListener(v ->
+                            jenis_kelamin = getResources().getString(R.string.rb_laki));
+                    rb_wanita.setOnClickListener(v ->
+                            jenis_kelamin = getResources().getString(R.string.rb_wanita));
+
                     if (kewarganegaraan.equals("WNI")){
                         rb_wni.setChecked(true);
                         rb_wna.setChecked(false);
@@ -521,20 +494,14 @@ public class DataAnakFragment extends Fragment {
                         rb_wni.setChecked(false);
                     }
 
-                    rb_wni.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            kewarganegaraan = getResources().getString(R.string.rb_wni);
-                            et_negara_asal.setVisibility(View.GONE);
-                        }
+                    rb_wni.setOnClickListener(v -> {
+                        kewarganegaraan = getResources().getString(R.string.rb_wni);
+                        et_negara_asal.setVisibility(View.GONE);
                     });
 
-                    rb_wna.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            et_negara_asal.setVisibility(View.VISIBLE);
-                            kewarganegaraan = et_negara_asal.getSelectedItem().toString();
-                        }
+                    rb_wna.setOnClickListener(v -> {
+                        et_negara_asal.setVisibility(View.VISIBLE);
+                        kewarganegaraan = et_negara_asal.getSelectedItem().toString();
                     });
 
                 } else {
@@ -724,7 +691,7 @@ public class DataAnakFragment extends Fragment {
         return true;
     }
     private boolean validateNegara() {
-        if (negaraasal == null) {
+        if (kewarganegaraan == null) {
             Toast.makeText(getContext(),"Harap di isi negara anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
@@ -737,8 +704,8 @@ public class DataAnakFragment extends Fragment {
             Toast.makeText(getContext(),"Harap di isi tingkatan anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
-        }
 
+        }
         return true;
     }
 
