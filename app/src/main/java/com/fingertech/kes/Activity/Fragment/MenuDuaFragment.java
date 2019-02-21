@@ -29,7 +29,10 @@ public class MenuDuaFragment extends Fragment {
 
     @SuppressLint("ResourceType")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+
+    {
+
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if(bundle!=null){
@@ -41,14 +44,17 @@ public class MenuDuaFragment extends Fragment {
             classroom_id    = bundle.getString("classroom_id");
             school_name     = bundle.getString("school_name");
         }
+
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_kalender,btn_pesan;
+    FrameLayout frameLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_dua, container, false);
+//        frameLayout     = (FrameLayout) view.findViewById(R.id.fragMenu2);
         btn_kalender    = view.findViewById(R.id.btn_kalender);
         btn_pesan       = view.findViewById(R.id.btn_pesan);
         btn_kalender.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +90,8 @@ public class MenuDuaFragment extends Fragment {
             }
         });
         return view;
+
     }
+
 
 }

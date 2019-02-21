@@ -96,8 +96,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/viewpager"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                   android:orientation="vertical">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fragMenuSatu"
+                        >
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fragMenu2">
                 <android.support.v4.view.ViewPager
                     android:id="@+id/PagerUtama"
                     android:layout_width="match_parent"
@@ -113,6 +121,8 @@
                             app:ipi_animationDuration="320"
                             app:ipi_pageIndicatorColor="@android:color/darker_gray"
                             app:ipi_currentPageIndicatorColor="@color/colorPrimary"/>
+                    </FrameLayout>
+                    </FrameLayout>
                 </LinearLayout>
 
                 <android.support.v7.widget.CardView

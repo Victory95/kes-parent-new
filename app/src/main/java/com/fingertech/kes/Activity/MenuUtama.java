@@ -643,6 +643,8 @@ public class MenuUtama extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragMenuSatu, menuSatuFragment);
+            fragmentTransaction.addToBackStack(null);
+            Log.d("APPTAG", "Fragment: "+ getSupportFragmentManager().findFragmentById(R.id.fragMenuSatu));
             fragmentTransaction.commit();
             menuSatuFragment.setArguments(bundle);
         }else {
@@ -652,7 +654,9 @@ public class MenuUtama extends AppCompatActivity
 
     public void send_data2(){
         Bundle bundle = new Bundle();
+
         if (bundle != null) {
+
             bundle.putString("parent_nik", parent_nik);
             bundle.putString("student_id", student_id);
             bundle.putString("school_code", school_code);
@@ -663,9 +667,12 @@ public class MenuUtama extends AppCompatActivity
             MenuDuaFragment menuSatuFragment = new MenuDuaFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragMenuDua, menuSatuFragment);
+            fragmentTransaction.replace(R.id.fragMenu2, menuSatuFragment);
+            Log.d("APPTAG", "Fragment: "+ getSupportFragmentManager().findFragmentById(R.id.fragMenu2));
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             menuSatuFragment.setArguments(bundle);
+
         }else {
             Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
         }
@@ -679,6 +686,7 @@ public class MenuUtama extends AppCompatActivity
 
         @Override
         public Fragment getItem(int position) {
+
             switch (position){
                 case 0:
                     send_data();
@@ -967,6 +975,7 @@ public class MenuUtama extends AppCompatActivity
 
                     // Create the recyclerview.
                     snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
+                    snappyRecyclerView.setAdapter(profileAdapter);
                     // Create the grid layout manager with 2 columns.
                     final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

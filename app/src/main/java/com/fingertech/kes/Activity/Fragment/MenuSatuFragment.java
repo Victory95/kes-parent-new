@@ -37,7 +37,9 @@ public class MenuSatuFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         Bundle bundle = this.getArguments();
+
         if(bundle!=null){
             authorization   = bundle.getString("authorization");
             parent_nik      = bundle.getString("parent_nik");
@@ -47,16 +49,21 @@ public class MenuSatuFragment extends Fragment {
             classroom_id    = bundle.getString("classroom_id");
             school_name     = bundle.getString("school_name");
         }
+
     }
+
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     FrameLayout frameLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+
+    {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_satu, container, false);
-        frameLayout     = (FrameLayout) view.findViewById(R.id.fragMenuSatu);
+//        frameLayout     = (FrameLayout) view.findViewById(R.id.fragMenuSatu);
         btn_profile     = (CardView)view.findViewById(R.id.btn_profil);
         btn_jadwal      = (CardView)view.findViewById(R.id.btn_jadwal);
         btn_ujian       = (CardView)view.findViewById(R.id.btn_jadwal_ujian);
@@ -96,6 +103,7 @@ public class MenuSatuFragment extends Fragment {
                 }
             }
         });
+
 
         btn_ujian.setOnClickListener(new View.OnClickListener() {
             @Override
