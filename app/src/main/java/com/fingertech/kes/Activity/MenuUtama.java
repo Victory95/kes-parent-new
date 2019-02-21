@@ -199,7 +199,8 @@ public class MenuUtama extends AppCompatActivity
     private TextView countTextView;
     private int alertCount = 0;
     List<JSONResponse.DataList>dataLists = new ArrayList<>();
-
+    InkPageIndicator inkPageIndicator;
+    MapWrapperLayout mapWrapperLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,27 +220,25 @@ public class MenuUtama extends AppCompatActivity
         map_menu            = findViewById(R.id.map_menu);
         recycle_menu        = findViewById(R.id.recycler_view_menu);
         viewpager           = findViewById(R.id.viewpager);
-        tambah_anak         = (CardView)findViewById(R.id.btn_tambah);
-        imageView           = (CircleImageView) findViewById(R.id.image_anak);
-        namaanak            = (TextView)findViewById(R.id.nama_anak);
-        swipeRefreshLayout  = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        tambah_anak         = findViewById(R.id.btn_tambah);
+        imageView           = findViewById(R.id.image_anak);
+        namaanak            = findViewById(R.id.nama_anak);
+        swipeRefreshLayout  = findViewById(R.id.pullToRefresh);
         recycleview_ln      = findViewById(R.id.recycler_profile_view);
         recyclerView        = findViewById(R.id.recycle_profile);
+        inkPageIndicator    = findViewById(R.id.indicators);
+        mapWrapperLayout    = findViewById(R.id.map_relative_layout);
         setSupportActionBar(toolbar);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         customCarouselView.setPageCount(sampleImages.length);
         customCarouselView.setSlideInterval(4000);
         customCarouselView.setViewListener(viewListener);
-        customCarouselView.setImageClickListener(new ImageClickListener() {
-            @Override
-            public void onClick(int position) {
+        customCarouselView.setImageClickListener(position -> {
 //                Toast.makeText(MenuUtama.this, "Clicked item: "+ position, Toast.LENGTH_SHORT).show();
-            }
         });
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -262,7 +261,7 @@ public class MenuUtama extends AppCompatActivity
         sharedviewpager = getSharedPreferences(my_viewpager_preferences,Context.MODE_PRIVATE);
 
         ParentPager.setAdapter(fragmentAdapter);
-        InkPageIndicator inkPageIndicator = findViewById(R.id.indicators);
+
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
@@ -278,7 +277,7 @@ public class MenuUtama extends AppCompatActivity
         });
 
 
-        final MapWrapperLayout mapWrapperLayout = (MapWrapperLayout)findViewById(R.id.map_relative_layout);
+
         mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
@@ -320,6 +319,7 @@ public class MenuUtama extends AppCompatActivity
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+
         ParentPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -343,20 +343,17 @@ public class MenuUtama extends AppCompatActivity
             }
         });
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("coba", "getInstanceId failed", task.getException());
-                        return;
-                    }
-
-                    // Get new Instance ID token
-                    String token = task.getResult().getToken();
-
-                    // Log and toast
-                    String msg = getString(R.string.msg_token_fmt, token);
-                    Log.d("Token", msg);
-                });
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w("coba", "getInstanceId failed", task.getException());
+                    return;
+                }
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+                // Log and toast
+                String msg = getString(R.string.msg_token_fmt, token);
+                Log.d("Token", msg);
+            });
 
     }
 
@@ -375,7 +372,7 @@ public class MenuUtama extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -390,20 +387,19 @@ public class MenuUtama extends AppCompatActivity
     }
 
     ViewListener viewListener = new ViewListener() {
-            @Override
-            public View setViewForPosition(final int position) {
-        View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
-        TextView labelTextView = (TextView) customView.findViewById(R.id.labelTextView);
-        ImageView fruitImageView = (ImageView) customView.findViewById(R.id.fruitImageView);
-        Button Baca     = (Button) customView.findViewById(R.id.baca);
-        Baca.setVisibility(View.GONE);
-        fruitImageView.setImageResource(sampleImages[position]);
-//        labelTextView.setText(sampleTitles[position]);
-        Baca.setOnClickListener(view -> {
+        @Override
+        public View setViewForPosition(final int position) {
+            View customView = getLayoutInflater().inflate(R.layout.view_custom, null);
+            TextView labelTextView      = customView.findViewById(R.id.labelTextView);
+            ImageView fruitImageView    = customView.findViewById(R.id.fruitImageView);
+            Button Baca                 = customView.findViewById(R.id.baca);
+            Baca.setVisibility(View.GONE);
+            fruitImageView.setImageResource(sampleImages[position]);
+//          labelTextView.setText(sampleTitles[position]);
+            Baca.setOnClickListener(view -> {
 //            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
-});
-        customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
-
+            });
+            customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
         return customView;
         }
     };
@@ -454,7 +450,7 @@ public class MenuUtama extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -617,8 +613,6 @@ public class MenuUtama extends AppCompatActivity
                         recycleview_ln.setVisibility(GONE);
                         viewpager.setVisibility(GONE);
                     }
-
-
                 }
 
             }
@@ -656,7 +650,7 @@ public class MenuUtama extends AppCompatActivity
             menuSatuFragment = new MenuSatuFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
+            fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
             fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
             fragmentTransaction.commitAllowingStateLoss();
             menuSatuFragment.setArguments(bundle);
@@ -688,7 +682,7 @@ public class MenuUtama extends AppCompatActivity
             menuDuaFragment = new MenuDuaFragment();
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
+            fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
             fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
             fragmentTransaction.commitAllowingStateLoss();
             menuDuaFragment.setArguments(bundle);
@@ -697,7 +691,6 @@ public class MenuUtama extends AppCompatActivity
         }
     }
     public static class FragmentAdapter extends FragmentStatePagerAdapter {
-
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);

@@ -26,8 +26,7 @@
         android:focusable="true">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/image_profile"
+        xmlns:app="http://schemas.android.com/apk/lib/com.app.chasebank"        android:id="@+id/image_profile"
         android:background="@drawable/ic_logo"
         android:scaleType="centerCrop"
         app:border_color="@color/colorPrimary"
