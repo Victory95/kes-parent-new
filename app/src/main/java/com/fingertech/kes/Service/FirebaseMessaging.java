@@ -1,13 +1,19 @@
 package com.fingertech.kes.Service;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -20,69 +26,70 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Objects;
 
+import static com.joooonho.SelectableRoundedImageView.TAG;
+
 public class FirebaseMessaging extends FirebaseMessagingService {
     NotificationManager notificationManager;
+    public static final String ANDROID_CHANNEL_ID = "com.fingertech.kes";
+    public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
 
     @Override
     public void onMessageReceived(RemoteMessage remotemsg) {
 
         Log.d("Token", "From -> " + remotemsg.getFrom());
-        tester(remotemsg);
+        String title       = remotemsg.getData().get("title");
+        String body        = remotemsg.getData().get("body");
+        Log.d("Title",remotemsg.getData()+"");
+//        sendNotification(title,body);
     }
 
-    public void tester(RemoteMessage remoteMessage) {
-        String messagetext = String.valueOf(remoteMessage.getNotification());
-        sendNotification(messagetext);
-
-    }
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title,String messageBody) {
         Intent intent = new Intent(this, MenuUtama.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_notif)
-                .setContentTitle("Title")
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle(title)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(soundUri)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
                 .setContentIntent(pendingIntent);
 
-        initChannels(FirebaseMessaging.this);
-        createNotificationChannel();
-         notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        create();
         notificationManager.notify(0, notificationBuilder.build());
     }
-    public void initChannels(Context context) {
-        if (Build.VERSION.SDK_INT < 26) {
-            return;
-        }
-        NotificationChannel channel = new NotificationChannel("default",
-                "Channel name",
-                NotificationManager.IMPORTANCE_DEFAULT);
-        channel.setDescription("Channel description");
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
+
+
+    public void create(){
+        // create android channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("default", "Channel name", importance);
-            channel.setDescription("Channel description");
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            NotificationChannel androidChannel = new NotificationChannel(ANDROID_CHANNEL_ID,
+                    ANDROID_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            // Sets whether notifications posted to this channel should display notification lights
+            androidChannel.enableLights(true);
+            // Sets whether notification posted to this channel should vibrate.
+            androidChannel.enableVibration(true);
+            // Sets the notification light color for notifications posted to this channel
+            androidChannel.setLightColor(Color.GREEN);
+            // Sets whether notifications posted to this channel appear on the lockscreen or not
+            androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            getManager().createNotificationChannel(androidChannel);
         }
+    }
+    private NotificationManager getManager() {
+        if (notificationManager == null) {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return notificationManager;
     }
     @Override
     public void onNewToken(String token) {
-        Log.d("", "Refreshed token: " + token);
+        Log.d("Token", "Refreshed token: " + token);
 
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the

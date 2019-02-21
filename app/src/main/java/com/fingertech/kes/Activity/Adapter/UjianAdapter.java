@@ -27,6 +27,8 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
     String searchString = "";
+    String mapel ="";
+    String type = "";
 
     public UjianAdapter(List<ItemUjian> viewItemList,Context context) {
         this.viewItemList = viewItemList;
@@ -85,6 +87,43 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
                     for (ItemUjian androidVersion : itemUjianList) {
 
                         if (androidVersion.getMapel().toLowerCase().contains(charString) || androidVersion.getType_id().toLowerCase().contains(charString) ) {
+
+                            filteredList.add(androidVersion);
+                        }
+                    }
+
+                    viewItemList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = viewItemList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                viewItemList = (ArrayList<ItemUjian>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+    public Filter getfilter(String searchString) {
+        this.searchString = searchString;
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty() || searchString.isEmpty()) {
+                    viewItemList = itemUjianList;
+                } else {
+
+                    ArrayList<ItemUjian> filteredList = new ArrayList<>();
+
+                    for (ItemUjian androidVersion : itemUjianList) {
+
+                        if (androidVersion.getMapel().toLowerCase().contains(searchString) && androidVersion.getType_id().toLowerCase().contains(charString) ) {
 
                             filteredList.add(androidVersion);
                         }

@@ -1,6 +1,7 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -16,12 +17,19 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +42,11 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -60,15 +70,27 @@ public class TugasAnak extends AppCompatActivity {
     int status;
     String code;
     String guru,tanggal,type,nilai,mapel,deskripsi,semester_id,start_date,end_date,semester,start_year,start_end;
-    TextView no_ujian;
     String date,semester_nama;
-
+    TextView tv_filter,tv_semesters,tv_reset,tv_slide,no_ujian;
+    LinearLayout ll_slide;
+    com.rey.material.widget.Spinner sp_type;
     private List<JSONResponse.DataSemester> dataSemesters;
     private List<JSONResponse.DataMapel> dataMapelList;
+    Spinner sp_mapel;
+    private String[] tipe = {
+            "Ekstrakulikuler",
+            "Latihan Praktikum",
+            "Latihan Teori",
+            "Ulangan Harian"
+    };
+    Button btn_cari;
+    ImageView btn_down;
+    View view;
+    String mata_pelajaran,type_pelajaran;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.tugas_anak);
+        setContentView(R.layout.tugas_sheet);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         rv_tugas        = findViewById(R.id.rv_tugas);
         toolbar         = findViewById(R.id.toolbar_tugas);
@@ -76,7 +98,7 @@ public class TugasAnak extends AppCompatActivity {
         tv_semester     = findViewById(R.id.tv_semester);
         tv_start        = findViewById(R.id.tv_start);
         tv_end          = findViewById(R.id.tv_end);
-//        tv_filter       = findViewById(R.id.tv_filter);
+        tv_filter       = findViewById(R.id.tv_filter);
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
 //        ll_slide        = findViewById(R.id.slide_down);
 
@@ -109,7 +131,85 @@ public class TugasAnak extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
             }
         });
+        tv_filter.setOnClickListener(v -> openBottomSheet());
+    }
 
+    public void openBottomSheet() {
+
+        View view = getLayoutInflater().inflate(R.layout.filter_sheet, null);
+        LinearLayout ll_slide   = view.findViewById(R.id.slide_down);
+        tv_semesters     = view.findViewById(R.id.tv_semesters);
+        sp_mapel        = view.findViewById(R.id.sp_mapel);
+        sp_type         = view.findViewById(R.id.sp_tipe);
+        btn_cari        = view.findViewById(R.id.btn_cari);
+        tv_reset        = view.findViewById(R.id.reset);
+        tv_slide        = view.findViewById(R.id.name);
+        btn_down        = view.findViewById(R.id.arrow_down);
+
+        final Dialog mBottomSheetDialog = new Dialog(TugasAnak.this,
+                R.style.MaterialDialogSheet);
+
+        mBottomSheetDialog.setContentView(view);
+        mBottomSheetDialog.setCancelable(true);
+        mBottomSheetDialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        mBottomSheetDialog.getWindow().setGravity(Gravity.BOTTOM);
+        mBottomSheetDialog.show();
+        tv_semesters.setText(semester);
+
+        List<String> listMapel = new ArrayList<>();
+        for (int m = 0;m < dataMapelList.size();m++){
+            listMapel.add(dataMapelList.get(m).getCources_name());
+        }
+
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(sp_mapel);
+
+            // Set popupWindow height to 500px
+            popupWindow.setHeight(500);
+        }
+        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+            Log.d("eror",e.getMessage());
+        }
+        final ArrayAdapter<String> adapterMapel = new ArrayAdapter<String>(TugasAnak.this,R.layout.spinner_full,listMapel);
+        adapterMapel.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        sp_mapel.setAdapter(adapterMapel);
+        sp_mapel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mata_pelajaran = listMapel.get(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        final List<String> listtype = new ArrayList<>(Arrays.asList(tipe));
+        final  ArrayAdapter<String> adapterTipe = new ArrayAdapter<String>(TugasAnak.this,R.layout.spinner_full,listtype);
+        adapterTipe.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        sp_type.setAdapter(adapterTipe);
+        sp_type.setOnItemClickListener((parent, view1, position, id) -> {
+            type_pelajaran = listtype.get(position).toString();
+            return true;
+        });
+        type_pelajaran = sp_type.getSelectedItem().toString();
+
+        btn_down.setOnClickListener(v -> mBottomSheetDialog.dismiss());
+        tv_slide.setOnClickListener(v -> mBottomSheetDialog.dismiss());
+        tv_reset.setOnClickListener(v -> {
+            Tugas_anak();
+            mBottomSheetDialog.dismiss();
+        });
+        btn_cari.setOnClickListener(v -> {
+            tugasAdapter.getfilter(mata_pelajaran.toLowerCase()).filter(type_pelajaran.toLowerCase());
+            mBottomSheetDialog.dismiss();
+        });
     }
 
     private void Check_Semester(){

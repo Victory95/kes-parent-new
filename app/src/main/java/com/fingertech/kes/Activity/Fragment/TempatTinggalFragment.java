@@ -154,7 +154,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
     String telepon_rumah,handphone,skun,penerimaan_kps,nokps,dusun;
     String studentdetailId,classroom_id,picture;
-
+    double latitude_anak,longitude_anak;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -284,40 +284,9 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        mlastLocation = location;
-        if (CurrLocationMarker != null) {
-            CurrLocationMarker.remove();
-
-        }
-
-        //Place current location marker
-        final LatLng latLng = new LatLng(CurrentLatitude, CurrentLongitude);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
-
-        //move map camera
-        Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
-            mGoogleApiClient.connect();
-        }
-        CurrentLatitude = latLng.latitude;
-        CurrentLongitude    = latLng.longitude;
-
-    }
 
     @Override
     public void onCameraIdle() {
-        CameraPosition position=Mmap.getCameraPosition();
         LatLng LatLng = Mmap.getCameraPosition().target;
         Geocoder geocode1 = new Geocoder(getContext());
         try {
@@ -330,13 +299,12 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         } catch (IOException e) {
             e.printStackTrace();
         }
+        latitude_anak = LatLng.latitude;
+        longitude_anak  = LatLng.longitude;
     }
 
     @Override
     public void onCameraMoveCanceled() {
-        CameraPosition position=Mmap.getCameraPosition();
-
-
         if(CurrLocationMarker != null){
             CurrLocationMarker.remove();}
     }
@@ -360,6 +328,34 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     public void onCameraMoveStarted(int i) {
         CameraPosition position=Mmap.getCameraPosition();
 
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mlastLocation = location;
+        if (CurrLocationMarker != null) {
+            CurrLocationMarker.remove();
+
+        }
+
+        //Place current location marker
+        final LatLng latLng = new LatLng(latitude_anak, longitude_anak);
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+        final MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Position");
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
+
+        //move map camera
+        Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -486,8 +482,8 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                     jenis_tinggal       = response.body().data.getJenis_tinggal();
                     transportasi        = response.body().data.getTransportasi();
                     alamat              = response.body().data.getAddress();
-                    CurrentLatitude     = response.body().data.getLatitude();
-                    CurrentLongitude    = response.body().data.getLongitude();
+                    latitude_anak       = Double.parseDouble(response.body().data.getLatitude());
+                    longitude_anak      = Double.parseDouble(response.body().data.getLongitude());
                     classroom_id        = response.body().getData().getClassroom_id();
                     picture             = response.body().getData().getPicture();
 
@@ -661,7 +657,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     public void update_detail(){
 
-        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),telepon_rumah.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(latitude_anak),String.valueOf(longitude_anak),telepon_rumah.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -705,7 +701,6 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
                 if (status == 1 && code.equals("USTM_SCS_0001")){
 
                     Intent intent = new Intent(getContext(), MenuUtama.class);
-//                    intent.putExtra("profile",profileModel);
                     startActivity(intent);
                 }else {
                     Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();

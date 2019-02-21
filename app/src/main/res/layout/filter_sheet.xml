@@ -1,0 +1,171 @@
+<android.support.v7.widget.CardView
+    android:layout_height="370dp"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_gravity="bottom|center"
+    android:layout_margin="20dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="370dp"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="#fff"
+            android:id="@+id/slide_down">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:id="@+id/arrow_down"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:background="@drawable/ic_down_blue"
+                android:focusable="true" />
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:textSize="14dp"
+                android:textStyle="bold"
+                android:text="Filter"
+                android:textAlignment="center"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:id="@+id/reset"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:text="Reset"
+                android:focusable="true" />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="@color/gray_active_icon"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:text="Semester"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tv_semesters"
+                style="@style/Material.Widget.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/edt_bg_selector_black_small"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:text="Mata Pelajaran"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edt_bg_selector_black_small">
+
+            <Spinner
+                android:id="@+id/sp_mapel"
+                style="@style/Material.Widget.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:text="Tipe"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp">
+
+            <com.rey.material.widget.Spinner
+                android:id="@+id/sp_tipe"
+                style="@style/Material.Widget.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                app:spn_arrowAnimClockwise="true"
+                app:spn_arrowAnimDuration="300"
+                app:spn_arrowSwitchMode="true"
+                app:spn_dividerColor="@color/black"
+                app:spn_dividerHeight="1dp"
+                app:spn_arrowPadding="22dp"
+                app:spn_labelTextColor="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_cari"
+            android:text="Cari"
+            android:textColor="#ffffff"
+            android:clickable="true"
+            android:textAlignment="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rectang_line"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginBottom="30dp"/>
+
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

@@ -289,7 +289,7 @@ public class DataFragment extends Fragment  {
             return;
         }if (!validateHubungan()){
             return;
-        }if (negaraasal == null){
+        }if (kewarganegaraan == null){
             tv_kewarganegaraan_validate.setVisibility(View.VISIBLE);
         }else {
             tv_kewarganegaraan_validate.setVisibility(View.GONE);
@@ -302,7 +302,7 @@ public class DataFragment extends Fragment  {
             editor.putString(TAG_TEMPAT_LAHIR, et_tempat_lahir.getText().toString());
             editor.putString(TAG_TANGGAL_LAHIR, et_tanggal_lahir.getText().toString());
             editor.putString(TAG_HUBUNGAN, et_hubungan.getSelectedItem().toString());
-            editor.putString(TAG_KEWARGANEGARAAN, (String) negaraasal);
+            editor.putString(TAG_KEWARGANEGARAAN, (String) kewarganegaraan);
             editor.commit();
             KontakFragment kontakFragment = new KontakFragment();
             Bundle Dataparent = new Bundle();
@@ -498,20 +498,21 @@ public class DataFragment extends Fragment  {
 
                     parent_type = et_hubungan.getSelectedItem().toString();
 
-                    rb_wni.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            negaraasal = getResources().getString(R.string.rb_wni);
-                            et_negaraasal.setVisibility(View.GONE);
-                        }
+                    if (kewarganegaraan.equals("WNI")){
+                        rb_wni.setChecked(true);
+                        rb_wna.setChecked(false);
+                    }else if (kewarganegaraan.equals("WNA")){
+                        rb_wna.setChecked(true);
+                        rb_wni.setChecked(false);
+                    }
+                    rb_wni.setOnClickListener(v -> {
+                        kewarganegaraan = getResources().getString(R.string.rb_wni);
+                        et_negaraasal.setVisibility(View.GONE);
                     });
 
-                    rb_wna.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            et_negaraasal.setVisibility(View.VISIBLE);
-                            negaraasal = et_negaraasal.getSelectedItem().toString();
-                        }
+                    rb_wna.setOnClickListener(v -> {
+                        et_negaraasal.setVisibility(View.VISIBLE);
+                        kewarganegaraan = et_negaraasal.getSelectedItem().toString();
                     });
 
 
