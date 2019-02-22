@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    ///// JSON response
+    <string name="no_internet_conn">No Internet Connection</string>
+
+    /////// Login public
+    <string name="LP_SCS_0001">Berhasil masuk</string>
+    <string name="LP_ERR_0001">Email kosong</string>
+    <string name="LP_ERR_0002">Password kosong</string>
+    <string name="LP_ERR_0003">Devices tidak dikenal</string>
+    <string name="LP_ERR_0004">Password anda salah</string>
+    <string name="LP_ERR_0005">Devices tidak sesuai dan hanya boleh masuk pada hp yang sama</string>
+    <string name="LP_ERR_0006">Email anda salah</string>
+    <string name="LP_ERR_0007">Akun belum di aktivasi</string>
+
+    /////// Register public
+    <string name="RP_SCS_0001">Berhasil daftar silahkan cek email anda untuk mengaktifkan akun anda </string>
+    <string name="RP_ERR_0001">Email kosong</string>
+    <string name="RP_ERR_0002">FullName kosong</string>
+    <string name="RP_ERR_0003">No HP kosong</string>
+    <string name="RP_ERR_0004">Password kosong</string>
+    <string name="RP_ERR_0005">Devices tidak dikenal</string>
+    <string name="RP_ERR_0006">hanya boleh daftar pada hp yang sama dan satu akun email</string>
+    <string name="RP_ERR_0007">Gagal Register</string>
+    <string name="RP_ERR_0008">Email sudah digunakan</string>
+
+    /////// Register Orangtua
+    <string name="RO_SCS_0001">Berhasil daftar <br> silahkan cek email anda untuk mengaktifkan akun anda </br> </string>
+    <string name="RO_ERR_0001">Email kosong</string>
+    <string name="RO_ERR_0002">FullName kosong</string>
+    <string name="RO_ERR_0003">No HP kosong</string>
+    <string name="RO_ERR_0004">Password kosong</string>
+    <string name="RO_ERR_0005">Jenis Kelamin Kosong</string>
+    <string name="RO_ERR_0006">hanya boleh daftar pada hp yang sama dan satu akun email</string>
+    <string name="RO_ERR_0007">NIK kosong</string>
+    <string name="RO_ERR_0008">Devices tidak dikenal</string>
+    <string name="RO_ERR_0009">Email sudah digunakan</string>
+    <string name="RO_ERR_0010">Gagal Daftar</string>
+    <string name="RO_ERR_0011">NIK sudah terdaftar</string>
+
+    /////// Register Sosmed
+    <string name="RS_SCS_0001">Berhasil Daftar</string>
+    <string name="RS_ERR_0001">Email kosong</string>
+    <string name="RS_ERR_0002">Fullname kosong</string>
+    <string name="RS_ERR_0007">Device ID kosong</string>
+    <string name="RS_ERR_0003">Email sudah digunakan</string>
+    <string name="RS_ERR_0004">ID Facebook tidak sesuai atau sudah terdaftar sebelumnya</string>
+    <string name="RS_ERR_0004b">ID Google tidak sesuai atau sudah terdaftar sebelumnya</string>
+    <string name="RS_ERR_0005">hanya boleh daftar pada hp yang sama dan satu akun email</string>
+    <string name="RS_ERR_0006">Gagal Masuk</string>
+
+    /////// Login Sosmed
+    <string name="LS_SCS_0001">Berhasil Masuk</string>
+    <string name="LS_ERR_0001">Device dan ID facebook tidak ditemukan</string>
+    <string name="LS_ERR_0001b">Device dan ID Google tidak ditemukan</string>
+    <string name="LS_ERR_0002">Devices tidak sesuai dan Hanya boleh masuk pada hp yang sama</string>
+
+    /////// Forgot Password
+    <string name="FP_SCS_0001">Berhasil request mengganti password silahlkan check email anda</string>
+    <string name="FP_ERR_0001">Email kosong</string>
+    <string name="FP_ERR_0002">Email tidak ditemukan</string>
+    <string name="FP_ERR_0003">Gagal request mengganti password</string>
+
+    /////// request_code_acsess
+    <string name="RCA_SCS_0001">Berhasil request kode</string>
+    <string name="RCA_ERR_0001">Email kosong</string>
+    <string name="RCA_ERR_0002">Fullname kosong</string>
+    <string name="RCA_ERR_0003">Parent id kosong</string>
+    <string name="RCA_ERR_0004">Student id kosong</string>
+    <string name="RCA_ERR_0005">School id kosong</string>
+    <string name="RCA_ERR_0006">Datez kosong</string>
+    <string name="RCA_ERR_0007">Expired date kosong</string>
+    <string name="RCA_ERR_0008">gagal request kode</string>
+
+    /////// Search School
+    <string name="SS_SCS_0001">Sekolah ditemukan</string>
+    <string name="SS_ERR_0001">Sekolah tidak ditemukan</string>
+
+    /////// check_student_nik
+    <string name="CSN_SCS_0001">Student nik ditemukan</string>
+    <string name="CSN_ERR_0001">Student nik tidak cocok dengan orangtua</string>
+    <string name="CSN_ERR_0002">Student nik tidak ditemukan</string>
+
+    /////// Nearby School
+    <string name="NS_SCS_0001">Sekolah terdekat ditemukan</string>
+    <string name="NS_ERR_0001">Sekolah terdekat tidak ditemukan</string>
+
+    /////// Nearby_radius
+    <string name="NR_SCS_0001">Sekolah terdekat ditemukan</string>
+    <string name="NR_ERR_0001">Latitude kosong</string>
+    <string name="NR_ERR_0002">Longitude kosong</string>
+    <string name="NR_ERR_0003">Radius kosong</string>
+    <string name="NR_ERR_0004">Gagal menemukan sekolah</string>
+
+    /////// check_school_kes
+    <string name="CSK_SCS_0001">Berhasil ditemukan</string>
+    <string name="CSK_ERR_0001">Gagal tidak ditemukan</string>
+    <string name="CSK_ERR_0002">Kode sekolah kosong</string>
+
+    /////// data_parent_student
+    <string name="DPG_SCS_0001">Berhasil</string>
+    <string name="DPG_ERR_0001">Gagal</string>
+    <string name="DPG_ERR_0002">gagal decoded</string>
+    <string name="DPG_ERR_0003">akses token tidak ada</string>
+
+    /////// masuk_code_acsess
+    <string name="MCA_SCS_0001">Berhasil verification code</string>
+    <string name="MCA_ERR_0001">verification code kosong</string>
+    <string name="MCA_ERR_0002">parent id kosong</string>
+    <string name="MCA_ERR_0003">Student id kosong</string>
+    <string name="MCA_ERR_0004">Code verification tidak ditemukan</string>
+    <string name="MCA_ERR_0005">gagal verification code</string>
+    <string name="MCA_ERR_0006">Code verification sudah kadaluarsa</string>
+    <string name="MCA_ERR_0007">Akses Anak telah digunakan. Maksimun 2</string>
+    <string name="MCA_ERR_0008">Gagal tersimpan</string>
+
+    //////School_onprov
+    <string name="SOP_SCS_0001">Berhasil menampilkan</string>
+    <string name="SOP_ERR_0001">Gagal menampilkan</string>
+
+    //////School_Get
+    <string name="DS_SCS_0001">Berhasil menampilkan detail sekolah</string>
+    <string name="DS_ERR_0001">Gagal menampilkan sekolah</string>
+
+    //////UpdateParent
+    <string name="UPA_SCS_0001">Berhasil Update</string>
+    <string name="UPA_ERR_0021">Gagal Update</string>
+    <string name="UPA_ERR_0001">student id kosong</string>
+    <string name="UPA_ERR_0002">parent name kosong</string>
+    <string name="UPA_ERR_0003">parent nik kosong</string>
+    <string name="UPA_ERR_0004">parent type kosong</string>
+    <string name="UPA_ERR_0005">parent birth date kosong</string>
+    <string name="UPA_ERR_0006">parent birth place kosong</string>
+    <string name="UPA_ERR_0007">type warga kosong</string>
+    <string name="UPA_ERR_0008">parent home phone kosong</string>
+    <string name="UPA_ERR_0009">parent phone kosong</string>
+    <string name="UPA_ERR_0010">parent address kosong</string>
+    <string name="UPA_ERR_0011">parent laitude kosong</string>
+    <string name="UPA_ERR_0012">parent longitude kosong</string>
+    <string name="UPA_ERR_0013">parent email kosong</string>
+    <string name="UPA_ERR_0014">parent education kosong</string>
+    <string name="UPA_ERR_0015">company name kosong</string>
+    <string name="UPA_ERR_0016">employment kosong</string>
+    <string name="UPA_ERR_0017">parent income kosong</string>
+    <string name="UPA_ERR_0018">workplace address kosong</string>
+    <string name="UPA_ERR_0019">office latitude kosong</string>
+    <string name="UPA_ERR_0020">office longitude kosong</string>
+
+
+    //////DataStudent
+    <string name="DTS_SCS_0001">Data Ditemukan</string>
+    <string name="DTS_ERR_0001">Data Tidak Ditemukan</string>
+</resources>
