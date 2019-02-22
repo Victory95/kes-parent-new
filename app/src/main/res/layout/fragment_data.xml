@@ -9,13 +9,13 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:id="@+id/fragData"
-    tools:context=".Activity.Fragment.DataFragment">
+    tools:context=".Activity.Fragment.DataFragment"
+    tools:ignore="SmallSp,Autofill">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:overScrollMode="never">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:paddingBottom="50dp"
@@ -31,10 +31,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="5dp"
-                android:text="Data diri"
+                android:text="@string/tv_data_diri"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="30dp" />
+                android:textSize="30sp" />
 
 
             <Button
@@ -46,9 +46,10 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rectangle_line2"
                 android:backgroundTint="@color/colorPrimaryDark"
-                android:text="Demi kepentingan sekolah dan keselamatan anak anda mohon di isi dengan benar"
+                android:text="@string/tv_demi_kepentingan_sekolah_dan_keselamatan_anak_anda_mohon_di_isi_dengan_benar"
                 android:textColor="@android:color/white"
-                android:textSize="10dp"/>
+                android:textSize="10sp"
+                 />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_nama_depan"
@@ -63,16 +64,16 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_nama_depan"
-                    android:hint="Nama"
-                    android:textSize="16dp"
+                    android:hint="@string/tv_nama"
+                    android:textSize="16sp"
                     android:inputType="textEmailAddress"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Nama Depan
-            </android.support.design.widget.TextInputLayout>Nama Depan
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_Email"
@@ -87,16 +88,16 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_Email"
-                    android:hint="E-mail"
-                    android:textSize="16dp"
+                    android:hint="@string/et_email"
+                    android:textSize="16sp"
                     android:inputType="textEmailAddress"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />E-mail
-            </android.support.design.widget.TextInputLayout>E-mail
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_NIK"
@@ -111,16 +112,16 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_NIK"
-                    android:hint="NIK / NOIRA"
-                    android:textSize="16dp"
+                    android:hint="@string/et_nik"
+                    android:textSize="16sp"
                     android:inputType="phone"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />NIK/NOIRA
-            </android.support.design.widget.TextInputLayout>NIK/NOIRA
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -153,7 +154,7 @@
                 android:layout_marginLeft="40dp"
                 android:id="@+id/tv_hubungan"
                 android:textColor="@android:color/holo_red_light"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:text="@string/validate_hubungan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -171,7 +172,7 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Jenis Kelamin"
+                    android:text="@string/tv_jenis_kelamin"
                     android:textColor="#ffff"
                     android:layout_marginTop="20dp"/>
                 <RadioGroup
@@ -187,8 +188,8 @@
                         android:id="@+id/rb_laki_laki"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Laki Laki"
-                        android:layout_marginRight="5dp"
+                        android:text="@string/rb_laki_laki"
+                        android:layout_marginEnd="5dp"
                         android:textColor="#ffff"/>
 
                     <RadioButton
@@ -196,7 +197,7 @@
                         android:id="@+id/rb_perempuan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Perempuan"
+                        android:text="@string/rb_perempuan"
                         android:textColor="#ffff"/>
 
                 </RadioGroup>
@@ -214,16 +215,16 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_tempatlahir"
-                    android:hint="Tempat Lahir"
-                    android:textSize="16dp"
+                    android:hint="@string/tv_tempat_lahir"
+                    android:textSize="16sp"
                     android:inputType="textEmailAddress"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Tempat Lahir
-            </android.support.design.widget.TextInputLayout>Tempat Lahir
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_tanggallahir"
@@ -238,16 +239,16 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_tanggallahir"
-                    android:hint="Tanggal Lahir"
-                    android:textSize="16dp"
+                    android:hint="@string/tv_tanggal_lahir"
+                    android:textSize="16sp"
                     android:inputType="date"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Tanggal Lahir
-            </android.support.design.widget.TextInputLayout>Tanggal Lahir
+                    android:layout_height="wrap_content" />
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -256,7 +257,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:text="Kewarganegaraan"
+                android:text="@string/tv_kewarganegaraan"
                 android:textColor="#ffff"/>
 
             <RadioGroup
@@ -272,8 +273,8 @@
                     android:id="@+id/rb_wni"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="WNI"
-                    android:layout_marginRight="5dp"
+                    android:text="@string/rb_wni"
+                    android:layout_marginEnd="5dp"
                     android:textColor="#ffff"/>
 
                 <RadioButton
@@ -281,7 +282,7 @@
                     android:id="@+id/rb_wna"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="WNA"
+                    android:text="@string/rb_wna"
                     android:textColor="#ffff"/>
             </RadioGroup>
 
@@ -291,7 +292,7 @@
                 android:layout_marginLeft="40dp"
                 android:id="@+id/tv_kewarganegaraan_validate"
                 android:textColor="@android:color/holo_red_light"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:text="@string/validate_kewarganegaraan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -335,10 +336,10 @@
             android:id="@+id/btn_kembali"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Kembali"
+            android:text="@string/btn_kembali"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="#ffffff" />
@@ -364,10 +365,10 @@
             android:id="@+id/btn_berikut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Berikutnya"
+            android:text="@string/btn_berikutnya"
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="#ffffff" />

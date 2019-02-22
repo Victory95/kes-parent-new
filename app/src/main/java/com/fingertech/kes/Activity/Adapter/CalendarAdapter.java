@@ -8,10 +8,7 @@ package com.fingertech.kes.Activity.Adapter;
         import android.widget.TextView;
 
         import com.fingertech.kes.Activity.Model.CalendarModel;
-        import com.fingertech.kes.Activity.Model.ItemSekolah;
-        import com.fingertech.kes.Activity.Model.ItemUjian;
         import com.fingertech.kes.R;
-        import com.fingertech.kes.Rest.JSONResponse;
 
         import java.util.List;
 
@@ -32,7 +29,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tester, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_kalendar, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;

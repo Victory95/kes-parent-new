@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -17,18 +18,19 @@
         android:elevation="1dp"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        tools:ignore="UnusedAttribute">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:scrollbars="none"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            tools:ignore="UselessParent">
             <TextView
                 android:id="@+id/input_search"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address" />
-
+                android:text="@string/tv_address" />
         </HorizontalScrollView>
 
     </LinearLayout>
@@ -48,6 +50,6 @@
         android:layout_marginEnd="150dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rectangle_line"
-        android:text="Pilih" />
+        android:text="@string/btn_pilih" />
 
 </RelativeLayout>

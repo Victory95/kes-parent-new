@@ -23,14 +23,15 @@
                 android:layout_marginBottom="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="5dp"
-                android:id="@+id/btn_edit">
+                android:id="@+id/btn_edit"
+                android:focusable="true">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/ic_logo_background"
-                    android:text="Edit"/>
+                    android:text="@string/tv_edit"/>
             </android.support.v7.widget.CardView>
             <TextView
                 android:layout_width="match_parent"
@@ -75,10 +76,10 @@
                     android:layout_marginTop="20dp"
                     android:layout_height="30dp">
                     <Button
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:id="@+id/btn_data"
                         android:layout_weight="1"
-                        android:text="Data Siswa"
+                        android:text="@string/btn_data_Siswa"
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimary"
                         android:background="@android:color/transparent"
@@ -88,8 +89,8 @@
                     <TextView
                         android:id="@+id/tv_line_boundaryLeft"
                         android:gravity="center"
-                        android:textSize="15dp"
-                        android:text="|"
+                        android:textSize="15sp"
+                        android:text="@string/padding"
                         android:textColor="@color/colorPrimary"
                         android:layout_weight="1.48"
                         android:layout_width="match_parent"
@@ -98,11 +99,11 @@
                         android:paddingBottom="2dp"
                         android:layout_height="match_parent" />
                     <Button
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:id="@+id/btn_alamat"
                         android:layout_weight="1"
                         android:textAllCaps="false"
-                        android:text="Alamat Siswa"
+                        android:text="@string/btn_alamat"
                         android:textColor="@color/colorPrimary"
                         android:background="@android:color/transparent"
                         android:backgroundTint="@color/colorPrimary"
@@ -111,8 +112,8 @@
                     <TextView
                         android:id="@+id/tv_line_boundaryRight"
                         android:gravity="center"
-                        android:textSize="15dp"
-                        android:text="|"
+                        android:textSize="15sp"
+                        android:text="@string/padding"
                         android:textColor="@color/colorPrimary"
                         android:layout_weight="1.48"
                         android:layout_width="match_parent"
@@ -121,11 +122,11 @@
                         android:paddingBottom="2dp"
                         android:layout_height="match_parent" />
                     <Button
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:id="@+id/btn_kontak"
                         android:layout_weight="1"
                         android:textAllCaps="false"
-                        android:text="Kontak Siswa"
+                        android:text="@string/btn_kontak"
                         android:textColor="@color/colorPrimary"
                         android:background="@android:color/transparent"
                         android:backgroundTint="@color/colorPrimary"
@@ -143,7 +144,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Jenis Kelamin"
+                            android:text="@string/tv_jenis_kelamin"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -164,7 +165,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nomor Induk Siswa Nasional (NISN)"
+                            android:text="@string/tv_nisn"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -184,7 +185,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Rombongan Belajar"
+                            android:text="@string/tv_rombel"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -205,7 +206,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Tempat Lahir"
+                            android:text="@string/tv_tempat_lahir"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -225,7 +226,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Tanggal Lahir"
+                            android:text="@string/tv_tanggal_lahir"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -245,7 +246,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Kebutuhan Khusus"
+                            android:text="@string/tv_kebutuhan_khusus"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -266,7 +267,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Agama"
+                            android:text="@string/tv_agama"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -287,7 +288,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Kewarganegaraan"
+                            android:text="@string/tv_kewarganegaraan"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -316,7 +317,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nomor Rumah :"
+                            android:text="@string/tv_no_rumah"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -337,7 +338,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nomor Handphone :"
+                            android:text="@string/tv_no_handphone"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -358,7 +359,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Email :"
+                            android:text="@string/tv_email"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -378,7 +379,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Surat Keterangan Ujian Negara :"
+                            android:text="@string/tv_skun"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -399,7 +400,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Nomor KPS :"
+                            android:text="@string/tv_no_kps"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -420,7 +421,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Penerimaan KPS :"
+                            android:text="@string/tv_kps"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -449,7 +450,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Alamat :"
+                            android:text="@string/tv_alamat"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -470,7 +471,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="RT/RW :"
+                            android:text="@string/tv_rt_rw"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -491,7 +492,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Kelurahan/Desa :"
+                            android:text="@string/tv_kelurahan"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -511,7 +512,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Kecamatan :"
+                            android:text="@string/tv_kecamatan"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -532,7 +533,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Kode Pos :"
+                            android:text="@string/tv_kode_pos"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -553,7 +554,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Status Tinggal :"
+                            android:text="@string/tv_status_tinggal"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"
@@ -574,7 +575,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Transportasi :"
+                            android:text="@string/tv_transportasi"
                             android:textSize="16sp"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="20dp"

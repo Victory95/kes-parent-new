@@ -25,7 +25,7 @@
     <string name="RP_ERR_0008">Email sudah digunakan</string>
 
     /////// Register Orangtua
-    <string name="RO_SCS_0001">Berhasil daftar <br> silahkan cek email anda untuk mengaktifkan akun anda </br> </string>
+    <string name="RO_SCS_0001">Berhasil daftar \n\n silahkan cek email anda untuk mengaktifkan akun anda  </string>
     <string name="RO_ERR_0001">Email kosong</string>
     <string name="RO_ERR_0002">FullName kosong</string>
     <string name="RO_ERR_0003">No HP kosong</string>

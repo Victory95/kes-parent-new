@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Autofill,DisableBaselineAlignment,RtlHardcoded,ContentDescription,TooManyViews,TextFields">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbaredit"
@@ -31,14 +33,15 @@
                 android:layout_marginTop="20dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="5dp"
-                android:id="@+id/btn_simpan">
+                android:id="@+id/btn_simpan"
+                android:focusable="true">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:textColor="@color/ic_logo_background"
-                    android:text="Simpan "/>
+                    android:text="@string/tv_simpan"/>
             </android.support.v7.widget.CardView>
             <LinearLayout
                 android:background="@drawable/rectangle_line_blue"
@@ -49,10 +52,10 @@
                 android:layout_marginTop="30dp"
                 android:layout_height="30dp">
                 <Button
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:id="@+id/btn_data"
                     android:layout_weight="1"
-                    android:text="Data Siswa"
+                    android:text="@string/btn_data_Siswa"
                     android:textAllCaps="false"
                     android:textColor="@color/colorPrimary"
                     android:background="@android:color/transparent"
@@ -62,8 +65,8 @@
                 <TextView
                     android:id="@+id/tv_line_boundaryLeft"
                     android:gravity="center"
-                    android:textSize="15dp"
-                    android:text="|"
+                    android:textSize="15sp"
+                    android:text="@string/padding"
                     android:textColor="@color/colorPrimary"
                     android:layout_weight="1.48"
                     android:layout_width="match_parent"
@@ -72,11 +75,11 @@
                     android:paddingBottom="2dp"
                     android:layout_height="match_parent" />
                 <Button
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:id="@+id/btn_alamat"
                     android:layout_weight="1"
                     android:textAllCaps="false"
-                    android:text="Alamat Siswa"
+                    android:text="@string/btn_alamat"
                     android:textColor="@color/colorPrimary"
                     android:background="@android:color/transparent"
                     android:backgroundTint="@color/colorPrimary"
@@ -85,8 +88,8 @@
                 <TextView
                     android:id="@+id/tv_line_boundaryRight"
                     android:gravity="center"
-                    android:textSize="15dp"
-                    android:text="|"
+                    android:textSize="15sp"
+                    android:text="@string/padding"
                     android:textColor="@color/colorPrimary"
                     android:layout_weight="1.48"
                     android:layout_width="match_parent"
@@ -95,11 +98,11 @@
                     android:paddingBottom="2dp"
                     android:layout_height="match_parent" />
                 <Button
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:id="@+id/btn_kontak"
                     android:layout_weight="1"
                     android:textAllCaps="false"
-                    android:text="Kontak Siswa"
+                    android:text="@string/btn_kontak"
                     android:textColor="@color/colorPrimary"
                     android:background="@android:color/transparent"
                     android:backgroundTint="@color/colorPrimary"
@@ -152,16 +155,17 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_nama_lengkap_anak"
-                        android:hint="Nama Lengkap"
-                        android:textSize="16dp"
+                        android:hint="@string/et_nama_lengkap"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Nama Lengkap
-                </android.support.design.widget.TextInputLayout>Nama Lengkap
+                        android:layout_height="wrap_content"
+                         />
+                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -174,7 +178,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_weight="1"
                         android:id="@+id/til_nis"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:textColorHint="@color/textColor_Grey"
                         android:layout_width="match_parent"
                         android:theme="@style/TextLabelView"
@@ -183,22 +187,22 @@
                         <EditText
                             android:theme="@style/TextLabel"
                             android:id="@+id/et_nama_nis"
-                            android:hint="NIS"
-                            android:textSize="16dp"
+                            android:hint="@string/et_nis"
+                            android:textSize="16sp"
                             android:inputType="textEmailAddress"
                             android:background="@drawable/edt_bg_selector_black"
                             android:paddingBottom="6dp"
                             android:textColor="@color/black"
                             android:paddingTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />NIS
-                    </android.support.design.widget.TextInputLayout>NIS
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
 
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_nisn"
                         android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:textColorHint="@color/textColor_Grey"
                         android:layout_width="match_parent"
                         android:theme="@style/TextLabelView"
@@ -207,16 +211,16 @@
                         <EditText
                             android:theme="@style/TextLabel"
                             android:id="@+id/et_nama_nisn"
-                            android:hint="Nisn"
-                            android:textSize="16dp"
+                            android:hint="@string/tv_nisn"
+                            android:textSize="16sp"
                             android:inputType="textEmailAddress"
                             android:background="@drawable/edt_bg_selector_black"
                             android:paddingBottom="6dp"
                             android:textColor="@color/black"
                             android:paddingTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />NISN
-                    </android.support.design.widget.TextInputLayout>NISN
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
 
@@ -233,16 +237,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_Nik"
-                        android:hint="NIK/NOIRA"
-                        android:textSize="16dp"
+                        android:hint="@string/et_nik"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />NIK/NOIRA
-                </android.support.design.widget.TextInputLayout>NIK/NOIRA
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_rombel"
@@ -257,16 +261,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_rombel"
-                        android:hint="Rombel"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_rombel"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Rombel
-                </android.support.design.widget.TextInputLayout>Rombel
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
 
 
@@ -275,7 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="30dp"
                     android:layout_marginLeft="30dp"
-                    android:text="Jenis Kelamin"
+                    android:text="@string/tv_jenis_kelamin"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/black"
                     android:layout_marginTop="20dp"/>
@@ -292,8 +296,8 @@
                         android:id="@+id/rb_laki_lakI"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:text="Pria"
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/rb_laki"
                         android:textColor="@color/black"/>
 
                     <RadioButton
@@ -301,7 +305,7 @@
                         android:id="@+id/rb_perempuaN"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Wanita"
+                        android:text="@string/rb_wanita"
                         android:textColor="@color/black"/>
 
                 </RadioGroup>
@@ -319,16 +323,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_tempatlahiR"
-                        android:hint="Tempat Lahir"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_tempat_lahir"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Tempat Lahir
-                </android.support.design.widget.TextInputLayout>Tempat Lahir
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_tanggallahiR"
@@ -343,16 +347,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_tanggallahiR"
-                        android:hint="Tanggal Lahir"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_tanggal_lahir"
+                        android:textSize="16sp"
                         android:inputType="date"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Tanggal Lahir
-                </android.support.design.widget.TextInputLayout>Tanggal Lahir
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
 
                 <LinearLayout
@@ -393,16 +397,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_kebutuhan_khusus"
-                        android:hint="Kebutuhan Khusus"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_kebutuhan_khusus"
+                        android:textSize="16sp"
                         android:inputType="date"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Kebutuhan Khusus
-                </android.support.design.widget.TextInputLayout>Kebutuhan Khusus
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -411,7 +415,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Kewarganegaraan"
+                    android:text="@string/tv_kewarganegaraan"
                     android:textColor="@color/black"/>
 
                 <RadioGroup
@@ -427,8 +431,8 @@
                         android:id="@+id/rb_wnI"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="WNI"
-                        android:layout_marginRight="5dp"
+                        android:text="@string/rb_wni"
+                        android:layout_marginEnd="5dp"
                         android:textColor="@color/black"/>
 
                     <RadioButton
@@ -436,7 +440,7 @@
                         android:id="@+id/rb_wnA"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="WNA"
+                        android:text="@string/rb_wna"
                         android:textColor="@color/black"/>
                 </RadioGroup>
                 <LinearLayout
@@ -487,16 +491,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_nomor_Rumah"
-                        android:hint="Nomor Rumah"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_no_rumah"
+                        android:textSize="16sp"
                         android:inputType="phone"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Nomor Rumah
-                </android.support.design.widget.TextInputLayout>Nomor Rumah
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_nomor_Ponsel"
@@ -511,16 +515,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_nomor_Ponsel"
-                        android:hint="Nomor Ponsel"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_no_handphone"
+                        android:textSize="16sp"
                         android:inputType="phone"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Nomor Ponsel
-                </android.support.design.widget.TextInputLayout>Nomor Ponsel
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_e_mail"
@@ -535,16 +539,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_email_student"
-                        android:hint="E-Mail"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_email"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />E-Mail
-                </android.support.design.widget.TextInputLayout>E-Mail
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_skun"
@@ -559,15 +563,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_skun"
-                        android:hint="Surat Keterangan Ujian Negara"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_skun"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Surat Keterangan Negara
-                </android.support.design.widget.TextInputLayout>Surat Keterangan Negara
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_kps"
@@ -582,15 +586,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_kps"
-                        android:hint="Nomor KPS"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_no_kps"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Nomor KPS
-                </android.support.design.widget.TextInputLayout>Nomor KPS
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_PKPS"
@@ -606,15 +610,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_PKPS"
-                        android:hint="Penerimaan KPS"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_kps"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Penerimaan KPS
-                </android.support.design.widget.TextInputLayout>Penerimaan KPS
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -637,15 +641,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_Alamat"
-                        android:hint="Alamat"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_alamat"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Alamat
-                </android.support.design.widget.TextInputLayout>Alamat
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -658,7 +662,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_weight="1"
                         android:id="@+id/til_rt"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:textColorHint="@color/textColor_Grey"
                         android:theme="@style/TextLabelView"
                         android:layout_width="match_parent"
@@ -667,21 +671,21 @@
                         <EditText
                             android:theme="@style/TextLabel"
                             android:id="@+id/et_rt"
-                            android:hint="RT"
-                            android:textSize="16dp"
+                            android:hint="@string/et_rt"
+                            android:textSize="16sp"
                             android:background="@drawable/edt_bg_selector_black"
                             android:paddingBottom="6dp"
                             android:textColor="@color/black"
                             android:paddingTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />RT
-                    </android.support.design.widget.TextInputLayout>RT
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
 
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_rw"
                         android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:textColorHint="@color/textColor_Grey"
                         android:theme="@style/TextLabelView"
                         android:layout_width="match_parent"
@@ -690,15 +694,15 @@
                         <EditText
                             android:theme="@style/TextLabel"
                             android:id="@+id/et_rw"
-                            android:hint="RW"
-                            android:textSize="16dp"
+                            android:hint="@string/et_rw"
+                            android:textSize="16sp"
                             android:background="@drawable/edt_bg_selector_black"
                             android:paddingBottom="6dp"
                             android:textColor="@color/black"
                             android:paddingTop="10dp"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />NISN
-                    </android.support.design.widget.TextInputLayout>NISN
+                            android:layout_height="wrap_content" />
+                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -714,15 +718,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_dusun"
-                        android:hint="Desa"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_desa"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/> Kelurahan/Desa
-                </android.support.design.widget.TextInputLayout>Kelurahan/Desa
+                        android:layout_height="wrap_content"/>
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_kelurahan"
@@ -738,15 +742,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_kelurahan"
-                        android:hint="Kelurahan"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_kelurahan"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/> Kelurahan/Desa
-                </android.support.design.widget.TextInputLayout>Kelurahan/Desa
+                        android:layout_height="wrap_content"/>
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_Kecamatan"
@@ -762,15 +766,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_Kecamatan"
-                        android:hint="Kecamatan"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_kecamatan"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Kecamatan
-                </android.support.design.widget.TextInputLayout>Kecamatan
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_kode_pos"
@@ -785,16 +789,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_kode_pos"
-                        android:hint="Kode Pos"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_kode_pos"
+                        android:textSize="16sp"
                         android:inputType="phone"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Kode Pos
-                </android.support.design.widget.TextInputLayout>Kode Pos
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_status_tinggal"
@@ -809,15 +813,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_status_tinggal"
-                        android:hint="Status tinggal"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_status_tinggal"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Status tinggal
-                </android.support.design.widget.TextInputLayout>Status tinggal
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_transportasi"
@@ -832,15 +836,15 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_transportasi"
-                        android:hint="Transportasi"
-                        android:textSize="16dp"
+                        android:hint="@string/tv_transportasi"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Alamat
-                </android.support.design.widget.TextInputLayout>Alamat
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/btn_search"
@@ -853,7 +857,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:scaleType="centerCrop"
                     app:cardCornerRadius="15dp"
-                    app:layout_collapseMode="pin">
+                    app:layout_collapseMode="pin"
+                    android:focusable="true">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -865,13 +870,13 @@
                             android:background="@drawable/maps"/>
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center|left"
                             android:textColor="@color/black"
                             android:id="@+id/nama_rumah"
-                            android:text="Lokasi Rumah"/>
+                            android:text="@string/tv_lokasi_rumah"/>
 
                         <ImageView
                             android:layout_width="40dp"
@@ -907,7 +912,7 @@
                         android:layout_marginBottom="20dp"
                         android:layout_marginRight="20dp"
                         android:id="@+id/alamat_rumah_anak"
-                        android:hint="Silahkan pilih lokasi tempat tinggal anak anda"
+                        android:hint="@string/btn_pilih_lokasi"
                         android:gravity="center"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>

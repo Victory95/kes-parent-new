@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragPelengkap"
-    tools:context=".Activity.Fragment.DataPelengkap">
+    tools:context=".Activity.Fragment.DataPelengkap"
+    tools:ignore="UselessParent">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v4.widget.NestedScrollView
@@ -31,7 +31,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="SK Pendirian Sekolah"
+                        android:text="@string/tv_sk_pendirian_sekolah"
                         android:textColor="#000000" />
 
                     <TextView
@@ -52,7 +52,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Tanggal SK Pendirian Sekolah"
+                        android:text="@string/tv_tanggal_sk_pendirian_sekolah"
                         android:textColor="#000000" />
 
                     <TextView
@@ -73,7 +73,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Status Kepemilikan"
+                        android:text="@string/tv_status_kepemilikan"
                         android:textColor="#000000" />
 
                     <TextView
@@ -94,7 +94,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="SK izin operasional"
+                        android:text="@string/tv_sk_izin_operasional"
                         android:textColor="#000000" />
 
                     <TextView
@@ -115,7 +115,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Tanggal SK izin operasional"
+                        android:text="@string/tv_tanggal_sk_izin_operasional"
                         android:textColor="#000000" />
 
                     <TextView
@@ -136,7 +136,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Kebutuhan Khusus"
+                        android:text="@string/tv_kebutuhan_khusus"
                         android:textColor="#000000" />
 
                     <TextView
@@ -163,7 +163,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/tabel_border"
                             android:padding="23dip"
-                            android:text="Nomor Rekening"
+                            android:text="@string/tv_nomor_rekening"
                             android:textColor="#000000" />
                     </LinearLayout>
 
@@ -185,7 +185,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Nama Bank"
+                        android:text="@string/tv_nama_bank"
                         android:textColor="#000000" />
 
                     <TextView
@@ -206,7 +206,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Cabang"
+                        android:text="@string/tv_cabang"
                         android:textColor="#000000" />
 
                     <TextView
@@ -227,7 +227,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Rekening Atas Nama"
+                        android:text="@string/tv_rekening_atas_nama"
                         android:textColor="#000000" />
 
                     <TextView
@@ -248,7 +248,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="MBS"
+                        android:text="@string/tv_mbs"
                         android:textColor="#000000" />
 
                     <TextView
@@ -268,7 +268,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Luas Tanah milik (m2)"
+                        android:text="@string/tv_luas_tanah_milik_m2"
                         android:textColor="#000000" />
 
                     <TextView
@@ -288,7 +288,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Luas Tanah Bukan Milik (m2)"
+                        android:text="@string/tv_luas_tanah_bukan_milik_m2"
                         android:textColor="#000000" />
 
                     <TextView
@@ -308,7 +308,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Nama Wajib Pajak"
+                        android:text="@string/tv_nama_wajib_pajak"
                         android:textColor="#000000" />
 
                     <TextView
@@ -328,7 +328,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="NPWP"
+                        android:text="@string/tv_npwp"
                         android:textColor="#000000" />
 
                     <TextView

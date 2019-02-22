@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragLainnya"
-    tools:context=".Activity.Fragment.Lainnya">
+    tools:context=".Activity.Fragment.Lainnya"
+    tools:ignore="UselessParent">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v4.widget.NestedScrollView
@@ -30,7 +31,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Kepala Sekolah"
+                        android:text="@string/tv_kepala_sekolah"
                         android:textColor="#000000" />
 
                     <TextView
@@ -51,7 +52,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Operator Sekolah"
+                        android:text="@string/tv_operator_sekolah"
                         android:textColor="#000000" />
 
                     <TextView
@@ -72,7 +73,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Akreditasi"
+                        android:text="@string/tv_akreditasi"
                         android:textColor="#000000" />
 
                     <TextView
@@ -93,7 +94,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Kurikulum"
+                        android:text="@string/tv_kurikulum"
                         android:textColor="#000000" />
 
                     <TextView
@@ -114,7 +115,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Total Guru"
+                        android:text="@string/tv_total_guru"
                         android:textColor="#000000" />
 
                     <TextView
@@ -135,7 +136,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Total Siswa Pria"
+                        android:text="@string/tv_total_siswa_pria"
                         android:textColor="#000000" />
 
                     <TextView
@@ -156,7 +157,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Total Siswa Wanita"
+                        android:text="@string/tv_total_siswa_wanita"
                         android:textColor="#000000" />
 
                     <TextView
@@ -177,7 +178,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Rombongan Belajar"
+                        android:text="@string/tv_rombel"
                         android:textColor="#000000" />
 
                     <TextView
@@ -198,7 +199,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Ruang Kelas"
+                        android:text="@string/tv_ruang_kelas"
                         android:textColor="#000000" />
 
                     <TextView
@@ -219,7 +220,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Laboratorium"
+                        android:text="@string/tv_laboratorium"
                         android:textColor="#000000" />
 
                     <TextView
@@ -240,7 +241,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Perpustakaan"
+                        android:text="@string/tv_perpustakaan"
                         android:textColor="#000000" />
 
                     <TextView
@@ -260,7 +261,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text="Sanitasi"
+                        android:text="@string/tv_sanitasi"
                         android:textColor="#000000" />
 
                     <TextView

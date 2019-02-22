@@ -118,6 +118,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -206,6 +207,7 @@ public class MenuUtama extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.menu_utama);
         toolbar             = findViewById(R.id.toolbar);
         ParentPager         = findViewById(R.id.PagerUtama);
@@ -418,6 +420,8 @@ public class MenuUtama extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
 //            case R.id.activity_main_update_menu_item:
 //                // TODO update alert menu icon
 //                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
@@ -447,7 +451,8 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, TentangKami.class);
             startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
-
+            Intent intent = new Intent(MenuUtama.this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

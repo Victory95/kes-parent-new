@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Masuk">
+    tools:context=".Activity.Masuk"
+    tools:ignore="UselessParent,ContentDescription,RtlSymmetry">
 
     <ScrollView
         android:layout_weight="1"
@@ -17,7 +17,7 @@
             android:layout_gravity="center"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_marginBottom="30dp"
@@ -37,16 +37,14 @@
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
-                    \\\\ Skip this
                     <com.google.android.gms.common.SignInButton
                         android:id="@+id/sign_in_button"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:visibility="visible" />
 
-                    \\\\ custom Login Google
                     <ImageView
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:src="@drawable/ic_google_original"
                         android:layout_width="18dp"
                         android:layout_height="match_parent" />
@@ -59,7 +57,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </RelativeLayout>Google
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rectangle_line"
@@ -67,15 +65,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
-                    /// Skip This
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/login_button"
                         android:layout_width="0dp"
                         android:layout_height="0dp"/>
 
-                    ////// Here Custom Login Facebook
                     <ImageView
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:src="@drawable/ic_facebook_original"
                         android:layout_width="18dp"
                         android:layout_height="match_parent" />
@@ -83,12 +79,12 @@
                         android:id="@+id/btn_Facebook"
                         android:textAllCaps="false"
                         android:text="@string/btn_facebook_daftar"
-                        android:paddingLeft="10dp"
+                        android:paddingStart="10dp"
                         android:textColor="@android:color/white"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </RelativeLayout>Facebook
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -103,19 +99,19 @@
 
                         <View
                             android:layout_weight="1"
-                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
                             android:background="@color/textColor_Grey"
                             android:layout_width="match_parent"
-                            android:layout_marginRight="20dp"
-                            android:layout_height="wrap_content"></View>
+                            android:layout_marginEnd="20dp"
+                            android:layout_height="wrap_content"/>
 
                         <View
-                            android:layout_marginRight="2dp"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginStart="20dp"
                             android:layout_weight="1"
                             android:background="@color/textColor_Grey"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"></View>
+                            android:layout_height="wrap_content"/>
 
                     </LinearLayout>
 
@@ -132,7 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
                     <ImageView
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:src="@drawable/ic_email"
                         android:layout_width="25dp"
                         android:layout_height="match_parent" />
@@ -144,14 +140,14 @@
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                </RelativeLayout>Email
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_marginTop="15dp"
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
                     <ImageView
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:src="@drawable/ic_orangtua"
                         android:layout_width="25dp"
                         android:layout_height="match_parent" />
@@ -163,7 +159,7 @@
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                </RelativeLayout>Orangtua
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -179,11 +175,12 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="RtlHardcoded">
 
             <TextView
                 android:layout_weight="1"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:gravity="right"
                 android:text="@string/tv_recommend_masuk"
                 android:layout_width="wrap_content"
@@ -193,11 +190,10 @@
                 android:gravity="left"
                 android:id="@+id/tv_Masuk"
                 android:layout_weight="1"
-                android:layout_alignParentBottom="true"
                 android:text="@string/btn_recommend_masuk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </LinearLayout>Bottombar
+        </LinearLayout>
 
     </LinearLayout>
 

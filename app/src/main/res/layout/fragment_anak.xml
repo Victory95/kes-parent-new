@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +12,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:overScrollMode="never"
         android:layout_weight="1">
 
@@ -30,10 +29,10 @@
                 android:layout_marginEnd="60dp"
                 android:background="@drawable/rectang_line"
                 android:backgroundTint="@color/rectange"
-                android:text="Data Diri Anak"
+                android:text="@string/tv_data_diri_anak"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="35dp" />
+                android:textSize="35sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -41,10 +40,10 @@
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="80dp"
                 android:layout_marginTop="70dp"
-                android:text="Tolong lengkapi datadiri anak anda"
+                android:text="@string/tv_tolong_lengkapi_datadiri_anak_anda"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -63,8 +62,8 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="50dp"
-                android:src="@drawable/ic_children_bg"/>
-            />
+                android:src="@drawable/ic_children_bg"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
     <LinearLayout
@@ -77,10 +76,10 @@
             android:id="@+id/btn_kembali"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Batal"
+            android:text="@string/btn_batal"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="#ffffff" />
@@ -106,10 +105,10 @@
             android:id="@+id/btn_berikut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Berikutnya"
+            android:text="@string/btn_berikutnya"
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="#ffffff" />

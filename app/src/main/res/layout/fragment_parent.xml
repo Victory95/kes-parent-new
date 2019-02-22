@@ -10,13 +10,13 @@
     android:id="@+id/fragParent"
     android:focusableInTouchMode="true"
     tools:context=".Activity.Fragment.ParentFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="ContentDescription,MissingConstraints">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:overScrollMode="never">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:orientation="vertical"
@@ -33,9 +33,9 @@
                 android:layout_marginBottom="40dp"
                 android:background="@drawable/rectang_line"
                 android:backgroundTint="@color/rectange"
-                android:text="Selamat datang"
+                android:text="@string/info_selamat_datang"
                 android:textColor="#ffffff"
-                android:textSize="28dp"
+                android:textSize="28sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -49,10 +49,10 @@
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="70dp"
-                android:text="Ini adalah akses pertama anda untuk akses ke orang tua"
+                android:text="@string/tv_info_orangtua"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -86,8 +86,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view"
-                tools:ignore="MissingConstraints" />
+                app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <TextView
                 android:id="@+id/textView"
@@ -96,7 +95,7 @@
                 android:layout_marginStart="70dp"
                 android:layout_marginEnd="70dp"
                 android:layout_marginBottom="25dp"
-                android:text="Pastikan semua data anda isi dan ikuti petunjuknya"
+                android:text="@string/tv_info_2"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 app:layout_constraintBottom_toTopOf="@+id/textView3"
@@ -113,7 +112,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="70dp"
                 android:layout_marginBottom="15dp"
-                android:text="Ikuti Langkah berikut"
+                android:text="@string/tv_ikuti_langkah_berikut"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -133,10 +132,10 @@
             android:id="@+id/btn_kembali"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Batal"
+            android:text="@string/btn_batal"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="#ffffff" />
@@ -162,10 +161,10 @@
             android:id="@+id/btn_berikut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Berikutnya"
+            android:text="@string/btn_berikutnya"
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="#ffffff" />

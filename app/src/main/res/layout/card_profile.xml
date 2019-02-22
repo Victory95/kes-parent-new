@@ -1,9 +1,10 @@
-<LinearLayout android:layout_width="wrap_content"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
     android:layout_height="120dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="10dp"
     android:layout_marginBottom="10dp"
-    android:layout_marginLeft="20dp"
+    android:layout_marginStart="20dp"
     android:orientation="vertical"
     android:id="@+id/clicked"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -36,10 +37,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/nama_anak"
-            android:text="Profile anak"
-
+            android:text="@string/tv_profile_anak"
             android:layout_gravity="center"
-            android:textSize="8dp"
-            android:gravity="center"/>
+            android:textSize="8sp"
+            android:gravity="center"
+            tools:ignore="SmallSp" />
     </android.support.v7.widget.CardView>
 </LinearLayout>

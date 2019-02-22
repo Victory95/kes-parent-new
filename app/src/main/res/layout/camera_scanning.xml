@@ -5,8 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.CameraScanning">
-
+    tools:context=".Activity.CameraScanning"
+    tools:ignore="RtlHardcoded,NestedWeights,ContentDescription,TextViewEdits,RelativeOverlap">
 
     <RelativeLayout
         android:background="#505050"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:digits="0123456789"
                 android:inputType="phone"
                 android:id="@+id/tv_result"

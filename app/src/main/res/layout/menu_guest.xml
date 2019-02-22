@@ -22,6 +22,7 @@
         android:background="@color/colorPrimary"
         app:itemTextColor="@color/ic_logo_background"
         app:headerLayout="@layout/nav_header_menu_guest"
-        app:menu="@menu/menu_guest_drawer" />
+        app:menu="@menu/menu_guest_drawer"
+        app:itemIconTint="@color/ic_logo_background"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -9,13 +9,12 @@
     android:id="@+id/fragTempatTinggal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
-    tools:context=".Activity.Fragment.TempatTinggalFragment">
+    tools:context=".Activity.Fragment.TempatTinggalFragment"
+    tools:ignore="Autofill,ContentDescription,RtlHardcoded">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:overScrollMode="never"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,11 +27,10 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="100dp"
                 android:layout_marginBottom="5dp"
-                android:text="Tempat Tinggal"
+                android:text="@string/tv_tempat_tinggal"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="25dp" />
-
+                android:textSize="25sp" />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_Alamat"
@@ -47,16 +45,16 @@
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_Alamat"
-                android:hint="Alamat"
-                android:textSize="16dp"
+                android:hint="@string/tv_alamat"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Alamat
-        </android.support.design.widget.TextInputLayout>Alamat
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,12 +62,13 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_weight="1"
                     android:id="@+id/til_rt"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:textColorHint="#B6FFFFFF"
                     android:theme="@style/TextLabelWhite"
                     android:layout_width="match_parent"
@@ -78,22 +77,21 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_rt"
-                        android:hint="RT"
-                        android:textSize="16dp"
+                        android:hint="@string/et_rt"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_white"
                         android:paddingBottom="6dp"
                         android:textColor="@android:color/white"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />RT
-                </android.support.design.widget.TextInputLayout>RT
-
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_rw"
                     android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:textColorHint="#B6FFFFFF"
                     android:theme="@style/TextLabelWhite"
                     android:layout_width="match_parent"
@@ -102,16 +100,16 @@
                     <EditText
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_rw"
-                        android:hint="RW"
-                        android:textSize="16dp"
+                        android:hint="@string/et_rw"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector_white"
                         android:paddingBottom="6dp"
                         android:textColor="@android:color/white"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />NISN
-                </android.support.design.widget.TextInputLayout>NISN
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -127,41 +125,39 @@
                 <EditText
                     android:theme="@style/TextLabel"
                     android:id="@+id/et_dusun"
-                    android:hint="Desa"
-                    android:textSize="16dp"
+                    android:hint="@string/tv_desa"
+                    android:textSize="16sp"
                     android:inputType="textEmailAddress"
                     android:background="@drawable/edt_bg_selector_white"
                     android:paddingBottom="6dp"
                     android:textColor="@android:color/white"
                     android:paddingTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/> Kelurahan/Desa
-            </android.support.design.widget.TextInputLayout>Kelurahan/Desa
-
+                    android:layout_height="wrap_content"/>
+            </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_kelurahan"
-            android:textColorHint="#B6FFFFFF"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="20dp"
+                android:id="@+id/til_kelurahan"
+                android:textColorHint="#B6FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="20dp"
                 android:theme="@style/TextLabelWhite"
-
                 android:layout_marginLeft="30dp">
 
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_kelurahan"
-                android:hint="Kelurahan"
-                android:textSize="16dp"
+                android:hint="@string/tv_kelurahan"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/> Kelurahan/Desa
-        </android.support.design.widget.TextInputLayout>Kelurahan/Desa
+                android:layout_height="wrap_content"/>
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_Kecamatan"
@@ -177,16 +173,16 @@
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_Kecamatan"
-                android:hint="Kecamatan"
-                android:textSize="16dp"
+                android:hint="@string/tv_kecamatan"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Kecamatan
-        </android.support.design.widget.TextInputLayout>Kecamatan
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_kode_pos"
@@ -201,16 +197,16 @@
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_kode_pos"
-                android:hint="Kode Pos"
-                android:textSize="16dp"
+                android:hint="@string/tv_kode_pos"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Kode Pos
-        </android.support.design.widget.TextInputLayout>Kode Pos
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_status_tinggal"
@@ -225,16 +221,16 @@
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_status_tinggal"
-                android:hint="Status tinggal"
-                android:textSize="16dp"
+                android:hint="@string/tv_status_tinggal"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Status tinggal
-        </android.support.design.widget.TextInputLayout>Status tinggal
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/til_transportasi"
@@ -249,16 +245,17 @@
             <EditText
                 android:theme="@style/TextLabel"
                 android:id="@+id/et_transportasi"
-                android:hint="Transportasi"
-                android:textSize="16dp"
+                android:hint="@string/tv_transportasi"
+                android:textSize="16sp"
                 android:inputType="textEmailAddress"
                 android:background="@drawable/edt_bg_selector_white"
                 android:paddingBottom="6dp"
                 android:textColor="@android:color/white"
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />Alamat
-        </android.support.design.widget.TextInputLayout>Alamat
+                android:layout_height="wrap_content" />
+        </android.support.design.widget.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -273,13 +270,13 @@
                 android:background="@drawable/maps"/>
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center|left"
                 android:textColor="@android:color/white"
                 android:id="@+id/nama_rumah"
-                android:text="Lokasi Rumah"/>
+                android:text="@string/tv_lokasi_rumah"/>
 
             <ImageView
                 android:layout_width="40dp"
@@ -313,7 +310,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="20dp"
                 android:id="@+id/alamat_rumah_anak"
-                android:hint="Silahkan pilih lokasi tempat tinggal anak anda"
+                android:hint="@string/tv_info_lokasi_rumah"
                 android:gravity="center"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
@@ -335,7 +332,7 @@
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Kembali"
+            android:text="@string/btn_kembali"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="#ffffff" />
@@ -364,7 +361,7 @@
             android:layout_marginRight="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Submit"
+            android:text="@string/btn_submit"
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="#ffffff" />

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/colorPrimary"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.KodeAksesAnak">
-
-
+    tools:context=".Activity.KodeAksesAnak"
+    tools:ignore="Autofill,LabelFor,ContentDescription">
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@color/colorPrimary"
@@ -33,7 +31,7 @@
         android:visibility="gone"
         android:layout_marginTop="50dp"
         android:text="@string/tv_kode_aa_label"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:textColor="@android:color/white"
@@ -48,7 +46,8 @@
         android:src="@drawable/ic_face"
         android:layout_gravity="center"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        tools:ignore="ContentDescription" />
     <TextView
         android:visibility="gone"
         android:layout_marginTop="10dp"
@@ -62,7 +61,7 @@
 
     <TextView
         android:layout_marginTop="20dp"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:id="@+id/tv_kode_akses_anak_sekolah"
         android:gravity="center"
@@ -108,7 +107,8 @@
                 android:inputType="number"
                 android:textColor="@android:color/white"
                 android:maxLength="1"
-                android:nextFocusRight="@id/editTexttwo">
+                android:nextFocusRight="@id/editTexttwo"
+                >
 
                 <requestFocus />
             </EditText>
@@ -174,8 +174,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="-40dp"
-            android:layout_toRightOf="@id/lay_txt"
+            android:layout_marginStart="-40dp"
+            android:layout_toEndOf="@id/lay_txt"
             android:padding="10dp"
             android:src="@drawable/ic_copy_paste" />
     </RelativeLayout>
@@ -187,14 +187,14 @@
         android:layout_marginRight="40dp"
         android:gravity="center"
         android:text="@string/validate_kode_aa"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:textColor="@android:color/holo_red_light"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Kirim kode OTP lagi"
+        android:text="@string/tv_kirim_kode_otp_lagi"
         android:textAlignment="center"
         android:layout_marginTop="20dp"
         android:textColor="@color/ic_logo_background"

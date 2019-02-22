@@ -6,7 +6,8 @@
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.DaftarPublic">
+    tools:context=".Activity.DaftarPublic"
+    tools:ignore="UselessParent,Autofill,NestedWeights,TextFields">
 
     <ScrollView
         android:scrollbars="none"
@@ -15,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -28,7 +29,7 @@
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="0dp">
 
 
                     <android.support.design.widget.TextInputLayout
@@ -43,14 +44,14 @@
                             android:id="@+id/et_nama_lengkap"
                             android:paddingBottom="6dp"
                             android:paddingTop="10dp"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:theme="@style/TextLabel"
                             android:background="@drawable/edt_bg_selector"
                             android:textColor="@color/default_textColor"
                             android:hint="@string/et_nama_lengkap"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Nama Lengkap
+                    </android.support.design.widget.TextInputLayout>
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_email"
                         android:paddingTop="28dp"
@@ -63,7 +64,7 @@
                             android:id="@+id/et_email"
                             android:paddingBottom="6dp"
                             android:paddingTop="10dp"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:background="@drawable/edt_bg_selector"
                             android:textColor="@color/default_textColor"
                             android:inputType="textEmailAddress"
@@ -71,7 +72,7 @@
                             android:theme="@style/TextLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Alamat Email
+                    </android.support.design.widget.TextInputLayout>
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/til_number_phone"
                         android:paddingTop="28dp"
@@ -84,7 +85,7 @@
                             android:id="@+id/et_number_phone"
                             android:paddingBottom="6dp"
                             android:paddingTop="10dp"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:maxLength="12"
                             android:background="@drawable/edt_bg_selector"
                             android:textColor="@color/default_textColor"
@@ -93,11 +94,11 @@
                             android:theme="@style/TextLabel"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Number Handphone
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:textColor="@color/textColor_Grey"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:text="@string/validate2_mobile_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -112,12 +113,12 @@
                         app:passwordToggleDrawable="@drawable/show_password_selector"
                         android:layout_width="match_parent"
                         android:theme="@style/TextLabelView"
-                        android:layout_height="wrap_content">
+                        android:layout_height="0dp">
 
                         <EditText
                             android:id="@+id/et_kata_sandi"
                             android:paddingTop="10dp"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:focusableInTouchMode="true"
                             android:longClickable="false"
                             android:textIsSelectable="false"
@@ -128,10 +129,10 @@
                             android:hint="@string/et_kata_sandi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Kata Sandi
+                    </android.support.design.widget.TextInputLayout>
                     <TextView
                         android:textColor="@color/textColor_Grey"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:text="@string/validate2_pass_lengh"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -150,7 +151,7 @@
                         <EditText
                             android:id="@+id/et_ulangi_kata_sandi"
                             android:paddingTop="10dp"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:longClickable="false"
                             android:textIsSelectable="false"
                             android:theme="@style/TextLabel"
@@ -160,14 +161,14 @@
                             android:hint="@string/et_ulangi_kata_sandi"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
-                    </android.support.design.widget.TextInputLayout>Ulangi Kata Sandi
+                    </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
                 <CheckBox
                     android:id="@+id/cb_ketentuan"
                     android:layout_marginTop="30dp"
-                    android:layout_marginLeft="33dp"
-                    android:layout_marginRight="40dp"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginEnd="40dp"
                     android:paddingTop="5dp"
                     android:lineSpacingExtra="5dp"
                     android:layout_width="match_parent"
@@ -183,13 +184,13 @@
                     android:layout_marginRight="40dp"
                     android:layout_marginTop="50dp"
                     android:text="@string/btn_buat_akun"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textAllCaps="false"
                     android:background="@drawable/rectangle"
                     android:backgroundTint="@color/colorPrimary"
                     android:textColor="@android:color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Button Buat Akun
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </LinearLayout>

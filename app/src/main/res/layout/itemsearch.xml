@@ -8,6 +8,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/namaSchool"
-        android:padding="@dimen/fab_margin"
-        android:text="tester"/>
+        android:padding="@dimen/fab_margin"/>
 </LinearLayout>

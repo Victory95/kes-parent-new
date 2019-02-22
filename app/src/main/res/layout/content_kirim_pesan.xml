@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:text="Sekolah"
+                    android:text="@string/tv_sekolah"
                     android:gravity="center"/>
 
                 <LinearLayout
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:text="Kelas"
+                    android:text="@string/tv_kelas"
                     android:gravity="center"/>
 
                 <LinearLayout
@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:text="Guru"
+                    android:text="@string/tv_guru"
                     android:gravity="center"/>
 
                 <LinearLayout
@@ -127,7 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:text="Mata Pelajaran"
+                        android:text="@string/tv_mata_pelajaran"
                         android:gravity="center"/>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -158,7 +158,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pesan"
+            android:text="@string/tv_pesan"
             android:paddingStart="20dp"
             android:layout_marginTop="10dp"
             tools:ignore="RtlSymmetry" />
@@ -179,7 +179,8 @@
                 android:textSize="13sp"
                 android:id="@+id/et_pesan"
                 android:background="@drawable/tab_semester"
-                android:theme="@style/TextLabelView"/>
+                android:theme="@style/TextLabelView"
+                tools:ignore="Autofill,LabelFor,TextFields" />
         </android.support.v7.widget.CardView>
     </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

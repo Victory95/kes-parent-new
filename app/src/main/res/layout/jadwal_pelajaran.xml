@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.Anak.JadwalPelajaran">
+    tools:context=".Activity.Anak.JadwalPelajaran"
+    tools:ignore="ContentDescription,RtlSymmetry" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -43,7 +44,8 @@
                         android:id="@+id/klik_senin"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -58,11 +60,12 @@
                                 android:layout_marginRight="15dp"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginBottom="10dp"
-                                android:background="@drawable/ic_right"/>
+                                android:background="@drawable/ic_right"
+                                />
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Senin"
+                                android:text="@string/tv_senin"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -72,7 +75,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:id="@+id/jumlah_senin"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
@@ -91,7 +93,7 @@
                         android:gravity="center"
                         android:layout_margin="20dp"
                         android:visibility="gone"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -122,7 +124,8 @@
                         android:id="@+id/klik_selasa"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -142,7 +145,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Selasa"
+                                android:text="@string/tv_selasa"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -152,7 +155,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="16sp"
@@ -171,7 +173,7 @@
                         android:gravity="center"
                         android:visibility="gone"
                         android:layout_margin="20dp"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,7 +203,8 @@
                         android:id="@+id/klik_rabu"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -221,7 +224,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Rabu"
+                                android:text="@string/tv_rabu"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -231,7 +234,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="16sp"
@@ -250,7 +252,7 @@
                         android:gravity="center"
                         android:visibility="gone"
                         android:layout_margin="20dp"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -280,7 +282,8 @@
                         android:id="@+id/klik_kamis"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -300,7 +303,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Kamis"
+                                android:text="@string/tv_kamis"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -310,7 +313,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:id="@+id/jumlah_kamis"
@@ -329,7 +331,7 @@
                         android:gravity="center"
                         android:visibility="gone"
                         android:layout_margin="20dp"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -359,7 +361,8 @@
                         android:id="@+id/klik_jumat"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -380,7 +383,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Jumat"
+                                android:text="@string/tv_jumat"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -390,7 +393,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="16sp"
@@ -410,7 +412,7 @@
                         android:gravity="center"
                         android:visibility="gone"
                         android:layout_margin="20dp"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
@@ -442,7 +444,8 @@
                         android:id="@+id/klik_sabtu"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:scaleType="centerCrop"
-                        app:layout_collapseMode="pin">
+                        app:layout_collapseMode="pin"
+                        android:focusable="true">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -462,7 +465,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Sabtu"
+                                android:text="@string/tv_sabtu"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="20sp"
@@ -473,7 +476,6 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="0 mata pelajaran"
                                 android:background="@color/colorPrimary"
                                 android:textColor="@color/ic_logo_background"
                                 android:textSize="16sp"
@@ -492,7 +494,7 @@
                         android:gravity="center"
                         android:visibility="gone"
                         android:layout_margin="20dp"
-                        android:text="Tidak ada jadwal"/>
+                        android:text="@string/hint_no_jadwal"/>
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -502,11 +504,6 @@
                     </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-
     </android.support.v4.widget.NestedScrollView>
-
-
-
 </LinearLayout>

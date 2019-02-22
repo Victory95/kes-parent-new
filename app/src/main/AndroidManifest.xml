@@ -10,11 +10,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <!--<uses-permission android:name="android.permission.READ_SMS" /> &lt;!&ndash; GCM requires a Google account to use push notifications. &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.GET_ACCOUNTS" /> &lt;!&ndash; Keeps the processor from sleeping when a message is received. &ndash;&gt;-->
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK" /> &lt;!&ndash; Prevents other applications from registering and receiving the application's messages. &ndash;&gt;-->
-
+    <uses-permission android:name="android.permission.RECEIVE_SMS" /> <!-- <uses-permission android:name="android.permission.READ_SMS" /> &lt;!&ndash; GCM requires a Google account to use push notifications. &ndash;&gt; -->
+    <!-- <uses-permission android:name="android.permission.GET_ACCOUNTS" /> &lt;!&ndash; Keeps the processor from sleeping when a message is received. &ndash;&gt; -->
+    <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> &lt;!&ndash; Prevents other applications from registering and receiving the application's messages. &ndash;&gt; -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -29,11 +27,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,ExportedService,InnerclassSeparator">
-
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
@@ -46,6 +47,17 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <service android:name=".Service.FirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Service.FirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name="com.facebook.FacebookActivity"
@@ -77,12 +89,6 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <service android:name=".Service.FirebaseMessaging">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -92,12 +98,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <service android:name=".Service.FirebaseIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
 
         <activity
             android:name=".Activity.SplashScreen"
@@ -347,12 +347,11 @@
             android:label="Jadwal Ujian"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.KirimPesan"
+        <activity
+            android:name=".Activity.Anak.KirimPesan"
             android:label="Kirim Pesan"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-             />
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

@@ -41,7 +41,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Tanggal"
+                        android:text="@string/tv_tanggal"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -63,7 +63,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Sekolah"
+                        android:text="@string/tv_sekolah"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -84,7 +84,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Di buat oleh"
+                        android:text="@string/tv_dibuat_oleh"
                         android:gravity="center"
                         android:textColor="@color/black" />
                     <TextView
@@ -110,7 +110,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Mata Pelajaran"
+                            android:text="@string/tv_mata_pelajaran"
                             android:gravity="center"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -133,7 +133,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Anak"
+                        android:text="@string/tv_anak"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -155,7 +155,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Kelas"
+                        android:text="@string/tv_kelas"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -181,7 +181,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Pesan"
+                            android:text="@string/tv_pesan"
                             android:gravity="center"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -205,7 +205,8 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 app:cardCornerRadius="15dp"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                android:focusable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -214,7 +215,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Balas Pesan"
+                        android:text="@string/btn_balas_pesan"
                         android:textColor="@color/ic_logo_background"
                         android:textSize="20sp"
                         android:gravity="center"/>
