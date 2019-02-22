@@ -291,10 +291,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.ProfilAnak"
+            android:label="Profile Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.JadwalPelajaran"
+            android:label="Jadwal Pelajaran"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

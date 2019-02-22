@@ -2,6 +2,7 @@
 package com.fingertech.kes.Activity.Adapter;
 
         import android.support.v7.widget.RecyclerView;
+        import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_kalendar, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_calendar, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
@@ -59,8 +60,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            tanggal = (TextView) itemView.findViewById(R.id.tanggal_ujian);
-            jam     = (TextView) itemView.findViewById(R.id.jam_ujian);
+            tanggal = (TextView) itemView.findViewById(R.id.tanggal_kalendar);
+            jam     = (TextView) itemView.findViewById(R.id.jam_kalendar);
             mapel   = (TextView) itemView.findViewById(R.id.title_kalender);
             type_id = (TextView) itemView.findViewById(R.id.desc_kalender);
             itemView.setOnClickListener(this);
@@ -76,4 +77,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
 
         void onItemClick(View view, int position);
     }
+
+
 }

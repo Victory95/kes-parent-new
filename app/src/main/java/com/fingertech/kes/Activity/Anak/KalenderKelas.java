@@ -67,7 +67,6 @@ public class KalenderKelas extends AppCompatActivity {
     Date date;
     String calendar_id,calendar_type,calendar_desc,calendar_time,calendar_date,calendar_title;
     Toolbar toolbar;
-    CardView cv_event;
     TextView kalendar;
 
     @Override
@@ -83,7 +82,6 @@ public class KalenderKelas extends AppCompatActivity {
         recyclerView        = findViewById(R.id.recylceview_calendar);
         toolbar             = findViewById(R.id.toolbar_kalendar);
         kalendar            = findViewById(R.id.no_kalendar);
-        cv_event            = findViewById(R.id.event);
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         classroom_id        = getIntent().getStringExtra("classroom_id");
@@ -195,6 +193,14 @@ public class KalenderKelas extends AppCompatActivity {
                                     Long times = cal.getTimeInMillis();
                                     eventList = getevent(times);
                                     compactCalendarView.addEvents(eventList);
+                                    calendarModel = new CalendarModel();
+                                    calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
+                                    calendarModel.setCalendar_time(calendar.getCalendar_time());
+                                    calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
+                                    calendarModel.setCalendar_title(calendar.getCalendar_title());
+                                    calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                    calendarModel.setCalendar_type(calendar_type);
+                                    calendarModelList.add(calendarModel);
 
                                 } else if (calendar_type.equals("4")) {
                                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -209,16 +215,20 @@ public class KalenderKelas extends AppCompatActivity {
                                     Long times = cal.getTimeInMillis();
                                     events = getEventList(times);
                                     compactCalendarView.addEvents(events);
+                                    String remove="Hari Libur - ";
+                                    calendarModel = new CalendarModel();
+                                    calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
+                                    calendarModel.setCalendar_time("Seharian");
+                                    calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
+                                    String sentence = calendar.getCalendar_title();
+                                    String replaced = sentence.replace("Hari Libur - ", "");
+                                    calendarModel.setCalendar_title(replaced);
+                                    calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                    calendarModel.setCalendar_type(calendar_type);
+                                    calendarModelList.add(calendarModel);
                                 }
 
-                                calendarModel = new CalendarModel();
-                                calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
-                                calendarModel.setCalendar_time(calendar.getCalendar_time());
-                                calendarModel.setCalendar_date(calendar.getCalendar_date());
-                                calendarModel.setCalendar_title(calendar.getCalendar_title());
-                                calendarModel.setCalendar_desc(calendar.getCalendar_desc());
-                                calendarModel.setCalendar_type(calendar.getCalendar_type());
-                                calendarModelList.add(calendarModel);
+
                             }
                             calendarAdapter.notifyDataSetChanged();
                             kalendar.setVisibility(View.GONE);
@@ -229,7 +239,6 @@ public class KalenderKelas extends AppCompatActivity {
 //                    calendarModelList.clear();
                     kalendar.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
-                    cv_event.setVisibility(View.GONE);
 //                    calendarAdapter.notifyDataSetChanged();
                 }
             }
@@ -240,8 +249,11 @@ public class KalenderKelas extends AppCompatActivity {
             }
         });
     }
+    public static String removeWords(String word ,String remove) {
+        return word.replace(remove,"");
+    }
     private List<Event> getevent(long timeinMilis){
-        return Arrays.asList(new Event(Color.parseColor("#40bfe8"),timeinMilis));
+        return Arrays.asList(new Event(Color.GREEN,timeinMilis));
     }
     private List<Event>getEventList(long timeinMilis){
         return Arrays.asList(new Event(Color.RED,timeinMilis));
@@ -256,8 +268,20 @@ public class KalenderKelas extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+    String converDate(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
