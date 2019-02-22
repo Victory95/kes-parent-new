@@ -508,8 +508,8 @@ public class Masuk extends AppCompatActivity {
                                 // Application code
                                 Log.i(TAG, "LoginButton FacebookCallback onSuccess");
                                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-                         if(isLoggedIn ){
+                                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                                if(isLoggedIn ){
 
                                 try {
 

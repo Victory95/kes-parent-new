@@ -2,7 +2,7 @@
     <!--<string name="facebook_app_id">1955989994447935</string>-->
     <!--<string name="fb_login_protocol_scheme">fb1955989994447935</string>-->
 
-    <string name="facebook_app_id">1955989994447935</string>
+    <string name="facebook_app_id" translatable="false">1955989994447935</string>
     <string name="fb_login_protocol_scheme" tools:ignore="ExtraTranslation">fb1955989994447935</string>
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 
@@ -17,7 +17,7 @@
     <string name="label_forgot_pass">Lupa Kata Sandi</string>
     <string name="label_akses_anak">Akses Siswa</string>
     <string name="label_recommend_school">Rekomendasikan Sekolah</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings" translatable="false">Settings</string>
 
     ///////// Toast show
     <string name="error_resp_json">Internet bermasalah, coba lagi</string>
@@ -60,6 +60,13 @@
     <string name="hnt_email">E-mail</string>
     <string name="hnt_pass">Kata Sandi</string>
 
+    ///pengaturan
+    <string name="tv_pilihan" translatable="false">Pilihan Bahasa</string>
+    <string name="tv_bahasa">Indonesia</string>
+    <string name="tv_toolbar">Pengaturan</string>
+
+
+
     ///////// Akses Anak
     <string name="tv_info_akses_anak">Kode akses akan dikirimkan melalui email yang terdaftar pada sekolah, bila email yang anda gunakan berbeda dengan email yang terdaftar pada sekolah mohon hubungi kami</string>
     <string name="et_nama_kode_sekolah">Nama / Kode Sekolah</string>
@@ -70,14 +77,14 @@
     <string name="validate_sekolah_code">* Nama sekolah / kode sekolah tidak ditemukan</string>
     <string name="tv_nama_anak_info">Nama anak anda</string>
     <string name="validate_nik_niora">* NIK / NIORA tidak ditemukan</string>
-    <string name="validate_nik_niora_ortu">* NIK / NIORA anak tidak cokok dengan orangtua</string>
+    <string name="validate_nik_niora_ortu">* NIK / NIORA anak tidak cocok dengan orangtua</string>
 
     ///////// Kode Akses Anak
     <string name="btn_submit">submit</string>
-    <string name="tv_kode_aa_label">Vertifikasi Kode</string>
+    <string name="tv_kode_aa_label">Verifikasi Kode</string>
     <string name="tv_kode_aa_info">Mohon masukan kode akses yang telah kami kirimkan ke email anda</string>
     <string name="tv_kode_aa_label2">Data Siswa</string>
-    <string name="validate_kode_aa">* Masukan kode vertifikasi terlebih dahulu</string>
+    <string name="validate_kode_aa">* Masukan kode verifikasi terlebih dahulu</string>
 
     //////// daftar_public/daftar_parent
     <string name="et_nama_lengkap">Nama Lengkap</string>
@@ -131,7 +138,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="title_activity_menu_guest">MenuGuest</string>
 
     <string name="no_location_data_provided">no location</string>
