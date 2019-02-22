@@ -21,4 +21,10 @@ public class  App extends Application {
         return context;
     }
 
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(DBHelper.onAttach(base,"en"));
+    }
+
 }
