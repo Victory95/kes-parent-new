@@ -73,8 +73,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
 
-//    language
-    implementation 'io.paperdb:paperdb:2.6'
     ///////// Search Material Design
     implementation 'com.github.arimorty:floatingsearchview:2.1.1'
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
@@ -110,6 +108,7 @@ dependencies {
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
+    implementation 'io.paperdb:paperdb:2.6'
 
 }
 apply plugin: 'com.google.gms.google-services'

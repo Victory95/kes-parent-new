@@ -1,4 +1,5 @@
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
@@ -18,14 +19,15 @@
             android:background="@drawable/ic_up_arrow"
             android:id="@+id/arrowF"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            tools:ignore="ContentDescription" />
         <TextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textSize="14dp"
-            android:text="Lihat Sekolah Per Provinsi"
+            android:textSize="14sp"
+            android:text="@string/tv_sekolah_provinsi"
             android:textAlignment="center"
             android:gravity="center_vertical"/>
     </LinearLayout>
@@ -44,8 +46,8 @@
             android:id="@+id/sma"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SMA"
-            android:textSize="20dp"
+            android:text="@string/tv_sma"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
@@ -54,9 +56,9 @@
             android:id="@+id/smk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SMK"
+            android:text="@string/tv_smk"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
 
@@ -64,9 +66,9 @@
             android:id="@+id/smp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SMP"
+            android:text="@string/tv_smp"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
 
@@ -74,9 +76,9 @@
             android:id="@+id/sd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SD"
+            android:text="@string/tv_Sd"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_weight="1"
             android:buttonTint="@color/colorPrimary"/>
 
@@ -94,7 +96,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pilih Provinsi"
+        android:text="@string/tv_provinsi"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"/>
@@ -129,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/TampilProv"
-        android:text="Tampilkan"
+        android:text="@string/btn_tampilkan"
         android:textColor="#ffffff"
         android:clickable="true"
         android:textAlignment="center"

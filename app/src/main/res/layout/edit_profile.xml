@@ -7,7 +7,8 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".Activity.EditProfile">
+    tools:context=".Activity.EditProfile"
+    tools:ignore="Autofill,TextFields">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarprofil"
@@ -15,7 +16,8 @@
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -45,7 +47,7 @@
                             android:paddingTop="10dp"
                             android:paddingBottom="6dp"
                             android:textColor="@color/default_textColor"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:theme="@style/TextLabel" />
                     </android.support.design.widget.TextInputLayout>
                     <android.support.design.widget.TextInputLayout
@@ -63,14 +65,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/edt_bg_selector"
-                            android:hint="Email"
+                            android:hint="@string/tv_email"
                             android:imeOptions="actionNext"
                             android:inputType="textEmailAddress"
                             android:paddingTop="10dp"
                             android:paddingBottom="6dp"
                             android:singleLine="true"
                             android:textColor="@color/default_textColor"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:theme="@style/TextLabel" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -89,14 +91,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edt_bg_selector"
-                        android:hint="Tanggal Lahir"
+                        android:hint="@string/tv_tanggal_lahir"
                         android:imeOptions="actionNext"
                         android:inputType="date"
                         android:paddingTop="10dp"
                         android:paddingBottom="6dp"
                         android:singleLine="true"
                         android:textColor="@color/default_textColor"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:theme="@style/TextLabel" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -115,19 +117,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/edt_bg_selector"
-                            android:hint="Nomor Handphone"
+                            android:hint="@string/tv_no_handphone"
                             android:imeOptions="actionNext"
                             android:inputType="phone"
                             android:paddingTop="10dp"
                             android:paddingBottom="6dp"
                             android:singleLine="true"
                             android:textColor="@color/default_textColor"
-                            android:textSize="16dp"
+                            android:textSize="16sp"
                             android:theme="@style/TextLabel" />
                     </android.support.design.widget.TextInputLayout>
                 <TextView
                     android:textColor="@color/textColor_Grey"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:text="@string/validate2_mobile_phone"
@@ -140,14 +142,14 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginTop="20dp"
                         android:layout_marginRight="40dp"
-                        android:text="Jenis Kelamin" />
+                        android:text="@string/tv_jenis_kelamin" />
 
                     <RadioGroup
                         android:id="@+id/rg_hubungan"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="35dp"
-                        android:layout_marginRight="40dp"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginEnd="40dp"
                         android:orientation="horizontal">
 
                         <RadioButton
@@ -207,10 +209,12 @@
                         android:backgroundTint="@color/colorPrimary"
                         android:clickable="true"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:text="Update Profile"
+                        android:text="@string/btn_update_profile"
                         android:textAllCaps="false"
                         android:textColor="@android:color/white"
-                        android:textSize="15dp" />
+                        android:textSize="15sp"
+                        android:focusable="true"
+                        tools:ignore="UnusedAttribute" />
                 </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

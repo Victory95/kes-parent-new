@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -333,6 +334,7 @@ public class JadwalPelajaran extends AppCompatActivity {
 
         call.enqueue(new Callback<JSONResponse.JadwalPelajaran>() {
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<JSONResponse.JadwalPelajaran> call, final Response<JSONResponse.JadwalPelajaran> response) {
                 Log.i("KES", response.code() + "");
@@ -357,7 +359,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         daysid = jadwalData.getDayid();
                         day_type = jadwalData.getDayType();
                         if (daysid.toString().equals("1") && days_name.toString().equals("Senin") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_senin.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_senin.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();
@@ -381,7 +383,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_senin.setAdapter(seninAdapter);
 
                         } else if (daysid.toString().equals("2") && days_name.toString().equals("Selasa") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_selasa.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_selasa.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();
@@ -403,7 +405,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_selasa.setLayoutManager(layoutManager);
                             rv_selasa.setAdapter(selasaAdapter);
                         } else if (daysid.toString().equals("3") && days_name.toString().equals("Rabu") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_rabu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_rabu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();
@@ -425,7 +427,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_rabu.setLayoutManager(layoutManager);
                             rv_rabu.setAdapter(rabuAdapter);
                         } else if (daysid.toString().equals("4") && days_name.toString().equals("Kamis") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_kamis.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_kamis.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();
@@ -448,7 +450,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_kamis.setAdapter(kamisAdapter);
 
                         } else if (daysid.toString().equals("5") && days_name.toString().equals("Jumat") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_jumat.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_jumat.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();
@@ -471,7 +473,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_jumat.setAdapter(jumatAdapter);
 
                         } else if (daysid.toString().equals("6") && days_name.toString().equals("Sabtu") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
-                            tv_sabtu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " mata pelajaran");
+                            tv_sabtu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + R.string.tv_mata_pelajaran);
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
                                 jam_mulai = response.body().getData().get(i).getScheduleClass().get(o).getTimezOk();

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.Anak.KalenderKelas"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="ContentDescription">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_kalendar"
@@ -29,7 +30,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -68,7 +69,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tidak ada event"
+        android:text="@string/hint_no_event"
         android:layout_margin="30dp"
         android:gravity="center"
         android:textSize="20sp"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="center">
@@ -8,7 +9,8 @@
         android:id="@+id/fruitImageView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/labelTextView"
@@ -22,7 +24,7 @@
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="    Baca Selengkapnya     "
+        android:text="@string/hint_baca"
         android:background="#46bfee"
         android:textColor="#fff"
         android:textAllCaps="false" />

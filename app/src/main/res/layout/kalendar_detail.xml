@@ -37,7 +37,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Tanggal"
+                    android:text="@string/tv_tanggal"
                     android:gravity="center"
                     android:textColor="@color/black" />
 
@@ -59,7 +59,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Waktu"
+                    android:text="@string/tv_waktu"
                     android:gravity="center"
                     android:textColor="@color/black" />
 
@@ -85,7 +85,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Judul"
+                        android:text="@string/tv_judul"
                         android:gravity="center"
                         android:textColor="@color/black" />
                 </LinearLayout>
@@ -107,7 +107,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Deskripsi"
+                    android:text="@string/tv_deskripsi"
                     android:gravity="center"
                     android:textColor="@color/black" />
 
@@ -129,7 +129,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Dibuat Oleh"
+                    android:text="@string/tv_dibuat_oleh"
                     android:gravity="center"
                     android:textColor="@color/black" />
 

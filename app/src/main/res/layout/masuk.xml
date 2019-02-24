@@ -8,7 +8,8 @@
     android:focusableInTouchMode="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Masuk">
+    tools:context=".Activity.Masuk"
+    tools:ignore="Autofill,RtlHardcoded,RtlSymmetry,ContentDescription" >
 
     <ScrollView
         android:layout_weight="1"
@@ -18,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -40,16 +41,15 @@
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_email"
                         android:hint="@string/hnt_email"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:inputType="textEmailAddress"
                         android:background="@drawable/edt_bg_selector"
                         android:paddingBottom="6dp"
                         android:textColor="@color/default_textColor"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />E-mail
-                </android.support.design.widget.TextInputLayout>Email
-
+                        android:layout_height="wrap_content"/>
+                </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_marginTop="20dp"
                     app:passwordToggleTint="@color/colorPrimary"
@@ -65,45 +65,46 @@
                         android:theme="@style/TextLabel"
                         android:id="@+id/et_kata_sandi"
                         android:hint="@string/hnt_pass"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:inputType="textPassword"
                         android:background="@drawable/edt_bg_selector"
                         android:textColor="@color/default_textColor"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />Kata Sandi
-                </android.support.design.widget.TextInputLayout>Kata Sandi
-
+                        android:layout_height="wrap_content" />
+                </android.support.design.widget.TextInputLayout>
                 <TextView
                     android:id="@+id/tvb_lupa_pass"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="10dp"
-                    android:paddingLeft="10dp"
+                    android:paddingStart="10dp"
                     android:textColor="@color/colorPrimary"
                     android:text="@string/tv_lupa_kata_sandi"
                     android:layout_gravity="right"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />Lupa kata sandi?
+                    android:layout_height="wrap_content" />
+
                 <Button
                     android:id="@+id/btn_Masuk"
                     android:text="@string/btn_masuk"
-                    android:textSize="17dp"
+                    android:textSize="17sp"
                     android:textAllCaps="false"
                     android:background="@drawable/rectangle"
                     android:backgroundTint="@color/colorPrimary"
                     android:textColor="@android:color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Button Masuk
+                    android:layout_height="wrap_content" />
+
                 <TextView
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="30dp"
                     android:text="@string/tv_atau"
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />Atau
-            </LinearLayout>---- EditText and Button
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_marginLeft="50dp"
@@ -116,14 +117,12 @@
                     android:background="@drawable/rectangle_line"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
-                    \\\\ Skip this
                     <com.google.android.gms.common.SignInButton
                         android:id="@+id/sign_in_button"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:visibility="visible" />
 
-                    \\\\ custom Login Google
                     <ImageView
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/ic_google_original"
@@ -138,7 +137,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </RelativeLayout>Google
+                </RelativeLayout>
                 <RelativeLayout
                     android:layout_marginTop="25dp"
                     android:background="@drawable/rectangle_line"
@@ -146,13 +145,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
-                    /// Skip This
                     <com.facebook.login.widget.LoginButton
                         android:id="@+id/login_button"
                         android:layout_width="0dp"
                         android:layout_height="0dp"/>
 
-                    ////// Here Custom Login Facebook
                     <ImageView
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/ic_facebook_original"
@@ -167,14 +164,13 @@
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
-                </RelativeLayout>Facebook
-            </LinearLayout>---- List Opsi Masuk
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
         android:layout_weight="10"
-        android:layout_alignParentBottom="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -184,7 +180,8 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
 
             <TextView
                 android:layout_weight="1"
@@ -198,11 +195,10 @@
                 android:gravity="left"
                 android:id="@+id/tvb_daftar"
                 android:layout_weight="1"
-                android:layout_alignParentBottom="true"
                 android:text="@string/btn_recommend_daftar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </LinearLayout>Bottombar
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

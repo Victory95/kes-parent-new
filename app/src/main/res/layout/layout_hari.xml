@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="350dp"
     android:orientation="vertical"
@@ -15,7 +16,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hari"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:id="@+id/hari"
@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Libur Sekolah"
+                android:text="@string/tv_libur_sekolah"
                 android:layout_margin="20dp"
                 android:id="@+id/no_absen"
                 android:visibility="gone"
@@ -48,13 +48,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        >
+                        tools:ignore="UselessParent">
 
                         <TextView
                             android:layout_weight="1"
                             android:background="@drawable/tabel_ujian"
                             android:padding="13dip"
-                            android:text="Jam"
+                            android:text="@string/tv_jam"
                             android:gravity="center"
                             android:textColor="@color/ic_logo_background" />
 
@@ -62,7 +62,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/tabel_ujian"
                             android:padding="13dip"
-                            android:text="Keterangan"
+                            android:text="@string/tv_keterangan"
                             android:gravity="center"
                             android:textColor="@color/ic_logo_background" />
                     </TableRow>

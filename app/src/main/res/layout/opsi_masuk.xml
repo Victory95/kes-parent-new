@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".Activity.OpsiMasuk">
+    tools:context=".Activity.OpsiMasuk"
+    tools:ignore="ContentDescription">
 
     <LinearLayout
         android:gravity="center"
@@ -31,12 +31,12 @@
             android:layout_gravity="center"
             android:textColor="#b3b2b2"
             android:layout_marginBottom="60dp"
-            android:text="Temukan Sekolahmu Disini" />
+            android:text="@string/tv_intro" />
 
         <Button
             android:id="@+id/btn_Masuk"
             android:textAllCaps="false"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
@@ -48,7 +48,7 @@
         <Button
             android:id="@+id/btn_Masuk_tamu"
             android:textAllCaps="false"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/rectangle"
@@ -72,8 +72,8 @@
         android:layout_weight="17"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:textColor="#c9c8c8"
         android:gravity="center"
-        android:text="© 2018 Khronos Education System" />
+        android:text="@string/tv_credit" />
 </LinearLayout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Testerotp">
+    tools:context=".Activity.NextProject.TesterOtp"
+    tools:ignore="ContentDescription,Autofill,TextFields" >
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -36,7 +36,7 @@
         android:layout_below="@id/imageView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:text="May I ask you phone number?"
+        android:text="@string/info_nomor"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
         android:textColor="@color/colorPrimary" />
 
@@ -55,12 +55,13 @@
 
         <EditText
             android:id="@+id/editTextPhone"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:digits="0123456789"
-            android:hint="enter your number"
-            android:maxLength="12" />
+            android:hint="@string/et_nomor"
+            android:maxLength="12"
+            />
 
     </LinearLayout>
 
@@ -71,7 +72,7 @@
         android:layout_below="@id/linearLayout"
         android:layout_centerHorizontal="true"
         android:background="@color/colorPrimary"
-        android:text="Continue"
+        android:text="@string/btn_continue"
         android:textAllCaps="false"
         android:textColor="#ffffff" />
 

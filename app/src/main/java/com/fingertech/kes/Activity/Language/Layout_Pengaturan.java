@@ -64,16 +64,17 @@ public class Layout_Pengaturan extends AppCompatActivity {
 
     Context context = DBHelper.setLocale(this,lang);
         Resources resources = context.getResources();
-        TVPilihan.setText(resources.getString(R.string.tv_pilihan));
+
         toolbarPengaturan.setTitle(resources.getString(R.string.tv_toolbar));
     }
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             TVBahasa.setText("English");  //To change the text near to switch
+            TVPilihan.setText("Language");
             Paper.book().write("language","en");
             updateView((String)Paper.book().read("language"));
-            
+
             Log.d("You are :", "Checked");
         } else {
             TVBahasa.setText("Indonesia");   //To change the text near to switch

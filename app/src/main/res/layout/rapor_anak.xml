@@ -33,7 +33,8 @@
                 android:gravity="center_vertical"
                 android:layout_weight="1"
                 android:textColor="@color/ic_logo_background"
-                android:id="@+id/tv_walikelas"/>
+                android:id="@+id/tv_walikelas"
+                tools:ignore="NestedWeights" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -56,11 +57,12 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/tab_semester"
                     android:layout_weight="1">
 
@@ -90,14 +92,15 @@
                     android:layout_gravity="center"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="5dp"
-                    android:id="@+id/btn_go">
+                    android:id="@+id/btn_go"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:textColor="@color/colorPrimary"
-                        android:text="Go"/>
+                        android:text="@string/btn_go"/>
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
@@ -122,7 +125,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.4"
             android:textColor="@color/ic_logo_background"
-            android:text="Sampai"
+            android:text="@string/tv_sampai"
             android:gravity="center"/>
         <TextView
             android:layout_width="match_parent"
@@ -185,7 +188,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Status"
+                            android:text="@string/tv_status"
                             android:gravity="center"
                             android:textColor="#000000" />
 
@@ -208,7 +211,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Peringkat"
+                            android:text="@string/tv_peringkat"
                             android:gravity="center"
                             android:textColor="#000000" />
 
@@ -231,7 +234,7 @@
                             android:layout_weight="1"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Kritik &amp; Saran"
+                            android:text="@string/tv_kritik_amp_saran"
                             android:gravity="center"
                             android:textColor="#000000" />
 
@@ -252,7 +255,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"
-                android:text="Rapor belum diterbitkan oleh wali kelas"
+                android:text="@string/hint_no_rapor"
                 android:gravity="center"
                 android:id="@+id/tv_no_rapor"
                 android:visibility="gone"

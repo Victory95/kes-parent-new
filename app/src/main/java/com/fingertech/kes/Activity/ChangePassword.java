@@ -1,5 +1,7 @@
 package com.fingertech.kes.Activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,11 +48,11 @@ public class ChangePassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_password);
 
-        et_password_baru    = (EditText)findViewById(R.id.et_kata_sandi_baru);
-        et_password_lama    = (EditText)findViewById(R.id.et_kata_sandi_lama);
-        btn_ganti_password  = (Button)findViewById(R.id.btn_ganti_sandi);
+        et_password_baru    = findViewById(R.id.et_kata_sandi_baru);
+        et_password_lama    = findViewById(R.id.et_kata_sandi_lama);
+        btn_ganti_password  = findViewById(R.id.btn_ganti_sandi);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
-        tv_lupa_password    = (TextView)findViewById(R.id.tvb_lupa_pass);
+        tv_lupa_password    = findViewById(R.id.tvb_lupa_pass);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_change);
         setSupportActionBar(toolbar);
@@ -61,18 +63,10 @@ public class ChangePassword extends AppCompatActivity {
         authorization    = sharedpreferences.getString(TAG_TOKEN,"token");
         memberid         = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
 
-        btn_ganti_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                change_password();
-            }
-        });
-        tv_lupa_password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
-                startActivity(intent);
-            }
+        btn_ganti_password.setOnClickListener(v -> change_password());
+        tv_lupa_password.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+            startActivity(intent);
         });
     }
 

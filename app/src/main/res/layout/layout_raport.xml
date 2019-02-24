@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -31,7 +30,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_ujian"
                     android:padding="13dip"
-                    android:text="Detail"
+                    android:text="@string/tv_detail"
                     android:gravity="center"
                     android:textColor="@color/ic_logo_background" />
 
@@ -39,7 +38,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_ujian"
                     android:padding="13dip"
-                    android:text="Keterangan"
+                    android:text="@string/tv_keterangan"
                     android:gravity="center"
                     android:textColor="@color/ic_logo_background" />
             </TableRow>
@@ -58,7 +57,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Mata Pelajaran"
+                    android:text="@string/tv_mata_pelajaran"
                     android:gravity="center"
                     android:textColor="#000000" />
                 </LinearLayout>
@@ -81,7 +80,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Latihan Teori"
+                    android:text="@string/tv_latihan_teori"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -104,7 +103,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Ulangan Harian"
+                    android:text="@string/tv_ulangan_harian"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -127,7 +126,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Latihan Praktikum"
+                    android:text="@string/tv_latihan_praktikum"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -151,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Ekstrakulikuler"
+                    android:text="@string/tv_ekstrakulikuler"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:textColor="#000000" />
@@ -175,7 +174,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
-                    android:text="Ujian Sekolah"
+                    android:text="@string/tv_ujian_sekolah"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -200,7 +199,7 @@
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
                     android:layout_weight="1"
-                    android:text="Ujian Negara"
+                    android:text="@string/tv_ujian_negara"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -224,7 +223,7 @@
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
                     android:layout_weight="1"
-                    android:text="Nilai Akhir"
+                    android:text="@string/tv_nilai_akhir"
                     android:gravity="center"
                     android:textColor="#000000" />
 
@@ -248,7 +247,7 @@
                     android:background="@drawable/tabel_border"
                     android:padding="13dip"
                     android:layout_weight="1"
-                    android:text="Rata rata kelas"
+                    android:text="@string/tv_rata_rata_kelas"
                     android:gravity="center"
                     android:textColor="#000000" />
 

@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragContact"
-    tools:context=".Activity.Fragment.ContactFragment">
+    tools:context=".Activity.Fragment.ContactFragment"
+    tools:ignore="UselessParent">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v4.widget.NestedScrollView
@@ -20,7 +20,8 @@
         android:layout_height="match_parent"
         android:background="#ffffff"
         android:shrinkColumns="1"
-        android:stretchColumns="1">
+        android:stretchColumns="1"
+        >
     <!-- Row 3 with 2 columns -->
     <TableRow
         android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
             android:layout_weight="1"
             android:background="@drawable/tabel_border"
             android:padding="20dip"
-            android:text="Nomor Telepon"
+            android:text="@string/tv_nomor_telepon"
             android:textColor="#000000" />
 
         <TextView
@@ -58,7 +59,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/tabel_border"
                 android:padding="22dip"
-                android:text="Email"
+                android:text="@string/tv_email"
                 android:textColor="#000000" />
         </LinearLayout>
 
@@ -80,7 +81,7 @@
             android:layout_weight="1"
             android:background="@drawable/tabel_border"
             android:padding="20dip"
-            android:text="Nomor Fax"
+            android:text="@string/tv_nomor_fax"
             android:textColor="#000000" />
 
         <TextView
@@ -101,7 +102,7 @@
             android:layout_weight="1"
             android:background="@drawable/tabel_border"
             android:padding="20dip"
-            android:text="Website"
+            android:text="@string/tv_website"
             android:textColor="#000000" />
 
         <TextView
@@ -122,7 +123,7 @@
             android:layout_weight="1"
             android:background="@drawable/tabel_border"
             android:padding="20dip"
-            android:text="CP"
+            android:text="@string/tv_cp"
             android:textColor="#000000" />
 
         <TextView

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Model.HariModel.JadwalKamis;
-import com.fingertech.kes.Activity.Model.HariModel.JadwalSenin;
 import com.fingertech.kes.R;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public class KamisAdapter extends RecyclerView.Adapter<KamisAdapter.MyHolder> {
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_page, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_jadwal, parent, false);
 
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;

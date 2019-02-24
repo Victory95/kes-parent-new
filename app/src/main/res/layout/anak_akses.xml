@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activity.Search.AnakAkses">
+    tools:context=".Activity.Search.AnakAkses"
+    tools:ignore="RtlHardcoded,Autofill,TextFields,RtlSymmetry,ContentDescription">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_anak"
@@ -26,13 +27,14 @@
             android:id="@+id/lay_akses_anak"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Siswa atau Siswi"
+                android:text="@string/tv_siswa_siswi"
                 android:textColor="@color/colorPrimary"
-                android:layout_marginLeft="40dp"/>
+                android:layout_marginLeft="40dp"
+                 />
 
 
             <RelativeLayout
@@ -54,20 +56,18 @@
                         android:id="@+id/et_search"
                         android:paddingBottom="6dp"
                         android:paddingTop="10dp"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector"
                         android:textColor="@color/default_textColor"
                         android:imeOptions="actionSearch"
                         android:singleLine="true"
-                        android:hint="Nama / Kode Sekolah"
+                        android:hint="@string/et_nama_kode_sekolah"
                         android:theme="@style/TextLabel"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </android.support.design.widget.TextInputLayout>Masukkan Nama atau Kode Sekolah
-
-
+                        android:layout_height="wrap_content"/>
+                </android.support.design.widget.TextInputLayout>
                 <LinearLayout
                     android:layout_marginTop="80dp"
                     android:orientation="vertical"
@@ -80,7 +80,7 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
                         android:text="@string/validate_nama_kode_sekolah"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textColor="@android:color/holo_red_light"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -90,7 +90,7 @@
                         android:id="@+id/tv_kode_join"
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textColor="@color/textColor_Grey"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -118,7 +118,7 @@
                                     android:id="@+id/et_nik_niora_siswa"
                                     android:paddingBottom="6dp"
                                     android:paddingTop="10dp"
-                                    android:textSize="16dp"
+                                    android:textSize="16sp"
                                     android:background="@drawable/edt_bg_selector"
                                     android:textColor="@color/default_textColor"
                                     android:inputType="textCapCharacters"
@@ -130,8 +130,7 @@
                                     android:theme="@style/TextLabel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content" />
-                            </android.support.design.widget.TextInputLayout>NIK
-
+                            </android.support.design.widget.TextInputLayout>
                             <LinearLayout
                                 android:background="@drawable/rectangle_line_blue"
                                 android:layout_marginTop="15dp"
@@ -154,9 +153,9 @@
                                     android:paddingBottom="10dp"
                                     android:textColor="@color/textColor_Grey"
                                     android:textColorHint="@color/colorPrimary"
-                                    android:textSize="12dp"
+                                    android:textSize="12sp"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent" />
+                                    android:layout_height="match_parent"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -189,7 +188,7 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
                         android:visibility="gone"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:gravity="center"
                         android:textColor="@color/textColor_Grey"
                         android:layout_width="match_parent"
@@ -201,8 +200,8 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
                         android:visibility="gone"
-                        android:text="_____"
-                        android:textSize="25dp"
+                        android:text="@string/tv____"
+                        android:textSize="25sp"
                         android:gravity="center"
                         android:textColor="@color/colorPrimary"
                         android:layout_width="match_parent"
@@ -214,14 +213,14 @@
                         android:id="@+id/btn_kode_akses"
                         android:layout_marginTop="40dp"
                         android:text="@string/btn_minta_kode_akses"
-                        android:textSize="17dp"
+                        android:textSize="17sp"
                         android:textAllCaps="false"
                         android:background="@drawable/rectangle"
                         android:backgroundTint="@color/colorPrimary"
                         android:textColor="@android:color/white"
                         android:layout_width="match_parent"
                         android:layout_marginBottom="50dp"
-                        android:layout_height="wrap_content" />Button Masuk
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
                 <android.support.v7.widget.RecyclerView

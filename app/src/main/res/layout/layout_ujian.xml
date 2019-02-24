@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="130dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,16 +31,15 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Tanggal"
                         android:id="@+id/tanggal_ujian"
                         android:textColor="@color/ic_logo_background"
-                        android:background="@color/mint_color"/>
+                        android:background="@color/mint_color"
+                        tools:ignore="NestedWeights" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Jam"
                         android:id="@+id/jam_ujian"
                         android:textColor="@color/ic_logo_background"
                         android:background="@color/mint_color"/>
@@ -75,7 +75,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="MID"
                             android:textSize="12sp"
                             android:id="@+id/type_ujian"
                             android:textColor="@color/ic_logo_background"
@@ -110,8 +109,8 @@
                         android:layout_weight="1"
                         android:textColor="@color/black"
                         android:gravity="center"
-                        android:text="Nilai"
-                        android:background="@color/Primary_alpha_04"/>
+                        android:background="@color/Primary_alpha_04"
+                        tools:ignore="NestedWeights" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -119,7 +118,6 @@
                         android:textColor="@color/black"
                         android:gravity="center"
                         android:id="@+id/nilai_ujian"
-                        android:text="-"
                         android:background="@color/Primary_alpha_04"/>
                 </LinearLayout>
             </LinearLayout>
@@ -128,11 +126,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mapel"
                 android:id="@+id/mapel_ujian"
                 android:textSize="16sp"
                 android:layout_marginTop="10dp"
@@ -141,7 +139,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="deskripsi"
                 android:layout_marginTop="5dp"
                 android:id="@+id/desc_ujian"
                 android:paddingStart="10dp"/>

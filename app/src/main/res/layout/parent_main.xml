@@ -9,7 +9,7 @@
         android:layout_weight="1"
         android:id="@+id/PagerParent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
 
     </com.fingertech.kes.Activity.Model.CustomViewPager>
 
@@ -24,10 +24,10 @@
             android:id="@+id/btn_kembali"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Batal"
+            android:text="@string/btn_batal"
             android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="#ffffff" />
@@ -53,10 +53,10 @@
             android:id="@+id/btn_berikut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_weight="1"
             android:background="#0046bfee"
-            android:text="Berikutnya"
+            android:text="@string/btn_berikutnya"
             android:textAlignment="textEnd"
             android:textAllCaps="false"
             android:textColor="#ffffff" />

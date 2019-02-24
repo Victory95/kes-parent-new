@@ -6,12 +6,12 @@
 
     <TextView
         android:id="@+id/negarA"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginLeft="3dp"
+        android:layout_marginStart="3dp"
         android:layout_weight="1"
-        android:hint="Negara Asal"
+        android:hint="@string/tv_negara_asal"
         android:textColor="#fff"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 </LinearLayout>

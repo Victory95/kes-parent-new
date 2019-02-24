@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.Anak.BalasPesan"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Autofill,LabelFor,TextFields" >
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_balas"
@@ -41,7 +42,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Balas kepada"
+                        android:text="@string/tv_balas_kepada"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -63,7 +64,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Sekolah"
+                        android:text="@string/tv_sekolah"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -84,7 +85,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Anak"
+                        android:text="@string/tv_anak"
                         android:gravity="center"
                         android:textColor="@color/black" />
                     <TextView
@@ -106,7 +107,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/tabel_border"
                         android:padding="13dip"
-                        android:text="Kelas"
+                        android:text="@string/tv_kelas"
                         android:gravity="center"
                         android:textColor="@color/black" />
 
@@ -133,7 +134,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Mata Pelajaran"
+                            android:text="@string/tv_mata_pelajaran"
                             android:gravity="center"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -161,7 +162,7 @@
                             android:layout_height="match_parent"
                             android:background="@drawable/tabel_border"
                             android:padding="13dip"
-                            android:text="Pesan"
+                            android:text="@string/tv_pesan"
                             android:gravity="center"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -173,7 +174,8 @@
                         android:theme="@style/TextLabelView"
                         android:id="@+id/isi_pesan"
                         android:gravity="center_vertical"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        />
                 </TableRow>
             </TableLayout>
             <android.support.v7.widget.CardView
@@ -186,7 +188,8 @@
                 android:foreground="?android:attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 app:cardCornerRadius="15dp"
-                app:layout_collapseMode="pin">
+                app:layout_collapseMode="pin"
+                android:focusable="true">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -195,7 +198,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Balas Pesan"
+                        android:text="@string/tv_balas_pesan"
                         android:textColor="@color/ic_logo_background"
                         android:textSize="20sp"
                         android:gravity="center"/>

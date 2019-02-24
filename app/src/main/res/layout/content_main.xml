@@ -10,7 +10,8 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
 
         <View
             android:layout_marginTop="100dp"
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Memberid"/>
+            android:text="@string/tv_member_id"/>
 
         <TextView
             android:id="@+id/tv_email"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Email"/>
+            android:text="@string/tv_email"/>
 
         <TextView
             android:id="@+id/tv_fullname"
@@ -41,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Fullname"/>
+            android:text="@string/tv_fullname"/>
 
         <TextView
             android:id="@+id/tv_member_type"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Member Type"/>
+            android:text="@string/tv_member_type"/>
 
         <TextView
             android:id="@+id/tv_token"
@@ -57,15 +58,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Token" />
+            android:text="@string/tv_token" />
 
         <Button
             android:layout_marginTop="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginLeft="50dp"
             android:id="@+id/btn_logout"
-            android:text="Logout"
-            android:textSize="15dp"
+            android:text="@string/btn_logout"
+            android:textSize="15sp"
             android:textAllCaps="false"
             android:layout_marginBottom="100dp"
             android:background="@drawable/rectangle"
