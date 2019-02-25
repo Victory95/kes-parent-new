@@ -544,7 +544,7 @@ public class ProfileParent extends AppCompatActivity {
                         member.setText("Sebagai User Biasa");
                         jadi_parent.setVisibility(View.VISIBLE);
                     }
-                    tanggallahir.setText(tanggal_lahir);
+                    tanggallahir.setText(convertDate(tanggal_lahir));
 
                     String imagefile = Base_url + picture;
                     if (picture.equals("")){
@@ -592,42 +592,52 @@ public class ProfileParent extends AppCompatActivity {
 
     }
 
+    //Konversi tanggal dari date dialog ke format yang kita inginkan
+    String convertDate(String tanggal) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     private void pilihan() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileParent.this,R.style.DialogTheme);
         builder.setTitle("Log out");
         builder.setMessage("Apakah anda ingin keluar?");
         builder.setIcon(R.drawable.ic_alarm);
-        builder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putBoolean(Masuk.session_status, false);
-                editor.putString(TAG_EMAIL, null);
-                editor.putString(TAG_MEMBER_ID, null);
-                editor.putString(TAG_FULLNAME, null);
-                editor.putString(TAG_MEMBER_TYPE, null);
-                editor.putString(TAG_TOKEN, null);
-                editor.commit();
+        builder.setPositiveButton("Ya", (dialog, which) -> {
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putBoolean(Masuk.session_status, false);
+            editor.putString(TAG_EMAIL, null);
+            editor.putString(TAG_MEMBER_ID, null);
+            editor.putString(TAG_FULLNAME, null);
+            editor.putString(TAG_MEMBER_TYPE, null);
+            editor.putString(TAG_TOKEN, null);
+            editor.commit();
 
-                /////// Logout Facebook
-                LoginManager.getInstance().logOut();
+            /////// Logout Facebook
+            LoginManager.getInstance().logOut();
 
 
-                ///// Google Logout
-                mAuth.signOut();
-                mGoogleSignInClient.signOut().addOnCompleteListener(ProfileParent.this,
-                        new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                FirebaseUser user = null;
-                            }
-                        });
+            ///// Google Logout
+            mAuth.signOut();
+            mGoogleSignInClient.signOut().addOnCompleteListener(ProfileParent.this,
+                    new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            FirebaseUser user = null;
+                        }
+                    });
 
-                Intent intent = new Intent(ProfileParent.this, MenuGuest.class);
-                finish();
-                startActivity(intent);
-            }
+            Intent intent = new Intent(ProfileParent.this, MenuGuest.class);
+            finish();
+            startActivity(intent);
         });
         builder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
             @Override

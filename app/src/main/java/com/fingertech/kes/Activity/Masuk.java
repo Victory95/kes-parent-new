@@ -653,7 +653,7 @@ public class Masuk extends AppCompatActivity {
         });
     }
     public void login_sosmed_post(){
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

@@ -1,14 +1,11 @@
 package com.fingertech.kes.Activity.Fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.facebook.share.Share;
-import com.fingertech.kes.Activity.Anak.AbsensiAnak;
+import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Anak.RaportAnak;
@@ -35,14 +31,6 @@ public class MenuSatuFragment extends Fragment {
     public MenuSatuFragment() {
         // Required empty public constructor
     }
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        getActivity().setContentView(R.layout.fragment_menu_satu);
-//        ViewPager vp = new ViewPager(getContext());
-//        vp.setId(R.id.PagerUtama);
-//
-//    }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     SharedPreferences sharedPreferences;
@@ -113,7 +101,7 @@ public class MenuSatuFragment extends Fragment {
 
         btn_absensi.setOnClickListener(v -> {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), AbsensiAnak.class);
+                Intent intent = new Intent(getContext(), AbsenAnak.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code);
                 intent.putExtra("student_id", student_id);

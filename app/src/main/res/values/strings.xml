@@ -479,6 +479,9 @@
     <string name="btn_continue">Continue</string>
     <string name="hint_no_ujian">Tidak ada ujian</string>
     <string name="hint_baca">Baca Selengkapnya</string>
+    <string name="tv_nilai">Nilai</string>
+    <string name="tv_bulan">Bulan</string>
+    <string name="hint_absen">Libur</string>
 
     <!--<string name="firebase_database_url" translatable="false">https://123.firebaseio.com</string>-->
     <!--<string name="gcm_defaultSenderId" translatable="false">123</string>-->

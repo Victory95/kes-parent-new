@@ -80,7 +80,8 @@ public interface Auth {
     @FormUrlEncoded
     @POST("auth/kes_login_sosmed")
     Call<JSONResponse>login_sosmed_post(@Field("fg_code") String fg_code,
-                                        @Field("device_id") String device_id);
+                                        @Field("device_id") String device_id,
+                                        @Field("firebase_token") String firebase_token);
 
     //////// Forgot password
     @FormUrlEncoded

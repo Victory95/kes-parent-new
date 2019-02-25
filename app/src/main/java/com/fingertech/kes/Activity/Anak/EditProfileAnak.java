@@ -359,6 +359,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         }
         if (!validateNegara()){
             return;
+
         }if (!validateEmail()) {
             return;
         }
@@ -508,7 +509,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         return true;
     }
     private boolean validateNegara() {
-        if (negaraasal == null) {
+        if (kewarganegaraan == null) {
             Toast.makeText(getApplicationContext(),"Harap di isi negara anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
@@ -712,12 +713,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         et_negara_asal.setAdapter(spinnerArrayAdapter);
-        et_negara_asal.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(Spinner parent, View view, int position, long id) {
-                negaraasal = myData.get(position).toString();
-            }
-        });
+        et_negara_asal.setOnItemSelectedListener((parent, view, position, id) -> kewarganegaraan = myData.get(position).toString());
 
     }
 
@@ -966,7 +962,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     rb_wni.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            negaraasal = getResources().getString(R.string.rb_wni);
+                            kewarganegaraan = getResources().getString(R.string.rb_wni);
                             et_negara_asal.setVisibility(View.GONE);
                         }
                     });
@@ -975,7 +971,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         @Override
                         public void onClick(View v) {
                             et_negara_asal.setVisibility(View.VISIBLE);
-                            negaraasal = et_negara_asal.getSelectedItem().toString();
+                            kewarganegaraan = et_negara_asal.getSelectedItem().toString();
                         }
                     });
 
@@ -1116,6 +1112,8 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     CurrLocationMarker.remove();}
                 CurrLocationMarker = Mmap.addMarker(markerOptions);
                 alamattempattinggal.setText(strEditText);
+                CurrentLatitude     = lati;
+                CurrentLongitude    = longi;
             }
         }
     }
@@ -1161,7 +1159,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     public void update_member(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization.toString(),student_id.toString(), school_code.toLowerCase().toString(), et_nama_lengkap.getText().toString(), jenis_kelamin.toString(), et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(),negaraasal.toString(),sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization.toString(),student_id.toString(), school_code.toLowerCase().toString(), et_nama_lengkap.getText().toString(), jenis_kelamin.toString(), et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(),kewarganegaraan.toString(),sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -1179,6 +1177,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     intent.putExtra("student_id",student_id);
                     intent.putExtra("parent_nik",parent_nik);
                     startActivity(intent);
+                    finish();
                 }else {
                     Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();
                 }

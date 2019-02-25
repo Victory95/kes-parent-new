@@ -5,6 +5,7 @@ import com.fingertech.kes.Rest.JSONResponse;
 import java.util.List;
 
 public class AbsenModel {
+
     public String schedule_time,timez_start,times_finish,lesson_duration,total_attendedance,total_leave_sick;
     public List<JSONResponse.DataHari>days;
 

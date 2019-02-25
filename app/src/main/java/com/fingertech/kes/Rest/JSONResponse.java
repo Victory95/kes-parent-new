@@ -5570,9 +5570,8 @@ public class JSONResponse{
         @SerializedName("schedule_time")
         public String schedule_time;
 
-        @SerializedName("timez_start")
+        @SerializedName("timez_ok")
         public String timez_start;
-
 
         @SerializedName("timez_finish")
         public String timez_finish;

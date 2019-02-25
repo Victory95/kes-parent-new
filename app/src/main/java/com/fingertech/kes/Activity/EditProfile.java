@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -161,19 +162,15 @@ public class EditProfile extends AppCompatActivity {
         }, mYear, mMonth, mDay);
 
 
-        et_tanggal.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+        et_tanggal.setOnClickListener(view -> {
 //                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
-                mDatePicker.show();
-            }
+            mDatePicker.show();
         });
 
-        et_tanggal.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View view, boolean b) {
-                if (b) {
+        et_tanggal.setOnFocusChangeListener((view, b) -> {
+            if (b) {
 //                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
-                    mDatePicker.show();
-                }
+                mDatePicker.show();
             }
         });
 
@@ -215,38 +212,20 @@ public class EditProfile extends AppCompatActivity {
         ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         sp_religion.setAdapter(ArrayAdapter);
         sp_religion.setSelection(position);
-        sp_religion.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(Spinner parent, View view, int position, long id) {
-                if (position > 0) {
-                    agama = penghasil.get(position);
-                }
+        sp_religion.setOnItemSelectedListener((parent, view, position1, id) -> {
+            if (position1 > 0) {
+                agama = penghasil.get(position1);
             }
         });
 
         agama = sp_religion.getSelectedItem().toString();
 
-        rb_pria.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gender = getResources().getString(R.string.rb_laki);
-            }
-        });
-        rb_wanita.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                gender = getResources().getString(R.string.rb_wanita);
-            }
-        });
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        rb_pria.setOnClickListener(v -> gender = getResources().getString(R.string.rb_laki));
+        rb_wanita.setOnClickListener(v -> gender = getResources().getString(R.string.rb_wanita));
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         last_update = df.format(Calendar.getInstance().getTime());
 
-        btn_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                update_profile();
-            }
-        });
+        btn_update.setOnClickListener(v -> update_profile());
 
     }
 
@@ -254,8 +233,8 @@ public class EditProfile extends AppCompatActivity {
     String convertDate(int year, int month, int day) {
         Log.d("Tanggal", year + "/" + month + "/" + day);
         String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
             return e;
@@ -285,6 +264,7 @@ public class EditProfile extends AppCompatActivity {
                 if (status == 1 && code.equals("UP_SCS_0001")) {
                     Intent intent = new Intent(EditProfile.this, ProfileParent.class);
                     startActivity(intent);
+                    finish();
                 } else{
                     if (status == 0 && code.equals("UP_ERR_0001")) {
                         Toast.makeText(getApplicationContext(), "Email tidak boleh kosong", Toast.LENGTH_LONG).show();

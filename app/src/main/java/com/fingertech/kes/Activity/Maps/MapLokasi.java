@@ -70,12 +70,12 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
         setContentView(R.layout.map_lokasi);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapLokasi);
         mapFragment.getMapAsync(this);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.searc);
+        final Toolbar toolbar = findViewById(R.id.searc);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
-        Pilih = (Button)findViewById(R.id.pilih_map);
-        lokasi  = (TextView)findViewById(R.id.lokasi_anda);
+        Pilih   = findViewById(R.id.pilih_map);
+        lokasi  = findViewById(R.id.lokasi_anda);
 
     }
 
@@ -151,17 +151,13 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
 
                 lokasi.setText(address);
 
-                Pilih.setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("ResourceType")
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MapLokasi.this,LokasiAnda.class);
-                        intent.putExtra("address", city);
-                        intent.putExtra("latitude",latitude1);
-                        intent.putExtra("longitude", longitude1);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
+                Pilih.setOnClickListener(v -> {
+                    Intent intent = new Intent(MapLokasi.this,LokasiAnda.class);
+                    intent.putExtra("address", city);
+                    intent.putExtra("latitude",latitude1);
+                    intent.putExtra("longitude", longitude1);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 });
             }
 

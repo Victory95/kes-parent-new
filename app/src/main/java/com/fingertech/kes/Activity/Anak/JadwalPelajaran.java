@@ -155,159 +155,141 @@ public class JadwalPelajaran extends AppCompatActivity {
 
 
 
-        btn_senin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemlist.size() == 0) {
-                    if (hint_senin.getVisibility() == View.GONE) {
-                        arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                        hint_senin.setVisibility(View.VISIBLE);
-                        rv_senin.setVisibility(View.GONE);
-                    }else if (hint_senin.getVisibility() == View.VISIBLE){
-                        arrow_senin.setBackgroundResource(R.drawable.ic_right);
-                        rv_senin.setVisibility(View.GONE);
-                        hint_senin.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_senin.getVisibility() == View.GONE) {
-                        arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                        rv_senin.setVisibility(View.VISIBLE);
-                        hint_senin.setVisibility(View.GONE);
-                    } else if (rv_senin.getVisibility() == View.VISIBLE) {
-                        arrow_senin.setBackgroundResource(R.drawable.ic_right);
-                        rv_senin.setVisibility(View.GONE);
-                        hint_senin.setVisibility(View.GONE);
-                    }
+        btn_senin.setOnClickListener(v -> {
+            if (itemlist.size() == 0) {
+                if (hint_senin.getVisibility() == View.GONE) {
+                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
+                    hint_senin.setVisibility(View.VISIBLE);
+                    rv_senin.setVisibility(View.GONE);
+                }else if (hint_senin.getVisibility() == View.VISIBLE){
+                    arrow_senin.setBackgroundResource(R.drawable.ic_right);
+                    rv_senin.setVisibility(View.GONE);
+                    hint_senin.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_senin.getVisibility() == View.GONE) {
+                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
+                    rv_senin.setVisibility(View.VISIBLE);
+                    hint_senin.setVisibility(View.GONE);
+                } else if (rv_senin.getVisibility() == View.VISIBLE) {
+                    arrow_senin.setBackgroundResource(R.drawable.ic_right);
+                    rv_senin.setVisibility(View.GONE);
+                    hint_senin.setVisibility(View.GONE);
                 }
             }
         });
-        btn_selasa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemselasa.size() == 0) {
-                    if (hint_selasa.getVisibility() == View.GONE) {
-                        arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                        hint_selasa.setVisibility(View.VISIBLE);
-                        rv_selasa.setVisibility(View.GONE);
-                    }else if (hint_selasa.getVisibility() == View.VISIBLE){
-                        arrow_selasa.setBackgroundResource(R.drawable.ic_right);
-                        rv_selasa.setVisibility(View.GONE);
-                        hint_selasa.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_selasa.getVisibility() == View.GONE) {
-                        arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                        rv_selasa.setVisibility(View.VISIBLE);
-                        hint_selasa.setVisibility(View.GONE);
-                    } else if (rv_selasa.getVisibility() == View.VISIBLE) {
-                        arrow_selasa.setBackgroundResource(R.drawable.ic_right);
-                        rv_selasa.setVisibility(View.GONE);
-                        hint_selasa.setVisibility(View.GONE);
-                    }
+        btn_selasa.setOnClickListener(v -> {
+            if (itemselasa.size() == 0) {
+                if (hint_selasa.getVisibility() == View.GONE) {
+                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
+                    hint_selasa.setVisibility(View.VISIBLE);
+                    rv_selasa.setVisibility(View.GONE);
+                }else if (hint_selasa.getVisibility() == View.VISIBLE){
+                    arrow_selasa.setBackgroundResource(R.drawable.ic_right);
+                    rv_selasa.setVisibility(View.GONE);
+                    hint_selasa.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_selasa.getVisibility() == View.GONE) {
+                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
+                    rv_selasa.setVisibility(View.VISIBLE);
+                    hint_selasa.setVisibility(View.GONE);
+                } else if (rv_selasa.getVisibility() == View.VISIBLE) {
+                    arrow_selasa.setBackgroundResource(R.drawable.ic_right);
+                    rv_selasa.setVisibility(View.GONE);
+                    hint_selasa.setVisibility(View.GONE);
                 }
             }
         });
-        btn_rabu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemRabu.size() == 0) {
-                    if (hint_rabu.getVisibility() == View.GONE) {
-                        arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                        hint_rabu.setVisibility(View.VISIBLE);
-                        rv_rabu.setVisibility(View.GONE);
-                    }else if (hint_rabu.getVisibility() == View.VISIBLE){
-                        arrow_rabu.setBackgroundResource(R.drawable.ic_right);
-                        rv_rabu.setVisibility(View.GONE);
-                        hint_rabu.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_rabu.getVisibility() == View.GONE) {
-                        arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                        rv_rabu.setVisibility(View.VISIBLE);
-                        hint_rabu.setVisibility(View.GONE);
-                    } else if (rv_rabu.getVisibility() == View.VISIBLE) {
-                        arrow_rabu.setBackgroundResource(R.drawable.ic_right);
-                        rv_rabu.setVisibility(View.GONE);
-                        hint_rabu.setVisibility(View.GONE);
-                    }
+        btn_rabu.setOnClickListener(v -> {
+            if (itemRabu.size() == 0) {
+                if (hint_rabu.getVisibility() == View.GONE) {
+                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
+                    hint_rabu.setVisibility(View.VISIBLE);
+                    rv_rabu.setVisibility(View.GONE);
+                }else if (hint_rabu.getVisibility() == View.VISIBLE){
+                    arrow_rabu.setBackgroundResource(R.drawable.ic_right);
+                    rv_rabu.setVisibility(View.GONE);
+                    hint_rabu.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_rabu.getVisibility() == View.GONE) {
+                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
+                    rv_rabu.setVisibility(View.VISIBLE);
+                    hint_rabu.setVisibility(View.GONE);
+                } else if (rv_rabu.getVisibility() == View.VISIBLE) {
+                    arrow_rabu.setBackgroundResource(R.drawable.ic_right);
+                    rv_rabu.setVisibility(View.GONE);
+                    hint_rabu.setVisibility(View.GONE);
                 }
             }
         });
-        btn_kamis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemKamis.size() == 0) {
-                    if (hint_kamis.getVisibility() == View.GONE) {
-                        arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                        hint_kamis.setVisibility(View.VISIBLE);
-                        rv_kamis.setVisibility(View.GONE);
-                    }else if (hint_kamis.getVisibility() == View.VISIBLE){
-                        arrow_kamis.setBackgroundResource(R.drawable.ic_right);
-                        rv_kamis.setVisibility(View.GONE);
-                        hint_kamis.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_kamis.getVisibility() == View.GONE) {
-                        arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                        rv_kamis.setVisibility(View.VISIBLE);
-                        hint_kamis.setVisibility(View.GONE);
-                    } else if (rv_kamis.getVisibility() == View.VISIBLE) {
-                        arrow_kamis.setBackgroundResource(R.drawable.ic_right);
-                        rv_kamis.setVisibility(View.GONE);
-                        hint_kamis.setVisibility(View.GONE);
-                    }
+        btn_kamis.setOnClickListener(v -> {
+            if (itemKamis.size() == 0) {
+                if (hint_kamis.getVisibility() == View.GONE) {
+                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
+                    hint_kamis.setVisibility(View.VISIBLE);
+                    rv_kamis.setVisibility(View.GONE);
+                }else if (hint_kamis.getVisibility() == View.VISIBLE){
+                    arrow_kamis.setBackgroundResource(R.drawable.ic_right);
+                    rv_kamis.setVisibility(View.GONE);
+                    hint_kamis.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_kamis.getVisibility() == View.GONE) {
+                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
+                    rv_kamis.setVisibility(View.VISIBLE);
+                    hint_kamis.setVisibility(View.GONE);
+                } else if (rv_kamis.getVisibility() == View.VISIBLE) {
+                    arrow_kamis.setBackgroundResource(R.drawable.ic_right);
+                    rv_kamis.setVisibility(View.GONE);
+                    hint_kamis.setVisibility(View.GONE);
                 }
             }
         });
-        btn_jumat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemJumat.size() == 0) {
-                    if (hint_jumat.getVisibility() == View.GONE) {
-                        arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                        hint_jumat.setVisibility(View.VISIBLE);
-                        rv_jumat.setVisibility(View.GONE);
-                    }else if (hint_jumat.getVisibility() == View.VISIBLE){
-                        arrow_jumat.setBackgroundResource(R.drawable.ic_right);
-                        rv_jumat.setVisibility(View.GONE);
-                        hint_jumat.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_jumat.getVisibility() == View.GONE) {
-                        arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                        rv_jumat.setVisibility(View.VISIBLE);
-                        hint_jumat.setVisibility(View.GONE);
-                    } else if (rv_jumat.getVisibility() == View.VISIBLE) {
-                        arrow_jumat.setBackgroundResource(R.drawable.ic_right);
-                        rv_jumat.setVisibility(View.GONE);
-                        hint_jumat.setVisibility(View.GONE);
-                    }
+        btn_jumat.setOnClickListener(v -> {
+            if (itemJumat.size() == 0) {
+                if (hint_jumat.getVisibility() == View.GONE) {
+                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
+                    hint_jumat.setVisibility(View.VISIBLE);
+                    rv_jumat.setVisibility(View.GONE);
+                }else if (hint_jumat.getVisibility() == View.VISIBLE){
+                    arrow_jumat.setBackgroundResource(R.drawable.ic_right);
+                    rv_jumat.setVisibility(View.GONE);
+                    hint_jumat.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_jumat.getVisibility() == View.GONE) {
+                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
+                    rv_jumat.setVisibility(View.VISIBLE);
+                    hint_jumat.setVisibility(View.GONE);
+                } else if (rv_jumat.getVisibility() == View.VISIBLE) {
+                    arrow_jumat.setBackgroundResource(R.drawable.ic_right);
+                    rv_jumat.setVisibility(View.GONE);
+                    hint_jumat.setVisibility(View.GONE);
                 }
             }
         });
-        btn_sabtu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemSabtu.size() == 0) {
-                    if (hint_sabtu.getVisibility() == View.GONE) {
-                        arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                        hint_sabtu.setVisibility(View.VISIBLE);
-                        rv_sabtu.setVisibility(View.GONE);
-                    }else if (hint_sabtu.getVisibility() == View.VISIBLE){
-                        arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
-                        rv_sabtu.setVisibility(View.GONE);
-                        hint_sabtu.setVisibility(View.GONE);
-                    }
-                }else {
-                    if (rv_sabtu.getVisibility() == View.GONE) {
-                        arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                        rv_sabtu.setVisibility(View.VISIBLE);
-                        hint_sabtu.setVisibility(View.GONE);
-                    } else if (rv_sabtu.getVisibility() == View.VISIBLE) {
-                        arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
-                        rv_sabtu.setVisibility(View.GONE);
-                        hint_sabtu .setVisibility(View.GONE);
-                    }
+        btn_sabtu.setOnClickListener(v -> {
+            if (itemSabtu.size() == 0) {
+                if (hint_sabtu.getVisibility() == View.GONE) {
+                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
+                    hint_sabtu.setVisibility(View.VISIBLE);
+                    rv_sabtu.setVisibility(View.GONE);
+                }else if (hint_sabtu.getVisibility() == View.VISIBLE){
+                    arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
+                    rv_sabtu.setVisibility(View.GONE);
+                    hint_sabtu.setVisibility(View.GONE);
+                }
+            }else {
+                if (rv_sabtu.getVisibility() == View.GONE) {
+                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
+                    rv_sabtu.setVisibility(View.VISIBLE);
+                    hint_sabtu.setVisibility(View.GONE);
+                } else if (rv_sabtu.getVisibility() == View.VISIBLE) {
+                    arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
+                    rv_sabtu.setVisibility(View.GONE);
+                    hint_sabtu .setVisibility(View.GONE);
                 }
             }
         });
@@ -357,7 +339,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         day_status = jadwalData.getDayStatus();
                         daysid = jadwalData.getDayid();
                         day_type = jadwalData.getDayType();
-                        if (daysid.toString().equals("1") && days_name.toString().equals("Senin") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        if (days_name.toString().equals("Senin")) {
                             tv_senin.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -381,7 +363,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_senin.setLayoutManager(layoutManager);
                             rv_senin.setAdapter(seninAdapter);
 
-                        } else if (daysid.toString().equals("2") && days_name.toString().equals("Selasa") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        } else if (days_name.toString().equals("Selasa")) {
                             tv_selasa.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -403,7 +385,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                             rv_selasa.setLayoutManager(layoutManager);
                             rv_selasa.setAdapter(selasaAdapter);
-                        } else if (daysid.toString().equals("3") && days_name.toString().equals("Rabu") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        } else if (days_name.toString().equals("Rabu")) {
                             tv_rabu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -425,7 +407,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                             rv_rabu.setLayoutManager(layoutManager);
                             rv_rabu.setAdapter(rabuAdapter);
-                        } else if (daysid.toString().equals("4") && days_name.toString().equals("Kamis") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        } else if (days_name.toString().equals("Kamis")) {
                             tv_kamis.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -448,7 +430,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_kamis.setLayoutManager(layoutManager);
                             rv_kamis.setAdapter(kamisAdapter);
 
-                        } else if (daysid.toString().equals("5") && days_name.toString().equals("Jumat") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        } else if (days_name.toString().equals("Jumat")) {
                             tv_jumat.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -471,7 +453,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                             rv_jumat.setLayoutManager(layoutManager);
                             rv_jumat.setAdapter(jumatAdapter);
 
-                        } else if (daysid.toString().equals("6") && days_name.toString().equals("Sabtu") && day_status.toString().equals("1") && day_type.toString().equals("1")) {
+                        } else if (days_name.toString().equals("Sabtu")) {
                             tv_sabtu.setText(String.valueOf(response.body().getData().get(i).getScheduleClass().size()) + " Mata Pelajaran");
                             for (int o = 0; o < response.body().getData().get(i).getScheduleClass().size(); o++) {
                                 mapel = response.body().getData().get(i).getScheduleClass().get(o).getCourcesName();
@@ -502,7 +484,6 @@ public class JadwalPelajaran extends AppCompatActivity {
                         }else {
                             arrow_senin.setBackgroundResource(R.drawable.ic_down);
                             rv_senin.setVisibility(View.VISIBLE);
-
                         }
                     }else if (day.equals("Selasa")){
                         if (itemselasa.size() == 0) {
@@ -534,10 +515,17 @@ public class JadwalPelajaran extends AppCompatActivity {
                         }
                     } else if (day.equals("Sabtu")){
                         if (itemSabtu.size() == 0) {
-                            hint_jumat.setVisibility(View.VISIBLE);
+                            hint_sabtu.setVisibility(View.VISIBLE);
                         }else {
-                            arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                            rv_jumat.setVisibility(View.VISIBLE);
+                            arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
+                            rv_sabtu.setVisibility(View.VISIBLE);
+                        }
+                    }else if (day.equals("Minggu")){
+                        if (itemlist.size() == 0) {
+                            hint_senin.setVisibility(View.VISIBLE);
+                        }else {
+                            arrow_senin.setBackgroundResource(R.drawable.ic_down);
+                            rv_senin.setVisibility(View.VISIBLE);
                         }
                     }
                 }

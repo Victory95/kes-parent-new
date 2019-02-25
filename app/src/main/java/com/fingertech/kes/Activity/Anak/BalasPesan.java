@@ -70,12 +70,7 @@ public class BalasPesan extends AppCompatActivity {
         tv_anak.setText(anak);
         tv_kelas.setText(kelas);
         tv_mapel.setText(mapel);
-        balas_pesan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                balas_pesan();
-            }
-        });
+        balas_pesan.setOnClickListener(v -> balas_pesan());
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

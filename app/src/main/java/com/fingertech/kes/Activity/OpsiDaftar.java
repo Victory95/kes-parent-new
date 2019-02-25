@@ -50,6 +50,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -91,6 +92,7 @@ public class OpsiDaftar extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton sign_in_button;
+    String firebase_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +178,20 @@ public class OpsiDaftar extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("coba", "getInstanceId failed", task.getException());
+                        return;
+                    }
 
+                    // Get new Instance ID token
+                    firebase_token = task.getResult().getToken();
+
+                    // Log and toast
+                    String msg = getString(R.string.msg_token_fmt, token);
+                    Log.d("Token", msg);
+                });
     }
 
     @Override
@@ -356,7 +371,7 @@ public class OpsiDaftar extends AppCompatActivity {
         });
     }
     public void login_sosmed_post(){
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

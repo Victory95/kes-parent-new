@@ -63,8 +63,8 @@
         app:compactCalendarCurrentDayTextColor="@color/black"
         app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
         app:compactCalendarCurrentSelectedDayTextColor="@color/colorPrimary"
-        app:compactCalendarOtherMonthDaysTextColor="@color/red_500"
-        />
+        app:compactCalendarOtherMonthDaysTextColor="@color/gray_active_icon"
+        app:compactCalendarDisplayOtherMonthDays="true" />
 
     <TextView
         android:layout_width="match_parent"
