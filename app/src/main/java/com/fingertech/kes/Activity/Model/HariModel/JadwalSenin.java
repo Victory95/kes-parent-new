@@ -26,7 +26,6 @@ public class JadwalSenin {
         this.jam_selesai = jam_selesai;
     }
 
-
     public String getDuration() {
         return duration;
     }

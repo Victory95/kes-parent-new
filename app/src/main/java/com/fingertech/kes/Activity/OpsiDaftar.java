@@ -226,27 +226,27 @@ public class OpsiDaftar extends AppCompatActivity {
         }
     }
     public void loginFacebook(){
+        progressBar();
+        showDialog();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                hideDialog();
                 // App code
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.v("LoginActivity", response.toString());
-                                //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
-                                // Application code
-                                try {
-                                    id = object.getString("id");
-                                    email = object.getString("email");
-                                    fullname = object.getString("name");
-                                    getDeviceID();
-                                    register_sosmed_post();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                        (object, response) -> {
+                            Log.v("LoginActivity", response.toString());
+                            //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
+                            // Application code
+                            try {
+                                id = object.getString("id");
+                                email = object.getString("email");
+                                fullname = object.getString("name");
+                                getDeviceID();
+                                register_sosmed_post();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         });
                 Bundle parameters = new Bundle();
@@ -263,6 +263,7 @@ public class OpsiDaftar extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException exception) {
+                hideDialog();
                 Log.d("FB Response :", "Error" + exception);
                 Toast.makeText(OpsiDaftar.this, "Error", Toast.LENGTH_SHORT).show();
             }
@@ -296,7 +297,7 @@ public class OpsiDaftar extends AppCompatActivity {
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -371,12 +372,14 @@ public class OpsiDaftar extends AppCompatActivity {
         });
     }
     public void login_sosmed_post(){
+        progressBar();
+        showDialog();
         Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 Log.d("TAG",response.code()+"");
-
+                hideDialog();
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
@@ -423,6 +426,8 @@ public class OpsiDaftar extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
+                Log.d("onFailure",t.toString());
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -434,22 +439,23 @@ public class OpsiDaftar extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        progressBar();
+        showDialog();
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        hideDialog();
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        hideDialog();
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

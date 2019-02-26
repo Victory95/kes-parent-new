@@ -48,6 +48,7 @@ public class AbsenAnak extends AppCompatActivity {
     private SimpleDateFormat tahunFormat    = new SimpleDateFormat("yyyy", Locale.getDefault());
     private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("dd",Locale.getDefault());
     private SimpleDateFormat hariFormat     = new SimpleDateFormat("EEEE",Locale.getDefault());
+    private SimpleDateFormat formattanggal  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
 
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
@@ -55,17 +56,15 @@ public class AbsenAnak extends AppCompatActivity {
     ImageView left_month,right_month;
     int status;
     String code;
-    String authorization,school_code,student_id,classroom_id,calendar_month,calendar_year;
+    String authorization,school_code,student_id,classroom_id,calendar_year;
     RecyclerView recyclerView;
-    AbsenModel absenModel;
-    String timez_start,timez_finish,days_id,leave_sick;
+    String tanggals;
 
     private List<AbsensiModel>absensiModels;
     AbsensiModel absensiModel;
 
 
     List<JSONResponse.DataJam> dataJamList = new ArrayList<>();
-    List<AbsenModel.DataAbsensi> dataAbsensis = new ArrayList<AbsenModel.DataAbsensi>();
     AbsensiAdapter absensiAdapter;
     TextView tv_absen;
     LinearLayout hint;
@@ -104,7 +103,7 @@ public class AbsenAnak extends AppCompatActivity {
         {
             tanggal = tanggal.substring(1);
         }
-
+        tanggals = formattanggal.format(Calendar.getInstance().getTime());
         bulan = bulanFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
         if(bulan.substring(0,1).equals("0"))
         {
@@ -136,11 +135,13 @@ public class AbsenAnak extends AppCompatActivity {
                     {
                         tanggal = tanggal.substring(1);
                     }
+                    tanggals = formattanggal.format(dateClicked);
                     compactCalendarView.setCurrentDayBackgroundColor(R.color.transparent);
                     if (absensiModels != null) {
                         absensiModels.clear();
                         for (JSONResponse.DataJam dataJam : dataJamList) {
                             absensiModel = new AbsensiModel();
+                            absensiModel.setTanggal(tanggals);
                             absensiModel.setTimez_star(dataJam.getTimez_start());
                             absensiModel.setTimez_finish(dataJam.getTimez_finish());
                             absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(tanggal)-1).getAbsen_status());
@@ -206,6 +207,7 @@ public class AbsenAnak extends AppCompatActivity {
                             absensiModels.clear();
                             for (JSONResponse.DataJam dataJam : dataJamList) {
                                 absensiModel = new AbsensiModel();
+                                absensiModel.setTanggal(tanggals);
                                 absensiModel.setTimez_star(dataJam.getTimez_start());
                                 absensiModel.setTimez_finish(dataJam.getTimez_finish());
                                 absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(tanggal)-1).getAbsen_status());

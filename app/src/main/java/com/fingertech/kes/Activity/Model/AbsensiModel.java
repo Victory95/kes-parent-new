@@ -3,12 +3,39 @@ package com.fingertech.kes.Activity.Model;
 import java.util.List;
 
 public class AbsensiModel {
+
+    public String tanggal;
     public String timez_star,timez_finish;
     public List<dataAbsensi> dataAbsensis;
     public String day_type;
     public String absens_status;
     public String total_masuk;
     public String leave_sick;
+    public String guru,mapel;
+
+    public String getGuru() {
+        return guru;
+    }
+
+    public void setGuru(String guru) {
+        this.guru = guru;
+    }
+
+    public String getMapel() {
+        return mapel;
+    }
+
+    public void setMapel(String mapel) {
+        this.mapel = mapel;
+    }
+
+    public String getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(String tanggal) {
+        this.tanggal = tanggal;
+    }
 
     public String getDay_id() {
         return day_id;

@@ -205,41 +205,27 @@ public class Masuk extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             Log.d("gala not found : ", ""+e.fillInStackTrace());
         }
-        tvb_lupa_pass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
-                startActivity(intent);
-            }
+        tvb_lupa_pass.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), ForgotPassword.class);
+            startActivity(intent);
         });
 
         //////////// list button opsi masuk
-        btn_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
+        btn_google.setOnClickListener(v -> signIn());
+
+        btn_facebook.setOnClickListener(v -> {
+
+            LoginManager.getInstance().logInWithReadPermissions(Masuk.
+                    this,
+                    Arrays.asList("email", "public_profile"));
+
+            loginFacebook();
         });
 
-        btn_facebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LoginManager.getInstance().logInWithReadPermissions(Masuk.
-                        this,
-                        Arrays.asList("email", "public_profile"));
-
-                loginFacebook();
-            }
-        });
-
-        tvb_daftar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OpsiDaftar.class);
-                startActivity(intent);
-                finish();
-            }
+        tvb_daftar.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), OpsiDaftar.class);
+            startActivity(intent);
+            finish();
         });
 
         DateFormat df = new SimpleDateFormat("EEEEEE, dd MMM yyyy, HH:mm");
@@ -491,42 +477,41 @@ public class Masuk extends AppCompatActivity {
 
             }
         };
+        progressBar();
+        showDialog();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
+                hideDialog();
                 AccessToken accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
                 GraphRequest request = GraphRequest.newMeRequest(
                         loginResult.getAccessToken(),
+                        (object, response) -> {
+                            Log.v("LoginActivity", response.toString());
+                            //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
+                            // Application code
+                            Log.i(TAG, "LoginButton FacebookCallback onSuccess");
+                            AccessToken accessToken1 = AccessToken.getCurrentAccessToken();
+                            boolean isLoggedIn = accessToken1 != null && !accessToken1.isExpired();
+                            if(isLoggedIn ){
 
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                Log.v("LoginActivity", response.toString());
-                                //if (Profile.getCurrentProfile()!=null) { Log.v("Login", "ProfilePic" + Profile.getCurrentProfile().getProfilePictureUri(200, 200)); }
-                                // Application code
-                                Log.i(TAG, "LoginButton FacebookCallback onSuccess");
-                                AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-                                if(isLoggedIn ){
+                            try {
 
-                                try {
-
-                                    Log.d(id, "id");
-                                    id = object.getString("id");
-                                    email = object.getString("email");
-                                    fullname = object.getString("name");
-                                    getDeviceID();
-                                    register_sosmed_post();
+                                Log.d(id, "id");
+                                id = object.getString("id");
+                                email = object.getString("email");
+                                fullname = object.getString("name");
+                                getDeviceID();
+                                register_sosmed_post();
 
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
-                            }}
-                        });
+                        }});
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email");
                 request.setParameters(parameters);
@@ -542,6 +527,7 @@ public class Masuk extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException exception) {
+                hideDialog();
                 Log.d("FB Response :", "Error" + exception);
             }
         });
@@ -576,7 +562,7 @@ public class Masuk extends AppCompatActivity {
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -653,12 +639,14 @@ public class Masuk extends AppCompatActivity {
         });
     }
     public void login_sosmed_post(){
+        progressBar();
+        showDialog();
         Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 Log.d("TAG",response.code()+"");
-
+                hideDialog();
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
@@ -707,6 +695,7 @@ public class Masuk extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
+                hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -718,22 +707,23 @@ public class Masuk extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        progressBar();
+        showDialog();
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        hideDialog();
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        hideDialog();
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Toast.makeText(getApplicationContext(), "Login Failed: ", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
