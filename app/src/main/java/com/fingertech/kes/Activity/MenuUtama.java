@@ -68,6 +68,7 @@ import com.akexorcist.googledirection.util.DirectionConverter;
 import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
+import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 
@@ -251,16 +252,16 @@ public class MenuUtama extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_beranda);
 
         sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
-        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
-        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
-        email         = sharedpreferences.getString(TAG_EMAIL,"email");
-        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
-        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
-        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        authorization = sharedpreferences.getString(TAG_TOKEN,null);
+        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,null);
+        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,null);
+        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,null);
+        fullname      = sharedpreferences.getString(TAG_FULLNAME,null);
+        email         = sharedpreferences.getString(TAG_EMAIL,null);
+        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,null);
+        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,null);
+        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,null);
+        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
@@ -281,8 +282,6 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
             startActivity(intent);
         });
-
-
 
         mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
@@ -307,8 +306,11 @@ public class MenuUtama extends AppCompatActivity
             startActivity(mIntent);
         });
         tambah_anak.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(TAG_PARENT_NIK,parent_nik);
+            editor.commit();
             Intent intent = new Intent(MenuUtama.this, AnakAkses.class);
-            intent.putExtra("parent_nik",parent_nik);
+            intent.putExtra(TAG_PARENT_NIK,parent_nik);
             startActivity(intent);
         });
 
@@ -381,7 +383,7 @@ public class MenuUtama extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            new AlertDialog.Builder(this)
+            new AlertDialog.Builder(this,R.style.DialogTheme)
                     .setMessage("Apa kalian ingin Exit?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> moveTaskToBack(true))
@@ -445,7 +447,8 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-
+            Intent intent = new Intent(MenuUtama.this, AbsenAnak.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);

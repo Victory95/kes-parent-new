@@ -102,18 +102,18 @@ public class AnakAkses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.anak_akses);
-        search          = (EditText)findViewById(R.id.et_search);
+        search          = findViewById(R.id.et_search);
         recyclerView    = findViewById(R.id.recycler_search);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        linearLayout    = (LinearLayout)findViewById(R.id.infof);
-        Kodeakses       = (Button)findViewById(R.id.btn_kode_akses);
-        tvnamajoin      = (TextView)findViewById(R.id.tv_val_nama_kodes);
-        tvkodejoin      = (TextView)findViewById(R.id.tv_kode_join);
-        iv_camera       = (ImageView)findViewById(R.id.iv_camera);
-        et_nik          = (EditText)findViewById(R.id.et_nik_niora_siswa);
-        tl_input_noira  = (TextInputLayout)findViewById(R.id.til_nik_niora_siswa);
-        tvinfo          = (TextView)findViewById(R.id.tv_info_nama_anak);
-        tvnamaanak      = (TextView)findViewById(R.id.tv_nama_anak);
+        linearLayout    = findViewById(R.id.infof);
+        Kodeakses       = findViewById(R.id.btn_kode_akses);
+        tvnamajoin      = findViewById(R.id.tv_val_nama_kodes);
+        tvkodejoin      = findViewById(R.id.tv_kode_join);
+        iv_camera       = findViewById(R.id.iv_camera);
+        et_nik          = findViewById(R.id.et_nik_niora_siswa);
+        tl_input_noira  = findViewById(R.id.til_nik_niora_siswa);
+        tvinfo          = findViewById(R.id.tv_info_nama_anak);
+        tvnamaanak      = findViewById(R.id.tv_nama_anak);
         toolbar         = findViewById(R.id.toolbar_anak);
 
         setSupportActionBar(toolbar);
@@ -131,9 +131,6 @@ public class AnakAkses extends AppCompatActivity {
         member_type   = sharedpreferences.getString(TAG_MEMBER_TYPE,"member_type");
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
-        if (parent_nik.equals("")){
-            parent_nik = getIntent().getStringExtra("parent_nik");
-        }
 
         Kodeakses.setOnClickListener(v -> check_student_nik_post());
         search.addTextChangedListener(new TextWatcher() {
@@ -156,12 +153,9 @@ public class AnakAkses extends AppCompatActivity {
         });
 
         //////// Camera scan nik
-        iv_camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(AnakAkses.this, CameraScanning.class);
-                startActivityForResult(i, 1);
-            }
+        iv_camera.setOnClickListener(v -> {
+            Intent i = new Intent(AnakAkses.this, CameraScanning.class);
+            startActivityForResult(i, 1);
         });
 
         InputFilter[] editFilters = et_nik.getFilters();
@@ -169,19 +163,16 @@ public class AnakAkses extends AppCompatActivity {
         System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
         newFilters[editFilters.length] = new InputFilter.AllCaps();
         et_nik.setFilters(newFilters);
-        et_nik.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (!validateNikNiora()==false) {
-                        hideKeyboard(AnakAkses.this);
-                        et_nik.clearFocus();
-
-                        return true;
-                    }
+        et_nik.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (!validateNikNiora()) {
+                    hideKeyboard(AnakAkses.this);
+                    et_nik.clearFocus();
+                    return true;
                 }
-                return false;
-            } });
+            }
+            return false;
+        });
 
     }
     @Override
@@ -229,7 +220,7 @@ public class AnakAkses extends AppCompatActivity {
             requestFocus(et_nik);
             return false;
         } else if(status_nik==0){
-//            tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
+            tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora));
             requestFocus(et_nik);
         }else {
             tl_input_noira.setErrorEnabled(false);
@@ -257,20 +248,17 @@ public class AnakAkses extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     adapter.getFilter().filter(key);
 //                    adapter.setFilter(arraylist,key);
-                    adapter.setOnItemClickListener(new SearchAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            school_name         = response.body().getData().get(position).getSchool_name();
-                            sekolah_kode        = response.body().getData().get(position).getSchool_code();
-                            school_id           = response.body().getData().get(position).getSchool_id();
-                            sekolah_kode        = sekolah_kode.toLowerCase();
+                    adapter.setOnItemClickListener((view, position) -> {
+                        school_name         = response.body().getData().get(position).getSchool_name();
+                        sekolah_kode        = response.body().getData().get(position).getSchool_code();
+                        school_id           = response.body().getData().get(position).getSchool_id();
+                        sekolah_kode        = sekolah_kode.toLowerCase();
 
-                            search.setText(school_name);
-                            recyclerView.setVisibility(View.GONE);
-                            hideKeyboard(AnakAkses.this);
-                            check_school_kes_post();
-                            search.clearFocus();
-                        }
+                        search.setText(school_name);
+                        recyclerView.setVisibility(View.GONE);
+                        hideKeyboard(AnakAkses.this);
+                        check_school_kes_post();
+                        search.clearFocus();
                     });
 
                 } else {

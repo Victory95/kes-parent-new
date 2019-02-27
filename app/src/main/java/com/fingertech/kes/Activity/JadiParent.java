@@ -250,8 +250,8 @@ public class JadiParent extends AppCompatActivity {
     String convertDate(int year, int month, int day) {
         Log.d("Tanggal", year + "/" + month + "/" + day);
         String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(temp));
             return e;
@@ -291,6 +291,7 @@ public class JadiParent extends AppCompatActivity {
                 if (status == 1 && code.equals("SWP_SCS_0001")) {
                     Intent intent = new Intent(JadiParent.this, MenuUtama.class);
                     startActivity(intent);
+                    finish();
                 } else{
                     if (status == 0 && code.equals("SWP_ERR_0001")) {
                         Toast.makeText(getApplicationContext(), "Email tidak boleh kosong", Toast.LENGTH_LONG).show();

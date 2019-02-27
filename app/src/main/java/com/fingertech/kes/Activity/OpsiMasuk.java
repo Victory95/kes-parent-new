@@ -53,26 +53,17 @@ public class OpsiMasuk extends AppCompatActivity {
             finish();
             startActivity(intent);
         }
-        btn_masuk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Masuk.class);
-                startActivity(intent);
-            }
+        btn_masuk.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Masuk.class);
+            startActivity(intent);
         });
-        tv_daftar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OpsiDaftar.class);
-                startActivity(intent);
-            }
+        tv_daftar.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), OpsiDaftar.class);
+            startActivity(intent);
         });
-        btn_masuk_tamu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MenuGuest.class);
-                startActivity(intent);
-            }
+        btn_masuk_tamu.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), MenuGuest.class);
+            startActivity(intent);
         });
     }
 

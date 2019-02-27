@@ -5570,9 +5570,8 @@ public class JSONResponse{
         @SerializedName("schedule_time")
         public String schedule_time;
 
-        @SerializedName("timez_start")
+        @SerializedName("timez_ok")
         public String timez_start;
-
 
         @SerializedName("timez_finish")
         public String timez_finish;
@@ -5733,6 +5732,17 @@ public class JSONResponse{
 
         @SerializedName("calendar_type")
         public String calendar_type;
+
+        @SerializedName("calendar_colour")
+        public String calendar_colour;
+
+        public String getCalendar_colour() {
+            return calendar_colour;
+        }
+
+        public void setCalendar_colour(String calendar_colour) {
+            this.calendar_colour = calendar_colour;
+        }
 
         public int getCalendar_id() {
             return calendar_id;

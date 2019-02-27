@@ -48,23 +48,15 @@ public class LokasiAnda extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lokasi_anda);
 
-        PilihLokasi = (Button) findViewById(R.id.pilih_lokasi);
-        pilihmap    = (TextView)findViewById(R.id.pilihmap);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_dua);
+        PilihLokasi = findViewById(R.id.pilih_lokasi);
+        pilihmap    = findViewById(R.id.pilihmap);
+        final Toolbar toolbar = findViewById(R.id.toolbar_dua);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        PilihLokasi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPlaceAutoComplete(PICK_UP);
-            }
-        });
-        pilihmap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(LokasiAnda.this,MapLokasi.class);
-                startActivityForResult(mIntent,2);
-            }
+        PilihLokasi.setOnClickListener(v -> showPlaceAutoComplete(PICK_UP));
+        pilihmap.setOnClickListener(v -> {
+            Intent mIntent = new Intent(LokasiAnda.this,MapLokasi.class);
+            startActivityForResult(mIntent,2);
         });
     }
 
