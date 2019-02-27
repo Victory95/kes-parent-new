@@ -497,7 +497,9 @@
     <string name="Tittle_term"><![CDATA[Term&condition]]></string>
     <string name="Tv_english">english</string>
     <string name="Key_SW_Language">Key_SW_Language</string>
-    <string name="title_activity_setting_">Setting_Activity</string>
+    <string name="title_activity_setting_">Setting</string>
+    <string name="hint_absen">Libur</string>
+    <string name="tv_nilai">Nilai</string>
     <!--<string name="pref_title_ringtone">Ringtone</string>-->
     <!--<string name="pref_ringtone_silent">Silent</string>-->
     <!--<string name="Tv_bahasa">Pilih_bahasa</string>-->

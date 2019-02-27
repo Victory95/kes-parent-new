@@ -53,44 +53,40 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String title       = remotemsg.getData().get("title");
         String body        = remotemsg.getData().get("body");
         Log.d("Title",remotemsg.getData()+"");
-        sendNotification();
+        sendNotification(title,body);
     }
 
-    private void sendNotification() {
+    private void sendNotification(String title,String messageBody) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String path = preferences.getString("Ringtone", "");
         if (!path.isEmpty())
             Log.e("error", path.toString());
-        {
+            {
 
-            ringtone = RingtoneManager.getRingtone(this, Uri.parse(path));
-            ringtone.play();
-            if(ringtone != null && ringtone.isPlaying()) {
+                ringtone = RingtoneManager.getRingtone(this, Uri.parse(path));
+                ringtone.play();
+                if(ringtone != null && ringtone.isPlaying()) {
+                    ringtone.stop();
+                }
+            }
+        Intent intent = new Intent(this, MenuUtama.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-            ringtone.stop();
-        }
-        }
+        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle(title)
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setSound(soundUri)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
+                .setContentIntent(pendingIntent);
 
-
-
-//        Intent intent = new Intent(this, MenuUtama.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-//                PendingIntent.FLAG_ONE_SHOT);
-//
-////        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-////        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
-////                .setSmallIcon(R.drawable.ic_logo)
-////                .setContentTitle(title)
-////                .setContentText(messageBody)
-////                .setAutoCancel(true)
-////                .setSound(soundUri)
-////                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-////                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
-////                .setContentIntent(pendingIntent);
-////
-////        create();
-////        notificationManager.notify(0, notificationBuilder.build());
+        create();
+        notificationManager.notify(0, notificationBuilder.build());
     }
 
 

@@ -416,9 +416,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     if (foto.equals("")){
                         Glide.with(ProfilAnak.this).load("https://ui-avatars.com/api/?name="+namalengkap+"&background=40bfe8&color=fff").into(image_anak);
                     }
-                    Picasso.with(ProfilAnak.this).load(imagefiles).into(image_anak);
-
-
+                    Picasso.get().load(imagefiles).into(image_anak);
 
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {

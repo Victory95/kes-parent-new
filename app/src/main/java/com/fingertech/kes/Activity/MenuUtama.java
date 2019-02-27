@@ -622,7 +622,7 @@ public class MenuUtama extends AppCompatActivity
                         if (picture.equals("")){
                             Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);
                         }
-                        Picasso.with(MenuUtama.this).load(imagefile).into(image_profile);
+                        Picasso.get().load(imagefile).into(image_profile);
 
                     if (member.toString().equals("3")){
                         if (count.toString().equals("0")){

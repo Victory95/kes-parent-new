@@ -1,7 +1,9 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.AbsensiAdapter;
 import com.fingertech.kes.Activity.Model.AbsenModel;
@@ -23,12 +26,15 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +47,7 @@ import static com.fingertech.kes.Service.App.getContext;
 public class AbsenAnak extends AppCompatActivity {
     Toolbar toolbar;
     Auth mApiInterface;
-    String bulan,tahun,tanggal,hari;
+    String bulan,tahun,tanggal,day,hari;
     CompactCalendarView compactCalendarView;
 
     private SimpleDateFormat dateFormat     = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
@@ -69,7 +75,7 @@ public class AbsenAnak extends AppCompatActivity {
     AbsensiAdapter absensiAdapter;
     TextView tv_absen;
     LinearLayout hint;
-
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,49 +125,44 @@ public class AbsenAnak extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(absensiAdapter);
         dapat_absen();
+
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 hari    = hariFormat.format(dateClicked);
-                if (hari.equals("Sabtu") ||hari.equals("Minggu")){
-                    tv_absen.setVisibility(VISIBLE);
-                    recyclerView.setVisibility(GONE);
-                    hint.setVisibility(GONE);
-                }else {
-                    tv_absen.setVisibility(GONE);
-                    recyclerView.setVisibility(VISIBLE);
-                    hint.setVisibility(VISIBLE);
-                    tanggal = tanggalFormat.format(dateClicked);
-                    if(tanggal.substring(0,1).equals("0"))
-                    {
-                        tanggal = tanggal.substring(1);
-                    }
-                    tanggals = formattanggal.format(dateClicked);
-                    compactCalendarView.setCurrentDayBackgroundColor(Color.parseColor("#0Dffffff"));
-                    if (absensiModels != null) {
-                        absensiModels.clear();
+                day = tanggalFormat.format(dateClicked);
+                if(day.substring(0,1).equals("0"))
+                {
+                    day = day.substring(1);
+                }
+                tanggals = formattanggal.format(dateClicked);
+
+                compactCalendarView.setCurrentDayBackgroundColor(Color.parseColor("#0Dffffff"));
+
+                if (absensiModels != null) {
+                    absensiModels.clear();
                         for (JSONResponse.DataJam dataJam : dataJamList) {
                             absensiModel = new AbsensiModel();
                             absensiModel.setTanggal(tanggals);
-                            absensiModel.setTimez_star(dataJam.getTimez_start());
+                            absensiModel.setTimez_star(dataJam.getTimez_ok());
                             absensiModel.setTimez_finish(dataJam.getTimez_finish());
-                            absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(tanggal)-1).getAbsen_status());
+                            absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day)-1).getAbsen_status());
                             absensiModels.add(absensiModel);
                         }
                         absensiAdapter.notifyDataSetChanged();
-                    }
+
                 }
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                bulan = dateFormat.format(firstDayOfNewMonth);
+                bulan = bulanFormat.format(firstDayOfNewMonth);
                 if(bulan.substring(0,1).equals("0"))
                 {
                     bulan = bulan.substring(1);
                 }
                 month_calender.setText(dateFormat.format(firstDayOfNewMonth));
-                calendar_year   = tahunFormat.format(firstDayOfNewMonth);
+                tahun   = tahunFormat.format(firstDayOfNewMonth);
                 dapat_absen();
             }
         });
@@ -185,6 +186,7 @@ public class AbsenAnak extends AppCompatActivity {
     }
 
     public void dapat_absen(){
+
         Call<JSONResponse.AbsenSiswa> call = mApiInterface.kes_class_attendance_get(authorization.toString(),school_code.toLowerCase(),student_id.toString(),classroom_id.toString(),bulan.toString(),tahun.toString());
         call.enqueue(new Callback<JSONResponse.AbsenSiswa>() {
             @Override
@@ -209,7 +211,7 @@ public class AbsenAnak extends AppCompatActivity {
                             for (JSONResponse.DataJam dataJam : dataJamList) {
                                 absensiModel = new AbsensiModel();
                                 absensiModel.setTanggal(tanggals);
-                                absensiModel.setTimez_star(dataJam.getTimez_start());
+                                absensiModel.setTimez_star(dataJam.getTimez_ok());
                                 absensiModel.setTimez_finish(dataJam.getTimez_finish());
                                 absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(tanggal)-1).getAbsen_status());
                                 absensiModels.add(absensiModel);
@@ -226,4 +228,21 @@ public class AbsenAnak extends AppCompatActivity {
             }
         });
     }
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(AbsenAnak.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
+
 }

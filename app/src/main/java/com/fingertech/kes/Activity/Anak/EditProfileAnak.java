@@ -1054,7 +1054,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
             mGoogleApiClient.connect();
         }
-        CurrentLatitude = latLng.latitude;
+        CurrentLatitude     = latLng.latitude;
         CurrentLongitude    = latLng.longitude;
 
     }

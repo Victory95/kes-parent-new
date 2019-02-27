@@ -359,7 +359,7 @@ public class ProfileParent extends AppCompatActivity {
             } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
 
                 uri = data.getData();
-                Picasso.with(ProfileParent.this).load(uri).into(image_profil);
+                Picasso.get().load(uri).into(image_profil);
                 File file = FileUtils.getFile(ProfileParent.this, uri);
                 uploadImage(file);
             }
@@ -550,7 +550,7 @@ public class ProfileParent extends AppCompatActivity {
                     if (picture.equals("")){
                         Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profil);
                     }
-                    Picasso.with(ProfileParent.this).load(imagefile).into(image_profil);
+                    Picasso.get().load(imagefile).into(image_profil);
                     last_login.setText(lastlogin);
                     appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 

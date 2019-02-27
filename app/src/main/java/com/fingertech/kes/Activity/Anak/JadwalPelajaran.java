@@ -153,6 +153,64 @@ public class JadwalPelajaran extends AppCompatActivity {
         itemJumat   = new ArrayList<JadwalJumat>();
         itemSabtu   = new ArrayList<JadwalSabtu>();
 
+        switch (day) {
+            case "Senin":
+                if (itemlist.size() == 0) {
+                    hint_senin.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
+                    rv_senin.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Selasa":
+                if (itemselasa.size() == 0) {
+                    hint_selasa.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
+                    rv_selasa.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Rabu":
+                if (itemRabu.size() == 0) {
+                    hint_rabu.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
+                    rv_rabu.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Kamis":
+                if (itemKamis.size() == 0) {
+                    hint_kamis.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
+                    rv_kamis.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Jumat":
+                if (itemJumat.size() == 0) {
+                    hint_jumat.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
+                    rv_jumat.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Sabtu":
+                if (itemSabtu.size() == 0) {
+                    hint_sabtu.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
+                    rv_sabtu.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "Minggu":
+                if (itemlist.size() == 0) {
+                    hint_senin.setVisibility(View.VISIBLE);
+                } else {
+                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
+                    rv_senin.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
 
 
         btn_senin.setOnClickListener(v -> {
@@ -491,64 +549,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         }
 
                     }
-                    switch (day) {
-                        case "Senin":
-                            if (itemlist.size() == 0) {
-                                hint_senin.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                                rv_senin.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Selasa":
-                            if (itemselasa.size() == 0) {
-                                hint_selasa.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                                rv_selasa.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Rabu":
-                            if (itemRabu.size() == 0) {
-                                hint_rabu.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                                rv_rabu.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Kamis":
-                            if (itemKamis.size() == 0) {
-                                hint_kamis.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                                rv_kamis.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Jumat":
-                            if (itemJumat.size() == 0) {
-                                hint_jumat.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                                rv_jumat.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Sabtu":
-                            if (itemSabtu.size() == 0) {
-                                hint_sabtu.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                                rv_sabtu.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                        case "Minggu":
-                            if (itemlist.size() == 0) {
-                                hint_senin.setVisibility(View.VISIBLE);
-                            } else {
-                                arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                                rv_senin.setVisibility(View.VISIBLE);
-                            }
-                            break;
-                    }
+
                 }
             }
 

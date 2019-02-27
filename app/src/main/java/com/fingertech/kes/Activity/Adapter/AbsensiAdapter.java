@@ -89,7 +89,6 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
             e.printStackTrace();
         }
         Long times_start = date.getTime();
-        Log.d("times", jam_sekarang +"/"+times_now+"/"+times_start);
         if (times_now >= times_start){
             if (viewItem.getDay_id().equals("0")) {
                 Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);

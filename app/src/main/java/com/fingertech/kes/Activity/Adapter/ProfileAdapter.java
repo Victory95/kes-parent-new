@@ -80,7 +80,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff").into(holder.imageView);
             }
         }
-        Picasso.with(getContext()).load(profileModel.getPicture()).into(holder.imageView);
+        Picasso.get().load(profileModel.getPicture()).into(holder.imageView);
         if (row_index == position){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     155,
