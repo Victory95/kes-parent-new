@@ -62,6 +62,7 @@ import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -311,6 +312,8 @@ public class MenuGuest extends AppCompatActivity
             Intent intent = new Intent(MenuGuest.this, TentangKami.class);
             startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
+            Intent intent = new Intent(MenuGuest.this, SettingsActivity.class);
+            startActivity(intent);
 
         }
 

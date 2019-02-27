@@ -26,10 +26,14 @@
         android:roundIcon="@mipmap/ic_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning,ExportedService,InnerclassSeparator">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning,InnerclassSeparator">
         <activity
-            android:name=".Activity.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:name=".Activity.Setting.Setting_Activity"
+            android:label="@string/title_activity_setting_"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activity.Setting.SettingsActivity"
+            android:label="@string/title_activity_settings" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -287,6 +291,11 @@
         <activity
             android:name=".Activity.Maps.TentangKami"
             android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Language.Layout_Pengaturan"
+            android:label="@string/tv_toolbar"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

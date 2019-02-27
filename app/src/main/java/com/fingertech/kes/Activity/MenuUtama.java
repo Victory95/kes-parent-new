@@ -71,6 +71,7 @@ import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 
+import com.fingertech.kes.Activity.Language.Layout_Pengaturan;
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
@@ -81,6 +82,8 @@ import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Search.AnakAkses;
+import com.fingertech.kes.Activity.Setting.Setting_Activity;
+import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -451,7 +454,7 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, TentangKami.class);
             startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
-            Intent intent = new Intent(MenuUtama.this, SettingsActivity.class);
+            Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         }
 

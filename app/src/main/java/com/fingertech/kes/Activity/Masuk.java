@@ -226,7 +226,7 @@ public class Masuk extends AppCompatActivity {
             public void onClick(View v) {
 
                 LoginManager.getInstance().logInWithReadPermissions(Masuk.
-                        this,
+                                this,
                         Arrays.asList("email", "public_profile"));
 
                 loginFacebook();
@@ -511,21 +511,21 @@ public class Masuk extends AppCompatActivity {
                                 boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
                                 if(isLoggedIn ){
 
-                                try {
+                                    try {
 
-                                    Log.d(id, "id");
-                                    id = object.getString("id");
-                                    email = object.getString("email");
-                                    fullname = object.getString("name");
-                                    getDeviceID();
-                                    register_sosmed_post();
+                                        Log.d(id, "id");
+                                        id = object.getString("id");
+                                        email = object.getString("email");
+                                        fullname = object.getString("name");
+                                        getDeviceID();
+                                        register_sosmed_post();
 
 
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
 
-                            }}
+                                }}
                         });
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,email");
@@ -576,7 +576,7 @@ public class Masuk extends AppCompatActivity {
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -653,7 +653,7 @@ public class Masuk extends AppCompatActivity {
         });
     }
     public void login_sosmed_post(){
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString());
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
