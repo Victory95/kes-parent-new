@@ -4,6 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Layout_Pengaturan">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Activity.Setting.Setting_Activity"
+    tools:showIn="@layout/activity_setting_">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment"
+        >
+
+
+    </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>
