@@ -74,7 +74,8 @@ public interface Auth {
     Call<JSONResponse>register_sosmed_post(@Field("email") String email,
                                            @Field("fullname") String fullname,
                                            @Field("fg_code") String fg_code,
-                                           @Field("device_id") String device_id);
+                                           @Field("device_id") String device_id,
+                                           @Field("firebase_token") String firebase_token);
 
     //////// Login Sosmed
     @FormUrlEncoded

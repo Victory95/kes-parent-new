@@ -34,6 +34,7 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.rey.material.widget.Spinner;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -289,6 +290,7 @@ public class JadiParent extends AppCompatActivity {
                 code   = resource.code;
 
                 if (status == 1 && code.equals("SWP_SCS_0001")) {
+                    FancyToast.makeText(JadiParent.this,"Berhasil menjadi Orangtua",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
                     Intent intent = new Intent(JadiParent.this, MenuUtama.class);
                     startActivity(intent);
                     finish();

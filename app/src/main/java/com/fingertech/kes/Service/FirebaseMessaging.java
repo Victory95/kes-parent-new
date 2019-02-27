@@ -40,7 +40,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String title       = remotemsg.getData().get("title");
         String body        = remotemsg.getData().get("body");
         Log.d("Title",remotemsg.getData()+"");
-//        sendNotification(title,body);
+        sendNotification(title,body);
     }
 
     private void sendNotification(String title,String messageBody) {
@@ -61,6 +61,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent);
 
         create();
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
 

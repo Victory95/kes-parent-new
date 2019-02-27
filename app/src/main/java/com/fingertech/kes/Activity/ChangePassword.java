@@ -25,6 +25,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -88,13 +89,17 @@ public class ChangePassword extends AppCompatActivity {
                 code   = resource.code;
 
                 if (status == 1 && code.equals("CP_SCS_0001")) {
+                    FancyToast.makeText(getApplicationContext(),"Kata sandi berhasil diubah",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
                     Intent intent = new Intent(ChangePassword.this,ProfileParent.class);
                     startActivity(intent);
+
                 } else{
                     if (status == 0 && code.equals("CP_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), "Kata sandi lama anda salah", Toast.LENGTH_LONG).show();
+                        FancyToast.makeText(getApplicationContext(),"Kata sandi lama anda salah",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+//                        Toast.makeText(getApplicationContext(), "Kata sandi lama anda salah", Toast.LENGTH_LONG).show();
                     }else if (status == 0 && code.equals("CP_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), "Kata sandi tidak boleh sama dengan yang lain", Toast.LENGTH_LONG).show();
+                        FancyToast.makeText(getApplicationContext(),"Kata sandi tidak boleh sama dengan yang lain",FancyToast.LENGTH_LONG,FancyToast.ERROR,true).show();
+//                        Toast.makeText(getApplicationContext(), "Kata sandi tidak boleh sama dengan yang lain", Toast.LENGTH_LONG).show();
                     }
                 }
 

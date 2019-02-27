@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Adapter;
 
 import android.annotation.SuppressLint;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Model.AbsensiModel;
+import com.fingertech.kes.Activity.Model.HariModel.JadwalSenin;
 import com.fingertech.kes.R;
+import com.fingertech.kes.Rest.JSONResponse;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,12 +33,10 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    private List<String> mItems = new ArrayList<>();
-    String dates;
-    Date date,date_now;
-    private SimpleDateFormat jamformat  = new SimpleDateFormat("hh:mm",Locale.getDefault());
-    String jam_sekarang;
-    DateFormat format = new SimpleDateFormat("hh:mm", Locale.getDefault());
+    private Date date,date_now;
+    private SimpleDateFormat jamformat  = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
+    private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+    private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
     public AbsensiAdapter(List<AbsensiModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
@@ -68,41 +70,34 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
 
         // Get car item dto in list.
         AbsensiModel viewItem = viewItemList.get(position);
-        Calendar cal = Calendar.getInstance();
-        Calendar now = Calendar.getInstance();
+//        holder.mapel.setText(viewItem.getMapel());
+//        holder.guru.setText("Guru "+viewItem.getGuru());
         holder.times.setText("Jam "+viewItem.getTimez_star() + " - "+viewItem.getTimez_finish());
-
+        String tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
         // Set car item title.
-        jam_sekarang    = jamformat.format(Calendar.getInstance().getTime());
+        String jam_sekarang = jamformat.format(Calendar.getInstance().getTime());
         try {
-            date_now    = format.parse(jam_sekarang);
+            date_now    = times_format.parse(tanggal+" "+ jam_sekarang +":00");
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        now.setTime(date_now);
-        setToMidnight(now);
-        Long times_now = now.getTimeInMillis();
-
+        Long times_now = date_now.getTime();
         try {
-            date = format.parse(viewItem.timez_finish);
+            date = times_format.parse(viewItem.getTanggal()+" "+viewItem.getTimez_star()+":00");
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        cal.setTime(date);
-        setToMidnight(cal);
-        Long times_start = cal.getTimeInMillis();
+        Long times_start = date.getTime();
+        Log.d("times", jam_sekarang +"/"+times_now+"/"+times_start);
         if (times_now >= times_start){
             if (viewItem.getDay_id().equals("0")) {
-//                holder.absen_status.setText("Tidak Masuk");
                 Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);
             }else if (viewItem.getDay_id().equals("1")){
                 Glide.with(getContext()).load(R.drawable.ic_true).into(holder.image_absen);
-//                holder.absen_status.setText("Masuk");
             }
         }else {
             Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
-//            holder.absen_status.setText("Belum Absen");
         }
     }
 
@@ -112,14 +107,16 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView times,absen_status;
+        TextView times,mapel,guru;
         OnItemClickListener onItemClickListener;
         ImageView image_absen;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            times   = itemView.findViewById(R.id.jam_absen);
-            image_absen =   itemView.findViewById(R.id.image_absen);
+            times       = itemView.findViewById(R.id.jam_absen);
+            image_absen = itemView.findViewById(R.id.image_absen);
+//            guru        = itemView.findViewById(R.id.guru_absen);
+//            mapel       = itemView.findViewById(R.id.mapel_absen);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }
@@ -132,20 +129,5 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
     public interface OnItemClickListener {
 
         void onItemClick(View view, int position);
-    }
-    public void clear() {
-        final int size = viewItemList.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                viewItemList.remove(0);
-            }
-            notifyItemRangeRemoved(0, size);
-        }
-    }
-    private void setToMidnight(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
     }
 }

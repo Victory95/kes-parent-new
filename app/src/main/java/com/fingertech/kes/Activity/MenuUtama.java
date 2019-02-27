@@ -110,6 +110,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
@@ -380,12 +383,23 @@ public class MenuUtama extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            new AlertDialog.Builder(this,R.style.DialogTheme)
-                    .setMessage("Apa kalian ingin Exit?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", (dialog, id) -> moveTaskToBack(true))
-                    .setNegativeButton("No", null)
-                    .show();
+            new FancyGifDialog.Builder(this)
+                    .setTitle("Keluar")
+                    .setMessage("Apakah anda ingin keluar dari aplikasi.")
+                    .setNegativeBtnText("Tidak")
+                    .setNegativeBtnBackground("#FFA9A7A8")
+                    .setPositiveBtnBackground("#40bfe8")
+                    .setPositiveBtnText("Ya")
+                    .setGifResource(R.drawable.home)   //Pass your Gif here
+                    .isCancellable(true)
+                    .OnPositiveClicked(() -> moveTaskToBack(true))
+                    .OnNegativeClicked(new FancyGifDialogListener() {
+                        @Override
+                        public void OnClick() {
+
+                        }
+                    })
+                    .build();
         }
 
     }
@@ -559,7 +573,6 @@ public class MenuUtama extends AppCompatActivity
                             school_code     = profileModels.get(position).getSchool_code();
                             classroom_id    = profileModels.get(position).getClassroom_id();
                             school_name     = profileModels.get(position).getSchool_name();
-                            Toast.makeText(getApplicationContext(),profileModels.get(position).getNama(),Toast.LENGTH_LONG).show();
                             send_data();
                             send_data2();
                         });

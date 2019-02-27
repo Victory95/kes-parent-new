@@ -31,6 +31,7 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.rey.material.widget.Spinner;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -146,7 +147,6 @@ public class EditProfile extends AppCompatActivity {
             rb_wanita.setChecked(true);
             rb_pria.setChecked(false);
         }
-
         et_tanggal.setText(tanggal_lahir);
 
         Calendar mcurrentDate = Calendar.getInstance();
@@ -220,8 +220,8 @@ public class EditProfile extends AppCompatActivity {
 
         agama = sp_religion.getSelectedItem().toString();
 
-        rb_pria.setOnClickListener(v -> gender = getResources().getString(R.string.rb_laki));
-        rb_wanita.setOnClickListener(v -> gender = getResources().getString(R.string.rb_wanita));
+        rb_pria.setOnClickListener(v -> gender_profile = getResources().getString(R.string.rb_laki));
+        rb_wanita.setOnClickListener(v -> gender_profile = getResources().getString(R.string.rb_wanita));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         last_update = df.format(Calendar.getInstance().getTime());
 
@@ -248,8 +248,7 @@ public class EditProfile extends AppCompatActivity {
     public void update_profile(){
         progressBar();
         showDialog();
-        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization.toString(),parent_id.toString(),et_email.getText().toString(),et_nama_lengkap.getText().toString(),et_nomor_hp.getText().toString(),last_update.toString(),gender.toString(),agama.toString(),et_tanggal.getText().toString());
-
+        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization.toString(),parent_id.toString(),et_email.getText().toString(),et_nama_lengkap.getText().toString(),et_nomor_hp.getText().toString(),last_update.toString(),gender_profile.toString(),agama.toString(),et_tanggal.getText().toString());
         call.enqueue(new Callback<JSONResponse>() {
 
             @Override
@@ -265,6 +264,7 @@ public class EditProfile extends AppCompatActivity {
                     Intent intent = new Intent(EditProfile.this, ProfileParent.class);
                     startActivity(intent);
                     finish();
+                    FancyToast.makeText(getApplicationContext(),"Berhasil Update",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
                 } else{
                     if (status == 0 && code.equals("UP_ERR_0001")) {
                         Toast.makeText(getApplicationContext(), "Email tidak boleh kosong", Toast.LENGTH_LONG).show();
