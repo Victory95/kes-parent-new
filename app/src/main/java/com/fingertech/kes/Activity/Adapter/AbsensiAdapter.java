@@ -94,6 +94,8 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
                 Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);
             }else if (viewItem.getDay_id().equals("1")){
                 Glide.with(getContext()).load(R.drawable.ic_true).into(holder.image_absen);
+            }else if (viewItem.getDay_id().equals("2")){
+                Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
             }
         }else {
             Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);

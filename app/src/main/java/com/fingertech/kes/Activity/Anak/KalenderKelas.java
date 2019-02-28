@@ -126,22 +126,7 @@ public class KalenderKelas extends AppCompatActivity {
                 }
                 calendar_year   = tahunFormat.format(firstDayOfNewMonth);
                 dapat_calendar();
-                final SkeletonScreen skeletonScreen = Skeleton.bind(recyclerView)
-                        .adapter(calendarAdapter)
-                        .shimmer(true)
-                        .angle(20)
-                        .frozen(false)
-                        .duration(1200)
-                        .count(10)
-                        .load(R.layout.item_calendar)
-                        .show(); //default count is 10
-                recyclerView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        skeletonScreen.hide();
-                    }
-                }, 3000);
-                return;
+
             }
         });
         left_month.setOnClickListener(v -> compactCalendarView.scrollLeft());
