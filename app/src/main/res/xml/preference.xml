@@ -3,18 +3,6 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:key="Key_General"
-        android:title="General">
-
-        <SwitchPreference
-            android:key="@string/Key_SW_Language"
-            android:title="Bahasa"
-            android:editable="true"
-            android:summary="@string/tv_bahasa"
-            />
-
-    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="Nada"
@@ -44,10 +32,6 @@
     <PreferenceCategory android:title="About">
 
         <Preference
-            android:selectable="false"
-            android:summary="@string/summary_about" />
-
-        <Preference
             android:summary="1.0.10"
             android:title="Versi" />
 
@@ -59,7 +43,7 @@
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_faq" />
         </Preference>
-        <Preference android:title="@string/Tittle_term">
+        <Preference android:title="TERM AND CONDITIONS">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_term" />
