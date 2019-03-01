@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -244,9 +245,14 @@ public class PesanAnak extends AppCompatActivity {
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PesanAnak.this);
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(pesanAdapter);
-
+                    hideKeyboard(PesanAnak.this);
+                    date_from.clearFocus();
+                    date_to.clearFocus();
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){
+                    hideKeyboard(PesanAnak.this);
+                    date_to.clearFocus();
+                    date_from.clearFocus();
                     no_pesan.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 }
@@ -277,20 +283,31 @@ public class PesanAnak extends AppCompatActivity {
         dialog.setCancelable(false);
     }
 
-//    public boolean dispatchTouchEvent(MotionEvent event) {
-//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//            View v = getCurrentFocus();
-//            if ( v instanceof EditText) {
-//                Rect outRect = new Rect();
-//                v.getGlobalVisibleRect(outRect);
-//                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-//                    v.clearFocus();
-//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                }
-//            }
-//        }
-//        return super.dispatchTouchEvent( event );
-//    }
-
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }
