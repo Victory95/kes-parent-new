@@ -16,6 +16,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
@@ -39,6 +40,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
 
     private Ringtone ringtone;
+    private Vibrator vibrator;
 
     NotificationManager notificationManager;
     public static final String ANDROID_CHANNEL_ID = "com.fingertech.kes";
@@ -59,39 +61,44 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     private void nada() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         String path = preferences.getString("Ringtone", "");
         if (!path.isEmpty()) {
             ringtone = RingtoneManager.getRingtone(this, Uri.parse(path));
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(400);
             ringtone.play();
         }else if(path.isEmpty())
         {
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(400);
             ringtone = RingtoneManager.getRingtone(this, Uri.parse(path));
             ringtone.stop();
         }
 
     }
-    private void sendnotification(String title,String messageBody){
-
-        Intent intent = new Intent(this, MenuUtama.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_logo)
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(soundUri)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
-                .setContentIntent(pendingIntent);
-
-        create();
-        notificationManager.notify(0, notificationBuilder.build());
-
-    }
+//    private void sendnotification(String title,String messageBody){
+//
+//        Intent intent = new Intent(this, MenuUtama.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+//                PendingIntent.FLAG_ONE_SHOT);
+//
+//        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
+//                .setSmallIcon(R.drawable.ic_logo)
+//                .setContentTitle(title)
+//                .setContentText(messageBody)
+//                .setAutoCancel(true)
+//                .setSound(soundUri)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
+//                .setContentIntent(pendingIntent);
+//
+//        create();
+//        notificationManager.notify(0, notificationBuilder.build());
+//
+//    }
 
 
 
