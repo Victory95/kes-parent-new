@@ -153,9 +153,6 @@ public class JadwalPelajaran extends AppCompatActivity {
         itemJumat   = new ArrayList<JadwalJumat>();
         itemSabtu   = new ArrayList<JadwalSabtu>();
 
-
-
-
         btn_senin.setOnClickListener(v -> {
             if (itemlist.size() == 0) {
                 if (hint_senin.getVisibility() == View.GONE) {
@@ -491,60 +488,67 @@ public class JadwalPelajaran extends AppCompatActivity {
                             }
                         }
                         switch (day) {
-                            case "Senin":
+                            case "Monday":
                                 if (itemlist.size() == 0) {
                                     hint_senin.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_senin.setBackgroundResource(R.drawable.ic_down);
                                     rv_senin.setVisibility(View.VISIBLE);
+                                    hint_senin.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Selasa":
+                            case "Tuesday":
                                 if (itemselasa.size() == 0) {
                                     hint_selasa.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_selasa.setBackgroundResource(R.drawable.ic_down);
                                     rv_selasa.setVisibility(View.VISIBLE);
+                                    hint_selasa.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Rabu":
+                            case "Wednesday":
                                 if (itemRabu.size() == 0) {
                                     hint_rabu.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_rabu.setBackgroundResource(R.drawable.ic_down);
                                     rv_rabu.setVisibility(View.VISIBLE);
+                                    hint_rabu.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Kamis":
+                            case "Thursday":
                                 if (itemKamis.size() == 0) {
                                     hint_kamis.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_kamis.setBackgroundResource(R.drawable.ic_down);
                                     rv_kamis.setVisibility(View.VISIBLE);
+                                    hint_kamis.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Jumat":
+                            case "Friday":
                                 if (itemJumat.size() == 0) {
                                     hint_jumat.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                                    rv_jumat.setVisibility(View.VISIBLE);
+                                    rv_jumat.setVisibility(View.GONE);
+                                    hint_jumat.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Sabtu":
+                            case "Saturday":
                                 if (itemSabtu.size() == 0) {
                                     hint_sabtu.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
                                     rv_sabtu.setVisibility(View.VISIBLE);
+                                    hint_sabtu.setVisibility(View.GONE);
                                 }
                                 break;
-                            case "Minggu":
+                            case "Sunday":
                                 if (itemlist.size() == 0) {
                                     hint_senin.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_senin.setBackgroundResource(R.drawable.ic_down);
                                     rv_senin.setVisibility(View.VISIBLE);
+                                    hint_senin.setVisibility(View.GONE);
                                 }
                                 break;
                         }

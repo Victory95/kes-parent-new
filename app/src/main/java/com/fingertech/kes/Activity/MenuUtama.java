@@ -80,6 +80,8 @@ import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
+import com.fingertech.kes.Activity.RecycleView.DialogFactory;
+import com.fingertech.kes.Activity.RecycleView.OneButtonDialog;
 import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Search.AnakAkses;
@@ -113,6 +115,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
+import com.rey.material.app.Dialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -134,6 +137,7 @@ import retrofit2.Response;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+
 
 public class MenuUtama extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -324,8 +328,8 @@ public class MenuUtama extends AppCompatActivity
             public void onRefresh() {
                 get_profile();
                 get_children();
-//                send_data();
-//                send_data2();
+                send_data();
+                send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -341,6 +345,7 @@ public class MenuUtama extends AppCompatActivity
             public void onPageSelected(int position) {
             switch (position){
                 case 0:
+                    send_data();
                     break;
                 case 1:
                     send_data2();
@@ -390,7 +395,7 @@ public class MenuUtama extends AppCompatActivity
                     .setTitle("Keluar")
                     .setMessage("Apakah anda ingin keluar dari aplikasi.")
                     .setNegativeBtnText("Tidak")
-                    .setNegativeBtnBackground("#FFA9A7A8")
+                    .setNegativeBtnBackground("#FFFFFF")
                     .setPositiveBtnBackground("#40bfe8")
                     .setPositiveBtnText("Ya")
                     .setGifResource(R.drawable.home)   //Pass your Gif here
@@ -402,7 +407,9 @@ public class MenuUtama extends AppCompatActivity
 
                         }
                     })
+
                     .build();
+
         }
 
     }
@@ -569,6 +576,7 @@ public class MenuUtama extends AppCompatActivity
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
                         recyclerView.setAdapter(profileAdapter);
+
                         profileAdapter.setOnItemClickListener((view, position) -> {
                             profileAdapter.notifyDataSetChanged();
                             profileAdapter.selectRow(position);
@@ -653,68 +661,59 @@ public class MenuUtama extends AppCompatActivity
 
     public void send_data(){
         Bundle bundle = new Bundle();
-        if (bundle != null) {
-            SharedPreferences.Editor editor = sharedviewpager.edit();
-            editor.putString("member_id",parent_id);
-            editor.putString("school_code",school_code);
-            editor.putString("authorization",authorization);
-            editor.putString("classroom_id",classroom_id);
-            editor.putString("parent_nik",parent_nik);
-            editor.putString("school_name",school_name);
-            editor.putString("student_id",student_id);
-            editor.commit();
-            bundle.putString("parent_nik", parent_nik);
-            bundle.putString("student_id", student_id);
-            bundle.putString("school_code", school_code);
-            bundle.putString("member_id", parent_id);
-            bundle.putString("authorization", authorization);
-            bundle.putString("classroom_id", classroom_id);
-            bundle.putString("school_name",school_name);
-            Fragment menuSatuFragment = null;
-            menuSatuFragment = new MenuSatuFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
-            fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
-            fragmentTransaction.commitAllowingStateLoss();
-            menuSatuFragment.setArguments(bundle);
-        }else {
-            Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
-        }
+        SharedPreferences.Editor editor = sharedviewpager.edit();
+        editor.putString("member_id", parent_id);
+        editor.putString("school_code", school_code.toLowerCase());
+        editor.putString("authorization", authorization);
+        editor.putString("classroom_id", classroom_id);
+        editor.putString("parent_nik", parent_nik);
+        editor.putString("school_name", school_name);
+        editor.putString("student_id", student_id);
+        editor.commit();
+        bundle.putString("parent_nik", parent_nik);
+        bundle.putString("student_id", student_id);
+        bundle.putString("school_code", school_code.toLowerCase());
+        bundle.putString("member_id", parent_id);
+        bundle.putString("authorization", authorization);
+        bundle.putString("classroom_id", classroom_id);
+        bundle.putString("school_name", school_name);
+        MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
+        menuSatuFragment.putString(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
+        fragmentTransaction.commit();
+        menuSatuFragment.setArguments(bundle);
     }
 
     public void send_data2(){
         Bundle bundle = new Bundle();
-        if (bundle != null) {
-            SharedPreferences.Editor editor = sharedviewpager.edit();
-            editor.putString("member_id",parent_id);
-            editor.putString("school_code",school_code);
-            editor.putString("authorization",authorization);
-            editor.putString("classroom_id",classroom_id);
-            editor.putString("parent_nik",parent_nik);
-            editor.putString("school_name",school_name);
-            editor.putString("student_id",student_id);
-            editor.commit();
-            bundle.putString("parent_nik", parent_nik);
-            bundle.putString("student_id", student_id);
-            bundle.putString("school_code", school_code);
-            bundle.putString("member_id", parent_id);
-            bundle.putString("authorization", authorization);
-            bundle.putString("classroom_id", classroom_id);
-            bundle.putString("school_name",school_name);
-            Fragment menuDuaFragment = null;
-            menuDuaFragment = new MenuDuaFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
-            fragmentTransaction.addToBackStack(null);//add the transaction to the back stack so the user can navigate back
-            fragmentTransaction.commitAllowingStateLoss();
-            menuDuaFragment.setArguments(bundle);
-        }else {
-            Toast.makeText(MenuUtama.this,"harap refersh kembali",Toast.LENGTH_LONG).show();
-        }
+        SharedPreferences.Editor editor = sharedviewpager.edit();
+        editor.putString("member_id",parent_id);
+        editor.putString("school_code",school_code.toLowerCase());
+        editor.putString("authorization",authorization);
+        editor.putString("classroom_id",classroom_id);
+        editor.putString("parent_nik",parent_nik);
+        editor.putString("school_name",school_name);
+        editor.putString("student_id",student_id);
+        editor.commit();
+        bundle.putString("parent_nik", parent_nik);
+        bundle.putString("student_id", student_id);
+        bundle.putString("school_code", school_code.toLowerCase());
+        bundle.putString("member_id", parent_id);
+        bundle.putString("authorization", authorization);
+        bundle.putString("classroom_id", classroom_id);
+        bundle.putString("school_name",school_name);
+        MenuDuaFragment menuDuaFragment = new MenuDuaFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
+        fragmentTransaction.commit();
+        menuDuaFragment.setArguments(bundle);
     }
-    public static class FragmentAdapter extends FragmentStatePagerAdapter {
+
+
+    public class FragmentAdapter extends FragmentStatePagerAdapter {
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -724,8 +723,10 @@ public class MenuUtama extends AppCompatActivity
         public Fragment getItem(int position) {
             switch (position){
                 case 0:
+                    send_data();
                     return new MenuSatuFragment();
                 case 1:
+                    send_data2();
                     return new MenuDuaFragment();
             }
             return null;

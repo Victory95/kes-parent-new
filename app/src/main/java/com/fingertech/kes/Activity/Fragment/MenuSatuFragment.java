@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.AbsenAnak;
@@ -35,6 +37,22 @@ public class MenuSatuFragment extends Fragment {
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     SharedPreferences sharedPreferences;
     FrameLayout frameLayout;
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        Bundle bundle = this.getArguments();
+//        if (bundle!=null){
+//            authorization = bundle.getString("authorization");
+//            parent_nik    = bundle.getString("parent_nik");
+//            school_code   = bundle.getString("school_code");
+//            student_id    = bundle.getString("student_id");
+//            member_id     = bundle.getString("member_id");
+//            classroom_id  = bundle.getString("classroom_id");
+//            school_name   = bundle.getString("school_name");
+//        }
+//    }
+    Bundle bundle;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +65,7 @@ public class MenuSatuFragment extends Fragment {
         btn_absensi     = view.findViewById(R.id.btn_absen);
         btn_tugas_anak  = view.findViewById(R.id.btn_tugas);
         btn_raport      = view.findViewById(R.id.btn_raport);
-//        frameLayout     = view.findViewById(R.id.fragMenuSatu);
+        frameLayout     = view.findViewById(R.id.fragel);
 
         sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -58,26 +76,31 @@ public class MenuSatuFragment extends Fragment {
         school_name         = sharedPreferences.getString("school_name",null);
         parent_nik          = sharedPreferences.getString("parent_nik",null);
 
-
         btn_profile.setOnClickListener(v -> {
-            if (authorization != null && parent_nik != null && school_code != null && student_id != null) {
-                Intent intent = new Intent(getContext(), ProfilAnak.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("parent_nik", parent_nik);
-                intent.putExtra("school_code", school_code);
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("school_name",school_name);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("member_id",member_id);
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("parent_nik",parent_nik);
+            editor.putString("school_name",school_name);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), ProfilAnak.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("parent_nik", parent_nik);
+            intent.putExtra("school_code", school_code);
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("school_name",school_name);
+            startActivity(intent);
+
         });
 
         btn_jadwal.setOnClickListener(v -> {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
                 Intent intent = new Intent(getContext(), JadwalPelajaran.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
                 intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
@@ -90,7 +113,7 @@ public class MenuSatuFragment extends Fragment {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
                 Intent intent = new Intent(getContext(), JadwalUjian.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
                 intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
@@ -103,7 +126,7 @@ public class MenuSatuFragment extends Fragment {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
                 Intent intent = new Intent(getContext(), AbsenAnak.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
                 intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
@@ -116,7 +139,7 @@ public class MenuSatuFragment extends Fragment {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
                 Intent intent = new Intent(getContext(), TugasAnak.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
                 intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
@@ -128,7 +151,7 @@ public class MenuSatuFragment extends Fragment {
             if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
                 Intent intent = new Intent(getContext(), RaportAnak.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
                 intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
@@ -137,6 +160,21 @@ public class MenuSatuFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void putString(Bundle bundle){
+        authorization = bundle.getString("authorization");
+        parent_nik    = bundle.getString("parent_nik");
+        school_code   = bundle.getString("school_code");
+        student_id    = bundle.getString("student_id");
+        member_id     = bundle.getString("member_id");
+        classroom_id  = bundle.getString("classroom_id");
+        school_name   = bundle.getString("school_name");
+
+
+
+
+
     }
 
 }

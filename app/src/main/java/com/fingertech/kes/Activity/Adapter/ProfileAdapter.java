@@ -80,16 +80,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff").into(holder.imageView);
             }
         }
-        Picasso.get().load(profileModel.getPicture()).into(holder.imageView);
+        Glide.with(getContext()).load(profileModel.getPicture()).into(holder.imageView);
         if (row_index == position){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    155,
-                    155
+                    200,
+                    200
             );
             params.setMargins(0,10,0,0);
             LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                    155,
-                    35
+                    200,
+                    50
             );
 
             paramsanak.setMargins(0,10,0,10);
@@ -113,12 +113,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
             }
         }else {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    130,
-                    130
+                    175,
+                    175
             );
             params.setMargins(0,30,0,0);
             LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                    130,
+                    175,
                     35
             );
             paramsanak.setMargins(0,10,0,5);
@@ -179,7 +179,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
 
     public void selectRow(int index){
         row_index=index;
-        this.onItemClickListener = onItemClickListener;
         notifyDataSetChanged();
 
     }

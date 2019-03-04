@@ -103,7 +103,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     ImageView bookmark;
     Toolbar ToolBarAtas2;
     SearchManager searchManager;
-    SquareFloatButton refress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,16 +111,16 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSearch);
         mapFragment.getMapAsync(this);
 
-        discreteSlider               = (DiscreteSlider)findViewById(R.id.discrete_slider);
-        tickMarkLabelsRelativeLayout = (RelativeLayout)findViewById(R.id.tick_mark_labels_rl);
-        Kelurahan                    = (Button)findViewById(R.id.kelurahan);
-        bookmark                     = (ImageView) findViewById(R.id.book);
+        discreteSlider               = findViewById(R.id.discrete_slider);
+        tickMarkLabelsRelativeLayout = findViewById(R.id.tick_mark_labels_rl);
+        Kelurahan                    = findViewById(R.id.kelurahan);
+        bookmark                     = findViewById(R.id.book);
         recyclerView                 = findViewById(R.id.recyclerView);
-        searchView                   = (SearchView)findViewById(R.id.search);
-        ToolBarAtas2                 = (Toolbar)findViewById(R.id.toolbar_satu);
+        searchView                   = findViewById(R.id.search);
+        ToolBarAtas2                 = findViewById(R.id.toolbar_satu);
         mApiInterface                = ApiClient.getClient().create(Auth.class);
         searchManager                = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        refress                      = (SquareFloatButton)findViewById(R.id.refres);
+
 
         requestFocus(searchView);
 
@@ -170,7 +169,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         search_school_post(key);
         hideKeyboard(this);
         recyclerView.setVisibility(View.GONE);
-        refress.setVisibility(View.VISIBLE);
         tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
         discreteSlider.setVisibility(View.VISIBLE);
 
@@ -182,7 +180,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onQueryTextSubmit(String query) {
                 key = query;
                 search_school_post(query);
-                refress.setVisibility(View.GONE);
                 tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
                 discreteSlider.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -193,7 +190,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onQueryTextChange(String newText) {
                 key = newText;
                 search_school_post(newText);
-                refress.setVisibility(View.GONE);
                 tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
                 discreteSlider.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -212,6 +208,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             Intent mIntent = new Intent(SearchingMAP.this,LokasiAnda.class);
             startActivityForResult(mIntent,2);
         });
+
     }
 
 
@@ -278,12 +275,13 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             mcurrLocationMarker.remove();
 
         }
-        currentLatitude     = location.getLatitude();
-        currentLongitude    = location.getLongitude();
+        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        currentLatitude     = latLng.latitude;
+        currentLongitude    = latLng.longitude;
         Jarak = 2.5;
         dapat_map();
         //Place current location marker
-        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
 
         final MarkerOptions markerOptions = new MarkerOptions();
@@ -317,20 +315,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
-        refress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mmap.clear();
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
-                final MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title("Lokasi Anda");
-                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_map));
 
-                mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                mmap.animateCamera(CameraUpdateFactory.zoomTo(14));
-            }
-        });
         updateLocation(location);
         getAddress();
     }
@@ -489,7 +474,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
 
                         LatLng latLng = new LatLng(lat, lng);
-                        if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
+                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -501,7 +486,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                             // Adding Marker to the Camera.
                             m = mmap.addMarker(markerOptions);
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -512,7 +497,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
                             // Adding Marker to the Camera.
                             m = mmap.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -599,7 +584,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         String Alamat           = response.body().getData().get(position).getSchool_address();
                         final LatLng latLng = new LatLng(latitudeF, longitudeF);
                         hideKeyboard(SearchingMAP.this);
-                        if(response.body().getData().get(position).getJenjang_pendidikan().toString().equals("SD")){
+                        if(response.body().getData().get(position).getJenjang_pendidikan().equals("SD")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -610,7 +595,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                             // Adding Marker to the Camera.
                             m = mmap.addMarker(markerOptions);
 
-                        }else if(response.body().getData().get(position).getJenjang_pendidikan().toString().equals("SMP")){
+                        }else if(response.body().getData().get(position).getJenjang_pendidikan().equals("SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -621,7 +606,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
                             // Adding Marker to the Camera.
                             m = mmap.addMarker(markerOptions);
-                        }else if(response.body().getData().get(position).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                        }else if(response.body().getData().get(position).getJenjang_pendidikan().equals("SPK SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -704,7 +689,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapClick(LatLng latLng) {
-        refress.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
         discreteSlider.setVisibility(View.VISIBLE);
@@ -722,7 +706,11 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 String schoolid = data.getStringExtra("schoolid");
                 String namaSek     = data.getStringExtra("namasekolah");
                 String alamat   = data.getStringExtra("alamat");
-
+                currentLatitude = lati;
+                currentLongitude = longi;
+                Jarak = 2.5;
+                dapat_map();
+                Kelurahan.setText(alamat);
                 final LatLng latLng1 = new LatLng(lati,longi);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng1.latitude, latLng1.longitude)).zoom(16).build();
                 InfoWindowData indo = new InfoWindowData();
@@ -730,7 +718,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 indo.setAlamat(alamat);
                 indo.setSchooldetailid(schoolid);
 
-                if (jenjang.toString().equals("sd") || jenjang.toString().equals("BPK SD")){
+                if (jenjang.equals("sd") || jenjang.equals("BPK SD")){
 
                     final MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng1);
@@ -743,7 +731,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
 
-                }else if(jenjang.toString().equals("smp") || jenjang.toString().equals("BPK SMP")){
+                }else if(jenjang.equals("smp") || jenjang.equals("BPK SMP")){
                     final MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng1);
                     markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
@@ -755,7 +743,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
 
-                }else if(jenjang.toString().equals("smk")){
+                }else if(jenjang.equals("smk")){
                     final MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng1);
                     markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
@@ -788,7 +776,11 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 String address  = data.getStringExtra("address");
                 double lati     = data.getDoubleExtra("latitude",0.0);
                 double longi    = data.getDoubleExtra("longitude",0.0);
-
+                currentLatitude = lati;
+                currentLongitude = longi;
+                Jarak = 2.5;
+                Kelurahan.setText(address);
+                dapat_map();
                 final LatLng latLng1 = new LatLng(lati,longi);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng1.latitude, latLng1.longitude)).zoom(16).build();
 
@@ -804,7 +796,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mcurrLocationMarker.remove();}
                 mcurrLocationMarker = mmap.addMarker(markerOptions);
                 hideKeyboard(this);
-                Kelurahan.setText(address);
+
             }
         }
     }

@@ -110,12 +110,12 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@id/fragel"
+                        android:id="@+id/fragels"
                         />
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@id/fragMenuDua"
+                        android:id="@+id/fragMenuDuas"
                         />
                 </android.support.v4.view.ViewPager>
                     <com.pixelcan.inkpageindicator.InkPageIndicator

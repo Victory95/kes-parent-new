@@ -79,7 +79,7 @@ public class AnakAkses extends AppCompatActivity {
     String email, member_id, fullname, member_type,nama_anak, student_id,parent_nik, student_nik, school_id,school_name,school_code,sekolah_kode;
 
     TextView tvnamajoin,tvkodejoin,tvinfo,tvnamaanak;
-    TextInputLayout tl_input_noira;
+    TextInputLayout tl_input_noira,til_search;
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
 
@@ -97,7 +97,9 @@ public class AnakAkses extends AppCompatActivity {
     public static final String TAG_TOKEN        = "token";
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_PICTURE      = "picture";
     Toolbar toolbar;
+    String picture;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,11 +109,11 @@ public class AnakAkses extends AppCompatActivity {
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         linearLayout    = findViewById(R.id.infof);
         Kodeakses       = findViewById(R.id.btn_kode_akses);
-        tvnamajoin      = findViewById(R.id.tv_val_nama_kodes);
         tvkodejoin      = findViewById(R.id.tv_kode_join);
         iv_camera       = findViewById(R.id.iv_camera);
         et_nik          = findViewById(R.id.et_nik_niora_siswa);
         tl_input_noira  = findViewById(R.id.til_nik_niora_siswa);
+        til_search      = findViewById(R.id.til_search);
         tvinfo          = findViewById(R.id.tv_info_nama_anak);
         tvnamaanak      = findViewById(R.id.tv_nama_anak);
         toolbar         = findViewById(R.id.toolbar_anak);
@@ -132,7 +134,7 @@ public class AnakAkses extends AppCompatActivity {
         authorization = sharedpreferences.getString(TAG_TOKEN,"token");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
-        Kodeakses.setOnClickListener(v -> check_student_nik_post());
+        Kodeakses.setOnClickListener(v -> submitForm());
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -197,17 +199,17 @@ public class AnakAkses extends AppCompatActivity {
         if (!validateNikNiora()) {
             return;
         }
-            request_code_acsess_post();
+        check_student_nik_post();
 
     }
 
     private boolean validatenamasekolah() {
         if (search.getText().toString().trim().isEmpty()) {
-            Toast.makeText(getApplicationContext(),"* NIK / NIORA anak tidak cokok dengan orangtua",Toast.LENGTH_LONG).show();
+            til_search.setError(getResources().getString(R.string.validate_nama_kode_sekolah));
             requestFocus(search);
             return false;
         }else {
-            tl_input_noira.setErrorEnabled(false);
+            til_search.setErrorEnabled(false);
 //            tvnamajoin.setVisibility(View.GONE);
         }
         return true;
@@ -215,7 +217,6 @@ public class AnakAkses extends AppCompatActivity {
 
     private boolean validateNikNiora() {
         if (et_nik.getText().toString().trim().isEmpty()) {
-            Toast.makeText(getApplicationContext(),"* Masukan NIK / NIORA",Toast.LENGTH_LONG).show();
             tl_input_noira.setError(getResources().getString(R.string.validate_nik_niora_anak));
             requestFocus(et_nik);
             return false;
@@ -392,44 +393,23 @@ public class AnakAkses extends AppCompatActivity {
 
     public void getval_InfoAksesAnak(){
         String language = Locale.getDefault().getLanguage();
-        if (language.equals("en")) {
-            SpannableString ss = new SpannableString("The access code will be sent via email registered with the school, if the email you use is different from the email registered with the school please Contact us");
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    startActivity(new Intent(AnakAkses.this, MainActivity.class));
-                }
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
-                }
-            };
-            ss.setSpan(clickableSpan, 150, 160, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 150, 160, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tvinfo.setText(ss);
-            tvinfo.setMovementMethod(LinkMovementMethod.getInstance());
-            tvinfo.setHighlightColor(Color.TRANSPARENT);
-        }
-        else if (language.equals("in")) {
-            SpannableString ss = new SpannableString("Kode akses akan dikirimkan melalui email yang terdaftar pada sekolah, bila email yang anda gunakan berbeda dengan email yang terdaftar pada sekolah mohon Hubungi Kami");
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    startActivity(new Intent(AnakAkses.this, MainActivity.class));
-                }
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
-                }
-            };
-            ss.setSpan(clickableSpan, 154, 166, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 154, 166, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tvinfo.setText(ss);
-            tvinfo.setMovementMethod(LinkMovementMethod.getInstance());
-            tvinfo.setHighlightColor(Color.TRANSPARENT);
-        }
+        SpannableString ss = new SpannableString("Kode akses akan dikirimkan melalui email yang terdaftar pada sekolah, bila email yang anda gunakan berbeda dengan email yang terdaftar pada sekolah mohon Hubungi Kami");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                startActivity(new Intent(AnakAkses.this, MainActivity.class));
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+        ss.setSpan(clickableSpan, 154, 166, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 154, 166, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvinfo.setText(ss);
+        tvinfo.setMovementMethod(LinkMovementMethod.getInstance());
+        tvinfo.setHighlightColor(Color.TRANSPARENT);
     }
 
     public void check_student_nik_post(){
@@ -449,6 +429,7 @@ public class AnakAkses extends AppCompatActivity {
                 List<String> AL_CHECK_NIK_GETFULLNAME = null;
                 List<String> AL_CHECK_NIK_GETMEMBERID = null;
                 List<String> AL_CHECK_NIK_GETNIK = null;
+                List<String> AL_CHECK_NIK_GETPICTURE = null;
 
                 String CSN_SCS_0001 = getResources().getString(R.string.CSN_SCS_0001);
                 String CSN_ERR_0001 = getResources().getString(R.string.CSN_ERR_0001);
@@ -460,10 +441,12 @@ public class AnakAkses extends AppCompatActivity {
                         AL_CHECK_NIK_GETFULLNAME = new ArrayList<String>();
                         AL_CHECK_NIK_GETMEMBERID = new ArrayList<String>();
                         AL_CHECK_NIK_GETNIK = new ArrayList<String>();
+                        AL_CHECK_NIK_GETPICTURE = new ArrayList<String>();
                         for (int i = 0; i < arrayList.size(); i++){
                             AL_CHECK_NIK_GETFULLNAME.add(arrayList.get(i).getFullname());
                             AL_CHECK_NIK_GETMEMBERID.add(arrayList.get(i).getMemberid());
                             AL_CHECK_NIK_GETNIK.add(arrayList.get(i).getNik());
+                            AL_CHECK_NIK_GETPICTURE.add(arrayList.get(i).getPicture());
                         }
                     }
 
@@ -491,7 +474,13 @@ public class AnakAkses extends AppCompatActivity {
                             student_nik = item;
                         }
                     }
-                    submitForm();
+                    for (final String item : AL_CHECK_NIK_GETPICTURE){
+                        if (item.contains(item)){
+                            list.add(new SimpleSuggestions(item));
+                            picture = item;
+                        }
+                    }
+                    request_code_acsess_post();
 
                 } else {
                     status_nik =0;
@@ -554,6 +543,7 @@ public class AnakAkses extends AppCompatActivity {
                     editor.putString(TAG_NAMA_SEKOLAH, (String) school_name);
                     editor.putString(TAG_PARENT_NIK,parent_nik);
                     editor.putString(TAG_SCHOOL_CODE, (String)sekolah_kode.toLowerCase());
+                    editor.putString(TAG_PICTURE,picture);
                     editor.commit();
                     Intent intent = new Intent(getApplicationContext(), KodeAksesAnak.class);
                     intent.putExtra(TAG_STUDENT_ID,student_id);
@@ -563,6 +553,7 @@ public class AnakAkses extends AppCompatActivity {
                     intent.putExtra(TAG_NAMA_SEKOLAH,school_name);
                     intent.putExtra(TAG_PARENT_NIK,parent_nik);
                     intent.putExtra(TAG_SCHOOL_CODE,sekolah_kode.toLowerCase());
+                    intent.putExtra(TAG_PICTURE,picture);
                     startActivity(intent);
                 } else {
                     if(status == 0 && code.equals("RCA_ERR_0001")){

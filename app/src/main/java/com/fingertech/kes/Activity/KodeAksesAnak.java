@@ -33,6 +33,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.fingertech.kes.Activity.Anak.ProfilAnak;
+import com.fingertech.kes.Activity.RecycleView.DialogFactory;
+import com.fingertech.kes.Activity.RecycleView.OneButtonDialog;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -41,6 +45,9 @@ import com.rey.material.app.Dialog;
 import com.rey.material.app.DialogFragment;
 import com.rey.material.app.SimpleDialog;
 import com.rey.material.app.ThemeManager;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
+import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
+import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,9 +81,9 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_COUNT        = "count_children";
     public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_PICTURE      = "picture";
 
-    String authorization,count_student;
-
+    String authorization,count_student,picture,Base_anak;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +104,7 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         mintakode       = findViewById(R.id.kirim_kode);
         tv_kode_akses_anak_sekolah  = findViewById(R.id.tv_kode_akses_anak_sekolah);
         tv_kode_akses_anak_nama     = findViewById(R.id.tv_kode_akses_anak_nama);
+        Base_anak       = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
         editTextone.addTextChangedListener(this);
         editTexttwo.addTextChangedListener( this);
@@ -123,8 +131,15 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
         count_student = sharedpreferences.getString(TAG_COUNT,"");
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
-
+        picture       = sharedpreferences.getString(TAG_PICTURE,"");
         iv_close.setOnClickListener(v -> finish());
+        String imagefiles = Base_anak + picture;
+
+        if (picture.equals("")){
+            Glide.with(KodeAksesAnak.this).load("https://ui-avatars.com/api/?name="+childrenname+"&background=40bfe8&color=fff").into(iv_foto_profile);
+        }
+        Glide.with(KodeAksesAnak.this).load(imagefiles).into(iv_foto_profile);
+
         editTextone.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
@@ -676,23 +691,20 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
             }
         });
     }
+
     private void pilihan() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(KodeAksesAnak.this,R.style.DialogTheme);
-        builder.setTitle("Update Data Orang Tua");
-        builder.setMessage("Apakah anda ingin mengubah data anda?");
-        builder.setIcon(R.drawable.ic_alarm);
-        builder.setPositiveButton("Ya", (dialog, which) -> {
-            Intent intent = new Intent(getApplicationContext(), ParentMain.class);
-            delete_code();
-            startActivity(intent);
-        });
-        builder.setNegativeButton("Tidak", (dialog, which) -> {
-            Intent intent = new Intent(getApplicationContext(), AnakMain.class);
-            delete_code();
-            startActivity(intent);
-        });
-        builder.show();
-
+        OneButtonDialog oneButtonDialog =
+                DialogFactory.makeSuccessDialog("Selamat! \n Anda telah berhasil mengakses anak anda yang bernama '"+childrenname+" ' yang bersekolah di '"+school_name,
+                        "Demi kelancaran akses dalam memantau perkembangan pendidikan anak anda melalui KES, silahkan isi dengan sebaik-baiknya form berikut ini.",
+                        "Ok",
+                        new OneButtonDialog.ButtonDialogAction() {
+                            @Override
+                            public void onButtonClicked() {
+                                Intent intent = new Intent(getApplicationContext(), ParentMain.class);
+                                delete_code();
+                                startActivity(intent);                            }
+                        });
+        oneButtonDialog.show(getSupportFragmentManager(), OneButtonDialog.TAG);
     }
 }

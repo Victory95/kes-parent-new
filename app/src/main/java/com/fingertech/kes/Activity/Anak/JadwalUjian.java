@@ -414,10 +414,12 @@ public class JadwalUjian extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();

@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity.Search.AnakAkses"
+    android:background="@color/colorPrimary"
     tools:ignore="RtlHardcoded,Autofill,TextFields,RtlSymmetry,ContentDescription">
 
     <android.support.v7.widget.Toolbar
@@ -32,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tv_siswa_siswi"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/ic_logo_background"
                 android:layout_marginLeft="40dp"
                  />
 
@@ -47,8 +48,8 @@
                     android:paddingTop="28dp"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
-                    android:theme="@style/TextLabelView"
-                    android:textColorHint="@color/default_textHint"
+                    android:theme="@style/TextLabelWhite"
+                    android:textColorHint="@color/ic_logo_background"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -57,8 +58,8 @@
                         android:paddingBottom="6dp"
                         android:paddingTop="10dp"
                         android:textSize="16sp"
-                        android:background="@drawable/edt_bg_selector"
-                        android:textColor="@color/default_textColor"
+                        android:background="@drawable/edt_bg_selector_white"
+                        android:textColor="@color/ic_logo_background"
                         android:imeOptions="actionSearch"
                         android:singleLine="true"
                         android:hint="@string/et_nama_kode_sekolah"
@@ -91,7 +92,7 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
                         android:textSize="12sp"
-                        android:textColor="@color/textColor_Grey"
+                        android:textColor="@color/ic_logo_background"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
@@ -109,8 +110,8 @@
                                 android:paddingTop="28dp"
                                 android:layout_marginLeft="40dp"
                                 android:layout_marginRight="40dp"
-                                android:theme="@style/TextLabelView"
-                                android:textColorHint="@color/default_textHint"
+                                android:theme="@style/TextLabelWhite"
+                                android:textColorHint="@color/ic_logo_background"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
@@ -119,8 +120,8 @@
                                     android:paddingBottom="6dp"
                                     android:paddingTop="10dp"
                                     android:textSize="16sp"
-                                    android:background="@drawable/edt_bg_selector"
-                                    android:textColor="@color/default_textColor"
+                                    android:background="@drawable/edt_bg_selector_white"
+                                    android:textColor="@color/ic_logo_background"
                                     android:inputType="number"
                                     android:digits="QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
                                     android:imeOptions="actionSearch"
@@ -151,7 +152,7 @@
                                     android:paddingTop="10dp"
                                     android:paddingRight="10dp"
                                     android:paddingBottom="10dp"
-                                    android:textColor="@color/textColor_Grey"
+                                    android:textColor="@color/black"
                                     android:textColorHint="@color/colorPrimary"
                                     android:textSize="12sp"
                                     android:layout_width="match_parent"
@@ -174,7 +175,7 @@
                                 android:layout_gravity="center"
                                 android:id="@+id/iv_camera"
                                 android:background="?attr/selectableItemBackground"
-                                android:src="@drawable/ic_camera"
+                                android:src="@drawable/ic_camera_white"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent" />
 
@@ -216,8 +217,8 @@
                         android:textSize="17sp"
                         android:textAllCaps="false"
                         android:background="@drawable/rectangle"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:textColor="@android:color/white"
+                        android:backgroundTint="@color/ic_logo_background"
+                        android:textColor="@color/colorPrimary"
                         android:layout_width="match_parent"
                         android:layout_marginBottom="50dp"
                         android:layout_height="wrap_content" />

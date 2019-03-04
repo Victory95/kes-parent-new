@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Maps;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,9 +25,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.DetailSekolah;
+import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
@@ -63,6 +68,8 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
     GoogleApiClient mGoogleApiClient;
     Button Pilih;
     TextView lokasi;
+    String address,city;
+    double latitude1,longitude1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,14 +147,14 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
         try {
             List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             if (addressList != null && addressList.size() > 0) {
-                final String address = addressList.get(0).getAddressLine(0);
+                address = addressList.get(0).getAddressLine(0);
                 String number = addressList.get(0).getFeatureName();
-                final String city = addressList.get(0).getSubLocality();
+                city = addressList.get(0).getSubLocality();
                 String state = addressList.get(0).getAdminArea();
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
-                final double latitude1 = addressList.get(0).getLatitude();
-                final double longitude1 = addressList.get(0).getLongitude();
+                latitude1  = addressList.get(0).getLatitude();
+                longitude1 = addressList.get(0).getLongitude();
 
                 lokasi.setText(address);
 
@@ -177,11 +184,13 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
                         position.tilt));
         MarkerOptions options = new MarkerOptions()
                 .position(position.target)
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
-                .title("im here");
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map));
 
         if(mcurrLocationMarker!= null){
             mcurrLocationMarker.remove();}
+
+        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(MapLokasi.this);
+        mmap.setInfoWindowAdapter(customInfoWindow);
 
         mcurrLocationMarker = mmap.addMarker(options);
     }
@@ -277,5 +286,38 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
+
+        private Context context;
+
+        public CustomInfoWindowGoogleMap(Context ctx){
+            context = ctx;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            View view = ((Activity)context).getLayoutInflater()
+                    .inflate(R.layout.snippet_lokasi, null);
+
+            mmap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Intent intent = new Intent(MapLokasi.this,LokasiAnda.class);
+                    intent.putExtra("address", city);
+                    intent.putExtra("latitude",latitude1);
+                    intent.putExtra("longitude", longitude1);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+            return view;
+        }
     }
 }

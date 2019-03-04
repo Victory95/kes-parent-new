@@ -293,7 +293,6 @@ public class DataFragment extends Fragment  {
             tv_kewarganegaraan_validate.setVisibility(View.VISIBLE);
         }else {
             tv_kewarganegaraan_validate.setVisibility(View.GONE);
-
             SharedPreferences.Editor editor = sharedviewpager.edit();
             editor.putBoolean(session_status, true);
             editor.putString(TAG_PARENT_NAME, et_namadepan.getText().toString());

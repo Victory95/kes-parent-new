@@ -426,6 +426,7 @@ public class TugasAnak extends AppCompatActivity {
         return true;
     }
 
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();

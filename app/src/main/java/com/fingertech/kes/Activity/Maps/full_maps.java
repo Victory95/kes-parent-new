@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Maps;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -74,6 +76,9 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
     private Button Pilih;
     String result = "";
     Toolbar toolbar;
+    String address,city;
+    double latitude1,longitude1;
+
 
 
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
@@ -97,8 +102,6 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         toolbar = (Toolbar) findViewById(R.id.toolbar_map);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Pilih = (Button)findViewById(R.id.pilih);
     }
 
     private void showPlaceAutoComplete(int typeLocation) {
@@ -232,33 +235,46 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                 String state = addressList.get(0).getAdminArea();
                 String country = addressList.get(0).getCountryName();
                 String postalCode = addressList.get(0).getPostalCode();
-                final double latitude1 = addressList.get(0).getLatitude();
-                final double longitude1 = addressList.get(0).getLongitude();
+                latitude1 = addressList.get(0).getLatitude();
+                longitude1 = addressList.get(0).getLongitude();
 
                 result = address ;
                 msearch.setText(result +"\n");
-
-                Pilih.setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("ResourceType")
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.putExtra("alamat", result);
-                        intent.putExtra("latitude",latitude1);
-                        intent.putExtra("longitude", longitude1);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });
-
-
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
+        private Context context;
+
+        public CustomInfoWindowGoogleMap(Context ctx){
+            context = ctx;
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            View view = ((Activity)context).getLayoutInflater()
+                    .inflate(R.layout.snippet_lokasi, null);
+
+            mmap.setOnInfoWindowClickListener(marker1 -> {
+                Intent intent = new Intent();
+                intent.putExtra("alamat", result);
+                intent.putExtra("latitude",latitude1);
+                intent.putExtra("longitude", longitude1);
+                setResult(RESULT_OK, intent);
+                finish();
+            });
+            return view;
+        }
+    }
     @Override
     public void onCameraMoveCanceled() {
         CameraPosition position=mmap.getCameraPosition();
@@ -283,8 +299,9 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                         position.tilt));
         MarkerOptions options = new MarkerOptions()
                 .position(position.target)
-                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map))
-                .title("im here");
+                .icon(bitmapDescriptorFromVector(this, R.drawable.ic_map));
+        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(full_maps.this);
+        mmap.setInfoWindowAdapter(customInfoWindow);
 
         if(mcurrLocationMarker!= null){
             mcurrLocationMarker.remove();}

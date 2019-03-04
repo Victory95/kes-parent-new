@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -85,7 +86,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     String namalengkap,jeniskelamin,Nik,Sekolah,Nis,Nisn,tempatlahir,tanggallahir,kewarga_negaraan,nomorrumah,nomorhp,Email,sk_un,no_kps,penerimaankps,Alamat,Rt,Kelurahan,Kecamatan,kodepos,statustinggal,rw,transport,foto;
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
     SwipeRefreshLayout swipeRefreshLayout;
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,11 +223,18 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 show_kontak.setVisibility(View.GONE);
             }
         });
-        authorization = getIntent().getStringExtra("authorization");
-        school_code = getIntent().getStringExtra("school_code");
-        student_id = getIntent().getStringExtra("student_id");
-        parent_nik = getIntent().getStringExtra("parent_nik");
-        school_name = getIntent().getStringExtra("school_name");
+//        authorization = getIntent().getStringExtra("authorization");
+//        school_code = getIntent().getStringExtra("school_code");
+//        student_id = getIntent().getStringExtra("student_id");
+//        parent_nik = getIntent().getStringExtra("parent_nik");
+//        school_name = getIntent().getStringExtra("school_name");
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        parent_nik          = sharedPreferences.getString("parent_nik",null);
+        Log.d("gagal",authorization+"/"+parent_nik+"/"+school_code+"/"+student_id);
         if (authorization != null || school_code != null || student_id != null || parent_nik != null) {
             data_student_get();
         }else {

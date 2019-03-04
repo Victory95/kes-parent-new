@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -40,14 +41,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/iv_foto_profile"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_face"
-        android:layout_gravity="center"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        tools:ignore="ContentDescription" />
+        <com.github.florent37.shapeofview.shapes.CircleView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="20dp"
+            android:elevation="4dp"
+            android:layout_gravity="center"
+            app:shape_circle_borderColor="@color/colorPrimary"
+            app:shape_circle_borderWidth="0.5dp"
+            android:id="@+id/profilanak">
+
+            <ImageView
+                android:id="@+id/iv_foto_profile"
+                android:src="@drawable/ic_face"
+                android:layout_gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:ignore="ContentDescription" />
+
+        </com.github.florent37.shapeofview.shapes.CircleView>
+
+
     <TextView
         android:visibility="gone"
         android:layout_marginTop="10dp"

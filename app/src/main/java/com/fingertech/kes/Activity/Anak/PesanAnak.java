@@ -283,6 +283,7 @@ public class PesanAnak extends AppCompatActivity {
         dialog.setCancelable(false);
     }
 
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
