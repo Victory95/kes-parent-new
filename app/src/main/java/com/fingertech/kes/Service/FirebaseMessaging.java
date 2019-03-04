@@ -54,7 +54,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String body        = remotemsg.getData().get("body");
         Log.d("Title",remotemsg.getData()+"");
         nada();
-        sendnotification(title,body);
+//        sendnotification(title,body);
     }
 
     private void nada() {

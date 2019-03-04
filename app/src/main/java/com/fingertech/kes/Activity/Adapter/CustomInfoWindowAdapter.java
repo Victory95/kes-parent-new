@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,11 +14,11 @@ import com.fingertech.kes.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
-public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
     private Context context;
 
-    public InfoWindowAdapter(Context ctx){
+    public CustomInfoWindowAdapter(Context ctx){
         context = ctx;
     }
 
@@ -26,21 +27,38 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public View getInfoContents(Marker marker) {
         View view = ((Activity)context).getLayoutInflater()
                 .inflate(R.layout.custom_snippet, null);
 
-        TextView tvSch = (TextView) view.findViewById(R.id.nama_sekolah_snippet);
+        TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
 
         // Getting reference to the TextView to set longitude
-        TextView tvAkr = (TextView) view.findViewById(R.id.Alamat);
+        TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
+
+        // Getting reference to the TextView to set latitude
+        TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
+
+        // Getting reference to the TextView to set longitude
+        TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
+
+        // Getting reference to the TextView to set longitude
+        TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
+
 
         ImageView img = view.findViewById(R.id.imageS);
 
+
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
         tvSch.setText(infoWindowData.getNama());
-        tvAkr.setText(infoWindowData.getAlamat());
+        tvAkr.setText("Akreditasi "+infoWindowData.getAkreditasi());
+
+        tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
+        tvAlm.setText(infoWindowData.getAlamat());
+        final String SchoolDetailId = infoWindowData.getSchooldetailid();
+
         return view;
     }
 }

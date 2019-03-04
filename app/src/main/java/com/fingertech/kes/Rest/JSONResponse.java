@@ -2225,7 +2225,7 @@ public class JSONResponse{
 
     }
     public class SchoolDetail{
-        @SerializedName("statusKes")
+        @SerializedName("status_kes")
         public int statusKes;
 
         @SerializedName("data")
@@ -2378,13 +2378,13 @@ public class JSONResponse{
         @SerializedName("school_contact")
         private String school_contact;
 
-        @SerializedName("edulevelId")
+        @SerializedName("edulevel_id")
         private String edulevelId;
 
         @SerializedName("laboratorium")
         private String laboratorium;
 
-        @SerializedName("school_Id")
+        @SerializedName("school_id")
         private String school_Id;
 
         @SerializedName("sumber_listrik")
@@ -2411,8 +2411,8 @@ public class JSONResponse{
         @SerializedName("sertifikasi_iso")
         private String sertifikasi_iso;
 
-        @SerializedName("memberId")
-        private String memberId;
+        @SerializedName("member_id")
+        private String member_id;
 
         @SerializedName("cabang")
         private String cabang;
@@ -2907,11 +2907,11 @@ public class JSONResponse{
         }
 
         public String getMemberId() {
-            return memberId;
+            return member_id;
         }
 
         public void setMemberId(String memberId) {
-            this.memberId = memberId;
+            this.member_id = memberId;
         }
 
         public String getCabang() {
@@ -7487,6 +7487,132 @@ public class JSONResponse{
 
     }
 
+    //// Response Foto Sekolah
+    public class Foto_sekolah{
+
+        @SerializedName("data")
+        @Expose
+        public List<DataFoto> data;
+
+        @SerializedName("status")
+        public int status;
+
+        public List<DataFoto> getData() {
+            return data;
+        }
+
+        public void setData(List<DataFoto> data) {
+            this.data = data;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+    public class DataFoto{
+        @SerializedName("pictureid")
+        public String pictureid;
+
+        @SerializedName("npsn")
+        public String npsn;
+
+        @SerializedName("school_id")
+        public String school_id;
+
+        @SerializedName("filename")
+        public String filename;
+
+        @SerializedName("datez")
+        public String datez;
+
+        @SerializedName("member_id")
+        public String member_id;
+
+        @SerializedName("pic_url")
+        public String pic_url;
+
+        @SerializedName("picture_status")
+        public String picture_status;
+
+        @SerializedName("device_id")
+        public String device_id;
+
+        public String getPictureid() {
+            return pictureid;
+        }
+
+        public void setPictureid(String pictureid) {
+            this.pictureid = pictureid;
+        }
+
+        public String getNpsn() {
+            return npsn;
+        }
+
+        public void setNpsn(String npsn) {
+            this.npsn = npsn;
+        }
+
+        public String getSchool_id() {
+            return school_id;
+        }
+
+        public void setSchool_id(String school_id) {
+            this.school_id = school_id;
+        }
+
+        public String getFilename() {
+            return filename;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getPic_url() {
+            return pic_url;
+        }
+
+        public void setPic_url(String pic_url) {
+            this.pic_url = pic_url;
+        }
+
+        public String getPicture_status() {
+            return picture_status;
+        }
+
+        public void setPicture_status(String picture_status) {
+            this.picture_status = picture_status;
+        }
+
+        public String getDevice_id() {
+            return device_id;
+        }
+
+        public void setDevice_id(String device_id) {
+            this.device_id = device_id;
+        }
+    }
 
 
 

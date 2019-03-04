@@ -173,6 +173,10 @@ public interface Auth {
     @GET("auth/kes_detail_school")
     Call<JSONResponse.DetailSchool>detail_school_get(@Query("sch") String sch);
 
+    //// Full picture Sekolah
+    @GET("school/kes_full_schoolpic")
+    Call<JSONResponse.Foto_sekolah>kes_full_schoolpic_get(@Query("school_id") String school_id);
+
     //////// Delete Cerification
     @FormUrlEncoded
     @POST("auth/kes_delete_verification")

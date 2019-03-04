@@ -29,7 +29,7 @@
 
                     <TextView
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text="@string/tv_waktu_penyelengaraan"
                         android:textColor="#000000" />
@@ -37,7 +37,7 @@
                     <TextView
                         android:id="@+id/waktu_sekolah"
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text=""
                         android:textColor="#000000" />
@@ -71,7 +71,7 @@
 
                     <TextView
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text="@string/tv_sertifikasi_iso"
                         android:textColor="#000000" />
@@ -79,7 +79,7 @@
                     <TextView
                         android:id="@+id/sertifikasi_iso"
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text=""
                         android:textColor="#000000" />
@@ -113,7 +113,7 @@
 
                     <TextView
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text="@string/tv_daya_listrik_watt"
                         android:textColor="#000000" />
@@ -121,7 +121,7 @@
                     <TextView
                         android:id="@+id/daya_listrik"
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text=""
                         android:textColor="#000000" />
@@ -155,7 +155,7 @@
 
                     <TextView
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text="@string/tv_akses_internet_alternatif"
                         android:textColor="#000000" />
@@ -163,7 +163,7 @@
                     <TextView
                         android:id="@+id/akses_internet_alternatif"
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
+                        android:background="@drawable/tabel_grey"
                         android:padding="20dip"
                         android:text=""
                         android:textColor="#000000" />

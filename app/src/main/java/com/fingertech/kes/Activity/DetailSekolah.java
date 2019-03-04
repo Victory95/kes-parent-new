@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -21,8 +23,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +36,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.fingertech.kes.Activity.Adapter.FotoAdapter;
 import com.fingertech.kes.Activity.Fragment.ContactFragment;
 import com.fingertech.kes.Activity.Fragment.DataPelengkap;
 import com.fingertech.kes.Activity.Fragment.DataPeriodik;
@@ -40,6 +45,8 @@ import com.fingertech.kes.Activity.Fragment.IdentitasFragment;
 import com.fingertech.kes.Activity.Fragment.Lainnya;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Model.ClusterItemSekolah;
+import com.fingertech.kes.Activity.Model.FotoModel;
+import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
@@ -48,12 +55,14 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
@@ -66,7 +75,7 @@ public class DetailSekolah extends AppCompatActivity {
     String StatusKepemilikan,SKizin,TanggalIzin,kebutuhan,NomorRekening,NamaBank,Cabang,RekeningNama,MBS,TanahMilik,TanahBukan,NamaPajak;
     String Npwp,NomorTelepon,Email,Nofax,Website,CP,LessonHour,BOS,ISO,SumberListrik,DayaListrik,AksesInternet,AlternatifInternet,KepalaSekolah;
     String Operator,Akreditasi,Kurikulum,TotalGuru,SiswaPria,SiswaWanita,Rombel,RuangKelas,Laboratorium,Perpustakaan,Sanitasi,Picture;
-    String Npsn,Nama;
+    String school_id;
     Auth mApiInterface;
     int status;
     int schoolDetail;
@@ -74,6 +83,12 @@ public class DetailSekolah extends AppCompatActivity {
     FragmentManager fm;
     ProgressDialog dialog;
     private Bundle bundle,pelengkap,contact,periodik,lainnya;
+    ImageView foto_sekolah;
+    TextView hint_detail;
+    RecyclerView rv_foto;
+    FotoModel fotoModel;
+    List<FotoModel> fotoModelList = new ArrayList<>();
+    FotoAdapter fotoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,22 +103,25 @@ public class DetailSekolah extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
 
-            final Toolbar toolbar = (Toolbar) findViewById(R.id.htab_toolbar);
+        final Toolbar toolbar = findViewById(R.id.htab_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mApiInterface = ApiClient.getClient().create(Auth.class);
-        namadetailsekolah   = (TextView)findViewById(R.id.nama_detail_sekolah);
-        lokasisekolah       = (TextView)findViewById(R.id.lokasi_sekolah);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.htab_viewpager);
+        mApiInterface       = ApiClient.getClient().create(Auth.class);
+        namadetailsekolah   = findViewById(R.id.nama_detail_sekolah);
+        lokasisekolah       = findViewById(R.id.lokasi_sekolah);
+        final ViewPager viewPager = findViewById(R.id.htab_viewpager);
+//        foto_sekolah        = findViewById(R.id.htab_header);
+        hint_detail         = findViewById(R.id.hint_detail);
+        rv_foto             = findViewById(R.id.rv_foto);
         setupViewPager(viewPager);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.htab_tabs);
+        TabLayout tabLayout = findViewById(R.id.htab_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.htab_collapse_toolbar);
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.htab_appbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.htab_collapse_toolbar);
+        AppBarLayout appBarLayout = findViewById(R.id.htab_appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
@@ -117,11 +135,17 @@ public class DetailSekolah extends AppCompatActivity {
                     //collapsingToolbarLayout.setTitle(NamaSekolah);
                     namadetailsekolah.setText(NamaSekolah);
                     lokasisekolah.setText(Alamat);
+                    hint_detail.setVisibility(View.GONE);
                     isShow = true;
                 } else if(isShow) {
 //                    collapsingToolbarLayout.setTitle(NamaSekolah);//carefull there should a space between double quote otherwise it wont work
                     namadetailsekolah.setText(" ");
                     lokasisekolah.setText(" ");
+                    if (schoolDetail == 0) {
+                        hint_detail.setVisibility(View.VISIBLE);
+                    }else if (schoolDetail == 1){
+                        hint_detail.setVisibility(View.GONE);
+                    }
                     isShow = false;
                 }
             }
@@ -147,6 +171,7 @@ public class DetailSekolah extends AppCompatActivity {
             }
 
         });
+
         sch = getIntent().getStringExtra("detailid");
 
         dapat_identitas();
@@ -292,62 +317,63 @@ public class DetailSekolah extends AppCompatActivity {
                 if (status == 1 && code.equals("DS_SCS_0001")) {
                     JSONResponse.SchoolDetail source = resource.getSchool();
                     schoolDetail = source.statusKes;
-                    if (schoolDetail == 0){
-                         NPSN                 = response.body().school.getData().getNpsn();
-                         NamaSekolah          = response.body().school.getData().getSchool_name();
-                         JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
-                         StatusSekolah        = response.body().school.getData().getStatus_sekolah();
-                         Provinsi             = response.body().school.getData().getNama_provinsi();
-                         Kabupaten            = response.body().school.getData().getNama_kabupaten();
-                         Kecamatan            = response.body().school.getData().getNama_kecamatan();
-                         Kelurahan            = response.body().school.getData().getKelurahan();
-                         RT                   = response.body().school.getData().getRt();
-                         RW                   = response.body().school.getData().getRw();
-                         Alamat               = response.body().school.getData().getSchool_address();
-                         KodePos              = response.body().school.getData().getKode_pos();
-                         SKPendiri            = response.body().school.getData().getSkPendirian();
-                         TanggalSK            = response.body().school.getData().getTanggal_pendirian();
-                         StatusKepemilikan    = response.body().school.getData().getStatus_kepemilikan();
-                         SKizin               = response.body().school.getData().getSkIzin();
-                         TanggalIzin          = response.body().school.getData().getTanggal_izin();
-                         kebutuhan            = response.body().school.getData().getKebutuhan_khusus();
-                         NomorRekening        = response.body().school.getData().getNo_rekening();
-                         NamaBank             = response.body().school.getData().getNama_bank();
-                         Cabang               = response.body().school.getData().getCabang();
-                         RekeningNama         = response.body().school.getData().getAccountName();
-                         MBS                  = response.body().school.getData().getMbs();
-                         TanahMilik           = response.body().school.getData().getTanah_milik();
-                         TanahBukan           = response.body().school.getData().getTanah_bukan_milik();
-                         NamaPajak            = response.body().school.getData().getNwp();
-                         Npwp                 = response.body().school.getData().getNpwp();
-                         NomorTelepon         = response.body().school.getData().getSchool_phone();
-                         Email                = response.body().school.getData().getSchool_email();
-                         Nofax                = response.body().school.getData().getNo_fax();
-                         Website              = response.body().school.getData().getWebsite();
-                         CP                   = response.body().school.getData().getSchool_contact();
-                         LessonHour           = response.body().school.getData().getLessonHour();
-                         BOS                  = response.body().school.getData().getBersedia_menerima_bos();
-                         ISO                  = response.body().school.getData().getSertifikasi_iso();
-                         SumberListrik        = response.body().school.getData().getSumber_listrik();
-                         DayaListrik          = response.body().school.getData().getDaya_listrik();
-                         AksesInternet        = response.body().school.getData().getAkses_internet();
-                         AlternatifInternet   = response.body().school.getData().getInternet_alternatif();
-                         KepalaSekolah        = response.body().school.getData().getKepsek();
-                         Operator             = response.body().school.getData().getOperator();
-                         Akreditasi           = response.body().school.getData().getAkreditasi();
-                         Kurikulum            = response.body().school.getData().getKurikulum();
-                         TotalGuru            = response.body().school.getData().getTguru();
-                         SiswaPria            = response.body().school.getData().getTsiswa_pria();
-                         SiswaWanita          = response.body().school.getData().getTsiswa_wanita();
-                         Rombel               = response.body().school.getData().getRombel();
-                         RuangKelas           = response.body().school.getData().getRuang_kelas();
-                         Laboratorium         = response.body().school.getData().getLaboratorium();
-                         Perpustakaan         = response.body().school.getData().getPerpustakaan();
-                         Sanitasi             = response.body().school.getData().getSanitasi();
-                         Picture              = response.body().school.getData().getPicture();
 
+                    NPSN                 = response.body().school.getData().getNpsn();
+                    school_id            = response.body().getSchool().getData().getSchool_Id();
+                    NamaSekolah          = response.body().school.getData().getSchool_name();
+                    JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
+                    StatusSekolah        = response.body().school.getData().getStatus_sekolah();
+                    Provinsi             = response.body().school.getData().getNama_provinsi();
+                    Kabupaten            = response.body().school.getData().getNama_kabupaten();
+                    Kecamatan            = response.body().school.getData().getNama_kecamatan();
+                    Kelurahan            = response.body().school.getData().getKelurahan();
+                    RT                   = response.body().school.getData().getRt();
+                    RW                   = response.body().school.getData().getRw();
+                    Alamat               = response.body().school.getData().getSchool_address();
+                    KodePos              = response.body().school.getData().getKode_pos();
+                    SKPendiri            = response.body().school.getData().getSkPendirian();
+                    TanggalSK            = response.body().school.getData().getTanggal_pendirian();
+                    StatusKepemilikan    = response.body().school.getData().getStatus_kepemilikan();
+                    SKizin               = response.body().school.getData().getSkIzin();
+                    TanggalIzin          = response.body().school.getData().getTanggal_izin();
+                    kebutuhan            = response.body().school.getData().getKebutuhan_khusus();
+                    NomorRekening        = response.body().school.getData().getNo_rekening();
+                    NamaBank             = response.body().school.getData().getNama_bank();
+                    Cabang               = response.body().school.getData().getCabang();
+                    RekeningNama         = response.body().school.getData().getAccountName();
+                    MBS                  = response.body().school.getData().getMbs();
+                    TanahMilik           = response.body().school.getData().getTanah_milik();
+                    TanahBukan           = response.body().school.getData().getTanah_bukan_milik();
+                    NamaPajak            = response.body().school.getData().getNwp();
+                    Npwp                 = response.body().school.getData().getNpwp();
+                    NomorTelepon         = response.body().school.getData().getSchool_phone();
+                    Email                = response.body().school.getData().getSchool_email();
+                    Nofax                = response.body().school.getData().getNo_fax();
+                    Website              = response.body().school.getData().getWebsite();
+                    CP                   = response.body().school.getData().getSchool_contact();
+                    LessonHour           = response.body().school.getData().getLessonHour();
+                    BOS                  = response.body().school.getData().getBersedia_menerima_bos();
+                    ISO                  = response.body().school.getData().getSertifikasi_iso();
+                    SumberListrik        = response.body().school.getData().getSumber_listrik();
+                    DayaListrik          = response.body().school.getData().getDaya_listrik();
+                    AksesInternet        = response.body().school.getData().getAkses_internet();
+                    AlternatifInternet   = response.body().school.getData().getInternet_alternatif();
+                    KepalaSekolah        = response.body().school.getData().getKepsek();
+                    Operator             = response.body().school.getData().getOperator();
+                    Akreditasi           = response.body().school.getData().getAkreditasi();
+                    Kurikulum            = response.body().school.getData().getKurikulum();
+                    TotalGuru            = response.body().school.getData().getTguru();
+                    SiswaPria            = response.body().school.getData().getTsiswa_pria();
+                    SiswaWanita          = response.body().school.getData().getTsiswa_wanita();
+                    Rombel               = response.body().school.getData().getRombel();
+                    RuangKelas           = response.body().school.getData().getRuang_kelas();
+                    Laboratorium         = response.body().school.getData().getLaboratorium();
+                    Perpustakaan         = response.body().school.getData().getPerpustakaan();
+                    Sanitasi             = response.body().school.getData().getSanitasi();
+//                    Picture              = response.body().school.getData().getPicture();
+                    Log.d("Log",schoolDetail+"/"+school_id);
 
-                        bundle = new Bundle();
+                    bundle = new Bundle();
                         bundle.putString("npsn",NPSN);
                         bundle.putString("namasekolah",NamaSekolah);
                         bundle.putString("jenjangpendidikan",JenjangPendidikan);
@@ -408,9 +434,16 @@ public class DetailSekolah extends AppCompatActivity {
                         lainnya.putString("perpustakaan",Perpustakaan);
                         lainnya.putString("sanitasi",Sanitasi);
 
-
-
-                    }
+                        dapat_picture();
+                        if (schoolDetail == 0){
+                            hint_detail.setVisibility(View.VISIBLE);
+                            hint_detail.setOnClickListener(v -> {
+                                Intent intent = new Intent(DetailSekolah.this,RecommendSchool.class);
+                                startActivity(intent);
+                            });
+                        }else if (schoolDetail == 1){
+                            hint_detail.setVisibility(View.GONE);
+                        }
 
                 } else{
                     if (status == 0 && code.equals("DS_ERR_0001")) {
@@ -453,7 +486,7 @@ public class DetailSekolah extends AppCompatActivity {
                 if (status == 1 && code.equals("DS_SCS_0001")) {
                     JSONResponse.SchoolDetail source = resource.getSchool();
                     schoolDetail = source.statusKes;
-                    if (schoolDetail == 0){
+
                         NPSN                 = response.body().school.getData().getNpsn();
                         NamaSekolah          = response.body().school.getData().getSchool_name();
                         JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
@@ -466,7 +499,6 @@ public class DetailSekolah extends AppCompatActivity {
                         RW                   = response.body().school.getData().getRw();
                         Alamat               = response.body().school.getData().getSchool_address();
                         KodePos              = response.body().school.getData().getKode_pos();
-
 
                         bundle = new Bundle();
                         bundle.putString("npsn",NPSN);
@@ -491,8 +523,7 @@ public class DetailSekolah extends AppCompatActivity {
                         fp.addToBackStack(null);
                         fp.commit();
                         fragmentCurrent.setArguments(bundle);
-                    }
-
+//                    dapat_picture();
                 } else{
                     if (status == 0 && code.equals("DS_ERR_0001")) {
                         Toast.makeText(getApplicationContext(), DS_ERR_0001, Toast.LENGTH_LONG).show();
@@ -509,6 +540,63 @@ public class DetailSekolah extends AppCompatActivity {
 
         });
 
+    }
+
+    public void dapat_picture(){
+        Call<JSONResponse.Foto_sekolah> call = mApiInterface.kes_full_schoolpic_get(school_id);
+        call.enqueue(new Callback<JSONResponse.Foto_sekolah>() {
+            @Override
+            public void onResponse(Call<JSONResponse.Foto_sekolah> call, Response<JSONResponse.Foto_sekolah> response) {
+                Log.d("DetailSekolah",response.code()+"");
+                JSONResponse.Foto_sekolah resource = response.body();
+                status = resource.status;
+                if (status == 1){
+                    for (int i = 0;i < response.body().getData().size();i++){
+                        Picture = response.body().getData().get(i).getPic_url();
+                        fotoModel = new FotoModel();
+                        fotoModel.setPicture(Picture);
+                        fotoModelList.add(fotoModel);
+                    }
+                    fotoAdapter = new FotoAdapter(fotoModelList);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(DetailSekolah.this);
+                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    rv_foto.setLayoutManager(layoutManager);
+                    rv_foto.setAdapter(fotoAdapter);
+//                    Picture = response.body().getData().get(0).getPic_url();
+//                    if (schoolDetail == 0){
+//                        if (Picture.equals("")){
+//                            Glide.with(DetailSekolah.this).load(R.drawable.school).into(foto_sekolah);
+//                            setLocked(foto_sekolah);
+//                            hint_detail.setVisibility(View.VISIBLE);
+//                            hint_detail.setOnClickListener(v ->
+//                                startActivity(new Intent(DetailSekolah.this, RecommendSchool.class)));
+//                        }else {
+//                            setLocked(foto_sekolah);
+//                            hint_detail.setVisibility(View.VISIBLE);
+//                            hint_detail.setOnClickListener(v ->
+//                                    startActivity(new Intent(DetailSekolah.this, RecommendSchool.class)));
+//                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+//                        }
+//                    }else if (schoolDetail == 1){
+//                        if (Picture.equals("")){
+//                            setUnlocked(foto_sekolah);
+//                            hint_detail.setVisibility(View.GONE);
+//                            Glide.with(DetailSekolah.this).load(R.drawable.ic_logo_kemendikbud).into(foto_sekolah);
+//                        }else {
+//                            setUnlocked(foto_sekolah);
+//                            hint_detail.setVisibility(View.GONE);
+//                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+//                        }
+//                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.Foto_sekolah> call, Throwable t) {
+                Log.d("Gagal",t.toString());
+            }
+        });
     }
 
     public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -587,5 +675,20 @@ public class DetailSekolah extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    public static void  setLocked(ImageView v)
+    {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);  //0 means grayscale
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        v.setColorFilter(cf);
+        v.setImageAlpha(225);   // 128 = 0.5
+    }
+
+    public static void  setUnlocked(ImageView v)
+    {
+        v.setColorFilter(null);
+        v.setImageAlpha(255);
     }
 }

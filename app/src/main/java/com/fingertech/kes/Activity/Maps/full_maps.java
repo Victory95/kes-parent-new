@@ -307,6 +307,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
             mcurrLocationMarker.remove();}
 
         mcurrLocationMarker = mmap.addMarker(options);
+        mcurrLocationMarker.showInfoWindow();
     }
 
     @Override

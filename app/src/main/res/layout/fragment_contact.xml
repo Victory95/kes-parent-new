@@ -30,7 +30,7 @@
 
         <TextView
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text="@string/tv_nomor_telepon"
             android:textColor="#000000" />
@@ -38,7 +38,7 @@
         <TextView
             android:id="@+id/notelepon"
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text=""
             android:textColor="#000000" />
@@ -79,7 +79,7 @@
 
         <TextView
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text="@string/tv_nomor_fax"
             android:textColor="#000000" />
@@ -87,7 +87,7 @@
         <TextView
             android:id="@+id/nomor_fax"
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text=""
             android:textColor="#000000" />
@@ -121,7 +121,7 @@
 
         <TextView
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text="@string/tv_cp"
             android:textColor="#000000" />
@@ -129,7 +129,7 @@
         <TextView
             android:id="@+id/cp"
             android:layout_weight="1"
-            android:background="@drawable/tabel_border"
+            android:background="@drawable/tabel_grey"
             android:padding="20dip"
             android:text=""
             android:textColor="#000000" />

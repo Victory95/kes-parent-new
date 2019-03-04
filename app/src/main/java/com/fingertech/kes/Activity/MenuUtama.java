@@ -66,6 +66,7 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.bumptech.glide.Glide;
+import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Anak.AbsenAnak;
@@ -214,6 +215,7 @@ public class MenuUtama extends AppCompatActivity
     List<JSONResponse.DataList>dataLists = new ArrayList<>();
     InkPageIndicator inkPageIndicator;
     MapWrapperLayout mapWrapperLayout;
+    String placeName,vicinity,akreditasi,schooldetailid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -395,7 +397,7 @@ public class MenuUtama extends AppCompatActivity
                     .setTitle("Keluar")
                     .setMessage("Apakah anda ingin keluar dari aplikasi.")
                     .setNegativeBtnText("Tidak")
-                    .setNegativeBtnBackground("#FFFFFF")
+                    .setNegativeBtnBackground("#f0f0f0")
                     .setPositiveBtnBackground("#40bfe8")
                     .setPositiveBtnText("Ya")
                     .setGifResource(R.drawable.home)   //Pass your Gif here
@@ -780,13 +782,12 @@ public class MenuUtama extends AppCompatActivity
 
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position");
         markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_map));
-
         //move map camera
         mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
         CurrLocationMarker = mapG.addMarker(markerOptions);
+        CurrLocationMarker.hideInfoWindow();
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
@@ -795,7 +796,13 @@ public class MenuUtama extends AppCompatActivity
 
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-
+        InfoWindowData info = new InfoWindowData();
+        info.setNama("CurrentLocation");
+        info.setAlamat("");
+        info.setSchooldetailid("");
+        info.setAkreditasi("");
+        info.setJarak(0.0);
+        CurrLocationMarker.setTag(info);
         dapat_map();
 
     }
@@ -818,7 +825,14 @@ public class MenuUtama extends AppCompatActivity
             mapG.setMyLocationEnabled(true);
         }
 
-
+        mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
+                intent.putExtra("detailid",schooldetailid);
+                startActivity(intent);
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -923,10 +937,10 @@ public class MenuUtama extends AppCompatActivity
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         double lat                  = response.body().getData().get(i).getLatitude();
                         double lng                  = response.body().getData().get(i).getLongitude();
-                        final String placeName      = response.body().getData().get(i).getSchool_name();
-                        final String vicinity       = response.body().getData().get(i).getSchool_address();
-                        final String akreditasi     = response.body().getData().get(i).getAkreditasi();
-                        final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                        placeName      = response.body().getData().get(i).getSchool_name();
+                        vicinity       = response.body().getData().get(i).getSchool_address();
+                        akreditasi     = response.body().getData().get(i).getAkreditasi();
+                        schooldetailid = response.body().getData().get(i).getSchooldetailid();
                         final double Jarak          = response.body().getData().get(i).getDistance();
 
                         LatLng latLng = new LatLng(lat, lng);
@@ -992,7 +1006,7 @@ public class MenuUtama extends AppCompatActivity
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
 
-                        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(MenuUtama.this);
+                        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuUtama.this);
                         mapG.setInfoWindowAdapter(customInfoWindow);
 
                         m.setTag(info);

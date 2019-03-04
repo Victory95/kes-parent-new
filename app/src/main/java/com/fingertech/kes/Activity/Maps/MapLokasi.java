@@ -193,6 +193,7 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
         mmap.setInfoWindowAdapter(customInfoWindow);
 
         mcurrLocationMarker = mmap.addMarker(options);
+        mcurrLocationMarker.showInfoWindow();
     }
 
     @Override

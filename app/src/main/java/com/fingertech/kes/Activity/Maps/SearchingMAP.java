@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.etiennelawlor.discreteslider.library.ui.DiscreteSlider;
 import com.etiennelawlor.discreteslider.library.utilities.DisplayUtility;
+import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.SearchMapAdapter;
 import com.fingertech.kes.Activity.DetailSekolah;
@@ -103,6 +104,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     ImageView bookmark;
     Toolbar ToolBarAtas2;
     SearchManager searchManager;
+    double lat,lng;
+    String placeName,vicinity,schooldetailid,akreditasi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -526,7 +529,9 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         info.setNama(placeName);
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
-                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        info.setAkreditasi(akreditasi);
+                        info.setJarak(Jarak);
+                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
                         mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                         m.setTag(info);
                     }
@@ -577,11 +582,16 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     searchMapAdapter.getFilter(key).filter(key);
 //                    searchMapAdapter.setFilter(arraylist,key);
                     searchMapAdapter.setOnItemClickListener((view, position) -> {
-                        latitudeF   = response.body().getData().get(position).getLatitude();
-                        longitudeF  = response.body().getData().get(position).getLongitude();
-                        String Schooldetailid   = response.body().getData().get(position).getSchooldetailid();
-                        String Namasekolah      = response.body().getData().get(position).getSchool_name();
-                        String Alamat           = response.body().getData().get(position).getSchool_address();
+                        if (mmap!=null){
+                            mmap.clear();
+                        }
+                        searchView.clearFocus();
+                        latitudeF        = response.body().getData().get(position).getLatitude();
+                        longitudeF       = response.body().getData().get(position).getLongitude();
+                        schooldetailid   = response.body().getData().get(position).getSchooldetailid();
+                        placeName        = response.body().getData().get(position).getSchool_name();
+                        vicinity         = response.body().getData().get(position).getSchool_address();
+                        akreditasi       = response.body().getData().get(position).getAkreditasi();
                         final LatLng latLng = new LatLng(latitudeF, longitudeF);
                         hideKeyboard(SearchingMAP.this);
                         if(response.body().getData().get(position).getJenjang_pendidikan().equals("SD")){
@@ -635,13 +645,15 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
 
-                        InfoWindowData infoWindowData = new InfoWindowData();
-                        infoWindowData.setNama(Namasekolah);
-                        infoWindowData.setAlamat(Alamat);
-                        infoWindowData.setSchooldetailid(Schooldetailid);
-                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        InfoWindowData info = new InfoWindowData();
+                        info.setNama(placeName);
+                        info.setAlamat(vicinity);
+                        info.setSchooldetailid(schooldetailid);
+                        info.setAkreditasi(akreditasi);
+                        info.setJarak(distance(currentLatitude,currentLongitude,latitudeF,longitudeF));
+                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
                         mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                        m.setTag(infoWindowData);
+                        m.setTag(info);
                         tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
                         discreteSlider.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
@@ -822,6 +834,26 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
+    public double distance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1))
+                * Math.sin(deg2rad(lat2))
+                + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2))
+                * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
+    }
 }
 
 

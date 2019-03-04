@@ -34,6 +34,7 @@ import android.widget.RadioButton;
 //import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import  com.rey.material.widget.Spinner;
@@ -132,6 +133,8 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     Auth mApiInterface;
     int status;
     private ProgressDialog dialog;
+    double lat,lng,Jarak;
+    String placeName,vicinity,schooldetailid,akreditasi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,8 +172,16 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                 mapF.clear();
                 final LatLng lati = new LatLng(currentLatitudef, currentLongitudef);
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lati.latitude, lati.longitude)).zoom(13).build();
+                final MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(lati);
+                markerOptions.title("Current Position");
+                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_map));
+
+                //move map camera
                 mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mapF.animateCamera(CameraUpdateFactory.zoomTo(14));
+                CurrlocationMarker = mapF.addMarker(markerOptions);
+
                 dapat_map();
                 snappyrecyclerView.setVisibility(View.VISIBLE);
             }
@@ -303,7 +314,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         LastLocation = location;
         if (CurrlocationMarker != null) {
             CurrlocationMarker.remove();
-
         }
 
         //Place current location marker
@@ -325,6 +335,13 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             mGoogleApiClient.connect();
         }
 
+        InfoWindowData info = new InfoWindowData();
+        info.setNama("CurrentLocation");
+        info.setAlamat("");
+        info.setSchooldetailid("");
+        info.setAkreditasi("");
+        info.setJarak(0.0);
+        CurrlocationMarker.setTag(info);
         currentLatitudef = location.getLatitude();
         currentLongitudef = location.getLongitude();
         updateLocation(location);
@@ -333,6 +350,15 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapF = googleMap;
@@ -350,7 +376,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             buildGoogleApiClient();
             mapF.setMyLocationEnabled(true);
         }
-
 
         mapF.getUiSettings().setMyLocationButtonEnabled(false);
         mapF.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -494,13 +519,13 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                     ItemList = new ArrayList<ItemSekolah>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
                         //Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
-                        double lat                  = response.body().getData().get(i).getLatitude();
-                        double lng                  = response.body().getData().get(i).getLongitude();
-                        final String placeName      = response.body().getData().get(i).getSchool_name();
-                        final String vicinity       = response.body().getData().get(i).getSchool_address();
-                        final String akreditasi     = response.body().getData().get(i).getAkreditasi();
-                        final double Jarak          = response.body().getData().get(i).getDistance();
-                        final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                        lat            = response.body().getData().get(i).getLatitude();
+                        lng            = response.body().getData().get(i).getLongitude();
+                        placeName      = response.body().getData().get(i).getSchool_name();
+                        vicinity       = response.body().getData().get(i).getSchool_address();
+                        akreditasi     = response.body().getData().get(i).getAkreditasi();
+                        Jarak          = response.body().getData().get(i).getDistance();
+                        schooldetailid = response.body().getData().get(i).getSchooldetailid();
 
                         final LatLng latLng = new LatLng(lat, lng);
 
@@ -556,7 +581,9 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                         info.setNama(placeName);
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
-                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(FullMap.this);
+                        info.setAkreditasi(akreditasi);
+                        info.setJarak(Jarak);
+                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(FullMap.this);
                         mapF.setInfoWindowAdapter(customInfoWindowAdapter);
                         m.setTag(info);
 
