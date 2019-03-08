@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/fragMenuDua"
+    android:id="@+id/fragment2"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.Fragment.MenuDuaFragment"
     tools:ignore="UselessParent,RtlSymmetry,ContentDescription">

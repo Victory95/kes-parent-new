@@ -640,6 +640,7 @@ public class Masuk extends AppCompatActivity {
             public void onFailure(Call<JSONResponse> call, Throwable t) {
                 hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+                Log.e("gagal",t.toString());
             }
         });
     }
@@ -702,6 +703,7 @@ public class Masuk extends AppCompatActivity {
             public void onFailure(Call<JSONResponse> call, Throwable t) {
                 hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
+                Log.e("gagal",t.toString());
             }
         });
     }

@@ -65,7 +65,7 @@ public class MenuSatuFragment extends Fragment {
         btn_absensi     = view.findViewById(R.id.btn_absen);
         btn_tugas_anak  = view.findViewById(R.id.btn_tugas);
         btn_raport      = view.findViewById(R.id.btn_raport);
-        frameLayout     = view.findViewById(R.id.fragel);
+        frameLayout     = view.findViewById(R.id.fragment1);
 
         sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);

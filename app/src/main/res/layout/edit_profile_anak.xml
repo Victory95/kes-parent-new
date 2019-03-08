@@ -23,26 +23,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="@color/colorPrimary"
-                android:clickable="true"
-                android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="5dp"
-                android:id="@+id/btn_simpan"
-                android:focusable="true">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textColor="@color/ic_logo_background"
-                    android:text="@string/tv_simpan"/>
-            </android.support.v7.widget.CardView>
             <LinearLayout
                 android:background="@drawable/rectangle_line_blue"
                 android:layout_width="match_parent"
@@ -271,9 +251,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </android.support.design.widget.TextInputLayout>
-
-
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -298,7 +275,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         android:text="@string/rb_laki"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:enabled="false"
+                        />
 
                     <RadioButton
                         android:buttonTint="@color/colorPrimary"
@@ -306,7 +285,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/rb_wanita"
-                        android:textColor="@color/black"/>
+                        android:textColor="@color/black"
+                        android:enabled="false"
+                        />
 
                 </RadioGroup>
 
@@ -448,8 +429,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="40dp">
+                    >
 
                     <com.rey.material.widget.Spinner
                         style="@style/Material.Widget.Spinner"
@@ -585,8 +565,8 @@
 
                     <EditText
                         android:theme="@style/TextLabel"
-                        android:id="@+id/et_kps"
-                        android:hint="@string/tv_no_kps"
+                        android:id="@+id/et_PKPS"
+                        android:hint="@string/tv_kps"
                         android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
@@ -594,6 +574,7 @@
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -605,19 +586,24 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="50dp"
                     android:theme="@style/TextLabelView"
-                    android:layout_marginLeft="30dp">
+                    android:layout_marginLeft="30dp"
+
+                    >
 
                     <EditText
                         android:theme="@style/TextLabel"
-                        android:id="@+id/et_PKPS"
-                        android:hint="@string/tv_kps"
+                        android:id="@+id/et_kps"
+                        android:hint="@string/tv_no_kps"
                         android:textSize="16sp"
                         android:background="@drawable/edt_bg_selector_black"
                         android:paddingBottom="6dp"
                         android:textColor="@color/black"
                         android:paddingTop="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+
+                        />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
@@ -863,12 +849,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/maps"/>
-
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -877,7 +861,6 @@
                             android:textColor="@color/black"
                             android:id="@+id/nama_rumah"
                             android:text="@string/tv_lokasi_rumah"/>
-
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
@@ -894,7 +877,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginBottom="50dp"
                     android:layout_marginRight="30dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     app:cardCornerRadius="12dp">
 
                     <fragment
@@ -915,6 +898,33 @@
                         android:hint="@string/btn_pilih_lokasi"
                         android:gravity="center"/>
                 </android.support.v7.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="40dp"
+                >
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                android:clickable="true"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="5dp"
+                android:id="@+id/btn_simpan"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/ic_logo_background"
+                    android:text="@string/tv_simpan"/>
+            </android.support.v7.widget.CardView>
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
