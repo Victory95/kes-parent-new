@@ -442,25 +442,25 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        switch (item.getItemId()) {
+////            case R.id.action_settings:
+//                return true;
 //            case R.id.activity_main_update_menu_item:
 //                // TODO update alert menu icon
-//                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
-//                updateAlertIcon();
-//                return true;
-//            case R.id.activity_main_alerts_menu_item:
-//                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
-//                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+////                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
+////                updateAlertIcon();
+////                return true;
+////            case R.id.activity_main_alerts_menu_item:
+////                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
+////                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -682,7 +682,7 @@ public class MenuUtama extends AppCompatActivity
         MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragel, menuSatuFragment);
+        fragmentTransaction.replace(R.id.fragment1, menuSatuFragment);
         fragmentTransaction.commit();
         menuSatuFragment.setArguments(bundle);
     }
@@ -708,7 +708,7 @@ public class MenuUtama extends AppCompatActivity
         MenuDuaFragment menuDuaFragment = new MenuDuaFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragMenuDua, menuDuaFragment);
+        fragmentTransaction.replace(R.id.fragment2, menuDuaFragment);
         fragmentTransaction.commit();
         menuDuaFragment.setArguments(bundle);
     }
