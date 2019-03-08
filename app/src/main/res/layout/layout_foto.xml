@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.florent37.shapeofview.shapes.RoundRectView
-    android:layout_width="match_parent"
-    android:layout_height="350dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:shape_roundRect_bottomLeftRadius="0dp"
-    app:shape_roundRect_bottomRightRadius="0dp"
-    app:shape_roundRect_topLeftRadius="0dp"
-    app:shape_roundRect_topRightRadius="0dp"
-    app:shape_roundRect_borderColor="@color/colorPrimary"
-    app:shape_roundRect_borderWidth="0.5dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-        <ImageView
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardview_id"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    xmlns:cardview="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    cardview:cardCornerRadius="4dp">
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_logo"
-            tools:ignore="ContentDescription"
-            android:id="@+id/image_foto"/>
-    </com.github.florent37.shapeofview.shapes.RoundRectView>
+            android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/image_foto"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"/>
+
+        </LinearLayout>
+</android.support.v7.widget.CardView>
 

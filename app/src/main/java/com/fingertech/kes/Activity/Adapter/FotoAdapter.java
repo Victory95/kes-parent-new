@@ -1,6 +1,8 @@
 package com.fingertech.kes.Activity.Adapter;
 
 import android.annotation.SuppressLint;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,9 +50,7 @@ public class FotoAdapter extends RecyclerView.Adapter<FotoAdapter.MyHolder> {
 
         // Get car item dto in list.
         FotoModel viewItem = viewItemList.get(position);
-        // Set car item title.
         Glide.with(getContext()).load(viewItem.getPicture()).into(holder.imageView);
-
     }
 
     @Override
@@ -77,5 +77,20 @@ public class FotoAdapter extends RecyclerView.Adapter<FotoAdapter.MyHolder> {
     public interface OnItemClickListener {
 
         void onItemClick(View view, int position);
+    }
+
+    public static void  setLocked(ImageView v)
+    {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);  //0 means grayscale
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        v.setColorFilter(cf);
+        v.setImageAlpha(225);
+    }
+
+    public static void  setUnlocked(ImageView v)
+    {
+        v.setColorFilter(null);
+        v.setImageAlpha(255);
     }
 }

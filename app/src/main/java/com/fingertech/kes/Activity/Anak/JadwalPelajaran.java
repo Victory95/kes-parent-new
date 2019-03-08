@@ -2,6 +2,8 @@ package com.fingertech.kes.Activity.Anak;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -86,6 +88,7 @@ public class JadwalPelajaran extends AppCompatActivity {
     TextView hint_senin,hint_selasa,hint_rabu,hint_kamis,hint_jumat,hint_sabtu;
     CardView btn_senin,btn_selasa,btn_rabu,btn_kamis,btn_jumat,btn_sabtu;
     ImageView arrow_senin,arrow_selasa,arrow_rabu,arrow_kamis,arrow_jumat,arrow_sabtu;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,10 +126,12 @@ public class JadwalPelajaran extends AppCompatActivity {
         hint_sabtu      = findViewById(R.id.hint_sabtu);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
-        authorization   = getIntent().getStringExtra("authorization");
-        school_code     = getIntent().getStringExtra("school_code");
-        memberid        = getIntent().getStringExtra("student_id");
-        classroom_id    = getIntent().getStringExtra("classroom_id");
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        memberid            = sharedPreferences.getString("student_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_launcher_background), PorterDuff.Mode.SRC_ATOP);

@@ -1,6 +1,8 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.RaportAdapter;
 import com.fingertech.kes.Activity.Adapter.TugasAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.RaporModel;
 import com.fingertech.kes.Activity.Model.TugasModel;
 import com.fingertech.kes.Controller.Auth;
@@ -74,7 +77,7 @@ public class RaportAnak extends AppCompatActivity {
 
     String date,namakelas,walikelas;
     String guru,tanggal,type,nilai,deskripsi,start_date,end_date,semester,start_year,start_end;
-
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +101,11 @@ public class RaportAnak extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
-        authorization   = getIntent().getStringExtra("authorization");
-        school_code     = getIntent().getStringExtra("school_code");
-        classroom_id    = getIntent().getStringExtra("classroom_id");
-        student_id      = getIntent().getStringExtra("student_id");
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());

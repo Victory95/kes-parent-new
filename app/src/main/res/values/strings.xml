@@ -335,7 +335,7 @@
     <string name="tv_titik">.....</string>
     <string name="btn_update_profile">Update Profile</string>
     <string name="tv_simpan">Simpan</string>
-    <string name="et_nis">NIS</string>
+    <string name="et_nis">Nomor Induk Siswa (NIS)</string>
     <string name="et_rt">RT</string>
     <string name="et_rw">RW</string>
     <string name="tv_desa">Desa</string>

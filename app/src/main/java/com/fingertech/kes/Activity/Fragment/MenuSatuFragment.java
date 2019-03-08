@@ -38,20 +38,6 @@ public class MenuSatuFragment extends Fragment {
     SharedPreferences sharedPreferences;
     FrameLayout frameLayout;
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        Bundle bundle = this.getArguments();
-//        if (bundle!=null){
-//            authorization = bundle.getString("authorization");
-//            parent_nik    = bundle.getString("parent_nik");
-//            school_code   = bundle.getString("school_code");
-//            student_id    = bundle.getString("student_id");
-//            member_id     = bundle.getString("member_id");
-//            classroom_id  = bundle.getString("classroom_id");
-//            school_name   = bundle.getString("school_name");
-//        }
-//    }
     Bundle bundle;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,84 +83,78 @@ public class MenuSatuFragment extends Fragment {
         });
 
         btn_jadwal.setOnClickListener(v -> {
-            if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), JadwalPelajaran.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("classroom_id", classroom_id);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), JadwalPelajaran.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("school_code", school_code.toLowerCase());
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
 
         btn_ujian.setOnClickListener(v -> {
-            if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), JadwalUjian.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("classroom_id", classroom_id);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), JadwalUjian.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("school_code", school_code.toLowerCase());
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
 
         btn_absensi.setOnClickListener(v -> {
-            if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), AbsenAnak.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("classroom_id", classroom_id);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), AbsenAnak.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("school_code", school_code.toLowerCase());
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
 
         btn_tugas_anak.setOnClickListener(v -> {
-            if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), TugasAnak.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("classroom_id", classroom_id);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), TugasAnak.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("school_code", school_code.toLowerCase());
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
         btn_raport.setOnClickListener(v -> {
-            if (authorization != null  && school_code != null && student_id != null && classroom_id != null) {
-                Intent intent = new Intent(getContext(), RaportAnak.class);
-                intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("student_id", student_id);
-                intent.putExtra("classroom_id", classroom_id);
-                startActivity(intent);
-            }else{
-                Toast.makeText(getContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
-            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code);
+            editor.putString("authorization",authorization);
+            editor.putString("classroom_id",classroom_id);
+            editor.putString("student_id",student_id);
+            editor.commit();
+            Intent intent = new Intent(getContext(), RaportAnak.class);
+            intent.putExtra("authorization", authorization);
+            intent.putExtra("school_code", school_code.toLowerCase());
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
         return view;
     }
-
-    public void putString(Bundle bundle){
-        authorization = bundle.getString("authorization");
-        parent_nik    = bundle.getString("parent_nik");
-        school_code   = bundle.getString("school_code");
-        student_id    = bundle.getString("student_id");
-        member_id     = bundle.getString("member_id");
-        classroom_id  = bundle.getString("classroom_id");
-        school_name   = bundle.getString("school_name");
-
-
-
-
-
-    }
-
 }

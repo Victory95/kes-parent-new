@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -40,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.AnakMain;
+import com.fingertech.kes.Activity.EditProfile;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ProfileModel;
@@ -65,6 +68,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.Spinner;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,10 +80,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.fingertech.kes.Service.App.getContext;
 
 public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
+        GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,
+        GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener,
+        GoogleMap.OnCameraMoveCanceledListener,
         LocationListener {
 
     private String[] listSekolah = {
@@ -146,49 +153,49 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapTinggal);
         mapFragment.getMapAsync(this);
-        namatempat          = (TextView)findViewById(R.id.nama_rumah);
-        alamattempattinggal = (TextView)findViewById(R.id.alamat_rumah_anak);
-        arrom               = (ImageView)findViewById(R.id.arrom);
-        et_negara_asal      = (Spinner) findViewById(R.id.sp_negara_asal);
-        et_tanggal          = (EditText)findViewById(R.id.et_tanggallahiR);
-        et_nama_lengkap     = (EditText)findViewById(R.id.et_nama_lengkap_anak);
-        et_nis              = (EditText)findViewById(R.id.et_nama_nis);
-        et_nisn             = (EditText)findViewById(R.id.et_nama_nisn);
-        et_rombel           = (EditText)findViewById(R.id.et_rombel);
-        et_tempat_lahir     = (EditText)findViewById(R.id.et_tempatlahiR);
-        et_nik              = (EditText)findViewById(R.id.et_Nik);
-        et_kebutuhan_khusus = (EditText)findViewById(R.id.et_kebutuhan_khusus);
-        sp_tingkatan        = (Spinner)findViewById(R.id.sp_tingkatan);
-        sp_agama            = (Spinner)findViewById(R.id.sp_agama);
-        rb_laki             = (RadioButton)findViewById(R.id.rb_laki_lakI);
-        rb_wanita           = (RadioButton)findViewById(R.id.rb_perempuaN);
-        rb_wni              = (RadioButton)findViewById(R.id.rb_wnI);
-        rb_wna              = (RadioButton)findViewById(R.id.rb_wnA);
-        et_teleponrumah     = (EditText)findViewById(R.id.et_nomor_Rumah);
-        et_handphone        = (EditText)findViewById(R.id.et_nomor_Ponsel);
-        et_email            = (EditText)findViewById(R.id.et_email_student);
-        et_skun             = (EditText)findViewById(R.id.et_skun);
-        et_penerimaankps    = (EditText)findViewById(R.id.et_PKPS);
-        et_nomorkps         = (EditText)findViewById(R.id.et_kps);
-        et_rt               = (EditText)findViewById(R.id.et_rt);
-        et_rw               = (EditText)findViewById(R.id.et_rw);
-        et_kelurahan        = (EditText)findViewById(R.id.et_kelurahan);
-        et_kecamatan        = (EditText)findViewById(R.id.et_Kecamatan);
-        et_kodepos          = (EditText)findViewById(R.id.et_kode_pos);
-        et_jenis_tinggal    = (EditText)findViewById(R.id.et_status_tinggal);
-        et_trasnportasi     = (EditText)findViewById(R.id.et_transportasi);
-        et_alamat           = (EditText)findViewById(R.id.et_Alamat);
+        namatempat          = findViewById(R.id.nama_rumah);
+        alamattempattinggal = findViewById(R.id.alamat_rumah_anak);
+        arrom               = findViewById(R.id.arrom);
+        et_negara_asal      = findViewById(R.id.sp_negara_asal);
+        et_tanggal          = findViewById(R.id.et_tanggallahiR);
+        et_nama_lengkap     = findViewById(R.id.et_nama_lengkap_anak);
+        et_nis              = findViewById(R.id.et_nama_nis);
+        et_nisn             = findViewById(R.id.et_nama_nisn);
+        et_rombel           = findViewById(R.id.et_rombel);
+        et_tempat_lahir     = findViewById(R.id.et_tempatlahiR);
+        et_nik              = findViewById(R.id.et_Nik);
+        et_kebutuhan_khusus = findViewById(R.id.et_kebutuhan_khusus);
+        sp_tingkatan        = findViewById(R.id.sp_tingkatan);
+        sp_agama            = findViewById(R.id.sp_agama);
+        rb_laki             = findViewById(R.id.rb_laki_lakI);
+        rb_wanita           = findViewById(R.id.rb_perempuaN);
+        rb_wni              = findViewById(R.id.rb_wnI);
+        rb_wna              = findViewById(R.id.rb_wnA);
+        et_teleponrumah     = findViewById(R.id.et_nomor_Rumah);
+        et_handphone        = findViewById(R.id.et_nomor_Ponsel);
+        et_email            = findViewById(R.id.et_email_student);
+        et_skun             = findViewById(R.id.et_skun);
+        et_penerimaankps    = findViewById(R.id.et_PKPS);
+        et_nomorkps         = findViewById(R.id.et_kps);
+        et_rt               = findViewById(R.id.et_rt);
+        et_rw               = findViewById(R.id.et_rw);
+        et_kelurahan        = findViewById(R.id.et_kelurahan);
+        et_kecamatan        = findViewById(R.id.et_Kecamatan);
+        et_kodepos          = findViewById(R.id.et_kode_pos);
+        et_jenis_tinggal    = findViewById(R.id.et_status_tinggal);
+        et_trasnportasi     = findViewById(R.id.et_transportasi);
+        et_alamat           = findViewById(R.id.et_Alamat);
         et_dusun            = findViewById(R.id.et_dusun);
         btn_search          = findViewById(R.id.btn_search);
         btn_simpan          = findViewById(R.id.btn_simpan);
         cv_data         = findViewById(R.id.btn_data);
         cv_kontak       = findViewById(R.id.btn_kontak);
         cv_alamat       = findViewById(R.id.btn_alamat);
-        show_data       = (LinearLayout)findViewById(R.id.show_data_anak);
-        show_kontak     = (LinearLayout)findViewById(R.id.show_kontak);
-        show_alamat     = (LinearLayout)findViewById(R.id.show_alamat);
-        tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
-        tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
+        show_data       = findViewById(R.id.show_data_anak);
+        show_kontak     = findViewById(R.id.show_kontak);
+        show_alamat     = findViewById(R.id.show_alamat);
+        tv_line_boundaryLeft   = findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight  = findViewById(R.id.tv_line_boundaryRight);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
         Calendar calendar = Calendar.getInstance();
 
@@ -198,7 +205,14 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         parent_nik    = getIntent().getStringExtra("parent_nik");
         loadSpinnerData();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbaredit);
+        et_nis.setEnabled(false);
+        et_nis.setFocusable(false);
+        et_nisn.setEnabled(false);
+        et_nisn.setFocusable(false);
+        et_nik.setEnabled(false);
+        et_nik.setFocusable(false);
+
+        final Toolbar toolbar = findViewById(R.id.toolbaredit);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
@@ -460,7 +474,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         return true;
     }
     private boolean validateJeniskelamin() {
-        if (jenis_kelamin.toString().trim().isEmpty()) {
+        if (jenis_kelamin.trim().isEmpty()) {
             Toast.makeText(getApplicationContext(),"Harap di isi jenis kelamin anak",Toast.LENGTH_LONG).show();
             return false;
         } else {
@@ -713,14 +727,14 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         et_negara_asal.setAdapter(spinnerArrayAdapter);
-        et_negara_asal.setOnItemSelectedListener((parent, view, position, id) -> kewarganegaraan = myData.get(position).toString());
+        et_negara_asal.setOnItemSelectedListener((parent, view, position, id) -> kewarganegaraan = myData.get(position));
 
     }
 
     public void data_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toLowerCase().toString(), student_id.toString(),parent_nik.toString());
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization, school_code.toLowerCase(), student_id, parent_nik);
         call.enqueue(new Callback<JSONResponse.DetailStudent>() {
             @Override
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
@@ -825,16 +839,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                             EditProfileAnak.this,R.layout.spinner_full,penghasil){
                         @Override
                         public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                            return position != 0;
                         }
 
                         @Override
@@ -867,29 +872,29 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
                     kelas = sp_tingkatan.getSelectedItem().toString();
 
-                    if (kelas.toString().equals("SD 1")){
+                    if (kelas.equals("SD 1")){
                         levelkelas = "4";
-                    }else if (kelas.toString().equals("SD 2")){
+                    }else if (kelas.equals("SD 2")){
                         levelkelas = "5";
-                    }else if (kelas.toString().equals("SD 3")){
+                    }else if (kelas.equals("SD 3")){
                         levelkelas = "6";
-                    }else if (kelas.toString().equals("SD 4")){
+                    }else if (kelas.equals("SD 4")){
                         levelkelas = "7";
-                    }else if (kelas.toString().equals("SD 5")){
+                    }else if (kelas.equals("SD 5")){
                         levelkelas = "8";
-                    }else if (kelas.toString().equals("SD 6")){
+                    }else if (kelas.equals("SD 6")){
                         levelkelas = "9";
-                    }else if (kelas.toString().equals("SMP 1")){
+                    }else if (kelas.equals("SMP 1")){
                         levelkelas = "10";
-                    }else if (kelas.toString().equals("SMP 2")){
+                    }else if (kelas.equals("SMP 2")){
                         levelkelas = "11";
-                    }else if (kelas.toString().equals("SMP 3")){
+                    }else if (kelas.equals("SMP 3")){
                         levelkelas = "12";
-                    }else if (kelas.toString().equals("SMA/SMK 1")){
+                    }else if (kelas.equals("SMA/SMK 1")){
                         levelkelas = "13";
-                    }else if (kelas.toString().equals("SMA/SMK 2")){
+                    }else if (kelas.equals("SMA/SMK 2")){
                         levelkelas = "14";
-                    }else if (kelas.toString().equals("SMA/SMK 3")){
+                    }else if (kelas.equals("SMA/SMK 3")){
                         levelkelas = "15";
                     }
                     final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
@@ -898,17 +903,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                             EditProfileAnak.this,R.layout.spinner_full,agama){
                         @Override
                         public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                            return position != 0;
                         }
 
                         @Override
@@ -1030,6 +1025,58 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     }
 
     @Override
+    public void onCameraIdle() {
+        LatLng LatLng = Mmap.getCameraPosition().target;
+        Log.d("location",LatLng.latitude+"/"+LatLng.longitude);
+        Geocoder geocode1 = new Geocoder(EditProfileAnak.this);
+        try {
+            List<Address> addressList = geocode1.getFromLocation(LatLng.latitude, LatLng.longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                String address1 = addressList.get(0).getAddressLine(0);
+                String number1 = addressList.get(0).getFeatureName();
+                String city1 = addressList.get(0).getLocality();
+                String state1 = addressList.get(0).getAdminArea();
+                String country1 = addressList.get(0).getCountryName();
+                String postalCode1 = addressList.get(0).getPostalCode();
+                alamattempattinggal.setText(address1 +"\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CurrentLatitude = LatLng.latitude;
+        CurrentLongitude = LatLng.longitude;
+    }
+
+    @Override
+    public void onCameraMoveCanceled() {
+        CameraPosition position=Mmap.getCameraPosition();
+        if(CurrLocationMarker != null){
+            CurrLocationMarker.remove();}
+    }
+
+    @Override
+    public void onCameraMove() {
+        CameraPosition position=Mmap.getCameraPosition();
+        MarkerOptions options = new MarkerOptions()
+                .position(position.target)
+                .icon(bitmapDescriptorFromVector(EditProfileAnak.this, R.drawable.ic_map))
+                .title("im here");
+
+        if(CurrLocationMarker!= null){
+            CurrLocationMarker.remove();}
+        CurrLocationMarker = Mmap.addMarker(options);
+
+    }
+
+
+    @Override
+    public void onCameraMoveStarted(int i) {
+        CameraPosition position=Mmap.getCameraPosition();
+
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         mlastLocation = location;
         if (CurrLocationMarker != null) {
@@ -1048,7 +1095,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         //move map camera
         Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
+        CurrLocationMarker = Mmap.addMarker(markerOptions);
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
@@ -1079,6 +1126,11 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         if (CurrLocationMarker != null) {
             CurrLocationMarker.remove();
         }
+        Mmap.setOnCameraIdleListener(this);
+        Mmap.setOnCameraMoveStartedListener(this);
+        Mmap.setOnCameraMoveListener(this);
+        Mmap.setOnCameraMoveCanceledListener(this);
+
     }
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(EditProfileAnak.this)
@@ -1129,7 +1181,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
     public void update_detail(){
 
-        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toLowerCase().toString(), student_id.toString(), et_rombel.getText().toString(), et_kebutuhan_khusus.getText().toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),et_teleponrumah.getText().toString(),et_skun.getText().toString(),et_penerimaankps.getText().toString(),et_nomorkps.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization, studentdetailId, school_code.toLowerCase(), student_id, et_rombel.getText().toString(), et_kebutuhan_khusus.getText().toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),et_teleponrumah.getText().toString(),et_skun.getText().toString(),et_penerimaankps.getText().toString(),et_nomorkps.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -1159,7 +1211,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     public void update_member(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization.toString(),student_id.toString(), school_code.toLowerCase().toString(), et_nama_lengkap.getText().toString(), jenis_kelamin.toString(), et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(),kewarganegaraan.toString(),sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code.toLowerCase(), et_nama_lengkap.getText().toString(), jenis_kelamin, et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(), kewarganegaraan,sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

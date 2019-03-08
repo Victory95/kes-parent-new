@@ -2,6 +2,7 @@ package com.fingertech.kes.Activity.Anak;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
 import com.fingertech.kes.Activity.Adapter.CalendarAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.CalendarModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
@@ -70,6 +72,7 @@ public class KalenderKelas extends AppCompatActivity {
     String calendar_id,calendar_type,calendar_colour,calendar_time,calendar_date,calendar_title;
     Toolbar toolbar;
     TextView kalendar;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +87,12 @@ public class KalenderKelas extends AppCompatActivity {
         recyclerView        = findViewById(R.id.recylceview_calendar);
         toolbar             = findViewById(R.id.toolbar_kalendar);
         kalendar            = findViewById(R.id.no_kalendar);
-        authorization       = getIntent().getStringExtra("authorization");
-        school_code         = getIntent().getStringExtra("school_code");
-        classroom_id        = getIntent().getStringExtra("classroom_id");
-        student_id          = getIntent().getStringExtra("student_id");
+
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

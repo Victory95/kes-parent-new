@@ -156,6 +156,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 intent.putExtra("student_id",student_id);
                 intent.putExtra("parent_nik",parent_nik);
                 startActivity(intent);
+                finish();
             }
         });
         cv_data.setOnClickListener(new View.OnClickListener() {
@@ -391,6 +392,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     }else if (kelas.toString().equals("15")){
                         kelas = "3 SMA";
                     }
+                    Log.d("location2",latitudeanak+"/"+longitudeanak);
                     kelas_anak.setText("Sedang bersekolah di "+school_name+" Kelas "+kelas);
                     jenis_kelamin.setText(jeniskelamin);
                     nis.setText("Nis : "+Nis);
@@ -456,14 +458,16 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
-    mapAnak = googleMap;
+        mapAnak = googleMap;
         final LatLng latLng = new LatLng(latitudeanak, longitudeanak);
+        Log.d("location",latLng.latitude+"/"+latLng.longitude);
         CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
         final MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .title("PT Gaia Persada")
+                .title("Location")
                 .icon(bitmapDescriptorFromVector(ProfilAnak.this, R.drawable.ic_map));
 
         //move map camera

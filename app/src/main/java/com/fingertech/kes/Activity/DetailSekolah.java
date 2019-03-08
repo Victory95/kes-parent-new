@@ -13,6 +13,8 @@ import android.location.Geocoder;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +29,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +52,7 @@ import com.fingertech.kes.Activity.Model.FotoModel;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.Controller.Auth;
+import com.fingertech.kes.GalleryFoto;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
@@ -62,6 +66,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import in.srain.cube.views.GridViewWithHeaderAndFooter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -89,7 +94,7 @@ public class DetailSekolah extends AppCompatActivity {
     FotoModel fotoModel;
     List<FotoModel> fotoModelList = new ArrayList<>();
     FotoAdapter fotoAdapter;
-
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,9 +116,11 @@ public class DetailSekolah extends AppCompatActivity {
         namadetailsekolah   = findViewById(R.id.nama_detail_sekolah);
         lokasisekolah       = findViewById(R.id.lokasi_sekolah);
         final ViewPager viewPager = findViewById(R.id.htab_viewpager);
-//        foto_sekolah        = findViewById(R.id.htab_header);
+        foto_sekolah        = findViewById(R.id.htab_header);
         hint_detail         = findViewById(R.id.hint_detail);
-        rv_foto             = findViewById(R.id.rv_foto);
+        fab                 = findViewById(R.id.fab);
+
+
         setupViewPager(viewPager);
 
 
@@ -175,6 +182,15 @@ public class DetailSekolah extends AppCompatActivity {
         sch = getIntent().getStringExtra("detailid");
 
         dapat_identitas();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailSekolah.this, GalleryFoto.class);
+                intent.putExtra("school_id",school_id);
+                startActivity(intent);
+            }
+        });
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -543,6 +559,7 @@ public class DetailSekolah extends AppCompatActivity {
     }
 
     public void dapat_picture(){
+
         Call<JSONResponse.Foto_sekolah> call = mApiInterface.kes_full_schoolpic_get(school_id);
         call.enqueue(new Callback<JSONResponse.Foto_sekolah>() {
             @Override
@@ -550,46 +567,42 @@ public class DetailSekolah extends AppCompatActivity {
                 Log.d("DetailSekolah",response.code()+"");
                 JSONResponse.Foto_sekolah resource = response.body();
                 status = resource.status;
-                if (status == 1){
-                    for (int i = 0;i < response.body().getData().size();i++){
-                        Picture = response.body().getData().get(i).getPic_url();
-                        fotoModel = new FotoModel();
-                        fotoModel.setPicture(Picture);
-                        fotoModelList.add(fotoModel);
-                    }
-                    fotoAdapter = new FotoAdapter(fotoModelList);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(DetailSekolah.this);
-                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    rv_foto.setLayoutManager(layoutManager);
-                    rv_foto.setAdapter(fotoAdapter);
-//                    Picture = response.body().getData().get(0).getPic_url();
-//                    if (schoolDetail == 0){
-//                        if (Picture.equals("")){
-//                            Glide.with(DetailSekolah.this).load(R.drawable.school).into(foto_sekolah);
-//                            setLocked(foto_sekolah);
-//                            hint_detail.setVisibility(View.VISIBLE);
-//                            hint_detail.setOnClickListener(v ->
-//                                startActivity(new Intent(DetailSekolah.this, RecommendSchool.class)));
-//                        }else {
-//                            setLocked(foto_sekolah);
-//                            hint_detail.setVisibility(View.VISIBLE);
-//                            hint_detail.setOnClickListener(v ->
-//                                    startActivity(new Intent(DetailSekolah.this, RecommendSchool.class)));
-//                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
-//                        }
-//                    }else if (schoolDetail == 1){
-//                        if (Picture.equals("")){
-//                            setUnlocked(foto_sekolah);
-//                            hint_detail.setVisibility(View.GONE);
-//                            Glide.with(DetailSekolah.this).load(R.drawable.ic_logo_kemendikbud).into(foto_sekolah);
-//                        }else {
-//                            setUnlocked(foto_sekolah);
-//                            hint_detail.setVisibility(View.GONE);
-//                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
-//                        }
+//                if (status == 1){
+//                    for (int i = 0;i < response.body().getData().size();i++){
+//                        Picture = response.body().getData().get(i).getPic_url();
+//                        fotoModel = new FotoModel();
+//                        fotoModel.setStatus(schoolDetail);
+//                        fotoModel.setPicture(Picture);
+//                        fotoModelList.add(fotoModel);
 //                    }
+//                    fotoAdapter = new FotoAdapter(fotoModelList);
+//                    LinearLayoutManager layoutManager = new LinearLayoutManager(DetailSekolah.this);
+//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//                    rv_foto.setLayoutManager(layoutManager);
+//                    rv_foto.setAdapter(fotoAdapter);
 
-                }
+                    Picture = response.body().getData().get(0).getPic_url();
+                    if (schoolDetail == 0){
+                        if (Picture.equals("")){
+                            Glide.with(DetailSekolah.this).load(R.drawable.school).into(foto_sekolah);
+                            setLocked(foto_sekolah);
+
+                        }else {
+                            setLocked(foto_sekolah);
+
+                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+                        }
+                    }else if (schoolDetail == 1){
+                        if (Picture.equals("")){
+                            setUnlocked(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(R.drawable.ic_logo_kemendikbud).into(foto_sekolah);
+                        }else {
+                            setUnlocked(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+                        }
+                    }
+
+
             }
 
             @Override

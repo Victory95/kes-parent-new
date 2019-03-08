@@ -102,13 +102,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
             if (profileModel.getPicture().equals(base_url)){
                 holder.namaprofile.setText(profileModel.getNama());
                 if (position == 0){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff").into(holder.imageView);
+                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
                 }else if (position == 1){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff").into(holder.imageView);
+                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
                 }else if (position == 2){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff").into(holder.imageView);
+                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
                 }else {
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff").into(holder.imageView);
+                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                 }
             }
         }else {

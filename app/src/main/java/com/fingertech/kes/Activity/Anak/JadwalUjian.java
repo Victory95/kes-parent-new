@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ItemUjian;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
@@ -83,6 +85,7 @@ public class JadwalUjian extends AppCompatActivity {
     ImageView btn_down;
     View view;
     String mata_pelajaran,type_pelajaran;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,10 +101,12 @@ public class JadwalUjian extends AppCompatActivity {
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
 //        ll_slide        = findViewById(R.id.slide_down);
 
-        authorization   = getIntent().getStringExtra("authorization");
-        memberid        = getIntent().getStringExtra("student_id");
-        school_code     = getIntent().getStringExtra("school_code");
-        classroom_id    = getIntent().getStringExtra("classroom_id");
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        memberid            = sharedPreferences.getString("student_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_launcher_background), PorterDuff.Mode.SRC_ATOP);

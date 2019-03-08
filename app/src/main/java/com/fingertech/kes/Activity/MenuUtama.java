@@ -680,7 +680,6 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name", school_name);
         MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
-        menuSatuFragment.putString(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragel, menuSatuFragment);

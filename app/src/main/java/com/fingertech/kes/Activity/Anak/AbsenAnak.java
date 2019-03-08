@@ -1,6 +1,8 @@
 package com.fingertech.kes.Activity.Anak;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.AbsensiAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.AbsenModel;
 import com.fingertech.kes.Activity.Model.AbsensiModel;
 import com.fingertech.kes.Controller.Auth;
@@ -76,6 +79,7 @@ public class AbsenAnak extends AppCompatActivity {
     TextView tv_absen;
     LinearLayout hint;
     ProgressDialog dialog;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +96,11 @@ public class AbsenAnak extends AppCompatActivity {
         hint                = findViewById(R.id.hint);
 
 
-        authorization   = getIntent().getStringExtra("authorization");
-        school_code     = getIntent().getStringExtra("school_code");
-        student_id      = getIntent().getStringExtra("student_id");
-        classroom_id    = getIntent().getStringExtra("classroom_id");
-
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

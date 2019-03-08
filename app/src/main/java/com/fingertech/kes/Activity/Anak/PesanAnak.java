@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.PesanAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
@@ -46,7 +48,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PesanAnak extends AppCompatActivity {
+public class
+PesanAnak extends AppCompatActivity {
 
     Toolbar toolbar;
     String authorization,school_code,parent_id;
@@ -63,6 +66,7 @@ public class PesanAnak extends AppCompatActivity {
     String tanggal,kelas,mapel,pesan,guru,classroom_id,school_name,student_id;
     ProgressDialog dialog;
     TextView no_pesan;
+    SharedPreferences sharedPreferences;
     FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +81,13 @@ public class PesanAnak extends AppCompatActivity {
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         fab             = findViewById(R.id.fab);
 
-        authorization   = getIntent().getStringExtra("authorization");
-        school_code     = getIntent().getStringExtra("school_code");
-        parent_id       = getIntent().getStringExtra("member_id");
-        classroom_id    = getIntent().getStringExtra("classroom_id");
-        school_name     = getIntent().getStringExtra("school_name");
-        student_id      = getIntent().getStringExtra("student_id");
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        parent_id           = sharedPreferences.getString("member_id",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
