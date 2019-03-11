@@ -185,24 +185,24 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapKerja);
         mapFragment.getMapAsync(this);
-        arro           = (ImageView)view.findViewById(R.id.arrow);
-        Jabatan        = (EditText)view.findViewById(R.id.et_jabatan);
-        Namaperusahaan = (EditText)view.findViewById(R.id.et_nama_perusahaan);
-        namakerja      = (TextView) view.findViewById(R.id.nama_kerja);
-        et_pekerjaan   = (Spinner) view.findViewById(R.id.sp_pekerjaan);
-        et_penghasilan = (Spinner) view.findViewById(R.id.sp_penghasilan);
-        alamatkerja    = (TextView)view.findViewById(R.id.alamat_kerja);
+        arro           = view.findViewById(R.id.arrow);
+        Jabatan        = view.findViewById(R.id.et_jabatan);
+        Namaperusahaan = view.findViewById(R.id.et_nama_perusahaan);
+        namakerja      = view.findViewById(R.id.nama_kerja);
+        et_pekerjaan   = view.findViewById(R.id.sp_pekerjaan);
+        et_penghasilan = view.findViewById(R.id.sp_penghasilan);
+        alamatkerja    = view.findViewById(R.id.alamat_kerja);
         parentMain        = (ParentMain)getActivity();
-        indicator         = (LinearLayout) view.findViewById(R.id.indicators);
-        back              = (Button)view.findViewById(R.id.btn_kembali);
-        next              = (Button)view.findViewById(R.id.btn_berikut);
+        indicator         = view.findViewById(R.id.indicators);
+        back              = view.findViewById(R.id.btn_kembali);
+        next              = view.findViewById(R.id.btn_berikut);
         fragmentAdapter   = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        ParentPager       = (ViewPager) parentMain.findViewById(R.id.PagerParent);
-        til_nama_perusahaan = (TextInputLayout)view.findViewById(R.id.til_nama_perusahaan);
-        til_jabatan         = (TextInputLayout)view.findViewById(R.id.til_jabatan);
-        til_pendidikan      = (TextView)view.findViewById(R.id.til_pendidikan);
-        til_penghasilan     = (TextView)view.findViewById(R.id.til_penghasilan);
-        til_alamatkerja     = (TextView)view.findViewById(R.id.til_alamat_kerja);
+        ParentPager       = parentMain.findViewById(R.id.PagerParent);
+        til_nama_perusahaan = view.findViewById(R.id.til_nama_perusahaan);
+        til_jabatan         = view.findViewById(R.id.til_jabatan);
+        til_pendidikan      = view.findViewById(R.id.til_pendidikan);
+        til_penghasilan     = view.findViewById(R.id.til_penghasilan);
+        til_alamatkerja     = view.findViewById(R.id.til_alamat_kerja);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -500,7 +500,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void data_parent_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(),school_code.toLowerCase().toString(),parent_nik.toString(),student_id.toString());
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization, school_code.toLowerCase(), parent_nik, student_id);
         call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
@@ -533,16 +533,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                             getActivity(),R.layout.spinner_text,penghasil){
                         @Override
                         public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                            return position != 0;
                         }
 
                         @Override
@@ -578,16 +569,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                             getActivity(),R.layout.spinner_text,plantsList){
                         @Override
                         public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                            return position != 0;
                         }
                         @Override
                         public View getDropDownView(int position, View convertView,
@@ -766,7 +748,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     public void update_parent(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_parent_put(authorization.toString(),studentparentid.toString(),school_code.toLowerCase().toString(),student_id.toString(),namaparent.toString(),nikparent.toString(), hubungan.toString(),tanggallahir.toString(),tempatlahir.toString(),kewarganegaraan.toString(),nomorrumah.toString(),nomorponsel.toString(),alamatrumah.toString(),String.valueOf(latitude_parent),String.valueOf(longitude_parent),emailparent.toString(),et_pekerjaan.getSelectedItem().toString(),Namaperusahaan.getText().toString(),Jabatan.getText().toString(),et_penghasilan.getSelectedItem().toString(),alamatkerja.getText().toString(),String.valueOf(latitude_kerja),String.valueOf(longitude_kerja));
+        Call<JSONResponse> postCall = mApiInterface.update_parent_put(authorization, studentparentid, school_code.toLowerCase(), student_id, namaparent, nikparent, hubungan, tanggallahir, tempatlahir, kewarganegaraan, nomorrumah, nomorponsel, alamatrumah,String.valueOf(latitude_parent),String.valueOf(longitude_parent), emailparent,et_pekerjaan.getSelectedItem().toString(),Namaperusahaan.getText().toString(),Jabatan.getText().toString(),et_penghasilan.getSelectedItem().toString(),alamatkerja.getText().toString(),String.valueOf(latitude_kerja),String.valueOf(longitude_kerja));
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

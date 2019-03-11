@@ -243,6 +243,19 @@ public class DataAnakFragment extends Fragment {
 
         buttonKembali.setOnClickListener(view14 -> ParentPager.setCurrentItem(getItem(-1), true));
 
+        et_nis.setEnabled(false);
+        et_nis.setFocusable(false);
+        et_nisn.setFocusable(false);
+        et_nisn.setEnabled(false);
+        et_nik.setEnabled(false);
+        et_nik.setFocusable(false);
+        rb_laki.setEnabled(false);
+        rb_wanita.setEnabled(false);
+        rb_wna.setEnabled(false);
+        rb_wni.setEnabled(false);
+        sp_agama.setEnabled(false);
+        sp_tingkatan.setEnabled(false);
+
         return view;
     }
 

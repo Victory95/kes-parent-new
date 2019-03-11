@@ -286,7 +286,6 @@ public class ProfileParent extends AppCompatActivity {
                 edit.putString(TAG_GENDER,jeniskelamin);
                 edit.putString(TAG_TANGGAL,tanggal_lahir);
                 edit.commit();
-
                 Intent intent = new Intent(ProfileParent.this, EditProfile.class);
                 startActivity(intent);
             }

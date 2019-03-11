@@ -18,6 +18,7 @@ import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -46,6 +47,12 @@ import com.fingertech.kes.Activity.EditProfile;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ProfileModel;
+import com.fingertech.kes.Activity.ParentMain;
+import com.fingertech.kes.Activity.RecycleView.DialogFactory;
+import com.fingertech.kes.Activity.RecycleView.DialogFactorykps;
+import com.fingertech.kes.Activity.RecycleView.DialogKps;
+
+import com.fingertech.kes.Activity.RecycleView.OneButtonDialog;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -67,6 +74,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.Spinner;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -112,12 +120,17 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             "Katolik",
             "Kristen"
     };
+    private String[] listkps ={
+        "Apakah anda mempunyai KPS",
+        "Ya",
+        "Tidak"
+    };
     String negaraasal,kelas,levelkelas;
     int status;
     String code;
     ProgressDialog dialog;
     Auth mApiInterface;
-    Spinner sp_tingkatan,sp_agama;
+    Spinner sp_tingkatan,sp_agama,sp_kps;
     RadioButton rb_laki,rb_wanita,rb_wni,rb_wna;
     EditText et_nama_lengkap,et_nis,et_nisn,et_nik,et_tempat_lahir,et_rombel,et_kebutuhan_khusus;
     String email,parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
@@ -145,6 +158,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     LinearLayout show_data,show_kontak,show_alamat;
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
     CardView btn_search,btn_simpan;
+    TextView hint_kps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +181,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         et_kebutuhan_khusus = findViewById(R.id.et_kebutuhan_khusus);
         sp_tingkatan        = findViewById(R.id.sp_tingkatan);
         sp_agama            = findViewById(R.id.sp_agama);
+        sp_kps              = findViewById(R.id.sp_kps);
         rb_laki             = findViewById(R.id.rb_laki_lakI);
         rb_wanita           = findViewById(R.id.rb_perempuaN);
         rb_wni              = findViewById(R.id.rb_wnI);
@@ -175,7 +190,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         et_handphone        = findViewById(R.id.et_nomor_Ponsel);
         et_email            = findViewById(R.id.et_email_student);
         et_skun             = findViewById(R.id.et_skun);
-        et_penerimaankps    = findViewById(R.id.et_PKPS);
         et_nomorkps         = findViewById(R.id.et_kps);
         et_rt               = findViewById(R.id.et_rt);
         et_rw               = findViewById(R.id.et_rw);
@@ -188,6 +202,8 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         et_dusun            = findViewById(R.id.et_dusun);
         btn_search          = findViewById(R.id.btn_search);
         btn_simpan          = findViewById(R.id.btn_simpan);
+        til_nokps           = findViewById(R.id.til_kps);
+        hint_kps            = findViewById(R.id.kps_hint);
         cv_data         = findViewById(R.id.btn_data);
         cv_kontak       = findViewById(R.id.btn_kontak);
         cv_alamat       = findViewById(R.id.btn_alamat);
@@ -204,6 +220,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         student_id    = getIntent().getStringExtra("student_id");
         parent_nik    = getIntent().getStringExtra("parent_nik");
         loadSpinnerData();
+        hint_kps.setOnClickListener(v -> pilihan());
 
         et_nis.setEnabled(false);
         et_nis.setFocusable(false);
@@ -384,9 +401,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             return;
         }
         if (!validateNomorkps()){
-            return;
-        }
-        if (!validatePenerimaan()){
             return;
         }
         if (!validateSkun()){
@@ -580,16 +594,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
         return true;
     }
-    private boolean validatePenerimaan() {
-        if (et_penerimaankps.getText().toString().trim().isEmpty()) {
-            Toast.makeText(getApplicationContext(),"Harap di isi penerimaan anak",Toast.LENGTH_LONG).show();
-            requestFocus(et_penerimaankps);
-            return false;
-        } else {
-        }
 
-        return true;
-    }
     private boolean validateSkun() {
         if (et_skun.getText().toString().trim().isEmpty()) {
             Toast.makeText(getApplicationContext(),"Harap di isi skun anak",Toast.LENGTH_LONG).show();
@@ -796,7 +801,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     et_handphone.setText(handphone);
                     et_email.setText(email);
                     et_skun.setText(skun);
-                    et_penerimaankps.setText(penerimaan_kps);
                     et_nomorkps.setText(nomor_kps);
 
                     et_nama_lengkap.setText(nama_lengkap);
@@ -833,6 +837,69 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     }else if(tingkatan_kelas.equals("15")){
                         kelas = "SMA/SMK 3";
                     }
+
+                    final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
+                            EditProfileAnak.this,R.layout.spinner_full,kps){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+
+                    int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
+                    ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    sp_kps.setAdapter(ArrayAdapters);
+                    sp_kps.setSelection(spinnerPositions);
+
+                    sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
+                        if (position > 0) {
+                            if (position == 1){
+                                penerimaan_kps = "Ya";
+                                til_nokps.setVisibility(View.VISIBLE);
+                                et_nomorkps.setVisibility(View.VISIBLE);
+                            }else if (position == 2){
+                                penerimaan_kps = "Tidak";
+                                til_nokps.setVisibility(View.GONE);
+                                et_nomorkps.setVisibility(View.GONE);
+                                et_nomorkps.setText("-");
+                            }
+                        }
+                    });
+
+                    if (penerimaan_kps.equals("Ya")){
+                        til_nokps.setVisibility(View.VISIBLE);
+                        et_nomorkps.setVisibility(View.VISIBLE);
+                    }else if (penerimaan_kps.equals("Tidak")) {
+                        til_nokps.setVisibility(View.GONE);
+                        et_nomorkps.setVisibility(View.GONE);
+                        et_nomorkps.setText("-");
+                    }
                     final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
                     // Initializing an ArrayAdapter
                     final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
@@ -866,7 +933,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         @Override
                         public void onItemSelected(Spinner parent, View view, int position, long id) {
                             kelas = penghasil.get(position);
-
                         }
                     });
 
@@ -922,11 +988,12 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
                         }
                     };
+
                     int spinneragama = agamaadapter.getPosition(religion);
                     agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
                     sp_agama.setAdapter(agamaadapter);
                     sp_agama.setSelection(spinneragama);
-
+                    sp_agama.setEnabled(false);
                     if (jenis_kelamin.equals("Pria")){
                         rb_laki.setChecked(true);
                         rb_wanita.setChecked(false);
@@ -934,18 +1001,20 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         rb_wanita.setChecked(true);
                         rb_laki.setChecked(false);
                     }
-                    rb_laki.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            jenis_kelamin = getResources().getString(R.string.rb_laki);
-                        }
-                    });
-                    rb_wanita.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
-                        }
-                    });
+                    rb_laki.setEnabled(false);
+                    rb_wanita.setEnabled(false);
+//                    rb_laki.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            jenis_kelamin = getResources().getString(R.string.rb_laki);
+//                        }
+//                    });
+//                    rb_wanita.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
+//                        }
+//                    });
                     if (kewarganegaraan.equals("WNI")){
                         rb_wni.setChecked(true);
                         rb_wna.setChecked(false);
@@ -953,7 +1022,8 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         rb_wna.setChecked(true);
                         rb_wni.setChecked(false);
                     }
-
+                    rb_wni.setEnabled(false);
+                    rb_wna.setEnabled(false);
                     rb_wni.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -969,6 +1039,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                             kewarganegaraan = et_negara_asal.getSelectedItem().toString();
                         }
                     });
+
 
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {
@@ -1181,7 +1252,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
     public void update_detail(){
 
-        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization, studentdetailId, school_code.toLowerCase(), student_id, et_rombel.getText().toString(), et_kebutuhan_khusus.getText().toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),et_teleponrumah.getText().toString(),et_skun.getText().toString(),et_penerimaankps.getText().toString(),et_nomorkps.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization, studentdetailId, school_code.toLowerCase(), student_id, et_rombel.getText().toString(), et_kebutuhan_khusus.getText().toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(CurrentLatitude),String.valueOf(CurrentLongitude),et_teleponrumah.getText().toString(),et_skun.getText().toString(),penerimaan_kps,et_nomorkps.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -1228,8 +1299,9 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     intent.putExtra("school_code",school_code);
                     intent.putExtra("student_id",student_id);
                     intent.putExtra("parent_nik",parent_nik);
-                    startActivity(intent);
+                    setResult(RESULT_OK, intent);
                     finish();
+                    FancyToast.makeText(getApplicationContext(),"Berhasil Update",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,false).show();
                 }else {
                     Toast.makeText(getApplicationContext(), "Gagal mengirim", Toast.LENGTH_LONG).show();
                 }
@@ -1242,5 +1314,22 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             }
         });
     }
+    private void pilihan() {
+        final String[] close = new String[1];
+        DialogKps dialogKps =
+                DialogFactorykps.makeSuccessDialog("Selamat! \n Anda telah berhasil mengakses anak anda yang bernama '"+childrenname+" ' yang bersekolah di '"+school_name,
+                        "Demi kelancaran akses dalam memantau perkembangan pendidikan anak anda melalui KES, silahkan isi dengan sebaik-baiknya form berikut ini.",
+                        "Ok",
+                        new DialogKps.ButtonDialogAction() {
+                            @Override
+                            public void onButtonClicked() {
+                                close[0] = "ok";
+                            }
+                        });
+        dialogKps.show(getSupportFragmentManager(), DialogKps.TAG);
 
+        if (close.equals("ok")){
+            dialogKps.closeDialog();
+        }
+    }
 }

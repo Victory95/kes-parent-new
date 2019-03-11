@@ -53,7 +53,6 @@ public class BookmarkTabel {
 
         Log.e("select sqlite ", "" + wordList);
 
-        database.close();
         return wordList;
     }
 

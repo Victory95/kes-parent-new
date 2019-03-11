@@ -155,8 +155,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 intent.putExtra("school_code",school_code);
                 intent.putExtra("student_id",student_id);
                 intent.putExtra("parent_nik",parent_nik);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,2);
             }
         });
         cv_data.setOnClickListener(new View.OnClickListener() {
@@ -486,4 +485,16 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                authorization = data.getStringExtra("authorization");
+                school_code   = data.getStringExtra("school_code");
+                student_id    = data.getStringExtra("student_id");
+                parent_nik    = data.getStringExtra("parent_nik");
+                data_student_get();
+            }
+        }
+    }
 }

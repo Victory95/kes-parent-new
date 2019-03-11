@@ -323,8 +323,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.RaportAnak"
-            android:label="Raport Anak"
+            android:name=".Activity.Anak.RaporAnak"
+            android:label="Rapor Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -147,29 +147,29 @@ public class DataFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view         = inflater.inflate(R.layout.fragment_data, container, false);
-        et_namadepan      = (EditText)view.findViewById(R.id.et_nama_depan);
-        et_Email          = (EditText)view.findViewById(R.id.et_Email);
-        et_Nik            = (EditText)view.findViewById(R.id.et_NIK);
-        et_tempat_lahir   = (EditText)view.findViewById(R.id.et_tempatlahir);
-        et_tanggal_lahir  = (EditText)view.findViewById(R.id.et_tanggallahir);
-        et_negaraasal     = (Spinner)view.findViewById(R.id.sp_negara);
-        til_namadepan     = (TextInputLayout)view.findViewById(R.id.til_nama_depan);
-        til_Email         = (TextInputLayout)view.findViewById(R.id.til_Email);
-        til_Nik           = (TextInputLayout)view.findViewById(R.id.til_NIK);
-        til_tempat_lahir  = (TextInputLayout)view.findViewById(R.id.til_tempatlahir);
-        til_tanggal_lahir = (TextInputLayout)view.findViewById(R.id.til_tanggallahir);
-        et_hubungan       = (Spinner) view.findViewById(R.id.sp_hubungan);
-        rb_wni            = (RadioButton) view.findViewById(R.id.rb_wni);
-        rb_wna            = (RadioButton) view.findViewById(R.id.rb_wna);
+        et_namadepan      = view.findViewById(R.id.et_nama_depan);
+        et_Email          = view.findViewById(R.id.et_Email);
+        et_Nik            = view.findViewById(R.id.et_NIK);
+        et_tempat_lahir   = view.findViewById(R.id.et_tempatlahir);
+        et_tanggal_lahir  = view.findViewById(R.id.et_tanggallahir);
+        et_negaraasal     = view.findViewById(R.id.sp_negara);
+        til_namadepan     = view.findViewById(R.id.til_nama_depan);
+        til_Email         = view.findViewById(R.id.til_Email);
+        til_Nik           = view.findViewById(R.id.til_NIK);
+        til_tempat_lahir  = view.findViewById(R.id.til_tempatlahir);
+        til_tanggal_lahir = view.findViewById(R.id.til_tanggallahir);
+        et_hubungan       = view.findViewById(R.id.sp_hubungan);
+        rb_wni            = view.findViewById(R.id.rb_wni);
+        rb_wna            = view.findViewById(R.id.rb_wna);
         dateFormatter     = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
         parentMain        = (ParentMain)getActivity();
-        indicator         = (LinearLayout) view.findViewById(R.id.indicators);
-        back              = (Button)view.findViewById(R.id.btn_kembali);
-        next              = (Button)view.findViewById(R.id.btn_berikut);
+        indicator         = view.findViewById(R.id.indicators);
+        back              = view.findViewById(R.id.btn_kembali);
+        next              = view.findViewById(R.id.btn_berikut);
         fragmentAdapter   = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        ParentPager       = (ViewPager) parentMain.findViewById(R.id.PagerParent);
-        tv_kewarganegaraan_validate = (TextView)view.findViewById(R.id.tv_kewarganegaraan_validate);
-        tv_validate_hubungan        = (TextView)view.findViewById(R.id.tv_hubungan);
+        ParentPager       = parentMain.findViewById(R.id.PagerParent);
+        tv_kewarganegaraan_validate = view.findViewById(R.id.tv_kewarganegaraan_validate);
+        tv_validate_hubungan        = view.findViewById(R.id.tv_hubungan);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +211,14 @@ public class DataFragment extends Fragment  {
         int mYear = mcurrentDate.get(Calendar.YEAR);
         int mMonth = mcurrentDate.get(Calendar.MONTH);
         int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+        et_Email.setEnabled(false);
+        et_Email.setFocusable(false);
+        et_Nik.setFocusable(false);
+        et_Nik.setEnabled(false);
+        et_hubungan.setEnabled(false);
+        rb_wna.setEnabled(false);
+        rb_wni.setEnabled(false);
 
         final DatePickerDialog mDatePicker;
         mDatePicker = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
@@ -267,7 +275,7 @@ public class DataFragment extends Fragment  {
         et_negaraasal.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(Spinner parent, View view, int position, long id) {
-                negaraasal = myData.get(position).toString();
+                negaraasal = myData.get(position);
             }
         });
 
@@ -301,7 +309,7 @@ public class DataFragment extends Fragment  {
             editor.putString(TAG_TEMPAT_LAHIR, et_tempat_lahir.getText().toString());
             editor.putString(TAG_TANGGAL_LAHIR, et_tanggal_lahir.getText().toString());
             editor.putString(TAG_HUBUNGAN, et_hubungan.getSelectedItem().toString());
-            editor.putString(TAG_KEWARGANEGARAAN, (String) kewarganegaraan);
+            editor.putString(TAG_KEWARGANEGARAAN, kewarganegaraan);
             editor.commit();
             KontakFragment kontakFragment = new KontakFragment();
             Bundle Dataparent = new Bundle();
@@ -416,7 +424,7 @@ public class DataFragment extends Fragment  {
     public void data_parent_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(), school_code.toLowerCase().toString(), parent_nik.toString(), student_id.toString());
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization, school_code.toLowerCase(), parent_nik, student_id);
         call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
@@ -453,16 +461,7 @@ public class DataFragment extends Fragment  {
                             getActivity(),R.layout.spinner_text,penghasil){
                         @Override
                         public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                            return position != 0;
                         }
 
                         @Override

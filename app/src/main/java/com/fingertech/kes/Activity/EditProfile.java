@@ -100,21 +100,21 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile);
 
-        til_nama_lengkap    = (TextInputLayout)findViewById(R.id.til_nama_profile);
-        til_email_profile   = (TextInputLayout)findViewById(R.id.til_email_profile);
-        til_nomor_handphone = (TextInputLayout)findViewById(R.id.til_mobile_phone);
-        et_nama_lengkap     = (EditText)findViewById(R.id.et_nama_profile);
-        et_email            = (EditText)findViewById(R.id.et_email_profile);
-        et_nomor_hp         = (EditText)findViewById(R.id.et_mobile_phone);
-        rb_pria             = (RadioButton)findViewById(R.id.rb_pria);
-        rb_wanita           = (RadioButton)findViewById(R.id.rb_wanita);
-        sp_religion         = (Spinner)findViewById(R.id.sp_religion);
-        btn_update          = (Button)findViewById(R.id.btn_update);
+        til_nama_lengkap    = findViewById(R.id.til_nama_profile);
+        til_email_profile   = findViewById(R.id.til_email_profile);
+        til_nomor_handphone = findViewById(R.id.til_mobile_phone);
+        et_nama_lengkap     = findViewById(R.id.et_nama_profile);
+        et_email            = findViewById(R.id.et_email_profile);
+        et_nomor_hp         = findViewById(R.id.et_mobile_phone);
+        rb_pria             = findViewById(R.id.rb_pria);
+        rb_wanita           = findViewById(R.id.rb_wanita);
+        sp_religion         = findViewById(R.id.sp_religion);
+        btn_update          = findViewById(R.id.btn_update);
         mApiInterface       = ApiClient.getClient().create(Auth.class);
         et_tanggal          = findViewById(R.id.et_tanggal);
 
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarprofil);
+        final Toolbar toolbar = findViewById(R.id.toolbarprofil);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
@@ -181,16 +181,7 @@ public class EditProfile extends AppCompatActivity {
                 this,R.layout.spinner_full,penghasil){
             @Override
             public boolean isEnabled(int position){
-                if(position == 0)
-                {
-                    // Disable the first item from Spinner
-                    // First item will be use for hint
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return position != 0;
             }
 
             @Override
@@ -248,7 +239,7 @@ public class EditProfile extends AppCompatActivity {
     public void update_profile(){
         progressBar();
         showDialog();
-        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization.toString(),parent_id.toString(),et_email.getText().toString(),et_nama_lengkap.getText().toString(),et_nomor_hp.getText().toString(),last_update.toString(),gender_profile.toString(),agama.toString(),et_tanggal.getText().toString());
+        retrofit2.Call<JSONResponse> call = mApiInterface.kes_update_put(authorization, parent_id,et_email.getText().toString(),et_nama_lengkap.getText().toString(),et_nomor_hp.getText().toString(), last_update, gender_profile, agama,et_tanggal.getText().toString());
         call.enqueue(new Callback<JSONResponse>() {
 
             @Override

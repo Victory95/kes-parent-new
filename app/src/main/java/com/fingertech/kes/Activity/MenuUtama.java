@@ -490,7 +490,7 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_list(){
-        Call<JSONResponse.ListNotification> call = mApiInterface.kes_notification_list_get(authorization.toString(),school_code.toLowerCase().toString(),student_id.toString());
+        Call<JSONResponse.ListNotification> call = mApiInterface.kes_notification_list_get(authorization, school_code.toLowerCase(), student_id);
         call.enqueue(new Callback<JSONResponse.ListNotification>() {
             @Override
             public void onResponse(Call<JSONResponse.ListNotification> call, Response<JSONResponse.ListNotification> response) {
@@ -531,7 +531,7 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_children(){
-        Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization.toString(),parent_id.toString());
+        Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
             public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
@@ -609,7 +609,7 @@ public class MenuUtama extends AppCompatActivity
     public void get_profile(){
         progressBar();
         showDialog();
-        retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
+        retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization, parent_id);
 
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
 
@@ -634,8 +634,8 @@ public class MenuUtama extends AppCompatActivity
                         }
                         Picasso.get().load(imagefile).into(image_profile);
 
-                    if (member.toString().equals("3")){
-                        if (count.toString().equals("0")){
+                    if (member.equals("3")){
+                        if (count.equals("0")){
                             recycleview_ln.setVisibility(VISIBLE);
                             viewpager.setVisibility(GONE);
                         }else {
@@ -870,19 +870,19 @@ public class MenuUtama extends AppCompatActivity
             View view = ((Activity)context).getLayoutInflater()
                     .inflate(R.layout.custom_snippet, null);
 
-            TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
+            TextView tvSch = view.findViewById(R.id.nama_school);
 
             // Getting reference to the TextView to set longitude
-            TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
+            TextView tvAkr = view.findViewById(R.id.akreditasi);
 
             // Getting reference to the TextView to set latitude
-            TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
+            TextView tvJrk = view.findViewById(R.id.jarak);
 
             // Getting reference to the TextView to set longitude
-            TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
+            TextView tvAlm = view.findViewById(R.id.alamat_school);
 
             // Getting reference to the TextView to set longitude
-            TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
+            TextView tvLht = view.findViewById(R.id.Lihat);
 
 
             ImageView img = view.findViewById(R.id.imageS);
@@ -934,8 +934,8 @@ public class MenuUtama extends AppCompatActivity
                 if (status == 1 && code.equals("NR_SCS_0001")) {
                     itemList = new ArrayList<ItemSekolah>();
                     for (int i = 0; i < response.body().getData().size(); i++) {
-                        double lat                  = response.body().getData().get(i).getLatitude();
-                        double lng                  = response.body().getData().get(i).getLongitude();
+                        double lat     = response.body().getData().get(i).getLatitude();
+                        double lng     = response.body().getData().get(i).getLongitude();
                         placeName      = response.body().getData().get(i).getSchool_name();
                         vicinity       = response.body().getData().get(i).getSchool_address();
                         akreditasi     = response.body().getData().get(i).getAkreditasi();
@@ -943,7 +943,7 @@ public class MenuUtama extends AppCompatActivity
                         final double Jarak          = response.body().getData().get(i).getDistance();
 
                         LatLng latLng = new LatLng(lat, lng);
-                        if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
+                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -957,7 +957,7 @@ public class MenuUtama extends AppCompatActivity
                             // Adding Marker to the Camera.
                             m = mapG.addMarker(markerOptions);
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -970,7 +970,7 @@ public class MenuUtama extends AppCompatActivity
 
                             // Adding Marker to the Camera.
                             m = mapG.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -1021,7 +1021,7 @@ public class MenuUtama extends AppCompatActivity
                     }
 
                     // Create the recyclerview.
-                    snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
+                    snappyRecyclerView = findViewById(R.id.recycler_view);
                     // Create the grid layout manager with 2 columns.
                     final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -1101,7 +1101,7 @@ public class MenuUtama extends AppCompatActivity
                             if(line != null){
                                 line.remove();
                             }
-                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SD")) {
+                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -1120,7 +1120,7 @@ public class MenuUtama extends AppCompatActivity
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
 
                             }
-                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMP")){
+                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -1138,7 +1138,7 @@ public class MenuUtama extends AppCompatActivity
                                 mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMA")){
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -1155,7 +1155,7 @@ public class MenuUtama extends AppCompatActivity
                                 m = mapG.addMarker(markerOptions);
                                 mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);

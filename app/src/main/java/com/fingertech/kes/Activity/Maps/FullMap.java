@@ -187,14 +187,14 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             }
         });
         //set layout slide listener
-        slidingLayout = (SlidingUpPanelLayout)findViewById(R.id.sliding_layout);
-        imageView = (ImageView) findViewById(R.id.arrowF);
-        et_provinsi = (Spinner) findViewById(R.id.sp_provinsi);
-        rb_sd = (RadioButton) findViewById(R.id.sd);
-        rb_smp = (RadioButton) findViewById(R.id.smp);
-        rb_sma = (RadioButton) findViewById(R.id.sma);
-        rb_smk = (RadioButton) findViewById(R.id.smk);
-        tampilProv = (Button) findViewById(R.id.TampilProv);
+        slidingLayout = findViewById(R.id.sliding_layout);
+        imageView = findViewById(R.id.arrowF);
+        et_provinsi = findViewById(R.id.sp_provinsi);
+        rb_sd = findViewById(R.id.sd);
+        rb_smp = findViewById(R.id.smp);
+        rb_sma = findViewById(R.id.sma);
+        rb_smk = findViewById(R.id.smk);
+        tampilProv = findViewById(R.id.TampilProv);
 
         dapat_provinsi();
 
@@ -359,6 +359,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             mGoogleApiClient.disconnect();
         }
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapF = googleMap;
@@ -529,7 +530,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
                         final LatLng latLng = new LatLng(lat, lng);
 
-                        if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SD")){
+                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -541,7 +542,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                             // Adding Marker to the Camera.
                             m = mapF.addMarker(markerOptions);
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -552,7 +553,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
 
                             // Adding Marker to the Camera.
                             m = mapF.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
                             MarkerOptions markerOptions = new MarkerOptions();
 
                             // Position of Marker on Map
@@ -596,7 +597,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                         ItemList.add(Item);
                     }
                     // Create the recyclerview.
-                    snappyrecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view2);
+                    snappyrecyclerView = findViewById(R.id.recycler_view2);
                     // Create the grid layout manager with 2 columns.
                     final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(FullMap.this);
                     layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -675,7 +676,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                 lines.remove();
                             }
 
-                            if (response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SD")) {
+                            if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
                                 latitudef = response.body().getData().get(currentItem).getLatitude();
                                 longitudef = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitudef, longitudef);
@@ -691,7 +692,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                 // Adding Marker to the Camera.
                                 m = mapF.addMarker(markerOptions);
                                 Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMP")) {
+                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")) {
                                 latitudef = response.body().getData().get(currentItem).getLatitude();
                                 longitudef = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitudef, longitudef);
@@ -707,7 +708,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                 // Adding Marker to the Camera.
                                 m = mapF.addMarker(markerOptions);
                                 Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMA")) {
+                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")) {
                                 latitudef = response.body().getData().get(currentItem).getLatitude();
                                 longitudef = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitudef, longitudef);
@@ -723,7 +724,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                 // Adding Marker to the Camera.
                                 m = mapF.addMarker(markerOptions);
                                 Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SPK SMP")) {
+                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")) {
                                 latitudef = response.body().getData().get(currentItem).getLatitude();
                                 longitudef = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitudef, longitudef);

@@ -163,20 +163,20 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         View view = inflater.inflate(R.layout.fragment_kontak, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKontak);
         mapFragment.getMapAsync(this);
-        namaalamat          = (TextView)view.findViewById(R.id.nama_alamat);
-        arros               = (ImageView)view.findViewById(R.id.arroW);
-        alamatrumah         = (TextView)view.findViewById(R.id.alamat_rumah);
-        Nomorrumah          = (EditText)view.findViewById(R.id.et_nomor_rumah);
-        Nomorponsel         = (EditText)view.findViewById(R.id.et_nomor_ponsel);
+        namaalamat          = view.findViewById(R.id.nama_alamat);
+        arros               = view.findViewById(R.id.arroW);
+        alamatrumah         = view.findViewById(R.id.alamat_rumah);
+        Nomorrumah          = view.findViewById(R.id.et_nomor_rumah);
+        Nomorponsel         = view.findViewById(R.id.et_nomor_ponsel);
         parentMain          = (ParentMain)getActivity();
-        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
-        back                = (Button)view.findViewById(R.id.btn_kembali);
-        next                = (Button)view.findViewById(R.id.btn_berikut);
+        indicator           = view.findViewById(R.id.indicators);
+        back                = view.findViewById(R.id.btn_kembali);
+        next                = view.findViewById(R.id.btn_berikut);
         fragmentAdapter     = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        ParentPager         = (ViewPager) parentMain.findViewById(R.id.PagerParent);
-        til_nomor_rumah     = (TextInputLayout)view.findViewById(R.id.til_nomor_rumah);
-        til_nomor_ponsel    = (TextInputLayout)view.findViewById(R.id.til_nomor_ponsel);
-        til_alamat_rumah    = (TextView)view.findViewById(R.id.til_alamat_rumah);
+        ParentPager         = parentMain.findViewById(R.id.PagerParent);
+        til_nomor_rumah     = view.findViewById(R.id.til_nomor_rumah);
+        til_nomor_ponsel    = view.findViewById(R.id.til_nomor_ponsel);
+        til_alamat_rumah    = view.findViewById(R.id.til_alamat_rumah);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -491,7 +491,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     public void data_parent_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization.toString(),school_code.toLowerCase().toString(),parent_nik.toString(),student_id.toString());
+        Call<JSONResponse.Data_parent_student> call = mApiInterface.data_parent_student_get(authorization, school_code.toLowerCase(), parent_nik, student_id);
         call.enqueue(new Callback<JSONResponse.Data_parent_student>() {
             @Override
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {

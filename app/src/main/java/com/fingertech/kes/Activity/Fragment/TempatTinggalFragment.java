@@ -163,22 +163,22 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapTinggal);
         mapFragment.getMapAsync(this);
-        namatempat          = (TextView)view.findViewById(R.id.nama_rumah);
-        alamattempattinggal = (TextView)view.findViewById(R.id.alamat_rumah_anak);
-        arrom               = (ImageView)view.findViewById(R.id.arrom);
+        namatempat          = view.findViewById(R.id.nama_rumah);
+        alamattempattinggal = view.findViewById(R.id.alamat_rumah_anak);
+        arrom               = view.findViewById(R.id.arrom);
         anakMain            = (AnakMain)getActivity();
-        ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
-        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
-        buttonKembali       = (Button)view.findViewById(R.id.btn_kembali);
-        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_berikut);
-        et_rt               = (EditText)view.findViewById(R.id.et_rt);
-        et_rw               = (EditText)view.findViewById(R.id.et_rw);
-        et_kelurahan        = (EditText)view.findViewById(R.id.et_kelurahan);
-        et_kecamatan        = (EditText)view.findViewById(R.id.et_Kecamatan);
-        et_kodepos          = (EditText)view.findViewById(R.id.et_kode_pos);
-        et_jenis_tinggal    = (EditText)view.findViewById(R.id.et_status_tinggal);
-        et_trasnportasi     = (EditText)view.findViewById(R.id.et_transportasi);
-        et_alamat           = (EditText)view.findViewById(R.id.et_Alamat);
+        ParentPager         = anakMain.findViewById(R.id.PagerAnak);
+        indicator           = view.findViewById(R.id.indicators);
+        buttonKembali       = view.findViewById(R.id.btn_kembali);
+        buttonBerikutnya    = view.findViewById(R.id.btn_berikut);
+        et_rt               = view.findViewById(R.id.et_rt);
+        et_rw               = view.findViewById(R.id.et_rw);
+        et_kelurahan        = view.findViewById(R.id.et_kelurahan);
+        et_kecamatan        = view.findViewById(R.id.et_Kecamatan);
+        et_kodepos          = view.findViewById(R.id.et_kode_pos);
+        et_jenis_tinggal    = view.findViewById(R.id.et_status_tinggal);
+        et_trasnportasi     = view.findViewById(R.id.et_transportasi);
+        et_alamat           = view.findViewById(R.id.et_Alamat);
         et_dusun            = view.findViewById(R.id.et_dusun);
         til_alamat          = view.findViewById(R.id.til_Alamat);
         til_jenistinggal    = view.findViewById(R.id.til_status_tinggal);
@@ -457,7 +457,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     public void data_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString(), student_id.toString(),parent_nik.toString());
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization, school_code, student_id, parent_nik);
         call.enqueue(new Callback<JSONResponse.DetailStudent>() {
             @Override
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
@@ -657,7 +657,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
 
     public void update_detail(){
 
-        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization.toString(),studentdetailId.toString(), school_code.toString(), student_id.toString(), Rombel.toString(), Kebutuhankhusus.toString(), et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(latitude_anak),String.valueOf(longitude_anak),telepon_rumah.toString(),skun.toString(),penerimaan_kps.toString(),nokps.toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_detail_put(authorization, studentdetailId, school_code, student_id, Rombel, Kebutuhankhusus, et_rt.getText().toString(),et_rw.getText().toString(),et_dusun.getText().toString(),et_kelurahan.getText().toString(),et_kecamatan.getText().toString(),et_kodepos.getText().toString(),et_jenis_tinggal.getText().toString(),et_trasnportasi.getText().toString(),String.valueOf(latitude_anak),String.valueOf(longitude_anak), telepon_rumah, skun, penerimaan_kps, nokps);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -687,7 +687,7 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     public void update_member(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization.toString(),student_id.toString(), school_code.toString(), Nama_lengkap.toString(), Jenis_kelamin.toString(), Tempat_lahir.toString(), Tanggal_lahir.toString(),Negara.toString(),Agama.toString(),et_alamat.getText().toString(),handphone.toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code, Nama_lengkap, Jenis_kelamin, Tempat_lahir, Tanggal_lahir, Negara, Agama,et_alamat.getText().toString(), handphone);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

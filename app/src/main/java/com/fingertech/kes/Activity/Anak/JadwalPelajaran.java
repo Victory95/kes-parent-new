@@ -534,7 +534,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     hint_jumat.setVisibility(View.VISIBLE);
                                 } else {
                                     arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                                    rv_jumat.setVisibility(View.GONE);
+                                    rv_jumat.setVisibility(View.VISIBLE);
                                     hint_jumat.setVisibility(View.GONE);
                                 }
                                 break;

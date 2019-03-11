@@ -25,8 +25,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Anak.EditProfileAnak;
 import com.fingertech.kes.Activity.AnakMain;
 import com.fingertech.kes.Activity.Masuk;
+import com.fingertech.kes.Activity.RecycleView.DialogFactorykps;
+import com.fingertech.kes.Activity.RecycleView.DialogKps;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -63,6 +66,11 @@ public class KontakAnakFragment extends Fragment {
     private AnakMain.FragmentAdapter fragmentAdapter;
     String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
 
+    private String[] listkps ={
+            "Apakah anda mempunyai KPS",
+            "Ya",
+            "Tidak"
+    };
 
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
@@ -104,13 +112,15 @@ public class KontakAnakFragment extends Fragment {
 
     SharedPreferences sharedpreferences,sharedviewpager;
     String teleponrumah,handphone,email,skun,penerimaan_kps,nomor_kps;
-    EditText et_teleponrumah,et_handphone,et_email,et_skun,et_penerimaankps,et_nomorkps;
+    EditText et_teleponrumah,et_handphone,et_email,et_skun,et_nomorkps;
     String parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
-    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps,til_penerimaankps;
+    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps;
     int status;
     String code;
     ProgressDialog dialog;
     Auth mApiInterface;
+    Spinner sp_kps;
+    TextView hint_kps;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,24 +132,46 @@ public class KontakAnakFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kontak_anak, container, false);
         anakMain          = (AnakMain)getActivity();
-        ParentPager         = (ViewPager) anakMain.findViewById(R.id.PagerAnak);
-        indicator           = (LinearLayout) view.findViewById(R.id.indicators);
-        buttonKembali       = (Button)view.findViewById(R.id.btn_back);
-        buttonBerikutnya    = (Button)view.findViewById(R.id.btn_next);
+        ParentPager         = anakMain.findViewById(R.id.PagerAnak);
+        indicator           = view.findViewById(R.id.indicators);
+        buttonKembali       = view.findViewById(R.id.btn_back);
+        buttonBerikutnya    = view.findViewById(R.id.btn_next);
         fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        et_teleponrumah     = (EditText)view.findViewById(R.id.et_nomor_Rumah);
-        et_handphone        = (EditText)view.findViewById(R.id.et_nomor_Ponsel);
-        et_email            = (EditText)view.findViewById(R.id.et_email_student);
-        et_skun             = (EditText)view.findViewById(R.id.et_skun);
-        et_penerimaankps    = (EditText)view.findViewById(R.id.et_PKPS);
-        et_nomorkps         = (EditText)view.findViewById(R.id.et_kps);
+        et_teleponrumah     = view.findViewById(R.id.et_nomor_Rumah);
+        et_handphone        = view.findViewById(R.id.et_nomor_Ponsel);
+        et_email            = view.findViewById(R.id.et_email_student);
+        et_skun             = view.findViewById(R.id.et_skun);
+        et_nomorkps         = view.findViewById(R.id.et_kps);
         til_email           = view.findViewById(R.id.til_e_mail);
         til_handphone       = view.findViewById(R.id.til_nomor_Ponsel);
         til_nokps           = view.findViewById(R.id.til_kps);
         til_teleponrumah    = view.findViewById(R.id.til_nomor_Rumah);
-        til_penerimaankps   = view.findViewById(R.id.til_PKPS);
         til_skun            = view.findViewById(R.id.til_skun);
+        sp_kps              = view.findViewById(R.id.sp_kps);
+        hint_kps            = view.findViewById(R.id.kps_hint);
 
+        hint_kps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] close = new String[1];
+                DialogKps dialogKps =
+                        DialogFactorykps.makeSuccessDialog("Selamat! \n Anda telah berhasil mengakses anak anda yang bernama '"+childrenname+" ' yang bersekolah di '"+school_name,
+                                "Demi kelancaran akses dalam memantau perkembangan pendidikan anak anda melalui KES, silahkan isi dengan sebaik-baiknya form berikut ini.",
+                                "Ok",
+                                new DialogKps.ButtonDialogAction() {
+                                    @Override
+                                    public void onButtonClicked() {
+                                        close[0] = "ok";
+                                    }
+                                });
+
+                dialogKps.show(getActivity().getSupportFragmentManager(), DialogKps.TAG);
+
+                if (close.equals("ok")){
+                    dialogKps.closeDialog();
+                }
+            }
+        });
         buttonBerikutnya.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,7 +249,7 @@ public class KontakAnakFragment extends Fragment {
     public void data_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toString(), student_id.toString(),parent_nik.toString());
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization, school_code, student_id, parent_nik);
         call.enqueue(new Callback<JSONResponse.DetailStudent>() {
             @Override
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
@@ -232,6 +264,7 @@ public class KontakAnakFragment extends Fragment {
                 String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    int tingkat  = Integer.parseInt(response.body().data.getEdulevel_id());
                     teleponrumah    = response.body().data.getHome_phone();
                     handphone       = response.body().data.getMobile_phone();
                     email           = response.body().data.getEmail();
@@ -243,7 +276,76 @@ public class KontakAnakFragment extends Fragment {
                     et_handphone.setText(handphone);
                     et_email.setText(email);
                     et_skun.setText(skun);
-                    et_penerimaankps.setText(penerimaan_kps);
+                    if (tingkat < 10){
+                        et_skun.setText("-");
+                        til_skun.setVisibility(View.GONE);
+                        et_skun.setVisibility(View.GONE);
+                    }else {
+                        til_skun.setVisibility(View.VISIBLE);
+                        et_skun.setVisibility(View.VISIBLE);
+                    }
+                    final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
+                    // Initializing an ArrayAdapter
+                    final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
+                            getActivity(),R.layout.spinner_text,kps){
+                        @Override
+                        public boolean isEnabled(int position){
+                            if(position == 0)
+                            {
+                                // Disable the first item from Spinner
+                                // First item will be use for hint
+                                return false;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView,
+                                                    ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            if(position == 0){
+                                // Set the hint text color gray
+                                tv.setTextColor(Color.GRAY);
+                            }
+                            else {
+                                tv.setTextColor(Color.BLACK);
+                            }
+                            return view;
+                        }
+                    };
+
+                    int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
+                    ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                    sp_kps.setAdapter(ArrayAdapters);
+                    sp_kps.setSelection(spinnerPositions);
+
+                    sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
+                        if (position > 0) {
+                            if (position == 1){
+                                penerimaan_kps = "Ya";
+                                til_nokps.setVisibility(View.VISIBLE);
+                                et_nomorkps.setVisibility(View.VISIBLE);
+                            }else if (position == 2){
+                                penerimaan_kps = "Tidak";
+                                til_nokps.setVisibility(View.GONE);
+                                et_nomorkps.setVisibility(View.GONE);
+                                et_nomorkps.setText("-");
+                            }
+                        }
+                    });
+
+                    if (penerimaan_kps.equals("Ya")){
+                        til_nokps.setVisibility(View.VISIBLE);
+                        et_nomorkps.setVisibility(View.VISIBLE);
+                    }else if (penerimaan_kps.equals("Tidak")) {
+                        til_nokps.setVisibility(View.GONE);
+                        et_nomorkps.setVisibility(View.GONE);
+                        et_nomorkps.setText("-");
+                    }
                     et_nomorkps.setText(nomor_kps);
 
                 } else {
@@ -295,9 +397,6 @@ public class KontakAnakFragment extends Fragment {
             return;
         }
         if (!validateNomorkps()){
-            return;
-        }
-        if (!validatePenerimaan()){
             return;
         }
         if (!validateSkun()){
@@ -353,17 +452,6 @@ public class KontakAnakFragment extends Fragment {
 
         return true;
     }
-    private boolean validatePenerimaan() {
-        if (et_penerimaankps.getText().toString().trim().isEmpty()) {
-            Toast.makeText(getContext(),"Harap di isi penerimaan anak",Toast.LENGTH_LONG).show();
-            requestFocus(et_penerimaankps);
-            return false;
-        } else {
-            til_penerimaankps.setErrorEnabled(false);
-        }
-
-        return true;
-    }
     private boolean validateSkun() {
         if (et_skun.getText().toString().trim().isEmpty()) {
             Toast.makeText(getContext(),"Harap di isi skun anak",Toast.LENGTH_LONG).show();
@@ -383,7 +471,7 @@ public class KontakAnakFragment extends Fragment {
         editor.putString(TAG_HANDPHONE,et_handphone.getText().toString());
         editor.putString(TAG_EMAIL,et_email.getText().toString());
         editor.putString(TAG_SKUN,et_skun.getText().toString());
-        editor.putString(TAG_PENERIMAANKPS,et_penerimaankps.getText().toString());
+        editor.putString(TAG_PENERIMAANKPS,penerimaan_kps.toString());
         editor.putString(TAG_NOKPS,et_nomorkps.getText().toString());
         editor.commit();
         TempatTinggalFragment tempatTinggalFragment = new TempatTinggalFragment();
@@ -392,7 +480,7 @@ public class KontakAnakFragment extends Fragment {
         tempattinggal.putString(TAG_HANDPHONE,et_handphone.getText().toString());
         tempattinggal.putString(TAG_EMAIL,et_email.getText().toString());
         tempattinggal.putString(TAG_SKUN,et_skun.getText().toString());
-        tempattinggal.putString(TAG_PENERIMAANKPS,et_penerimaankps.getText().toString());
+        tempattinggal.putString(TAG_PENERIMAANKPS,penerimaan_kps.toString());
         tempattinggal.putString(TAG_NOKPS,et_nomorkps.getText().toString());
         tempatTinggalFragment.setArguments(tempattinggal);
         FragmentManager fragmentManager = getFragmentManager();

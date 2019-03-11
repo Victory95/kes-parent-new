@@ -25,7 +25,6 @@ public class ItemSekolah {
 
     private Double lng;
 
-
     public String getName() {
         return nama_sekolah;
     }

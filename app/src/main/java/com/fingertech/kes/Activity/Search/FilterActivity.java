@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Adapter.BookmarkAdapter;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
@@ -41,6 +42,7 @@ public class FilterActivity extends AppCompatActivity {
     Toolbar ToolBarAtas2;
     Button arrof;
     SearchManager searchManager;
+    TextView hint_bookmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class FilterActivity extends AppCompatActivity {
         filter                 = findViewById(R.id.filter);
         arrof                  = findViewById(R.id.arrowF);
         searchManager          = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        hint_bookmark          = findViewById(R.id.hint_bookmark);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -100,42 +103,49 @@ public class FilterActivity extends AppCompatActivity {
     private void getAllData(){
        row = bookmarkTabel.getAllData();
 
-        for (int i = 0; i < row.size(); i++) {
-            String id       = row.get(i).get(Data.KEY_CourseId);
-            String poster   = row.get(i).get(Data.KEY_Name);
-            String title    = row.get(i).get(Data.KEY_ALAMAT);
-            data = new Data();
-            data.setId(id);
-            data.setName(poster);
-            data.setAddress(title);
-            itemList.add(data);
-        }
-        bookmarkAdapter.notifyDataSetChanged();
-        bookmarkAdapter.setOnItemClickListener((view, position) -> {
-            latitude     = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
-            longitude    = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
-            String poster   = row.get(position).get(Data.KEY_Name);
-            String title    = row.get(position).get(Data.KEY_ALAMAT);
-            String jenjang  = row.get(position).get(Data.KEY_JENJANG);
-            String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
+       if (row.size() == 0){
+           hint_bookmark.setVisibility(View.VISIBLE);
+           recyclerView.setVisibility(View.GONE);
+       }else {
+           hint_bookmark.setVisibility(View.GONE);
+           recyclerView.setVisibility(View.VISIBLE);
+           for (int i = 0; i < row.size(); i++) {
+               String id = row.get(i).get(Data.KEY_CourseId);
+               String poster = row.get(i).get(Data.KEY_Name);
+               String title = row.get(i).get(Data.KEY_ALAMAT);
+               data = new Data();
+               data.setId(id);
+               data.setName(poster);
+               data.setAddress(title);
+               itemList.add(data);
+           }
+           bookmarkAdapter.notifyDataSetChanged();
+           bookmarkAdapter.setOnItemClickListener((view, position) -> {
+               latitude = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
+               longitude = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
+               String poster = row.get(position).get(Data.KEY_Name);
+               String title = row.get(position).get(Data.KEY_ALAMAT);
+               String jenjang = row.get(position).get(Data.KEY_JENJANG);
+               String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
 
-            Intent intent = new Intent(FilterActivity.this,SearchingMAP.class);
-            intent.putExtra("latitude",latitude);
-            intent.putExtra("longitude", longitude);
-            intent.putExtra("jenjang",jenjang);
-            intent.putExtra("schoolid",schoolid);
-            intent.putExtra("namasekolah",poster);
-            intent.putExtra("alamat",title);
-            setResult(RESULT_OK, intent);
-            finish();
-        });
+               Intent intent = new Intent(FilterActivity.this, SearchingMAP.class);
+               intent.putExtra("latitude", latitude);
+               intent.putExtra("longitude", longitude);
+               intent.putExtra("jenjang", jenjang);
+               intent.putExtra("schoolid", schoolid);
+               intent.putExtra("namasekolah", poster);
+               intent.putExtra("alamat", title);
+               setResult(RESULT_OK, intent);
+               finish();
+           });
+       }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                finish();
                 return true;
         }
 

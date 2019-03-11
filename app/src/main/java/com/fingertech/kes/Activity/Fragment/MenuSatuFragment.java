@@ -7,18 +7,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
-import com.fingertech.kes.Activity.Anak.RaportAnak;
+import com.fingertech.kes.Activity.Anak.RaporAnak;
 import com.fingertech.kes.Activity.Anak.TugasAnak;
 import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -148,7 +145,7 @@ public class MenuSatuFragment extends Fragment {
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
             editor.commit();
-            Intent intent = new Intent(getContext(), RaportAnak.class);
+            Intent intent = new Intent(getContext(), RaporAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);
