@@ -16,7 +16,7 @@ public class DialogFactorykps {
                 messageId,
                 buttonTextId,
                 R.drawable.nomorkps,
-                R.drawable.contohkps,
+                R.drawable.contoh_kps,
                 R.color.colorPrimary,
                 action);
     }

@@ -122,6 +122,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:layout_marginRight="40dp"
                         android:text="Masuk"/>
                 </LinearLayout>
                 <LinearLayout

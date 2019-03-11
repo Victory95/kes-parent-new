@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/contohkps"
+        android:src="@drawable/contoh_kps"
         tools:ignore="ContentDescription" />
     <ImageView
         android:id="@+id/dlg_one_button_iv"
