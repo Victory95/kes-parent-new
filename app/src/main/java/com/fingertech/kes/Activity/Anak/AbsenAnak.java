@@ -23,12 +23,15 @@ import com.fingertech.kes.Activity.Adapter.AbsensiAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.AbsenModel;
 import com.fingertech.kes.Activity.Model.AbsensiModel;
+import com.fingertech.kes.Activity.Model.DataHari;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 
+import java.net.IDN;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,10 +60,8 @@ public class AbsenAnak extends AppCompatActivity {
     private SimpleDateFormat bulanFormat    = new SimpleDateFormat("MM", Locale.getDefault());
     private SimpleDateFormat tahunFormat    = new SimpleDateFormat("yyyy", Locale.getDefault());
     private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("dd",Locale.getDefault());
-    private SimpleDateFormat hariFormat     = new SimpleDateFormat("EEEE",Locale.getDefault());
+    private SimpleDateFormat hariFormat     = new SimpleDateFormat("EEEE",new Locale("in","ID"));
     private SimpleDateFormat formattanggal  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
-
-
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     TextView month_calender;
     ImageView left_month,right_month;
@@ -69,17 +70,32 @@ public class AbsenAnak extends AppCompatActivity {
     String authorization,school_code,student_id,classroom_id,calendar_year;
     RecyclerView recyclerView;
     String tanggals;
-
+    String times_ok,times_finish;
     private List<AbsensiModel>absensiModels;
+    List <AbsenModel> absenModelList = new ArrayList<>();
+
+    List<JSONResponse.ScheduleClassItem> scheduleClassItemList = new ArrayList<>();
+    List<JSONResponse.JadwalData> jadwalDataList = new ArrayList<>();
     AbsensiModel absensiModel;
-
-
+    AbsenModel absenModel;
+    private SimpleDateFormat jamformat  = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
+    private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    Date date_now,dates;
     List<JSONResponse.DataJam> dataJamList = new ArrayList<>();
+    List<DataHari> dataHariList = new ArrayList<>();
     AbsensiAdapter absensiAdapter;
     TextView tv_absen;
     LinearLayout hint;
     ProgressDialog dialog;
     SharedPreferences sharedPreferences;
+    String days_name;
+    String mapel;
+    int lamber;
+    String jamber;
+    String jam_mulai;
+    String jam_selesai;
+    String  daysid, day_type, day_status;
+    String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +125,11 @@ public class AbsenAnak extends AppCompatActivity {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         month_calender.setText(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
 
-        tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
-        if(tanggal.substring(0,1).equals("0"))
+
+        day = tanggalFormat.format(Calendar.getInstance().getTime());
+        if(day.substring(0,1).equals("0"))
         {
-            tanggal = tanggal.substring(1);
+            day = day.substring(1);
         }
         tanggals = formattanggal.format(Calendar.getInstance().getTime());
         bulan = bulanFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
@@ -124,17 +141,16 @@ public class AbsenAnak extends AppCompatActivity {
         hari    = hariFormat.format(Calendar.getInstance().getTime());
         tahun   = tahunFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
         absensiModels = new ArrayList<>();
-        absensiAdapter = new AbsensiAdapter(absensiModels);
+        absensiAdapter = new AbsensiAdapter(absensiModels,absenModelList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(absensiAdapter);
         dapat_absen();
-
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
                 hari    = hariFormat.format(dateClicked);
-                day = tanggalFormat.format(dateClicked);
+                day     = tanggalFormat.format(dateClicked);
                 if(day.substring(0,1).equals("0"))
                 {
                     day = day.substring(1);
@@ -143,23 +159,51 @@ public class AbsenAnak extends AppCompatActivity {
 
                 compactCalendarView.setCurrentDayBackgroundColor(Color.parseColor("#0Dffffff"));
 
-                if (absensiModels != null) {
-                    absensiModels.clear();
-                        for (JSONResponse.DataJam dataJam : dataJamList) {
+                if (hari.equals("Sabtu") || hari.equals("Minggu")){
+                    tv_absen.setVisibility(VISIBLE);
+                    recyclerView.setVisibility(GONE);
+                    hint.setVisibility(GONE);
+                }else {
+                    tv_absen.setVisibility(GONE);
+                    recyclerView.setVisibility(VISIBLE);
+                    hint.setVisibility(VISIBLE);
+                    if (absensiModels != null) {
+                        absensiModels.clear();
+                        for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
                             absensiModel = new AbsensiModel();
                             absensiModel.setTanggal(tanggals);
-                            absensiModel.setTimez_star(dataJam.getTimez_ok());
-                            absensiModel.setTimez_finish(dataJam.getTimez_finish());
-                            absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day)-1).getAbsen_status());
+                            absensiModel.setTimez_star(dataJam.getTimezOk());
+                            absensiModel.setTimez_finish(dataJam.getTimezFinish());
+                            absensiModel.setMapel(dataJam.getCourcesName());
+                            absensiModel.setGuru(dataJam.getTeacherName());
                             absensiModels.add(absensiModel);
                         }
-                        absensiAdapter.notifyDataSetChanged();
 
+                        absensiAdapter.notifyDataSetChanged();
+                    }
+                    if (absenModelList != null) {
+                        absenModelList.clear();
+                        for (JSONResponse.DataJam dataJam : dataJamList) {
+                            absenModel = new AbsenModel();
+                            absenModel.setTanggal(tanggals);
+                            absenModel.setTimez_star(dataJam.getTimez_ok());
+                            absenModel.setTimez_finish(dataJam.getTimez_finish());
+                            absenModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day)-1).getAbsen_status());
+                            absenModelList.add(absenModel);
+                        }
+                        absensiAdapter.notifyDataSetChanged();
+                    }
                 }
+                dapat_mapel();
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
+                day = tanggalFormat.format(firstDayOfNewMonth);
+                if(day.substring(0,1).equals("0"))
+                {
+                    day = day.substring(1);
+                }
                 bulan = bulanFormat.format(firstDayOfNewMonth);
                 if(bulan.substring(0,1).equals("0"))
                 {
@@ -167,6 +211,7 @@ public class AbsenAnak extends AppCompatActivity {
                 }
                 month_calender.setText(dateFormat.format(firstDayOfNewMonth));
                 tahun   = tahunFormat.format(firstDayOfNewMonth);
+                hari = hariFormat.format(firstDayOfNewMonth);
                 dapat_absen();
             }
         });
@@ -200,35 +245,95 @@ public class AbsenAnak extends AppCompatActivity {
                 JSONResponse.AbsenSiswa resource = response.body();
                 status = resource.status;
                 code   = resource.code;
+
                 if (status == 1 & code.equals("DTS_SCS_0001")){
                     dataJamList     = response.body().getData();
-                    if (hari.equals("Sabtu") ||hari.equals("Minggu")){
-                        tv_absen.setVisibility(VISIBLE);
-                        recyclerView.setVisibility(GONE);
-                        hint.setVisibility(GONE);
-                    }else {
-                        tv_absen.setVisibility(GONE);
-                        recyclerView.setVisibility(VISIBLE);
-                        hint.setVisibility(VISIBLE);
-                        if (absensiModels != null) {
-                            absensiModels.clear();
-                            for (JSONResponse.DataJam dataJam : dataJamList) {
-                                absensiModel = new AbsensiModel();
-                                absensiModel.setTanggal(tanggals);
-                                absensiModel.setTimez_star(dataJam.getTimez_ok());
-                                absensiModel.setTimez_finish(dataJam.getTimez_finish());
-                                absensiModel.setDay_id(dataJam.getDays().get(Integer.parseInt(tanggal)-1).getAbsen_status());
-                                absensiModels.add(absensiModel);
-                            }
-                            absensiAdapter.notifyDataSetChanged();
+//
+                    if (absenModelList != null) {
+                        absenModelList.clear();
+                        for (JSONResponse.DataJam dataJam : dataJamList) {
+                            absenModel = new AbsenModel();
+                            absenModel.setTanggal(tanggals);
+                            absenModel.setTimez_star(dataJam.getTimez_ok());
+                            absenModel.setTimez_finish(dataJam.getTimez_finish());
+                            absenModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day)-1).getDay_id());
+                            absenModelList.add(absenModel);
                         }
+                        absensiAdapter.notifyDataSetChanged();
                     }
+//                    if (absensiModels != null) {
+//                        absensiModels.clear();
+//                        for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
+//                            absensiModel = new AbsensiModel();
+//                            absensiModel.setTanggal(tanggals);
+//                            absensiModel.setTimez_star(dataJam.getTimezOk());
+//                            absensiModel.setTimez_finish(dataJam.getTimezFinish());
+//                            absensiModel.setMapel(dataJam.getCourcesName());
+//                            absensiModel.setGuru(dataJam.getTeacherName());
+//                            absensiModels.add(absensiModel);
+//                        }
+//                        absensiAdapter.notifyDataSetChanged();
+//                    }
+                    dapat_mapel();
+
                 }
             }
 
             @Override
             public void onFailure(Call<JSONResponse.AbsenSiswa> call, Throwable t) {
                 Log.d("Gagal",t.toString());
+            }
+        });
+    }
+    public void dapat_mapel(){
+        Call<JSONResponse.JadwalPelajaran> call = mApiInterface.kes_class_schedule_get(authorization,school_code,student_id,classroom_id);
+        call.enqueue(new Callback<JSONResponse.JadwalPelajaran>() {
+            @Override
+            public void onResponse(Call<JSONResponse.JadwalPelajaran> call, Response<JSONResponse.JadwalPelajaran> response) {
+                Log.d("Success",response.code()+"");
+                JSONResponse.JadwalPelajaran resource = response.body();
+                status = resource.status;
+                code    = resource.code;
+                if (status == 1 && code.equals("CSCH_SCS_0001")) {
+                    jadwalDataList = response.body().getData();
+                    for (int i = 0; i < response.body().getData().size(); i++) {
+                        scheduleClassItemList = response.body().getData().get(i).getScheduleClass();
+                        days_name = response.body().getData().get(i).getDayName();
+                        day_status = response.body().getData().get(i).getDayStatus();
+                        daysid = response.body().getData().get(i).getDayid();
+                        day_type = response.body().getData().get(i).getDayType();
+                        if (days_name.equals(hari)){
+                            if (hari.equals("Sabtu") || hari.equals("Minggu")){
+                                tv_absen.setVisibility(VISIBLE);
+                                recyclerView.setVisibility(GONE);
+                                hint.setVisibility(GONE);
+                            }else {
+                                tv_absen.setVisibility(GONE);
+                                recyclerView.setVisibility(VISIBLE);
+                                hint.setVisibility(VISIBLE);
+                                if (absensiModels != null) {
+                                    absensiModels.clear();
+                                    for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
+                                        absensiModel = new AbsensiModel();
+                                        absensiModel.setTanggal(tanggals);
+                                        absensiModel.setTimez_star(dataJam.getTimezOk());
+                                        absensiModel.setTimez_finish(dataJam.getTimezFinish());
+                                        absensiModel.setMapel(dataJam.getCourcesName());
+                                        absensiModel.setGuru(dataJam.getTeacherName());
+                                        absensiModels.add(absensiModel);
+                                    }
+                                    absensiAdapter.notifyDataSetChanged();
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.JadwalPelajaran> call, Throwable t) {
+                Log.d("onfailure",t.toString());
             }
         });
     }

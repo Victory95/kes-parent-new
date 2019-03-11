@@ -5571,7 +5571,6 @@ public class JSONResponse{
         public String schedule_time;
 
 
-
         @SerializedName("timez_ok")
         public String timez_ok;
 

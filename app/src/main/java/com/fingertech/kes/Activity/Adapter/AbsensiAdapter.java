@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.fingertech.kes.Activity.Model.AbsenModel;
 import com.fingertech.kes.Activity.Model.AbsensiModel;
 import com.fingertech.kes.Activity.Model.HariModel.JadwalSenin;
 import com.fingertech.kes.R;
@@ -30,15 +31,17 @@ import static com.fingertech.kes.Service.App.getContext;
 public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder> {
 
     private List<AbsensiModel> viewItemList;
+    private List<AbsenModel> absenModels;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    private Date date,date_now;
+    private Date date,date_now,date_mulai,date_selesai;
     private SimpleDateFormat jamformat  = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
     private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
     private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-    public AbsensiAdapter(List<AbsensiModel> viewItemList) {
+    public AbsensiAdapter(List<AbsensiModel> viewItemList,List<AbsenModel> absenModels) {
         this.viewItemList = viewItemList;
+        this.absenModels = absenModels;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -70,8 +73,11 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
 
         // Get car item dto in list.
         AbsensiModel viewItem = viewItemList.get(position);
-//        holder.mapel.setText(viewItem.getMapel());
-//        holder.guru.setText("Guru "+viewItem.getGuru());
+        AbsenModel absenModel = absenModels.get(position);
+        String times_ok = absenModel.getTimez_star();
+
+        holder.mapel.setText(viewItem.getMapel());
+        holder.guru.setText("Guru "+viewItem.getGuru());
         holder.times.setText("Jam "+viewItem.getTimez_star() + " - "+viewItem.getTimez_finish());
         String tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
         // Set car item title.
@@ -83,23 +89,48 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
         }
         Long times_now = date_now.getTime();
         try {
-            date = times_format.parse(viewItem.getTanggal()+" "+viewItem.getTimez_star()+":00");
+            date = times_format.parse(absenModel.getTanggal()+" "+viewItem.getTimez_star()+":00");
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
         Long times_start = date.getTime();
-        if (times_now >= times_start){
-            if (viewItem.getDay_id().equals("0")) {
-                Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);
-            }else if (viewItem.getDay_id().equals("1")){
-                Glide.with(getContext()).load(R.drawable.ic_true).into(holder.image_absen);
-            }else if (viewItem.getDay_id().equals("2")){
-                Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
+
+        try {
+            date_mulai = times_format.parse(absenModel.getTanggal()+" "+absenModel.getTimez_star()+":00");
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+        Long times_mulai = date_mulai.getTime();
+        Log.d("absen",absenModel.getDay_id()+"");
+        Log.d("times",times_start+"/"+times_mulai);
+
+        if (times_start.equals(times_mulai)){
+            switch (absenModel.getDay_id()) {
+                case "0":
+                    Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);
+                    break;
+                case "1":
+                    Glide.with(getContext()).load(R.drawable.ic_true).into(holder.image_absen);
+                    break;
+                case "2":
+                    Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
+                    break;
             }
         }else {
             Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
         }
+//        if (times_now >= times_start){
+//            if (viewItem.getDay_id().equals("0")) {
+//                Glide.with(getContext()).load(R.drawable.ic_false).into(holder.image_absen);
+//            }else if (viewItem.getDay_id().equals("1")){
+//                Glide.with(getContext()).load(R.drawable.ic_true).into(holder.image_absen);
+//            }else if (viewItem.getDay_id().equals("2")){
+//                Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
+//            }
+//        }else {
+//            Glide.with(getContext()).load(R.drawable.ic_kuning).into(holder.image_absen);
+//        }
     }
 
     @Override
@@ -116,8 +147,8 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyHolder
             super(itemView);
             times       = itemView.findViewById(R.id.jam_absen);
             image_absen = itemView.findViewById(R.id.image_absen);
-//            guru        = itemView.findViewById(R.id.guru_absen);
-//            mapel       = itemView.findViewById(R.id.mapel_absen);
+            guru        = itemView.findViewById(R.id.guru_absen);
+            mapel       = itemView.findViewById(R.id.mapel_absen);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }
