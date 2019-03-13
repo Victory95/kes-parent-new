@@ -156,7 +156,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 intent.putExtra("school_code",school_code);
                 intent.putExtra("student_id",student_id);
                 intent.putExtra("parent_nik",parent_nik);
-                startActivityForResult(intent,2);
+                startActivityForResult(intent,1);
             }
         });
         cv_data.setOnClickListener(new View.OnClickListener() {

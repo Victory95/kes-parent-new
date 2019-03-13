@@ -12,6 +12,23 @@ public class ProfileModel  {
     public String classroom_id;
     public String picture;
     public String school_name;
+    public int height,width;
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
     public String getSchool_name() {
         return school_name;

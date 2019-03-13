@@ -71,6 +71,20 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/btn_download"
+        android:text="Download"
+        android:textColor="#ffffff"
+        android:clickable="true"
+        android:textAlignment="center"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rectang_line"
+        android:focusable="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/btn_pilih"
         android:text="@string/btn_tampilkan"
         android:textColor="#ffffff"

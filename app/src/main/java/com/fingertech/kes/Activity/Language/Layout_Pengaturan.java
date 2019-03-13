@@ -18,7 +18,6 @@ import com.fingertech.kes.Service.DBHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.paperdb.Paper;
 
 public class Layout_Pengaturan extends AppCompatActivity {
 
@@ -55,11 +54,6 @@ public class Layout_Pengaturan extends AppCompatActivity {
 
 //        <-----------  language --------------- >
 //        first
-        Paper.init(this);
-        String language = Paper.book().read("language");
-        if (language==null)
-            Paper.book().write("language","en");
-        updateView((String)Paper.book().read("language"));
     }
 
     private void updateView(String lang) {
@@ -72,22 +66,12 @@ public class Layout_Pengaturan extends AppCompatActivity {
 
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
-            savedata();
         } else {
             TVBahasa.setText("Indonesia");   //To change the text near to switch
             Log.d("You are :", " Not Checked");
         }
     }
 
-    private void savedata() {
-        TVBahasa.setText("English");  //To change the text near to switch
-        TVPilihan.setText("Language");
-        Paper.book().write("language","en");
-        updateView((String)Paper.book().read("language"));
-        Log.d("You are :", "Checked");
-
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

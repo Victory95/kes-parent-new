@@ -196,6 +196,7 @@ public class MenuUtama extends AppCompatActivity
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
 
+    int height,width;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -355,9 +356,9 @@ public class MenuUtama extends AppCompatActivity
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        Toast.makeText(getApplicationContext(),height+"/"+width,Toast.LENGTH_LONG).show();
+        height = displayMetrics.heightPixels;
+        width = displayMetrics.widthPixels;
+
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -543,6 +544,8 @@ public class MenuUtama extends AppCompatActivity
                             foto            = response.body().getData().get(i).getPicture();
                             String imagefiles = Base_anak + foto;
                             profileModel = new ProfileModel();
+                            profileModel.setWidth(width);
+                            profileModel.setHeight(height);
                             profileModel.setStudent_id(student_id);
                             profileModel.setSchool_code(school_code);
                             profileModel.setNama(nama_anak);
@@ -551,7 +554,7 @@ public class MenuUtama extends AppCompatActivity
                             profileModel.setPicture(imagefiles);
                             profileModels.add(profileModel);
                         }
-                        profileAdapter = new ProfileAdapter(profileModels);
+                        profileAdapter = new ProfileAdapter(MenuUtama.this,profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
                         student_id      = response.body().getData().get(0).getStudent_id();

@@ -203,10 +203,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.MenuUtama"
+            android:screenOrientation="portrait"
             android:label="@string/khronos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.MenuGuest"
+            android:screenOrientation="portrait"
             android:label="@string/khronos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -217,6 +219,7 @@
         <activity
             android:name=".Activity.Maps.FullMap"
             android:label="@string/title_activity_menu_guest"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Maps.SearchingMAP"
@@ -256,6 +259,7 @@
         </activity>
         <activity
             android:name=".Activity.DetailSekolah"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Search.AnakAkses"

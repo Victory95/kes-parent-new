@@ -1,8 +1,10 @@
 package com.fingertech.kes.Activity.Adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.R;
@@ -37,10 +37,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
     public int row_index = -1;
     String base_url = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
-    private ColorGenerator mColorGenerator = ColorGenerator.MATERIAL;
-    private TextDrawable.IBuilder mDrawableBuilder;
+    Context context;
 
-    public ProfileAdapter(List<ProfileModel> viewItemList) {
+    public ProfileAdapter(Context context,List<ProfileModel> viewItemList) {
+        this.context       = context;
         this.profileModels = viewItemList;
     }
 
@@ -81,63 +81,187 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
             }
         }
         Glide.with(getContext()).load(profileModel.getPicture()).into(holder.imageView);
+
         if (row_index == position){
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    200,
-                    200
-            );
-            params.setMargins(0,10,0,0);
-            LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                    200,
-                    50
-            );
+            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        115,
+                        115
+                );
+                params.setMargins(0,10,0,0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        115,
+                        25
+                );
 
-            paramsanak.setMargins(0,10,0,10);
+                paramsanak.setMargins(0,10,0,10);
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
+                holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.namaanak.setLayoutParams(paramsanak);
+                holder.linearLayout.setGravity(Gravity.CENTER);
+                if (profileModel.getPicture().equals(base_url)){
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 1){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 2){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
+                    }else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
+                    }
+                }
+            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        250,
+                        250
+                );
+                params.setMargins(0,10,0,0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        250,
+                        50
+                );
 
-            holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
-            holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
-            holder.circleView.setLayoutParams(params);
-            holder.namaanak.setLayoutParams(paramsanak);
-            holder.linearLayout.setGravity(Gravity.CENTER);
-            if (profileModel.getPicture().equals(base_url)){
-                holder.namaprofile.setText(profileModel.getNama());
-                if (position == 0){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
-                }else if (position == 1){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
-                }else if (position == 2){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
-                }else {
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
+                paramsanak.setMargins(0,10,0,10);
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
+                holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.namaanak.setLayoutParams(paramsanak);
+                holder.linearLayout.setGravity(Gravity.CENTER);
+                if (profileModel.getPicture().equals(base_url)){
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 1){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 2){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
+                    }else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
+                    }
                 }
             }
-        }else {
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    175,
-                    175
-            );
-            params.setMargins(0,30,0,0);
-            LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                    175,
-                    35
-            );
-            paramsanak.setMargins(0,10,0,5);
+            else {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        200,
+                        200
+                );
+                params.setMargins(0,10,0,0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        200,
+                        50
+                );
 
-            holder.namaprofile.setTextColor(Color.parseColor("#000000"));
-            holder.namaanak.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
-            holder.circleView.setLayoutParams(params);
-            holder.linearLayout.setGravity(Gravity.BOTTOM);
-            holder.namaanak.setLayoutParams(paramsanak);
-            if (profileModel.getPicture().equals(base_url)){
-                holder.namaprofile.setText(profileModel.getNama());
-                if (position == 0){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff").into(holder.imageView);
-                }else if (position == 1){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff").into(holder.imageView);
-                }else if (position == 2){
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff").into(holder.imageView);
-                }else {
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff").into(holder.imageView);
+                paramsanak.setMargins(0,10,0,10);
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
+                holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.namaanak.setLayoutParams(paramsanak);
+                holder.linearLayout.setGravity(Gravity.CENTER);
+                if (profileModel.getPicture().equals(base_url)){
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 1){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 2){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
+                    }else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
+                    }
+                }
+            }
+
+
+        }else {
+            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        100,
+                        100
+                );
+                params.setMargins(0, 30, 0, 0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        100,
+                        20
+                );
+                paramsanak.setMargins(0, 10, 0, 5);
+
+                holder.namaprofile.setTextColor(Color.parseColor("#000000"));
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.linearLayout.setGravity(Gravity.BOTTOM);
+                holder.namaanak.setLayoutParams(paramsanak);
+                if (profileModel.getPicture().equals(base_url)) {
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=1de9b6&color=fff").into(holder.imageView);
+                    } else if (position == 1) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff2d6f&color=fff").into(holder.imageView);
+                    } else if (position == 2) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ffea00&color=fff").into(holder.imageView);
+                    } else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff3d00&color=fff").into(holder.imageView);
+                    }
+                }
+            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        200,
+                        200
+                );
+                params.setMargins(0,10,0,0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        200,
+                        35
+                );
+
+                paramsanak.setMargins(0,10,0,10);
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
+                holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.namaanak.setLayoutParams(paramsanak);
+                holder.linearLayout.setGravity(Gravity.CENTER);
+                if (profileModel.getPicture().equals(base_url)){
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=1de9b6&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 1){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff2d6f&color=fff&size=256").into(holder.imageView);
+                    }else if (position == 2){
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ffea00&color=fff&size=256").into(holder.imageView);
+                    }else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
+                    }
+                }
+            }
+            else {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        175,
+                        175
+                );
+                params.setMargins(0, 30, 0, 0);
+                LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
+                        175,
+                        35
+                );
+                paramsanak.setMargins(0, 10, 0, 5);
+
+                holder.namaprofile.setTextColor(Color.parseColor("#000000"));
+                holder.namaanak.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                holder.circleView.setLayoutParams(params);
+                holder.linearLayout.setGravity(Gravity.BOTTOM);
+                holder.namaanak.setLayoutParams(paramsanak);
+                if (profileModel.getPicture().equals(base_url)) {
+                    holder.namaprofile.setText(profileModel.getNama());
+                    if (position == 0) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=1de9b6&color=fff").into(holder.imageView);
+                    } else if (position == 1) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff2d6f&color=fff").into(holder.imageView);
+                    } else if (position == 2) {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ffea00&color=fff").into(holder.imageView);
+                    } else {
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff3d00&color=fff").into(holder.imageView);
+                    }
                 }
             }
         }

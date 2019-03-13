@@ -1,12 +1,18 @@
 package com.fingertech.kes.Activity.Anak;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,9 +44,16 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Util.FileDownloader;
 import com.rey.material.widget.Spinner;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.squareup.okhttp.ResponseBody;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,6 +101,9 @@ public class RaporAnak extends AppCompatActivity {
     ImageView arrow;
     LinearLayout drag;
 
+
+    File file = new File("Your_File_path/name");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +119,7 @@ public class RaporAnak extends AppCompatActivity {
         tv_kritik       = findViewById(R.id.kritik_saran);
         btn_go          = findViewById(R.id.btn_pilih);
         star            = findViewById(R.id.star);
+        btn_download    = findViewById(R.id.btn_download);
         slidingUpPanelLayout    = findViewById(R.id.sliding_layout);
         tv_teori           = findViewById(R.id.nilai_teori);
         tv_ulangan_harian  = findViewById(R.id.ulangan_harian);
@@ -169,6 +186,14 @@ public class RaporAnak extends AppCompatActivity {
             }
         });
 
+        btn_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"https://kes.co.id/api/students/kes_rapor_pdf?school_code="+school_code.toLowerCase()+"&student_id="+student_id+"&classroom_id="+classroom_id+"&semester_id="+semester_id,Toast.LENGTH_LONG).show();
+                String base_download = "https://kes.co.id/api/students/kes_rapor_pdf?school_code="+school_code.toLowerCase()+"&student_id="+student_id+"&classroom_id="+classroom_id+"&semester_id="+semester_id;
+                new DownloadFile().execute(base_download,"Nilai Rapor.pdf");
+            }
+        });
     }
     private void Check_Semester(){
 
@@ -313,19 +338,6 @@ public class RaporAnak extends AppCompatActivity {
             }
 
         });
-    }
-
-    String converDate(String tanggal){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
-
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
-        try {
-            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 
     private void showDialog() {
@@ -520,6 +532,91 @@ public class RaporAnak extends AppCompatActivity {
         } catch (java.text.ParseException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+
+    private boolean writeResponseBodyToDisk( ResponseBody body) {
+        try {
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("KES", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public  void open_pdf(){
+        File pdfFile = new File(Environment.getExternalStorageDirectory() + "/KES Documents/" + "Nilai Rapor.pdf");  // -> filename = maven.pdf
+        Uri path = Uri.fromFile(pdfFile);
+        Intent pdfIntent = new Intent(Intent.ACTION_VIEW);
+        pdfIntent.setDataAndType(path, "application/pdf");
+        pdfIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        try{
+            startActivity(pdfIntent);
+        }catch(ActivityNotFoundException e){
+            Toast.makeText(RaporAnak.this, "No Application available to view PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private class DownloadFile extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            String fileUrl = strings[0];   // -> http://maven.apache.org/maven-1.x/maven.pdf
+            String fileName = strings[1];  // -> maven.pdf
+            String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+            File folder = new File(extStorageDirectory, "KES Documents");
+            folder.mkdir();
+
+            File pdfFile = new File(folder, fileName);
+
+            try{
+                pdfFile.createNewFile();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            FileDownloader.downloadFile(fileUrl, pdfFile);
+            return null;
         }
     }
 }
