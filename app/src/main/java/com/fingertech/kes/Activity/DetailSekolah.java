@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -40,6 +42,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.HttpException;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.fingertech.kes.Activity.Adapter.FotoAdapter;
 import com.fingertech.kes.Activity.Fragment.ContactFragment;
 import com.fingertech.kes.Activity.Fragment.DataPelengkap;
@@ -95,6 +102,7 @@ public class DetailSekolah extends AppCompatActivity {
     List<FotoModel> fotoModelList = new ArrayList<>();
     FotoAdapter fotoAdapter;
     FloatingActionButton fab;
+    String member_id,school_code,school_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +127,7 @@ public class DetailSekolah extends AppCompatActivity {
         foto_sekolah        = findViewById(R.id.htab_header);
         hint_detail         = findViewById(R.id.hint_detail);
         fab                 = findViewById(R.id.fab);
+        member_id           = getIntent().getStringExtra("member_id");
 
 
         setupViewPager(viewPager);
@@ -336,6 +345,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                     NPSN                 = response.body().school.getData().getNpsn();
                     school_id            = response.body().getSchool().getData().getSchool_Id();
+                    school_code          = response.body().getSchool().getData().getSchool_code();
                     NamaSekolah          = response.body().school.getData().getSchool_name();
                     JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
                     StatusSekolah        = response.body().school.getData().getStatus_sekolah();
@@ -387,7 +397,6 @@ public class DetailSekolah extends AppCompatActivity {
                     Perpustakaan         = response.body().school.getData().getPerpustakaan();
                     Sanitasi             = response.body().school.getData().getSanitasi();
 //                    Picture              = response.body().school.getData().getPicture();
-                    Log.d("Log",schoolDetail+"/"+school_id);
 
                     bundle = new Bundle();
                         bundle.putString("npsn",NPSN);
@@ -455,6 +464,10 @@ public class DetailSekolah extends AppCompatActivity {
                             hint_detail.setVisibility(View.VISIBLE);
                             hint_detail.setOnClickListener(v -> {
                                 Intent intent = new Intent(DetailSekolah.this,RecommendSchool.class);
+                                intent.putExtra("member_id",member_id);
+                                intent.putExtra("school_id",school_id);
+                                intent.putExtra("school_code",school_code);
+                                intent.putExtra("school_name",NamaSekolah);
                                 startActivity(intent);
                             });
                         }else if (schoolDetail == 1){
@@ -567,47 +580,82 @@ public class DetailSekolah extends AppCompatActivity {
                 Log.d("DetailSekolah",response.code()+"");
                 JSONResponse.Foto_sekolah resource = response.body();
                 status = resource.status;
-//                if (status == 1){
-//                    for (int i = 0;i < response.body().getData().size();i++){
-//                        Picture = response.body().getData().get(i).getPic_url();
-//                        fotoModel = new FotoModel();
-//                        fotoModel.setStatus(schoolDetail);
-//                        fotoModel.setPicture(Picture);
-//                        fotoModelList.add(fotoModel);
-//                    }
-//                    fotoAdapter = new FotoAdapter(fotoModelList);
-//                    LinearLayoutManager layoutManager = new LinearLayoutManager(DetailSekolah.this);
-//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//                    rv_foto.setLayoutManager(layoutManager);
-//                    rv_foto.setAdapter(fotoAdapter);
-
-                    Picture = response.body().getData().get(0).getPic_url();
-                    if (schoolDetail == 0){
-                        if (Picture.equals("")){
-                            Glide.with(DetailSekolah.this).load(R.drawable.school).into(foto_sekolah);
+                if (status == 1) {
+                    if (response.body().getData().size() == 0) {
+                        if (schoolDetail == 1){
+                            setUnlocked(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                        }else if (schoolDetail == 0){
                             setLocked(foto_sekolah);
-
-                        }else {
-                            setLocked(foto_sekolah);
-
-                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
                         }
-                    }else if (schoolDetail == 1){
-                        if (Picture.equals("")){
+                    } else {
+                        Picture = response.body().getData().get(0).getPic_url();
+                    }
+                    if (schoolDetail == 0) {
+                        if (Picture.equals("")) {
+                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                            setLocked(foto_sekolah);
+                        } else {
+                            setLocked(foto_sekolah);
+                            Glide.with(DetailSekolah.this)
+                                    .load(Picture)
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            setLocked(foto_sekolah);
+                                            Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            return false;
+                                        }
+                                    })
+                                    .into(foto_sekolah);
+                        }
+                    } else if (schoolDetail == 1) {
+                        if (Picture.equals("")) {
                             setUnlocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this).load(R.drawable.ic_logo_kemendikbud).into(foto_sekolah);
-                        }else {
+                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                        } else {
                             setUnlocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this).load(Picture).into(foto_sekolah);
+                            Glide.with(DetailSekolah.this)
+                                    .load(Picture)
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+
+                                            Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            return false;
+                                        }
+                                    })
+                                    .into(foto_sekolah);
                         }
                     }
+                }else {
+                    if (schoolDetail == 1){
+                        setUnlocked(foto_sekolah);
+                        Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                    }else if (schoolDetail == 0){
+                        setLocked(foto_sekolah);
+                        Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                    }
 
+                }
 
             }
 
             @Override
             public void onFailure(Call<JSONResponse.Foto_sekolah> call, Throwable t) {
                 Log.d("Gagal",t.toString());
+
             }
         });
     }

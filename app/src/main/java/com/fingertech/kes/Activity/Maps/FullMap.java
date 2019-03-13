@@ -134,7 +134,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     int status;
     private ProgressDialog dialog;
     double lat,lng,Jarak;
-    String placeName,vicinity,schooldetailid,akreditasi;
+    String placeName,vicinity,schooldetailid,akreditasi,member_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +195,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
         rb_sma = findViewById(R.id.sma);
         rb_smk = findViewById(R.id.smk);
         tampilProv = findViewById(R.id.TampilProv);
+        member_id = getIntent().getStringExtra("member_id");
 
         dapat_provinsi();
 
@@ -280,6 +281,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                                 String schooldetail = item.getSchooldetailid();
                                 Intent intent = new Intent(FullMap.this,DetailSekolah.class);
                                 intent.putExtra("detailid", schooldetail);
+                                intent.putExtra("member_id",member_id);
                                 startActivity(intent);
                                 return false;
                             }
@@ -386,6 +388,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                 String SchoolDetailId = infoWindowData.getSchooldetailid();
                 Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
                 intent.putExtra("detailid",SchoolDetailId);
+                intent.putExtra("member_id",member_id);
                 startActivity(intent);
             }
         });

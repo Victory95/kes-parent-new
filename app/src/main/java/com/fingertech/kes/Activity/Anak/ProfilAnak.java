@@ -61,6 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fingertech.kes.Activity.Fragment.MenuSatuFragment.myViewpagerPreferences;
 import static com.fingertech.kes.Service.App.getContext;
 
 public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback {
@@ -86,46 +87,46 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     String namalengkap,jeniskelamin,Nik,Sekolah,Nis,Nisn,tempatlahir,tanggallahir,kewarga_negaraan,nomorrumah,nomorhp,Email,sk_un,no_kps,penerimaankps,Alamat,Rt,Kelurahan,Kecamatan,kodepos,statustinggal,rw,transport,foto;
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
     SwipeRefreshLayout swipeRefreshLayout;
-    SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences,sharedPreferences2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profil_anak);
-        toolbar         = (Toolbar)findViewById(R.id.toolbar_profile_anak);
-        cv_profile      = (CardView)findViewById(R.id.btn_image_anak);
+        toolbar         = findViewById(R.id.toolbar_profile_anak);
+        cv_profile      = findViewById(R.id.btn_image_anak);
         cv_data         = findViewById(R.id.btn_data);
         cv_kontak       = findViewById(R.id.btn_kontak);
         cv_alamat       = findViewById(R.id.btn_alamat);
-        show_data       = (LinearLayout)findViewById(R.id.show_data_anak);
-        show_kontak     = (LinearLayout)findViewById(R.id.show_kontak);
-        show_alamat     = (LinearLayout)findViewById(R.id.show_alamat);
-        kelas_anak      = (TextView)findViewById(R.id.sekolah_anak);
+        show_data       = findViewById(R.id.show_data_anak);
+        show_kontak     = findViewById(R.id.show_kontak);
+        show_alamat     = findViewById(R.id.show_alamat);
+        kelas_anak      = findViewById(R.id.sekolah_anak);
         nama_anak_profile   = findViewById(R.id.namaanak);
-        jenis_kelamin   = (TextView)findViewById(R.id.jenis_kelamin_anak);
-        nis             = (TextView)findViewById(R.id.nis);
+        jenis_kelamin   = findViewById(R.id.jenis_kelamin_anak);
+        nis             = findViewById(R.id.nis);
         nik             = findViewById(R.id.nik);
-        nisn            = (TextView)findViewById(R.id.nisn_anak);
-        tanggal_lahir   = (TextView)findViewById(R.id.tanggal_lahir_anak);
-        tempat_lahir    = (TextView)findViewById(R.id.tempat_lahir_anak);
-        kewarganegaraan = (TextView)findViewById(R.id.kewarganegaraan_anak);
-        nomor_rumah     = (TextView)findViewById(R.id.phone_anak);
-        nomor_hp        = (TextView)findViewById(R.id.handphone_anak);
-        email           = (TextView)findViewById(R.id.email_anak);
-        skun            = (TextView)findViewById(R.id.skun_anak);
-        nokps           = (TextView)findViewById(R.id.nomor_kps);
-        penerimaan_kps  = (TextView)findViewById(R.id.penerimaan_kps);
-        alamat          = (TextView)findViewById(R.id.alamat_anak);
-        rt              = (TextView)findViewById(R.id.rt_anak);
-        kelurahan       = (TextView)findViewById(R.id.kelurahan_anak);
-        kecamatan       = (TextView)findViewById(R.id.kecamatan_anak);
-        kode_pos        = (TextView)findViewById(R.id.kodepos_anak);
-        status_tinggal  = (TextView)findViewById(R.id.status_tinggal);
-        transportasi    = (TextView)findViewById(R.id.transportasi);
-        Agama           = (TextView)findViewById(R.id.agama);
-        kebutuhan_khusus= (TextView)findViewById(R.id.kebutuhan_khusus);
-        rombongan_belajar   = (TextView)findViewById(R.id.rombel);
-        tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
-        tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
+        nisn            = findViewById(R.id.nisn_anak);
+        tanggal_lahir   = findViewById(R.id.tanggal_lahir_anak);
+        tempat_lahir    = findViewById(R.id.tempat_lahir_anak);
+        kewarganegaraan = findViewById(R.id.kewarganegaraan_anak);
+        nomor_rumah     = findViewById(R.id.phone_anak);
+        nomor_hp        = findViewById(R.id.handphone_anak);
+        email           = findViewById(R.id.email_anak);
+        skun            = findViewById(R.id.skun_anak);
+        nokps           = findViewById(R.id.nomor_kps);
+        penerimaan_kps  = findViewById(R.id.penerimaan_kps);
+        alamat          = findViewById(R.id.alamat_anak);
+        rt              = findViewById(R.id.rt_anak);
+        kelurahan       = findViewById(R.id.kelurahan_anak);
+        kecamatan       = findViewById(R.id.kecamatan_anak);
+        kode_pos        = findViewById(R.id.kodepos_anak);
+        status_tinggal  = findViewById(R.id.status_tinggal);
+        transportasi    = findViewById(R.id.transportasi);
+        Agama           = findViewById(R.id.agama);
+        kebutuhan_khusus= findViewById(R.id.kebutuhan_khusus);
+        rombongan_belajar   = findViewById(R.id.rombel);
+        tv_line_boundaryLeft   = findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight  = findViewById(R.id.tv_line_boundaryRight);
         image_anak      = findViewById(R.id.image_profil_anak);
         edit_profile    = findViewById(R.id.btn_edit);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
@@ -223,18 +224,15 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 show_kontak.setVisibility(View.GONE);
             }
         });
-//        authorization = getIntent().getStringExtra("authorization");
-//        school_code = getIntent().getStringExtra("school_code");
-//        student_id = getIntent().getStringExtra("student_id");
-//        parent_nik = getIntent().getStringExtra("parent_nik");
-//        school_name = getIntent().getStringExtra("school_name");
-        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
-        authorization       = sharedPreferences.getString("authorization",null);
-        school_code         = sharedPreferences.getString("school_code",null);
-        student_id          = sharedPreferences.getString("student_id",null);
-        school_name         = sharedPreferences.getString("school_name",null);
-        parent_nik          = sharedPreferences.getString("parent_nik",null);
-        Log.d("gagal",authorization+"/"+parent_nik+"/"+school_code+"/"+student_id);
+
+        sharedPreferences2  = getSharedPreferences(myViewpagerPreferences,Context.MODE_PRIVATE);
+        authorization       = sharedPreferences2.getString("authorization",null);
+        school_code         = sharedPreferences2.getString("school_code",null);
+        student_id          = sharedPreferences2.getString("student_id",null);
+        school_name         = sharedPreferences2.getString("school_name",null);
+        parent_nik          = sharedPreferences2.getString("parent_nik",null);
+
+
         if (authorization != null || school_code != null || student_id != null || parent_nik != null) {
             data_student_get();
         }else {
@@ -257,8 +255,8 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAnak);
         mapFragment.getMapAsync(this);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile_anak);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile_anak);
+        collapsingToolbarLayout = findViewById(R.id.collapse_profile_anak);
+        appBarLayout = findViewById(R.id.appbar_profile_anak);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
@@ -319,7 +317,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     public void data_student_get(){
         progressBar();
         showDialog();
-        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization.toString(), school_code.toLowerCase().toString(),student_id.toString(),parent_nik.toString());
+        Call<JSONResponse.DetailStudent> call = mApiInterface.kes_detail_student_get(authorization, school_code.toLowerCase(), student_id, parent_nik);
         call.enqueue(new Callback<JSONResponse.DetailStudent>() {
             @Override
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
@@ -366,29 +364,29 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     latitudeanak        = Double.parseDouble(response.body().getData().getLatitude());
                     longitudeanak       = Double.parseDouble(response.body().getData().getLongitude());
 
-                    if (kelas.toString().equals("4")){
+                    if (kelas.equals("4")){
                         kelas = "1 SD";
-                    }else if (kelas.toString().equals("5")){
+                    }else if (kelas.equals("5")){
                         kelas = "2 SD";
-                    }else if (kelas.toString().equals("6")){
+                    }else if (kelas.equals("6")){
                         kelas = "3 SD";
-                    }else if (kelas.toString().equals("7")){
+                    }else if (kelas.equals("7")){
                         kelas = "4 SD";
-                    }else if (kelas.toString().equals("8")){
+                    }else if (kelas.equals("8")){
                         kelas = "5 SD";
-                    }else if (kelas.toString().equals("9")){
+                    }else if (kelas.equals("9")){
                         kelas = "6 SD";
-                    }else if (kelas.toString().equals("10")){
+                    }else if (kelas.equals("10")){
                         kelas = "1 SMP";
-                    }else if (kelas.toString().equals("11")){
+                    }else if (kelas.equals("11")){
                         kelas = "2 SMP";
-                    }else if (kelas.toString().equals("12")){
+                    }else if (kelas.equals("12")){
                         kelas = "3 SMP";
-                    }else if (kelas.toString().equals("13")){
+                    }else if (kelas.equals("13")){
                         kelas = "1 SMA";
-                    }else if (kelas.toString().equals("14")){
+                    }else if (kelas.equals("14")){
                         kelas = "2 SMA";
-                    }else if (kelas.toString().equals("15")){
+                    }else if (kelas.equals("15")){
                         kelas = "3 SMA";
                     }
                     Log.d("location2",latitudeanak+"/"+longitudeanak);

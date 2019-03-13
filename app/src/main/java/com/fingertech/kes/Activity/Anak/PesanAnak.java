@@ -101,7 +101,7 @@ PesanAnak extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(PesanAnak.this,KirimPesan.class);
             intent.putExtra("authorization",authorization);
-            intent.putExtra("school_code",school_code);
+            intent.putExtra("school_code",school_code.toLowerCase());
             intent.putExtra("member_id",parent_id);
             intent.putExtra("classroom_id",classroom_id);
             intent.putExtra("school_name",school_name);

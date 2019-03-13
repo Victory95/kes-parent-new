@@ -57,11 +57,11 @@ public class MenuDuaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("school_code",school_code);
+                editor.putString("school_code",school_code.toLowerCase());
                 editor.putString("authorization",authorization);
                 editor.putString("classroom_id",classroom_id);
                 editor.putString("student_id",student_id);
-                editor.commit();
+                editor.apply();
                 Intent intent = new Intent(getContext(), KalenderKelas.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
@@ -76,15 +76,15 @@ public class MenuDuaFragment extends Fragment {
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("member_id",member_id);
-                editor.putString("school_code",school_code);
+                editor.putString("school_code",school_code.toLowerCase());
                 editor.putString("authorization",authorization);
                 editor.putString("classroom_id",classroom_id);
                 editor.putString("school_name",school_name);
                 editor.putString("student_id",student_id);
-                editor.commit();
+                editor.apply();
                 Intent intent = new Intent(getContext(), PesanAnak.class);
                 intent.putExtra("authorization", authorization);
-                intent.putExtra("school_code", school_code);
+                intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("member_id", member_id);
                 intent.putExtra("classroom_id", classroom_id);
                 intent.putExtra("school_name",school_name);

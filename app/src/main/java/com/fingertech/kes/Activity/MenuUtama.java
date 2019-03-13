@@ -2,25 +2,21 @@ package com.fingertech.kes.Activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,10 +28,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.telephony.TelephonyManager;
-import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -47,7 +41,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -69,11 +62,9 @@ import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
-import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 
-import com.fingertech.kes.Activity.Language.Layout_Pengaturan;
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.SearchingMAP;
@@ -81,13 +72,10 @@ import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
-import com.fingertech.kes.Activity.RecycleView.DialogFactory;
-import com.fingertech.kes.Activity.RecycleView.OneButtonDialog;
 import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
-import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -111,25 +99,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
-import com.rey.material.app.Dialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
-import com.shashank.sony.fancytoastlib.FancyToast;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
-import com.synnapps.carouselview.ImageClickListener;
 import com.synnapps.carouselview.ViewListener;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -307,12 +286,14 @@ public class MenuUtama extends AppCompatActivity
         findViewById(R.id.squareFab).setOnClickListener(view -> {
 
             Intent mIntent = new Intent(MenuUtama.this, FullMap.class);
+            mIntent.putExtra("member_id",parent_id);
             startActivity(mIntent);
 
         });
         btn_search.setOnClickListener(v -> {
-            Intent mIntent = new Intent(MenuUtama.this, SearchingMAP.class);
-            startActivity(mIntent);
+            Intent intent = new Intent(MenuUtama.this, SearchingMAP.class);
+            intent.putExtra("member_id",parent_id);
+            startActivity(intent);
         });
         tambah_anak.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -331,7 +312,6 @@ public class MenuUtama extends AppCompatActivity
                 get_profile();
                 get_children();
                 send_data();
-                send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -372,6 +352,12 @@ public class MenuUtama extends AppCompatActivity
                 String msg = getString(R.string.msg_token_fmt, token);
                 Log.d("Token", msg);
             });
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        Toast.makeText(getApplicationContext(),height+"/"+width,Toast.LENGTH_LONG).show();
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -470,7 +456,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, AbsenAnak.class);
+            Intent intent = new Intent(MenuUtama.this, TestVideo.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
@@ -535,7 +521,7 @@ public class MenuUtama extends AppCompatActivity
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
             public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
-                Log.d("TAG",response.code()+"");
+                Log.d("TAG children",response.code()+"");
 
                 JSONResponse.ListChildren resource = response.body();
                 status = resource.status;
@@ -568,12 +554,11 @@ public class MenuUtama extends AppCompatActivity
                         profileAdapter = new ProfileAdapter(profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
-                        student_id      = profileModels.get(0).getStudent_id();
-                        school_code     = profileModels.get(0).getSchool_code();
-                        classroom_id    = profileModels.get(0).getClassroom_id();
-                        school_name     = profileModels.get(0).getSchool_name();
+                        student_id      = response.body().getData().get(0).getStudent_id();
+                        school_code     = response.body().getData().get(0).getSchool_code();
+                        classroom_id    = response.body().getData().get(0).getClassroom_id();
+                        school_name     = response.body().getData().get(0).getSchool_name();
                         send_data();
-                        send_data2();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -587,7 +572,7 @@ public class MenuUtama extends AppCompatActivity
                             classroom_id    = profileModels.get(position).getClassroom_id();
                             school_name     = profileModels.get(position).getSchool_name();
                             send_data();
-                            send_data2();
+
                         });
                     }else {
                         recyclerView.setVisibility(GONE);
@@ -600,7 +585,7 @@ public class MenuUtama extends AppCompatActivity
             }
             @Override
             public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
-
+                Log.d("onFailure",t.toString());
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -661,11 +646,11 @@ public class MenuUtama extends AppCompatActivity
 
     }
 
-    public void send_data(){
+    public void send_data() {
         Bundle bundle = new Bundle();
         SharedPreferences.Editor editor = sharedviewpager.edit();
         editor.putString("member_id", parent_id);
-        editor.putString("school_code", school_code.toLowerCase());
+        editor.putString("school_code", school_code);
         editor.putString("authorization", authorization);
         editor.putString("classroom_id", classroom_id);
         editor.putString("parent_nik", parent_nik);
@@ -674,24 +659,30 @@ public class MenuUtama extends AppCompatActivity
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
-        bundle.putString("school_code", school_code.toLowerCase());
+        bundle.putString("school_code", school_code);
         bundle.putString("member_id", parent_id);
         bundle.putString("authorization", authorization);
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name", school_name);
-        MenuSatuFragment menuSatuFragment = new MenuSatuFragment();
+        Fragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment1, menuSatuFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         menuSatuFragment.setArguments(bundle);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("WORKAROUND_FOR_BUG_19917_KEY", "WORKAROUND_FOR_BUG_19917_VALUE");
+        super.onSaveInstanceState(outState);
     }
 
     public void send_data2(){
         Bundle bundle = new Bundle();
         SharedPreferences.Editor editor = sharedviewpager.edit();
         editor.putString("member_id",parent_id);
-        editor.putString("school_code",school_code.toLowerCase());
+        editor.putString("school_code",school_code);
         editor.putString("authorization",authorization);
         editor.putString("classroom_id",classroom_id);
         editor.putString("parent_nik",parent_nik);
@@ -700,7 +691,7 @@ public class MenuUtama extends AppCompatActivity
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
-        bundle.putString("school_code", school_code.toLowerCase());
+        bundle.putString("school_code", school_code);
         bundle.putString("member_id", parent_id);
         bundle.putString("authorization", authorization);
         bundle.putString("classroom_id", classroom_id);
@@ -709,7 +700,7 @@ public class MenuUtama extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment2, menuDuaFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         menuDuaFragment.setArguments(bundle);
     }
 
@@ -829,6 +820,7 @@ public class MenuUtama extends AppCompatActivity
             public void onInfoWindowClick(Marker marker) {
                 Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
                 intent.putExtra("detailid",schooldetailid);
+                intent.putExtra("member_id",parent_id);
                 startActivity(intent);
             }
         });

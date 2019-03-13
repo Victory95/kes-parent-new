@@ -1,16 +1,19 @@
 package com.fingertech.kes.Activity.Fragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
@@ -24,7 +27,7 @@ import com.fingertech.kes.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MenuSatuFragment extends Fragment {
+public class MenuSatuFragment extends Fragment{
 
 
     public MenuSatuFragment() {
@@ -32,10 +35,13 @@ public class MenuSatuFragment extends Fragment {
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
-    SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences,sharedPreferences2;
+
+    public static final String myViewpagerPreferences = "myViewpagerPreferences";
     FrameLayout frameLayout;
 
     Bundle bundle;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +57,7 @@ public class MenuSatuFragment extends Fragment {
         frameLayout     = view.findViewById(R.id.fragment1);
 
         sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        sharedPreferences2  = getActivity().getSharedPreferences(myViewpagerPreferences,Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
         school_code         = sharedPreferences.getString("school_code",null);
         member_id           = sharedPreferences.getString("member_id",null);
@@ -60,7 +67,7 @@ public class MenuSatuFragment extends Fragment {
         parent_nik          = sharedPreferences.getString("parent_nik",null);
 
         btn_profile.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("member_id",member_id);
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
@@ -68,19 +75,20 @@ public class MenuSatuFragment extends Fragment {
             editor.putString("parent_nik",parent_nik);
             editor.putString("school_name",school_name);
             editor.putString("student_id",student_id);
-            editor.commit();
+            editor.apply();
             Intent intent = new Intent(getContext(), ProfilAnak.class);
+            intent.putExtra("member_id",member_id);
+            intent.putExtra("parent_nik",parent_nik);
             intent.putExtra("authorization", authorization);
             intent.putExtra("parent_nik", parent_nik);
             intent.putExtra("school_code", school_code);
             intent.putExtra("student_id", student_id);
             intent.putExtra("school_name",school_name);
             startActivity(intent);
-
         });
 
         btn_jadwal.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
@@ -95,7 +103,7 @@ public class MenuSatuFragment extends Fragment {
         });
 
         btn_ujian.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
@@ -110,7 +118,7 @@ public class MenuSatuFragment extends Fragment {
         });
 
         btn_absensi.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
@@ -125,7 +133,7 @@ public class MenuSatuFragment extends Fragment {
         });
 
         btn_tugas_anak.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
@@ -139,7 +147,7 @@ public class MenuSatuFragment extends Fragment {
             startActivity(intent);
         });
         btn_raport.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
+            SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
@@ -152,6 +160,9 @@ public class MenuSatuFragment extends Fragment {
             intent.putExtra("classroom_id", classroom_id);
             startActivity(intent);
         });
+
         return view;
     }
+
+
 }

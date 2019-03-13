@@ -7,10 +7,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,16 +22,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dant.centersnapreyclerview.SnappingRecyclerView;
 import com.fingertech.kes.Activity.Adapter.RaporAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.RaportModel;
-import com.fingertech.kes.Activity.RecycleView.EndlessRecyclerViewScrollListener;
+import com.fingertech.kes.Activity.RecycleView.CustomLayoutManager;
 import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
-import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -64,7 +68,7 @@ public class RaporAnak extends AppCompatActivity {
     RaporAdapter raporAdapter;
     RaportModel raportModel;
     List<RaportModel> raportModelList;
-    SnappyRecycleView snappyRecycleView;
+    SnappingRecyclerView snappyRecycleView;
     String teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel,nilai_akhir,rata_rata;
     CardView cardView;
     String semester_nama;
@@ -78,7 +82,12 @@ public class RaporAnak extends AppCompatActivity {
     String guru,tanggal,type,nilai,deskripsi,start_date,end_date,semester,start_year,start_end;
     SharedPreferences sharedPreferences;
     SlidingUpPanelLayout slidingUpPanelLayout;
-    EndlessRecyclerViewScrollListener scrollListener;
+    ImageView star;
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+    ImageView arrow;
+    LinearLayout drag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +102,7 @@ public class RaporAnak extends AppCompatActivity {
         tv_peringkat    = findViewById(R.id.peringkat);
         tv_kritik       = findViewById(R.id.kritik_saran);
         btn_go          = findViewById(R.id.btn_pilih);
+        star            = findViewById(R.id.star);
         slidingUpPanelLayout    = findViewById(R.id.sliding_layout);
         tv_teori           = findViewById(R.id.nilai_teori);
         tv_ulangan_harian  = findViewById(R.id.ulangan_harian);
@@ -103,6 +113,8 @@ public class RaporAnak extends AppCompatActivity {
         tv_rata_rata       = findViewById(R.id.rata_rata);
         tv_nilai_akhir     = findViewById(R.id.nilai_akhir);
         cardView           = findViewById(R.id.card);
+        arrow              = findViewById(R.id.arrow);
+        drag               = findViewById(R.id.dragView);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -120,13 +132,42 @@ public class RaporAnak extends AppCompatActivity {
         Check_Semester();
         Classroom_detail();
 
+        slidingUpPanelLayout.setFadeOnClickListener(view -> {
+            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            arrow.setImageResource(R.drawable.ic_up_arrow);
+        });
+        slidingUpPanelLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+
+            }
+
+            @Override
+            public void onPanelStateChanged(View view, SlidingUpPanelLayout.PanelState panelState, SlidingUpPanelLayout.PanelState panelState1) {
+                    if (panelState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                        arrow.setImageResource(R.drawable.ic_up_arrow);
+                    }else if (panelState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                        arrow.setImageResource(R.drawable.ic_arrow_down);
+                    }
+            }
+        });
 
         btn_go.setOnClickListener(v -> {
             RaportAnak();
             dapat_semester();
             slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            arrow.setImageResource(R.drawable.ic_up_arrow);
         });
 
+        drag.setOnClickListener(v -> {
+            if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                arrow.setImageResource(R.drawable.ic_up_arrow);
+            }else if (slidingUpPanelLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                arrow.setImageResource(R.drawable.ic_arrow_down);
+            }
+        });
 
     }
     private void Check_Semester(){
@@ -343,16 +384,13 @@ public class RaporAnak extends AppCompatActivity {
                         status_rapor.setText(statusrapor);
                         tv_peringkat.setText(peringkat);
                         tv_kritik.setText(kritik);
+                        if (peringkat.equals("1")){
+                            star.setVisibility(View.VISIBLE);
+                        }else {
+                            star.setVisibility(View.GONE);
+                        }
                         for (int i = 0; i < response.body().getData().getDetailScore().size(); i++) {
                             mapel           = response.body().getData().getDetailScore().get(i).getCourcesName();
-                            teori           = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getLatihanTeori().getScoreExam());
-                            ulangan_harian  = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getUlanganHarian().getScoreExam());
-                            praktikum       = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getPraktikum().getScoreExam());
-                            eskul           = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getEkstrakulikuler().getScoreExam());
-                            ujian_sekolah   = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getUjianSekolah().getScoreExam());
-                            ujian_negara    = String.valueOf(response.body().getData().getDetailScore().get(i).getTypeExam().getUjianNegara().getScoreExam());
-                            nilai_akhir     = String.valueOf(response.body().getData().getDetailScore().get(i).getFinalScore());
-                            rata_rata       = String.valueOf(response.body().getData().getDetailScore().get(i).getClassAverageScore());
 
                             raportModel = new RaportModel();
                             raportModel.setMapel(mapel);
@@ -364,15 +402,20 @@ public class RaporAnak extends AppCompatActivity {
                         snappyRecycleView.setVisibility(View.VISIBLE);
                         cardView.setVisibility(View.VISIBLE);
                         raporAdapter = new RaporAdapter(raportModelList);
-                        final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(RaporAnak.this);
+                        final LinearLayoutManager layoutManager = new LinearLayoutManager(RaporAnak.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                        snappyRecycleView.setLayoutManager(new SnappyLinearLayoutManager(RaporAnak.this));
+                        LinearSnapHelper snapHelper  = new LinearSnapHelper();
+                        snappyRecycleView.setOnFlingListener(null);
+                        snapHelper.attachToRecyclerView(snappyRecycleView);
+//                        snappyRecycleView.setLayoutManager(new SnappyLinearLayoutManager(RaporAnak.this));
+//                        snappyRecycleView.addItemDecoration(new ExampleDatePaddingItemDecoration(snappyRecycleView.getOrientation()));
                         snappyRecycleView.setLayoutManager(layoutManager);
                         snappyRecycleView.setAdapter(raporAdapter);
-
-                        snappyRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                        snappyRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                             @Override
-                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+
                                 int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
                                 int scrollOffset = recyclerView.computeHorizontalScrollOffset();
                                 int currentItem = 0;
@@ -391,20 +434,21 @@ public class RaporAnak extends AppCompatActivity {
                                 ujian_negara    = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUjianNegara().getScoreExam());
                                 nilai_akhir     = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getFinalScore());
                                 rata_rata       = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getClassAverageScore());
-                                tv_teori.setText(teori);
-                                tv_ulangan_harian.setText(ulangan_harian);
-                                tv_praktikum.setText(praktikum);
-                                tv_eskul.setText(eskul);
-                                tv_ujian_negara.setText(ujian_negara);
-                                tv_ujian_sekolah.setText(ujian_sekolah);
-                                tv_nilai_akhir.setText(nilai_akhir);
-                                tv_rata_rata.setText(rata_rata);
+                                tv_teori.setText(convertZero(teori));
+                                tv_ulangan_harian.setText(convertZero(ulangan_harian));
+                                tv_praktikum.setText(convertZero(praktikum));
+                                tv_eskul.setText(convertZero(eskul));
+                                tv_ujian_negara.setText(convertZero(ujian_negara));
+                                tv_ujian_sekolah.setText(convertZero(ujian_sekolah));
+                                tv_nilai_akhir.setText(convertZero(nilai_akhir));
+                                tv_rata_rata.setText(convertZero(rata_rata));
                             }
                         });
                     }
                     else {
                         no_rapor.setVisibility(View.VISIBLE);
                         snappyRecycleView.setVisibility(View.GONE);
+                        star.setVisibility(View.GONE);
                         cardView.setVisibility(View.GONE);
                         status_rapor.setText("-");
                         tv_peringkat.setText("-");
@@ -425,6 +469,14 @@ public class RaporAnak extends AppCompatActivity {
 
         });
     }
+
+    String convertZero(String data) {
+        if (data.equals("0.0")){
+            data = "-";
+        }
+        return data;
+    }
+
     private void Classroom_detail(){
 
         Call<JSONResponse.ClassroomDetail> call = mApiInterface.kes_classroom_detail_get(authorization.toString(),school_code.toString().toLowerCase(),classroom_id.toString());

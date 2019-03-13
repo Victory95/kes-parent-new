@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-
+        <activity android:name=".Activity.TestVideo"></activity>
         <activity
             android:name=".Activity.Setting.Setting_Activity"
             android:label="@string/title_activity_setting_"
@@ -362,11 +362,16 @@
             android:label="Kirim Pesan"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GalleryFoto"
+        <activity
+            android:name=".GalleryFoto"
             android:label="Gallery"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Anak.RekapAbsensi"
+            android:label="Rekap Presensi"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

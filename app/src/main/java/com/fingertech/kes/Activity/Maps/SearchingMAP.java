@@ -105,7 +105,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     Toolbar ToolBarAtas2;
     SearchManager searchManager;
     double lat,lng;
-    String placeName,vicinity,schooldetailid,akreditasi;
+    String placeName,vicinity,schooldetailid,akreditasi,member_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +123,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         ToolBarAtas2                 = findViewById(R.id.toolbar_satu);
         mApiInterface                = ApiClient.getClient().create(Auth.class);
         searchManager                = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
+        member_id                    = getIntent().getStringExtra("member_id");
 
         requestFocus(searchView);
 
@@ -261,6 +261,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             String SchoolDetailId = infoWindowData.getSchooldetailid();
             Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
             intent.putExtra("detailid",SchoolDetailId);
+            intent.putExtra("member_id",member_id);
             startActivity(intent);
         });
     }

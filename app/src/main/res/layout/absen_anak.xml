@@ -161,11 +161,22 @@
                         android:text="Belum Absen"/>
                 </LinearLayout>
             </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_absen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
+                android:text="Tidak ada pelajaran hari ini"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:id="@+id/no_absen"
+                android:visibility="gone"/>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

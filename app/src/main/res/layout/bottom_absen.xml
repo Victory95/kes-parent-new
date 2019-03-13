@@ -28,44 +28,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1.5"
             android:textSize="14sp"
-            android:text="Pilih Semester"
+            android:text="Rekap Absensi bulan ini"
             android:textAlignment="center"
             android:gravity="center_vertical"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Pilih Semeter"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center_vertical"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:orientation="horizontal">
-
-
-        <com.rey.material.widget.Spinner
-            style="@style/Material.Widget.Spinner"
-            android:id="@+id/sp_semester"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:background="@android:color/transparent"
-            android:spinnerMode="dropdown"
-            app:rd_style="@style/Material.Drawable.Ripple.Wave"
-            app:spn_arrowAnimClockwise="true"
-            app:spn_dividerColor="@color/black"
-            app:spn_arrowSwitchMode="true"
-            app:spn_arrowAnimDuration="3"/>
-
     </LinearLayout>
 
     <Button

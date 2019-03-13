@@ -88,7 +88,7 @@ public class KirimPesan extends AppCompatActivity {
     }
 
     public void dapat_mapel(){
-        Call<JSONResponse.ListMapel> call = mApiInterface.kes_list_cources_get(authorization.toString(),school_code.toLowerCase(),classroom_id.toString());
+        Call<JSONResponse.ListMapel> call = mApiInterface.kes_list_cources_get(authorization.toString(),school_code,classroom_id.toString());
         call.enqueue(new Callback<JSONResponse.ListMapel>() {
             @Override
             public void onResponse(Call<JSONResponse.ListMapel> call, Response<JSONResponse.ListMapel> response) {
