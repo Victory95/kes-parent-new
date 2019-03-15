@@ -488,7 +488,7 @@
     <string name="Tv_versi">Versi</string>
     <string name="tv_term_condition"><![CDATA[Term & Condition]]></string>
     <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Pilih Nada Pemberitahuan</string>
+    <string name="pref_ringtone_silent">silent</string>
     <string name="key_notifications_new_message_ringtone">key_notifications_new_message_ringtone</string>
     <string name="summary_choose_ringtone">Pilih Nada Pemberitahuan</string>
     <string name="summary_about">We are a team of like-minded people, specialized in development of Android App Development creating new trends across the app space. Glad to Help in anyway!</string>

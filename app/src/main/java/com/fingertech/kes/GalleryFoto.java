@@ -67,18 +67,22 @@ public class GalleryFoto extends AppCompatActivity {
                 Log.d("DetailSekolah",response.code()+"");
                 hideDialog();
                 JSONResponse.Foto_sekolah resource = response.body();
-                status = resource.status;
-                if (status == 1) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        Picture = response.body().getData().get(i).getPic_url();
-                        fotoModel = new FotoModel();
-                        fotoModel.setPicture(Picture);
-                        fotoModelList.add(fotoModel);
+                if (resource==null){
+
+                }else {
+                    status = resource.status;
+                    if (status == 1) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            Picture = response.body().getData().get(i).getPic_url();
+                            fotoModel = new FotoModel();
+                            fotoModel.setPicture(Picture);
+                            fotoModelList.add(fotoModel);
+                        }
+                        fotoAdapter = new FotoAdapter(fotoModelList);
+                        GridLayoutManager layoutManager = new GridLayoutManager(GalleryFoto.this, 2);
+                        rv_foto.setLayoutManager(layoutManager);
+                        rv_foto.setAdapter(fotoAdapter);
                     }
-                    fotoAdapter = new FotoAdapter(fotoModelList);
-                    GridLayoutManager layoutManager = new GridLayoutManager(GalleryFoto.this,2);
-                    rv_foto.setLayoutManager(layoutManager);
-                    rv_foto.setAdapter(fotoAdapter);
                 }
             }
 

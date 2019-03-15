@@ -330,155 +330,157 @@ public class DetailSekolah extends AppCompatActivity {
                 Log.i("KES", response.code() + "");
 
                 JSONResponse.DetailSchool resource = response.body();
+                if (resource==null){
+                    Toast.makeText(getApplicationContext(),"gagal",Toast.LENGTH_SHORT).show();
+                }else {
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
-
-                String DS_SCS_0001 = getResources().getString(R.string.DS_SCS_0001);
-                String DS_ERR_0001 = getResources().getString(R.string.DS_ERR_0001);
+                    String DS_SCS_0001 = getResources().getString(R.string.DS_SCS_0001);
+                    String DS_ERR_0001 = getResources().getString(R.string.DS_ERR_0001);
 
 
-                if (status == 1 && code.equals("DS_SCS_0001")) {
-                    JSONResponse.SchoolDetail source = resource.getSchool();
-                    schoolDetail = source.statusKes;
+                    if (status == 1 && code.equals("DS_SCS_0001")) {
+                        JSONResponse.SchoolDetail source = resource.getSchool();
+                        schoolDetail = source.statusKes;
 
-                    NPSN                 = response.body().school.getData().getNpsn();
-                    school_id            = response.body().getSchool().getData().getSchool_Id();
-                    school_code          = response.body().getSchool().getData().getSchool_code();
-                    NamaSekolah          = response.body().school.getData().getSchool_name();
-                    JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
-                    StatusSekolah        = response.body().school.getData().getStatus_sekolah();
-                    Provinsi             = response.body().school.getData().getNama_provinsi();
-                    Kabupaten            = response.body().school.getData().getNama_kabupaten();
-                    Kecamatan            = response.body().school.getData().getNama_kecamatan();
-                    Kelurahan            = response.body().school.getData().getKelurahan();
-                    RT                   = response.body().school.getData().getRt();
-                    RW                   = response.body().school.getData().getRw();
-                    Alamat               = response.body().school.getData().getSchool_address();
-                    KodePos              = response.body().school.getData().getKode_pos();
-                    SKPendiri            = response.body().school.getData().getSkPendirian();
-                    TanggalSK            = response.body().school.getData().getTanggal_pendirian();
-                    StatusKepemilikan    = response.body().school.getData().getStatus_kepemilikan();
-                    SKizin               = response.body().school.getData().getSkIzin();
-                    TanggalIzin          = response.body().school.getData().getTanggal_izin();
-                    kebutuhan            = response.body().school.getData().getKebutuhan_khusus();
-                    NomorRekening        = response.body().school.getData().getNo_rekening();
-                    NamaBank             = response.body().school.getData().getNama_bank();
-                    Cabang               = response.body().school.getData().getCabang();
-                    RekeningNama         = response.body().school.getData().getAccountName();
-                    MBS                  = response.body().school.getData().getMbs();
-                    TanahMilik           = response.body().school.getData().getTanah_milik();
-                    TanahBukan           = response.body().school.getData().getTanah_bukan_milik();
-                    NamaPajak            = response.body().school.getData().getNwp();
-                    Npwp                 = response.body().school.getData().getNpwp();
-                    NomorTelepon         = response.body().school.getData().getSchool_phone();
-                    Email                = response.body().school.getData().getSchool_email();
-                    Nofax                = response.body().school.getData().getNo_fax();
-                    Website              = response.body().school.getData().getWebsite();
-                    CP                   = response.body().school.getData().getSchool_contact();
-                    LessonHour           = response.body().school.getData().getLessonHour();
-                    BOS                  = response.body().school.getData().getBersedia_menerima_bos();
-                    ISO                  = response.body().school.getData().getSertifikasi_iso();
-                    SumberListrik        = response.body().school.getData().getSumber_listrik();
-                    DayaListrik          = response.body().school.getData().getDaya_listrik();
-                    AksesInternet        = response.body().school.getData().getAkses_internet();
-                    AlternatifInternet   = response.body().school.getData().getInternet_alternatif();
-                    KepalaSekolah        = response.body().school.getData().getKepsek();
-                    Operator             = response.body().school.getData().getOperator();
-                    Akreditasi           = response.body().school.getData().getAkreditasi();
-                    Kurikulum            = response.body().school.getData().getKurikulum();
-                    TotalGuru            = response.body().school.getData().getTguru();
-                    SiswaPria            = response.body().school.getData().getTsiswa_pria();
-                    SiswaWanita          = response.body().school.getData().getTsiswa_wanita();
-                    Rombel               = response.body().school.getData().getRombel();
-                    RuangKelas           = response.body().school.getData().getRuang_kelas();
-                    Laboratorium         = response.body().school.getData().getLaboratorium();
-                    Perpustakaan         = response.body().school.getData().getPerpustakaan();
-                    Sanitasi             = response.body().school.getData().getSanitasi();
+                        NPSN = response.body().school.getData().getNpsn();
+                        school_id = response.body().getSchool().getData().getSchool_Id();
+                        school_code = response.body().getSchool().getData().getSchool_code();
+                        NamaSekolah = response.body().school.getData().getSchool_name();
+                        JenjangPendidikan = response.body().school.getData().getJenjangPendidikan();
+                        StatusSekolah = response.body().school.getData().getStatus_sekolah();
+                        Provinsi = response.body().school.getData().getNama_provinsi();
+                        Kabupaten = response.body().school.getData().getNama_kabupaten();
+                        Kecamatan = response.body().school.getData().getNama_kecamatan();
+                        Kelurahan = response.body().school.getData().getKelurahan();
+                        RT = response.body().school.getData().getRt();
+                        RW = response.body().school.getData().getRw();
+                        Alamat = response.body().school.getData().getSchool_address();
+                        KodePos = response.body().school.getData().getKode_pos();
+                        SKPendiri = response.body().school.getData().getSkPendirian();
+                        TanggalSK = response.body().school.getData().getTanggal_pendirian();
+                        StatusKepemilikan = response.body().school.getData().getStatus_kepemilikan();
+                        SKizin = response.body().school.getData().getSkIzin();
+                        TanggalIzin = response.body().school.getData().getTanggal_izin();
+                        kebutuhan = response.body().school.getData().getKebutuhan_khusus();
+                        NomorRekening = response.body().school.getData().getNo_rekening();
+                        NamaBank = response.body().school.getData().getNama_bank();
+                        Cabang = response.body().school.getData().getCabang();
+                        RekeningNama = response.body().school.getData().getAccountName();
+                        MBS = response.body().school.getData().getMbs();
+                        TanahMilik = response.body().school.getData().getTanah_milik();
+                        TanahBukan = response.body().school.getData().getTanah_bukan_milik();
+                        NamaPajak = response.body().school.getData().getNwp();
+                        Npwp = response.body().school.getData().getNpwp();
+                        NomorTelepon = response.body().school.getData().getSchool_phone();
+                        Email = response.body().school.getData().getSchool_email();
+                        Nofax = response.body().school.getData().getNo_fax();
+                        Website = response.body().school.getData().getWebsite();
+                        CP = response.body().school.getData().getSchool_contact();
+                        LessonHour = response.body().school.getData().getLessonHour();
+                        BOS = response.body().school.getData().getBersedia_menerima_bos();
+                        ISO = response.body().school.getData().getSertifikasi_iso();
+                        SumberListrik = response.body().school.getData().getSumber_listrik();
+                        DayaListrik = response.body().school.getData().getDaya_listrik();
+                        AksesInternet = response.body().school.getData().getAkses_internet();
+                        AlternatifInternet = response.body().school.getData().getInternet_alternatif();
+                        KepalaSekolah = response.body().school.getData().getKepsek();
+                        Operator = response.body().school.getData().getOperator();
+                        Akreditasi = response.body().school.getData().getAkreditasi();
+                        Kurikulum = response.body().school.getData().getKurikulum();
+                        TotalGuru = response.body().school.getData().getTguru();
+                        SiswaPria = response.body().school.getData().getTsiswa_pria();
+                        SiswaWanita = response.body().school.getData().getTsiswa_wanita();
+                        Rombel = response.body().school.getData().getRombel();
+                        RuangKelas = response.body().school.getData().getRuang_kelas();
+                        Laboratorium = response.body().school.getData().getLaboratorium();
+                        Perpustakaan = response.body().school.getData().getPerpustakaan();
+                        Sanitasi = response.body().school.getData().getSanitasi();
 //                    Picture              = response.body().school.getData().getPicture();
 
-                    bundle = new Bundle();
-                        bundle.putString("npsn",NPSN);
-                        bundle.putString("namasekolah",NamaSekolah);
-                        bundle.putString("jenjangpendidikan",JenjangPendidikan);
-                        bundle.putString("statussekolah",StatusSekolah);
-                        bundle.putString("provinsi",Provinsi);
-                        bundle.putString("kabupaten",Kabupaten);
-                        bundle.putString("kecamatan",Kecamatan);
-                        bundle.putString("kelurahan",Kelurahan);
-                        bundle.putString("rt",RT);
-                        bundle.putString("rw",RW);
-                        bundle.putString("alamat",Alamat);
-                        bundle.putString("kodepos",KodePos);
+                        bundle = new Bundle();
+                        bundle.putString("npsn", NPSN);
+                        bundle.putString("namasekolah", NamaSekolah);
+                        bundle.putString("jenjangpendidikan", JenjangPendidikan);
+                        bundle.putString("statussekolah", StatusSekolah);
+                        bundle.putString("provinsi", Provinsi);
+                        bundle.putString("kabupaten", Kabupaten);
+                        bundle.putString("kecamatan", Kecamatan);
+                        bundle.putString("kelurahan", Kelurahan);
+                        bundle.putString("rt", RT);
+                        bundle.putString("rw", RW);
+                        bundle.putString("alamat", Alamat);
+                        bundle.putString("kodepos", KodePos);
 
                         pelengkap = new Bundle();
-                        pelengkap.putString("skpendiri",SKPendiri);
-                        pelengkap.putString("tanggalsk",TanggalSK);
-                        pelengkap.putString("statusmilik",StatusKepemilikan);
-                        pelengkap.putString("skizin",SKizin);
-                        pelengkap.putString("tanggalizin",TanggalIzin);
-                        pelengkap.putString("kebutuhankhusus",kebutuhan);
-                        pelengkap.putString("norekening",NomorRekening);
-                        pelengkap.putString("namabank",NamaBank);
-                        pelengkap.putString("cabang",Cabang);
-                        pelengkap.putString("namarekening",RekeningNama);
-                        pelengkap.putString("mbs",MBS);
-                        pelengkap.putString("tanahmilik",TanahMilik);
-                        pelengkap.putString("tanahbukan",TanahBukan);
-                        pelengkap.putString("namapajak",NamaPajak);
-                        pelengkap.putString("npwp",Npwp);
+                        pelengkap.putString("skpendiri", SKPendiri);
+                        pelengkap.putString("tanggalsk", TanggalSK);
+                        pelengkap.putString("statusmilik", StatusKepemilikan);
+                        pelengkap.putString("skizin", SKizin);
+                        pelengkap.putString("tanggalizin", TanggalIzin);
+                        pelengkap.putString("kebutuhankhusus", kebutuhan);
+                        pelengkap.putString("norekening", NomorRekening);
+                        pelengkap.putString("namabank", NamaBank);
+                        pelengkap.putString("cabang", Cabang);
+                        pelengkap.putString("namarekening", RekeningNama);
+                        pelengkap.putString("mbs", MBS);
+                        pelengkap.putString("tanahmilik", TanahMilik);
+                        pelengkap.putString("tanahbukan", TanahBukan);
+                        pelengkap.putString("namapajak", NamaPajak);
+                        pelengkap.putString("npwp", Npwp);
 
                         contact = new Bundle();
-                        contact.putString("notelepon",NomorTelepon);
-                        contact.putString("email",Email);
-                        contact.putString("nofax",Nofax);
-                        contact.putString("website",Website);
-                        contact.putString("cp",CP);
+                        contact.putString("notelepon", NomorTelepon);
+                        contact.putString("email", Email);
+                        contact.putString("nofax", Nofax);
+                        contact.putString("website", Website);
+                        contact.putString("cp", CP);
 
                         periodik = new Bundle();
-                        periodik.putString("lessonhour",LessonHour);
-                        periodik.putString("bos",BOS);
-                        periodik.putString("iso",ISO);
-                        periodik.putString("sumberlistrik",SumberListrik);
-                        periodik.putString("dayalistrik",DayaListrik);
-                        periodik.putString("aksesinternet",AksesInternet);
-                        periodik.putString("alternatifinternet",AlternatifInternet);
+                        periodik.putString("lessonhour", LessonHour);
+                        periodik.putString("bos", BOS);
+                        periodik.putString("iso", ISO);
+                        periodik.putString("sumberlistrik", SumberListrik);
+                        periodik.putString("dayalistrik", DayaListrik);
+                        periodik.putString("aksesinternet", AksesInternet);
+                        periodik.putString("alternatifinternet", AlternatifInternet);
 
                         lainnya = new Bundle();
-                        lainnya.putString("kepsek",KepalaSekolah);
-                        lainnya.putString("operator",Operator);
-                        lainnya.putString("akreditasi",Akreditasi);
-                        lainnya.putString("kurikulum",Kurikulum);
-                        lainnya.putString("totalguru",TotalGuru);
-                        lainnya.putString("siswapria",SiswaPria);
-                        lainnya.putString("siswawanita",SiswaWanita);
-                        lainnya.putString("rombel",Rombel);
-                        lainnya.putString("ruangkelas",RuangKelas);
-                        lainnya.putString("laboratorium",Laboratorium);
-                        lainnya.putString("perpustakaan",Perpustakaan);
-                        lainnya.putString("sanitasi",Sanitasi);
+                        lainnya.putString("kepsek", KepalaSekolah);
+                        lainnya.putString("operator", Operator);
+                        lainnya.putString("akreditasi", Akreditasi);
+                        lainnya.putString("kurikulum", Kurikulum);
+                        lainnya.putString("totalguru", TotalGuru);
+                        lainnya.putString("siswapria", SiswaPria);
+                        lainnya.putString("siswawanita", SiswaWanita);
+                        lainnya.putString("rombel", Rombel);
+                        lainnya.putString("ruangkelas", RuangKelas);
+                        lainnya.putString("laboratorium", Laboratorium);
+                        lainnya.putString("perpustakaan", Perpustakaan);
+                        lainnya.putString("sanitasi", Sanitasi);
 
                         dapat_picture();
-                        if (schoolDetail == 0){
+                        if (schoolDetail == 0) {
                             hint_detail.setVisibility(View.VISIBLE);
                             hint_detail.setOnClickListener(v -> {
-                                Intent intent = new Intent(DetailSekolah.this,RecommendSchool.class);
-                                intent.putExtra("member_id",member_id);
-                                intent.putExtra("school_id",school_id);
-                                intent.putExtra("school_code",school_code);
-                                intent.putExtra("school_name",NamaSekolah);
+                                Intent intent = new Intent(DetailSekolah.this, RecommendSchool.class);
+                                intent.putExtra("member_id", member_id);
+                                intent.putExtra("school_id", school_id);
+                                intent.putExtra("school_code", school_code);
+                                intent.putExtra("school_name", NamaSekolah);
                                 startActivity(intent);
                             });
-                        }else if (schoolDetail == 1){
+                        } else if (schoolDetail == 1) {
                             hint_detail.setVisibility(View.GONE);
                         }
 
-                } else{
-                    if (status == 0 && code.equals("DS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DS_ERR_0001, Toast.LENGTH_LONG).show();
+                    } else {
+                        if (status == 0 && code.equals("DS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -503,61 +505,63 @@ public class DetailSekolah extends AppCompatActivity {
                 Log.i("KES", response.code() + "");
 
                 JSONResponse.DetailSchool resource = response.body();
+                    if(resource==null){
+                        Toast.makeText(getApplicationContext(),"gagal",Toast.LENGTH_SHORT).show();
+                    }else {
+                        status = resource.status;
+                        code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
-
-                String DS_SCS_0001 = getResources().getString(R.string.DS_SCS_0001);
-                String DS_ERR_0001 = getResources().getString(R.string.DS_ERR_0001);
+                        String DS_SCS_0001 = getResources().getString(R.string.DS_SCS_0001);
+                        String DS_ERR_0001 = getResources().getString(R.string.DS_ERR_0001);
 
 
-                if (status == 1 && code.equals("DS_SCS_0001")) {
-                    JSONResponse.SchoolDetail source = resource.getSchool();
-                    schoolDetail = source.statusKes;
+                        if (status == 1 && code.equals("DS_SCS_0001")) {
+                            JSONResponse.SchoolDetail source = resource.getSchool();
+                            schoolDetail = source.statusKes;
 
-                        NPSN                 = response.body().school.getData().getNpsn();
-                        NamaSekolah          = response.body().school.getData().getSchool_name();
-                        JenjangPendidikan    = response.body().school.getData().getJenjangPendidikan();
-                        StatusSekolah        = response.body().school.getData().getStatus_sekolah();
-                        Provinsi             = response.body().school.getData().getNama_provinsi();
-                        Kabupaten            = response.body().school.getData().getNama_kabupaten();
-                        Kecamatan            = response.body().school.getData().getNama_kecamatan();
-                        Kelurahan            = response.body().school.getData().getKelurahan();
-                        RT                   = response.body().school.getData().getRt();
-                        RW                   = response.body().school.getData().getRw();
-                        Alamat               = response.body().school.getData().getSchool_address();
-                        KodePos              = response.body().school.getData().getKode_pos();
+                            NPSN = response.body().school.getData().getNpsn();
+                            NamaSekolah = response.body().school.getData().getSchool_name();
+                            JenjangPendidikan = response.body().school.getData().getJenjangPendidikan();
+                            StatusSekolah = response.body().school.getData().getStatus_sekolah();
+                            Provinsi = response.body().school.getData().getNama_provinsi();
+                            Kabupaten = response.body().school.getData().getNama_kabupaten();
+                            Kecamatan = response.body().school.getData().getNama_kecamatan();
+                            Kelurahan = response.body().school.getData().getKelurahan();
+                            RT = response.body().school.getData().getRt();
+                            RW = response.body().school.getData().getRw();
+                            Alamat = response.body().school.getData().getSchool_address();
+                            KodePos = response.body().school.getData().getKode_pos();
 
-                        bundle = new Bundle();
-                        bundle.putString("npsn",NPSN);
-                        bundle.putString("namasekolah",NamaSekolah);
-                        bundle.putString("jenjangpendidikan",JenjangPendidikan);
-                        bundle.putString("statussekolah",StatusSekolah);
-                        bundle.putString("provinsi",Provinsi);
-                        bundle.putString("kabupaten",Kabupaten);
-                        bundle.putString("kecamatan",Kecamatan);
-                        bundle.putString("kelurahan",Kelurahan);
-                        bundle.putString("rt",RT);
-                        bundle.putString("rw",RW);
-                        bundle.putString("alamat",Alamat);
-                        bundle.putString("kodepos",KodePos);
+                            bundle = new Bundle();
+                            bundle.putString("npsn", NPSN);
+                            bundle.putString("namasekolah", NamaSekolah);
+                            bundle.putString("jenjangpendidikan", JenjangPendidikan);
+                            bundle.putString("statussekolah", StatusSekolah);
+                            bundle.putString("provinsi", Provinsi);
+                            bundle.putString("kabupaten", Kabupaten);
+                            bundle.putString("kecamatan", Kecamatan);
+                            bundle.putString("kelurahan", Kelurahan);
+                            bundle.putString("rt", RT);
+                            bundle.putString("rw", RW);
+                            bundle.putString("alamat", Alamat);
+                            bundle.putString("kodepos", KodePos);
 
-                        IdentitasFragment fragmentCurrent = new IdentitasFragment();
-                        FragmentManager fx = getSupportFragmentManager();
-                        FragmentTransaction fp = fx.beginTransaction();
-                        //fragment.setArguments(bundle);
-                        fp.add(R.id.fragIdentitas, fragmentCurrent);
-                        fp.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                        fp.addToBackStack(null);
-                        fp.commit();
-                        fragmentCurrent.setArguments(bundle);
+                            IdentitasFragment fragmentCurrent = new IdentitasFragment();
+                            FragmentManager fx = getSupportFragmentManager();
+                            FragmentTransaction fp = fx.beginTransaction();
+                            //fragment.setArguments(bundle);
+                            fp.add(R.id.fragIdentitas, fragmentCurrent);
+                            fp.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                            fp.addToBackStack(null);
+                            fp.commit();
+                            fragmentCurrent.setArguments(bundle);
 //                    dapat_picture();
-                } else{
-                    if (status == 0 && code.equals("DS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DS_ERR_0001, Toast.LENGTH_LONG).show();
+                        } else {
+                            if (status == 0 && code.equals("DS_ERR_0001")) {
+                                Toast.makeText(getApplicationContext(), DS_ERR_0001, Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
-                }
-
             }
 
             @Override
@@ -569,6 +573,7 @@ public class DetailSekolah extends AppCompatActivity {
         });
 
     }
+
 
     public void dapat_picture(){
 
