@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.CustomView;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -25,7 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DialogKps extends DialogFragment {
+public class OneButtonDialog extends DialogFragment {
+
     public static final String TAG = "OneButtonDialogTag";
 
     protected static final String ARG_BUTTON_TEXT = "ARG_BUTTON_TEXT";
@@ -33,7 +34,6 @@ public class DialogKps extends DialogFragment {
     protected static final String ARG_TITLE = "ARG_TITLE";
     protected static final String ARG_MESSAGE = "ARG_MESSAGE";
     protected static final String ARG_IMAGE_RESOURCE_ID = "ARG_IMAGE_RESOURCE_ID";
-    protected static final String ARG_IMAGE_RESOURCE = "ARG_IMAGE_RESOURCE";
 
     private static final double DIALOG_WINDOW_WIDTH = 0.85;
 
@@ -42,31 +42,32 @@ public class DialogKps extends DialogFragment {
     @BindView(R.id.dlg_one_button_iv_icon)
     ImageView ivDialogIcon;
 
-    @BindView(R.id.dlg_one_button_iv)
-    ImageView ivDialog;
+    @BindView(R.id.dlg_one_button_tv_title)
+    TextView tvTitle;
+
+    @BindView(R.id.dlg_one_button_tv_message)
+    TextView tvMessage;
 
     @BindView(R.id.dlg_one_button_btn_ok)
     Button btnNeutral;
 
     private int getContentView() {
-        return R.layout.dialog_hint_kps;
+        return R.layout.dialog_one_button;
     }
 
-    public static DialogKps newInstance(String titleRes,
+    public static OneButtonDialog newInstance(String titleRes,
                                               String messageRes,
                                               String buttonTextRes,
-                                              @DrawableRes int image,
                                               @DrawableRes int imageResId,
                                               @ColorRes int colorResId,
                                               ButtonDialogAction buttonDialogAction) {
-        DialogKps oneButtonDialog = new DialogKps();
+        OneButtonDialog oneButtonDialog = new OneButtonDialog();
         oneButtonDialog.buttonDialogAction = buttonDialogAction;
 
         Bundle args = new Bundle();
         args.putString(ARG_TITLE, titleRes);
         args.putString(ARG_MESSAGE, messageRes);
         args.putString(ARG_BUTTON_TEXT, buttonTextRes);
-        args.putInt(ARG_IMAGE_RESOURCE,image);
         args.putInt(ARG_IMAGE_RESOURCE_ID, imageResId);
         args.putInt(ARG_COLOR_RESOURCE_ID, colorResId);
         oneButtonDialog.setArguments(args);
@@ -94,14 +95,17 @@ public class DialogKps extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String titleRes = getArguments().getString(ARG_TITLE);
+        String messageRes = getArguments().getString(ARG_MESSAGE);
         String buttonTextRes = getArguments().getString(ARG_BUTTON_TEXT);
         int image = getArguments().getInt(ARG_IMAGE_RESOURCE_ID);
-        int images = getArguments().getInt(ARG_IMAGE_RESOURCE);
         int color = getArguments().getInt(ARG_COLOR_RESOURCE_ID);
 
+        tvTitle.setText(titleRes);
+        tvTitle.setTextColor(getResources().getColor(color));
+        tvMessage.setText(messageRes);
         btnNeutral.setText(buttonTextRes);
         ivDialogIcon.setImageResource(image);
-        ivDialog.setImageResource(images);
     }
 
     @Override
@@ -148,4 +152,5 @@ public class DialogKps extends DialogFragment {
     public interface ButtonDialogAction {
         void onButtonClicked();
     }
+
 }

@@ -1,11 +1,9 @@
 package com.fingertech.kes.Activity.Anak;
 
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,11 +13,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,36 +41,24 @@ import android.widget.Toast;
 import com.fingertech.kes.Activity.Adapter.RaporAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.RaportModel;
-import com.fingertech.kes.Activity.RecycleView.CustomLayoutManager;
+import com.fingertech.kes.Activity.CustomView.CustomLayoutManager;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.fingertech.kes.Service.JSONParser;
-import com.fingertech.kes.Service.JsonHelper;
-import com.fingertech.kes.Util.FileDownloader;
-import com.google.android.gms.common.util.IOUtils;
 import com.rey.material.widget.Spinner;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -131,7 +114,6 @@ public class RaporAnak extends AppCompatActivity {
             "Ujian Negara"
     };
     TableRow tr_teori,tr_harian,tr_praktikum,tr_eskul,tr_ujian_sekolah,tr_ujian_negara,tr_nilai_akhir,tr_rata;
-    TextView lihat;
     File file = new File("Your_File_path/name");
 
     @Override
@@ -150,7 +132,6 @@ public class RaporAnak extends AppCompatActivity {
         tv_peringkat    = findViewById(R.id.peringkat);
         tv_kritik       = findViewById(R.id.kritik_saran);
         star            = findViewById(R.id.star);
-        lihat           = findViewById(R.id.lihat);
         slidingUpPanelLayout    = findViewById(R.id.sliding_layout);
         tv_teori           = findViewById(R.id.nilai_teori);
         tv_ulangan_harian  = findViewById(R.id.ulangan_harian);
@@ -221,10 +202,6 @@ public class RaporAnak extends AppCompatActivity {
                 slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 arrow.setImageResource(R.drawable.ic_arrow_down);
             }
-        });
-
-        lihat.setOnClickListener(v -> {
-            pilihan();
         });
 
     }
@@ -704,7 +681,6 @@ public class RaporAnak extends AppCompatActivity {
                     FileOutputStream fileOutputStream = new FileOutputStream(pdfFile);
                     if (response.body() != null) {
                         final int progressMax = 100;
-
                         Intent intent = new Intent(RaporAnak.this, LihatPdf.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         PendingIntent pendingIntent = PendingIntent.getActivity(RaporAnak.this, 2, intent,
@@ -726,7 +702,6 @@ public class RaporAnak extends AppCompatActivity {
                             SystemClock.sleep(2000);
                             Uri soundUri1 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                             for (int progress = 0; progress <= progressMax; progress += 50) {
-
                                 notification.setContentText(progress+" %")
                                         .setProgress(progressMax, progress, false);
                                 notificationManager.notify(2, notification.build());
@@ -739,7 +714,6 @@ public class RaporAnak extends AppCompatActivity {
                                     .setSound(soundUri1);
                             try {
                                 fileOutputStream.write(response.body().bytes());
-
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -752,7 +726,6 @@ public class RaporAnak extends AppCompatActivity {
                             });
                             notificationManager.notify(2, notification.build());
                         }).start();
-
                     }
                 }
                 catch (Exception ex){

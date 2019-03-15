@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.CustomView;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

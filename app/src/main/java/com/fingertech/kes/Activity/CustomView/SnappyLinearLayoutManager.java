@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.CustomView;
 
 import android.content.Context;
 import android.graphics.PointF;
@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewConfiguration;
-
-import com.fingertech.kes.Activity.MenuGuest;
 
 public class SnappyLinearLayoutManager extends LinearLayoutManager implements ISnappyLayoutManager {
     // These variables are from android.widget.Scroller, which is used, via ScrollerCompat, by

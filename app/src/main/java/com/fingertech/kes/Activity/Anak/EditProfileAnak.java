@@ -18,10 +18,8 @@ import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -42,17 +40,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.AnakMain;
-import com.fingertech.kes.Activity.EditProfile;
 import com.fingertech.kes.Activity.Maps.full_maps;
-import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ProfileModel;
-import com.fingertech.kes.Activity.ParentMain;
-import com.fingertech.kes.Activity.RecycleView.DialogFactory;
-import com.fingertech.kes.Activity.RecycleView.DialogFactorykps;
-import com.fingertech.kes.Activity.RecycleView.DialogKps;
+import com.fingertech.kes.Activity.CustomView.DialogFactorykps;
+import com.fingertech.kes.Activity.CustomView.DialogKps;
 
-import com.fingertech.kes.Activity.RecycleView.OneButtonDialog;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -86,9 +78,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.fingertech.kes.Service.App.getContext;
 
 public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,

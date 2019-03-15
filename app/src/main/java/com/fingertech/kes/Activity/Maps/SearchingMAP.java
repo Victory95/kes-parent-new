@@ -15,6 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -34,6 +36,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,8 +71,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -96,16 +101,18 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     Double currentLatitude,latitudeF,currentLongitude,longitudeF,Jarak;
     String location,key = "",code;
     int status,Zoom;
-    SearchView searchView;
     DiscreteSlider discreteSlider;
     RelativeLayout tickMarkLabelsRelativeLayout;
     Button Kelurahan;
 
     ImageView bookmark;
     Toolbar ToolBarAtas2;
-    SearchManager searchManager;
+
     double lat,lng;
     String placeName,vicinity,schooldetailid,akreditasi,member_id;
+    MaterialSearchView materialSearchView;
+    LinearLayout loc,search;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,13 +126,12 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         Kelurahan                    = findViewById(R.id.kelurahan);
         bookmark                     = findViewById(R.id.book);
         recyclerView                 = findViewById(R.id.recyclerView);
-        searchView                   = findViewById(R.id.search);
         ToolBarAtas2                 = findViewById(R.id.toolbar_satu);
         mApiInterface                = ApiClient.getClient().create(Auth.class);
-        searchManager                = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         member_id                    = getIntent().getStringExtra("member_id");
-
-        requestFocus(searchView);
+        materialSearchView           = findViewById(R.id.search_view);
+        loc                          = findViewById(R.id.loc);
+        search                       = findViewById(R.id.searchh);
 
         discreteSlider.setOnDiscreteSliderChangeListener(new DiscreteSlider.OnDiscreteSliderChangeListener() {
             @Override
@@ -169,36 +175,11 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        search_school_post(key);
+//        search_school_post(key);
         hideKeyboard(this);
         recyclerView.setVisibility(View.GONE);
         tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
         discreteSlider.setVisibility(View.VISIBLE);
-
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                key = query;
-                search_school_post(query);
-                tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
-                discreteSlider.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                key = newText;
-                search_school_post(newText);
-                tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
-                discreteSlider.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                return false;
-            }
-        });
 
         bookmark.setOnClickListener(v -> {
             Intent mIntent = new Intent(SearchingMAP.this,FilterActivity.class);
@@ -212,6 +193,54 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             startActivityForResult(mIntent,2);
         });
 
+
+        materialSearchView.setVoiceSearch(true);
+        materialSearchView.setCursorDrawable(R.drawable.color_cursor_white);
+
+        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search_school_post(query);
+                tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
+                discreteSlider.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
+                //Do some magic
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search_school_post(newText);
+                tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
+                discreteSlider.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                //Do some magic
+                return false;
+            }
+        });
+        materialSearchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+                tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
+                discreteSlider.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+                loc.setVisibility(View.GONE);
+                search.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+                tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
+                discreteSlider.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                loc.setVisibility(View.VISIBLE);
+                search.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
@@ -231,6 +260,15 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (materialSearchView.isSearchOpen()) {
+            materialSearchView.closeSearch();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -586,7 +624,8 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         if (mmap!=null){
                             mmap.clear();
                         }
-                        searchView.clearFocus();
+
+                        materialSearchView.clearFocus();
                         latitudeF        = response.body().getData().get(position).getLatitude();
                         longitudeF       = response.body().getData().get(position).getLongitude();
                         schooldetailid   = response.body().getData().get(position).getSchooldetailid();
@@ -779,7 +818,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                     mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                     m.setTag(indo);
                 }
-                requestFocus(searchView);
                 hideKeyboard(this);
                 recyclerView.setVisibility(View.GONE);
             }
@@ -811,6 +849,15 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 hideKeyboard(this);
 
             }
+        }else if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
+            ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (matches != null && matches.size() > 0) {
+                String searchWrd = matches.get(0);
+                if (!TextUtils.isEmpty(searchWrd)) {
+                    materialSearchView.setQuery(searchWrd, false);
+                }
+            }
+            return;
         }
     }
 
@@ -832,6 +879,11 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        materialSearchView.setMenuItem(item);
+
         return true;
     }
 

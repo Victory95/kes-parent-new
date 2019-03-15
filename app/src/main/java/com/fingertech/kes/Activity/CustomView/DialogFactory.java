@@ -1,6 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
-
-import android.support.annotation.StringRes;
+package com.fingertech.kes.Activity.CustomView;
 
 import com.fingertech.kes.R;
 

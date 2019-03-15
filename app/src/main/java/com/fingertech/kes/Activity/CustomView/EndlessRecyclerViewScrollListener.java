@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.CustomView;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

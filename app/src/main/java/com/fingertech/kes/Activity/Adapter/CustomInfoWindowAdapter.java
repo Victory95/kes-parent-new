@@ -33,35 +33,42 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         View view = ((Activity)context).getLayoutInflater()
                 .inflate(R.layout.custom_snippet, null);
 
-        TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
+        TextView tvSch = view.findViewById(R.id.nama_school);
 
         // Getting reference to the TextView to set longitude
-        TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
+        TextView tvAkr = view.findViewById(R.id.akreditasi);
 
         // Getting reference to the TextView to set latitude
-        TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
+        TextView tvJrk = view.findViewById(R.id.jarak);
 
         // Getting reference to the TextView to set longitude
-        TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
+        TextView tvAlm = view.findViewById(R.id.alamat_school);
 
         // Getting reference to the TextView to set longitude
-        TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
+        TextView tvLht = view.findViewById(R.id.Lihat);
 
 
         ImageView img = view.findViewById(R.id.imageS);
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
-        if (view!=null) {
 
+        if (infoWindowData != null){
+            img.setVisibility(View.VISIBLE);
+            tvLht.setVisibility(View.VISIBLE);
+            tvAlm.setVisibility(View.VISIBLE);
+            tvAkr.setVisibility(View.VISIBLE);
+            tvJrk.setVisibility(View.VISIBLE);
             tvSch.setText(infoWindowData.getNama());
-
-
             tvAkr.setText("Akreditasi " + infoWindowData.getAkreditasi());
-
             tvJrk.setText("Jarak > " + String.format("%.2f", infoWindowData.getJarak()) + "Km");
             tvAlm.setText(infoWindowData.getAlamat());
-            final String SchoolDetailId = infoWindowData.getSchooldetailid();
-        }else {
-
+        }
+        else {
+            tvSch.setText("Current Location");
+            img.setVisibility(View.GONE);
+            tvLht.setVisibility(View.GONE);
+            tvAlm.setVisibility(View.GONE);
+            tvAkr.setVisibility(View.GONE);
+            tvJrk.setVisibility(View.GONE);
         }
 
         return view;

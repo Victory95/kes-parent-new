@@ -208,7 +208,7 @@
                     android:layout_marginBottom="30dp"
                     android:layout_marginRight="20dp">
 
-                    <com.fingertech.kes.Activity.RecycleView.SnappyRecycleView
+                    <com.fingertech.kes.Activity.CustomView.SnappyRecycleView
                         android:id="@+id/recycler_view"
                         android:layout_width="match_parent"
                         android:layout_height="90dp"

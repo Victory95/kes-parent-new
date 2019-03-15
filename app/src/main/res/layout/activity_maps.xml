@@ -10,14 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:orientation="vertical"
+        android:id="@+id/dragView"
         android:background="#f0f0f0">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/ic_up_arrow"
-            android:id="@+id/arrowF"
+            android:src="@drawable/ic_up_arrow"
+            android:id="@+id/arrow"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             tools:ignore="ContentDescription" />
