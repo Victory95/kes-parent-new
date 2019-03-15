@@ -49,15 +49,20 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
 
         ImageView img = view.findViewById(R.id.imageS);
-
-
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
-        tvSch.setText(infoWindowData.getNama());
-        tvAkr.setText("Akreditasi "+infoWindowData.getAkreditasi());
+        if (view!=null) {
 
-        tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
-        tvAlm.setText(infoWindowData.getAlamat());
-        final String SchoolDetailId = infoWindowData.getSchooldetailid();
+            tvSch.setText(infoWindowData.getNama());
+
+
+            tvAkr.setText("Akreditasi " + infoWindowData.getAkreditasi());
+
+            tvJrk.setText("Jarak > " + String.format("%.2f", infoWindowData.getJarak()) + "Km");
+            tvAlm.setText(infoWindowData.getAlamat());
+            final String SchoolDetailId = infoWindowData.getSchooldetailid();
+        }else {
+
+        }
 
         return view;
     }

@@ -59,7 +59,7 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.bumptech.glide.Glide;
-import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
+//import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
@@ -512,6 +512,7 @@ public class MenuUtama extends AppCompatActivity
             countTextView.setText(String.valueOf(alertCount));
         } else {
             countTextView.setText("");
+            countTextView.setText("");
         }
 
         redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
@@ -865,19 +866,19 @@ public class MenuUtama extends AppCompatActivity
             View view = ((Activity)context).getLayoutInflater()
                     .inflate(R.layout.custom_snippet, null);
 
-            TextView tvSch = view.findViewById(R.id.nama_school);
+            TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
 
             // Getting reference to the TextView to set longitude
-            TextView tvAkr = view.findViewById(R.id.akreditasi);
+            TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
 
             // Getting reference to the TextView to set latitude
-            TextView tvJrk = view.findViewById(R.id.jarak);
+            TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
 
             // Getting reference to the TextView to set longitude
-            TextView tvAlm = view.findViewById(R.id.alamat_school);
+            TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
 
             // Getting reference to the TextView to set longitude
-            TextView tvLht = view.findViewById(R.id.Lihat);
+            TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
 
 
             ImageView img = view.findViewById(R.id.imageS);
@@ -887,18 +888,24 @@ public class MenuUtama extends AppCompatActivity
 
             InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
 
-            tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
-            tvAlm.setText(infoWindowData.getAlamat());
-            final String SchoolDetailId = infoWindowData.getSchooldetailid();
+            if(infoWindowData!=null) {
 
-            mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                    intent.putExtra("detailid",SchoolDetailId);
-                    startActivity(intent);
-                }
-            });
+
+                tvJrk.setText("Jarak > " + String.format("%.2f", infoWindowData.getJarak()) + "Km");
+                tvAlm.setText(infoWindowData.getAlamat());
+                final String SchoolDetailId = infoWindowData.getSchooldetailid();
+
+                mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        Intent intent = new Intent(getBaseContext(), DetailSekolah.class);
+                        intent.putExtra("detailid", SchoolDetailId);
+                        startActivity(intent);
+                    }
+                });
+            }else {
+                view.setVisibility(GONE);
+            }
             return view;
         }
     }
@@ -992,27 +999,32 @@ public class MenuUtama extends AppCompatActivity
 
                             // Adding Marker to the Camera.
                             m= mapG.addMarker(markerOptions);
+
                         }
 
-
                         InfoWindowData info = new InfoWindowData();
-                        info.setJarak(Jarak);
-                        info.setAlamat(vicinity);
-                        info.setSchooldetailid(schooldetailid);
+                        if (info==null){
 
-                        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuUtama.this);
-                        mapG.setInfoWindowAdapter(customInfoWindow);
+                        }else {
+                            info.setJarak(Jarak);
+                            info.setAlamat(vicinity);
+                            info.setSchooldetailid(schooldetailid);
 
-                        m.setTag(info);
-                        // m.showInfoWindow();
+                            com.fingertech.kes.Activity.MenuUtama.CustomInfoWindowGoogleMap customInfoWindow = new com.fingertech.kes.Activity.MenuUtama.CustomInfoWindowGoogleMap(com.fingertech.kes.Activity.MenuUtama.this);
 
-                        Item = new ItemSekolah();
-                        Item.setName(placeName);
-                        Item.setAkreditas(akreditasi);
-                        Item.setJarak(Jarak);
-                        Item.setLat(lat);
-                        Item.setLng(lng);
-                        itemList.add(Item);
+//
+                            mapG.setInfoWindowAdapter(customInfoWindow);
+
+                            m.setTag(info);
+                            // m.showInfoWindow();
+                            Item = new ItemSekolah();
+                            Item.setName(placeName);
+                            Item.setAkreditas(akreditasi);
+                            Item.setJarak(Jarak);
+                            Item.setLat(lat);
+                            Item.setLng(lng);
+                            itemList.add(Item);
+                        }
                     }
 
                     // Create the recyclerview.

@@ -27,6 +27,7 @@ import android.util.Log;
 
 import com.fingertech.kes.R;
 import com.fingertech.kes.Service.DBHelper;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 
 public class  SettingsActivity extends  PreferenceFragment{
 
@@ -34,7 +35,7 @@ public class  SettingsActivity extends  PreferenceFragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
-
+        SwitchPreference RingtoneSwitch = (SwitchPreference) findPreference("SW_Notifikasi");
         SwitchPreference vibrateSwitch = (SwitchPreference) findPreference("key_vibrate");
         RingtonePreference ringtonePreference = (RingtonePreference)findPreference("Ringtone");
         bindPreferenceSummaryToValue(ringtonePreference);
@@ -46,6 +47,7 @@ public class  SettingsActivity extends  PreferenceFragment{
                     boolean isVibrateOn = (Boolean) isVibrateOnObject;
                     if (isVibrateOn) {
                         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
                         v.vibrate(400);
                     }
                     return true;
@@ -53,6 +55,28 @@ public class  SettingsActivity extends  PreferenceFragment{
             });
         }
 
+        if (RingtoneSwitch!=null){
+            RingtoneSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String stringValue = newValue.toString();
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                    String path = preferences.getString("Ringtone", "");
+                    boolean checked = (boolean) newValue;
+                    Ringtone ringtone = RingtoneManager.getRingtone(
+                            preference.getContext(), Uri.parse(path));
+                    if (!path.isEmpty()){
+                        if (checked) {
+                            ringtone.play();
+                        }
+                    }else if(path.isEmpty()){
+                        ringtone.stop();
+                    }
+
+                    return true;
+                }
+            });
+        }
 
     }
 
