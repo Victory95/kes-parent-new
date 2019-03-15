@@ -69,7 +69,7 @@ public class JadwalUjian extends AppCompatActivity {
     String jam,tanggal,type,nilai,mapel,deskripsi,semester_id,start_date,end_date,semester,start_year,start_end;
     TextView no_ujian;
     String date,semester_nama;
-    TextView tv_semester,tv_start,tv_end,tv_filter,tv_semesters,tv_reset,tv_slide;
+    TextView tv_semester,tv_filter,tv_semesters,tv_reset,tv_slide;
     EditText et_kata_kunci;
     LinearLayout ll_slide;
     com.rey.material.widget.Spinner sp_type;
@@ -95,8 +95,6 @@ public class JadwalUjian extends AppCompatActivity {
         toolbar         = findViewById(R.id.toolbar_ujian);
         no_ujian        = findViewById(R.id.tv_no_ujian);
         tv_semester     = findViewById(R.id.tv_semester);
-        tv_start        = findViewById(R.id.tv_start);
-        tv_end          = findViewById(R.id.tv_end);
         tv_filter       = findViewById(R.id.tv_filter);
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
 //        ll_slide        = findViewById(R.id.slide_down);
@@ -256,20 +254,20 @@ public class JadwalUjian extends AppCompatActivity {
                 status = resource.status;
                 code = resource.code;
 
+                String tahun_mulai,tahun_akhir;
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     for (int i = 0;i < response.body().getData().size();i++){
-
                         if (response.body().getData().get(i).getSemester_id().equals(semester_id)){
                             semester    = response.body().getData().get(i).getSemester_name();
                             start_date  = response.body().getData().get(i).getStart_date();
                             end_date    = response.body().getData().get(i).getEnd_date();
-                            start_year  = response.body().getData().get(0).getStart_date();
-                            start_end   = response.body().getData().get(1).getEnd_date();
-                            tv_semester.setText("Semester "+semester+" ("+converTahun(start_year)+"/"+converTahun(start_end)+")");
-                            tv_start.setText(converDate(start_date));
-                            tv_end.setText(converDate(end_date));
-
                         }
+                        if (response.body().getData().get(i).getSemester_name().equals("Ganjil")){
+                            start_year  = converTahun(response.body().getData().get(i).getStart_date());
+                        } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
+                            start_end   = converTahun(response.body().getData().get(i).getEnd_date());
+                        }
+                        tv_semester.setText("Semester "+semester+" ("+start_year+"/"+start_end+")");
                     }
 
                     dataSemesters = response.body().getData();

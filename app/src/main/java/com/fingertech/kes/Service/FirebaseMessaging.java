@@ -47,7 +47,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
 
 
-
     @Override
     public void onMessageReceived(RemoteMessage remotemsg) {
 

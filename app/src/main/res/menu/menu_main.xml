@@ -2,9 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fingertech.kes.Activity.MainActivity">
-    <!--<item-->
-        <!--android:id="@+id/action_settings"-->
-        <!--android:orderInCategory="100"-->
-        <!--android:title="@string/action_settings"-->
-        <!--app:showAsAction="never" />-->
+    <item
+        android:id="@+id/item_download"
+        android:icon="@drawable/ic_download"
+        android:title="Unduh"
+        app:showAsAction="ifRoom"/>
+
 </menu>

@@ -410,9 +410,9 @@
     <string name="btn_profil_anak">Profil Anak</string>
     <string name="btn_jadwal">Jadwal</string>
     <string name="btn_jadwal_ujian">Jadwal Ujian</string>
-    <string name="btn_absensi_anak">Absensi Anak</string>
-    <string name="btn_tugas_anak">Tugas Anak</string>
-    <string name="btn_raport_anak">Raport Anak</string>
+    <string name="btn_absensi_anak">Absensi</string>
+    <string name="btn_tugas_anak">Tugas</string>
+    <string name="btn_raport_anak">Raport</string>
     <string name="info_selamat_datang">Selamat datang</string>
     <string name="tv_info_orangtua">Ini adalah akses pertama anda untuk akses ke orang tua</string>
     <string name="tv_info_2">Pastikan semua data anda isi dan ikuti petunjuknya</string>

@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.synnapps.carouselview.** { *; }
+-keep class io.intercom.android.** { *; }
+-keep class com.intercom.** { *; }
+-keep class com.shockwave.**

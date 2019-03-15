@@ -65,7 +65,7 @@ public class TugasAnak extends AppCompatActivity {
     TugasAdapter tugasAdapter;
     Auth mApiInterface;
     EditText et_kata_kunci;
-    TextView tv_semester,tv_start,tv_end;
+    TextView tv_semester;
     String authorization,memberid,school_code,classroom_id;
     RecyclerView rv_tugas;
     Toolbar toolbar;
@@ -100,8 +100,6 @@ public class TugasAnak extends AppCompatActivity {
         toolbar         = findViewById(R.id.toolbar_tugas);
         no_ujian        = findViewById(R.id.tv_no_ujian);
         tv_semester     = findViewById(R.id.tv_semester);
-        tv_start        = findViewById(R.id.tv_start);
-        tv_end          = findViewById(R.id.tv_end);
         tv_filter       = findViewById(R.id.tv_filter);
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
 //        ll_slide        = findViewById(R.id.slide_down);
@@ -267,13 +265,13 @@ public class TugasAnak extends AppCompatActivity {
                             semester    = response.body().getData().get(i).getSemester_name();
                             start_date  = response.body().getData().get(i).getStart_date();
                             end_date    = response.body().getData().get(i).getEnd_date();
-                            start_year  = response.body().getData().get(0).getStart_date();
-                            start_end   = response.body().getData().get(1).getEnd_date();
-                            tv_semester.setText("Semester "+semester+" ("+converTahun(start_year)+"/"+converTahun(start_end)+")");
-                            tv_start.setText(converDate(start_date));
-                            tv_end.setText(converDate(end_date));
-
                         }
+                        if (response.body().getData().get(i).getSemester_name().equals("Ganjil")){
+                            start_year  = converTahun(response.body().getData().get(i).getStart_date());
+                        } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
+                            start_end   = converTahun(response.body().getData().get(i).getEnd_date());
+                        }
+                        tv_semester.setText("Semester "+semester+" ("+start_year+"/"+start_end+")");
                     }
 
                     dataSemesters = response.body().getData();

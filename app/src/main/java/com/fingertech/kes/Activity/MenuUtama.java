@@ -384,8 +384,8 @@ public class MenuUtama extends AppCompatActivity
                     .setTitle("Keluar")
                     .setMessage("Apakah anda ingin keluar dari aplikasi.")
                     .setNegativeBtnText("Tidak")
-                    .setNegativeBtnBackground("#f0f0f0")
-                    .setPositiveBtnBackground("#40bfe8")
+                    .setNegativeBtnBackground("#40bfe8")
+                    .setPositiveBtnBackground("#f0f0f0")
                     .setPositiveBtnText("Ya")
                     .setGifResource(R.drawable.home)   //Pass your Gif here
                     .isCancellable(true)
@@ -457,7 +457,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, TestVideo.class);
+            Intent intent = new Intent(MenuUtama.this, test.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {

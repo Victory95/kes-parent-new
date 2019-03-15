@@ -141,8 +141,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            }
-            else {
+            } else if (profileModel.getHeight() == 1986 || profileModel.getWidth() == 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         200,
                         200
@@ -233,8 +232,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            }
-            else {
+            } else if (profileModel.getHeight() == 1986 || profileModel.getWidth() == 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         175,
                         175

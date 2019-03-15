@@ -5566,6 +5566,7 @@ public class JSONResponse{
             this.data = data;
         }
     }
+
     public class DataJam{
         @SerializedName("schedule_time")
         public String schedule_time;
@@ -7614,5 +7615,28 @@ public class JSONResponse{
     }
 
 
+    public class Download{
+        @SerializedName("status")
+        public int status;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        @SerializedName("code")
+        public String code;
+    }
 
 }

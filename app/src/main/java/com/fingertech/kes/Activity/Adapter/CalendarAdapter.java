@@ -77,6 +77,4 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
 
         void onItemClick(View view, int position);
     }
-
-
 }

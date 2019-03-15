@@ -50,7 +50,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginLeft="15dp"
                 android:orientation="horizontal"
-                tools:ignore="UselessParent">
+                tools:ignore="DisableBaselineAlignment,UselessParent">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -156,16 +156,13 @@
                 android:visibility="gone"
                 android:textSize="20sp"/>
 
-            <com.dant.centersnapreyclerview.SnappingRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/rv_rapor"
-                app:orientation="horizontal"
-                app:anchor="center"
                 >
-
-            </com.dant.centersnapreyclerview.SnappingRecyclerView>
+            </android.support.v7.widget.RecyclerView>
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -207,6 +204,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table1"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -230,6 +228,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table2"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -253,6 +252,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table3"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -276,6 +276,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table4"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -301,6 +302,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table5"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -324,6 +326,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table6"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -348,6 +351,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table7"
                         android:gravity="center_horizontal">
 
                         <TextView
@@ -372,6 +376,7 @@
                     <TableRow
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:id="@+id/table8"
                         android:gravity="center_horizontal">
 
                         <TextView
