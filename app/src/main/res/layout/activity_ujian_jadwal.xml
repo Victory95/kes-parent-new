@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="165dp"
         android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:background="@color/colorPrimary">
         <TextView
             android:layout_width="match_parent"
@@ -34,7 +36,7 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:textColorHint="@color/ic_logo_background"
-            android:theme="@style/LoginTextInputLayoutWhite"
+            android:theme="@style/TextLabelWhite"
             style="@style/LoginTextInputLayoutWhite">
 
             <EditText
@@ -50,9 +52,9 @@
                 android:singleLine="true"
                 android:textColor="@color/ic_logo_background"
                 android:textSize="16sp"
-                android:theme="@style/TextLabel"
-                tools:ignore="Autofill,RtlSymmetry" />
+                android:theme="@style/TextLabel"/>
         </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.BookmarkTabel;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -30,36 +31,31 @@ public class FilterActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private SlidingUpPanelLayout slidingUpPanelLayout;
-    SearchView searchView;
     BookmarkAdapter bookmarkAdapter;
     List<Data> itemList = new ArrayList<Data>();
     BookmarkTabel bookmarkTabel = new BookmarkTabel();
     Data data = new Data();
-    Button delete,filter;
+    Button delete;
     Double latitude,longitude;
     ArrayList<HashMap<String, String>> row;
     Toolbar ToolBarAtas2;
     Button arrof;
     SearchManager searchManager;
     TextView hint_bookmark;
+    MaterialSearchView materialSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bottom_sheet);
+        setContentView(R.layout.filter);
 
         recyclerView           = findViewById(R.id.recycleBookmark);
         delete                 = recyclerView.findViewById(R.id.BookMark);
-        searchView             = findViewById(R.id.search_filter);
         layoutManager          = new LinearLayoutManager(this);
         ToolBarAtas2           = findViewById(R.id.toolbar_back);
         bookmarkAdapter        = new BookmarkAdapter(itemList,FilterActivity.this);
-        slidingUpPanelLayout   = findViewById(R.id.sliding);
-        filter                 = findViewById(R.id.filter);
-        arrof                  = findViewById(R.id.arrowF);
-        searchManager          = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         hint_bookmark          = findViewById(R.id.hint_bookmark);
+        materialSearchView      = findViewById(R.id.search_view);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -69,26 +65,13 @@ public class FilterActivity extends AppCompatActivity {
 
         setSupportActionBar(ToolBarAtas2);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
-
-        filter.setOnClickListener(v ->
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED));
-
-        slidingUpPanelLayout.setFadeOnClickListener(view ->
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN));
-
-        arrof.setOnClickListener(v ->
-                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN));
-
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 bookmarkAdapter.getFilter(query).filter(query);
                 recyclerView.setVisibility(View.VISIBLE);
+                //Do some magic
                 return false;
             }
 
@@ -96,6 +79,7 @@ public class FilterActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 bookmarkAdapter.getFilter(newText).filter(newText);
                 recyclerView.setVisibility(View.VISIBLE);
+                //Do some magic
                 return false;
             }
         });
@@ -153,7 +137,11 @@ public class FilterActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        materialSearchView.setMenuItem(item);
+
         return true;
     }
-
 }

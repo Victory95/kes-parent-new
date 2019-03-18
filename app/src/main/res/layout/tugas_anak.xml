@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Anak.TugasAnak"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:ignore="Autofill,RtlSymmetry" >
 
     <android.support.v7.widget.Toolbar

@@ -219,7 +219,7 @@
             android:theme="@style/AppTheme.DarkStatusBar" />
         <activity
             android:name=".Activity.Maps.SearchingMAP"
-            android:label=""
+            android:label="Sekolah Terdekat"
             android:parentActivityName=".Activity.MenuGuest"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -229,7 +229,7 @@
         </activity>
         <activity
             android:name=".Activity.Search.FilterActivity"
-            android:label=""
+            android:label="Bookmark"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

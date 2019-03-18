@@ -204,7 +204,6 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 tickMarkLabelsRelativeLayout.setVisibility(View.GONE);
                 discreteSlider.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-
                 //Do some magic
                 return false;
             }

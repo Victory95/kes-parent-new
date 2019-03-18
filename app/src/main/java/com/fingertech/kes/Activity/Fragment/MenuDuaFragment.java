@@ -35,6 +35,20 @@ public class MenuDuaFragment extends Fragment {
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
     CardView btn_kalender,btn_pesan;
     SharedPreferences sharedPreferences;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        member_id           = sharedPreferences.getString("member_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        parent_nik          = sharedPreferences.getString("parent_nik",null);
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,14 +58,6 @@ public class MenuDuaFragment extends Fragment {
         btn_kalender    = view.findViewById(R.id.btn_kalender);
         btn_pesan       = view.findViewById(R.id.btn_pesan);
 
-        sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
-        authorization       = sharedPreferences.getString("authorization",null);
-        school_code         = sharedPreferences.getString("school_code",null);
-        member_id           = sharedPreferences.getString("member_id",null);
-        classroom_id        = sharedPreferences.getString("classroom_id",null);
-        student_id          = sharedPreferences.getString("student_id",null);
-        school_name         = sharedPreferences.getString("school_name",null);
-        parent_nik          = sharedPreferences.getString("parent_nik",null);
 
         btn_kalender.setOnClickListener(new View.OnClickListener() {
             @Override

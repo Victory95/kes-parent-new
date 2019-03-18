@@ -43,6 +43,21 @@ public class MenuSatuFragment extends Fragment{
     Bundle bundle;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        sharedPreferences2  = getActivity().getSharedPreferences(myViewpagerPreferences,Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        member_id           = sharedPreferences.getString("member_id",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        parent_nik          = sharedPreferences.getString("parent_nik",null);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -56,15 +71,6 @@ public class MenuSatuFragment extends Fragment{
         btn_raport      = view.findViewById(R.id.btn_raport);
         frameLayout     = view.findViewById(R.id.fragment1);
 
-        sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
-        sharedPreferences2  = getActivity().getSharedPreferences(myViewpagerPreferences,Context.MODE_PRIVATE);
-        authorization       = sharedPreferences.getString("authorization",null);
-        school_code         = sharedPreferences.getString("school_code",null);
-        member_id           = sharedPreferences.getString("member_id",null);
-        classroom_id        = sharedPreferences.getString("classroom_id",null);
-        student_id          = sharedPreferences.getString("student_id",null);
-        school_name         = sharedPreferences.getString("school_name",null);
-        parent_nik          = sharedPreferences.getString("parent_nik",null);
 
         btn_profile.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences2.edit();

@@ -353,39 +353,38 @@ public class TugasAnak extends AppCompatActivity {
 
 
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    if (response.body().getData() != null) {
-                        for (int i = 0; i < response.body().getData().size(); i++) {
-                            tanggal = response.body().getData().get(i).getExamDateOk();
-                            mapel = response.body().getData().get(i).getCources_name();
-                            type = response.body().getData().get(i).getExamTypeName();
-                            deskripsi = response.body().getData().get(i).getExamDesc();
-                            guru = response.body().getData().get(i).getTeacher_name();
-                            nilai = response.body().getData().get(i).getScoreValue();
+                    for (int i = 0; i < response.body().getData().size(); i++) {
+                        tanggal = response.body().getData().get(i).getExamDateOk();
+                        mapel = response.body().getData().get(i).getCources_name();
+                        type = response.body().getData().get(i).getExamTypeName();
+                        deskripsi = response.body().getData().get(i).getExamDesc();
+                        guru = response.body().getData().get(i).getTeacher_name();
+                        nilai = response.body().getData().get(i).getScoreValue();
 
-                            itemTugas = new TugasModel();
-                            itemTugas.setTanggal(tanggal);
-                            itemTugas.setMapel(mapel);
-                            itemTugas.setType_id(type);
-                            itemTugas.setDeskripsi(deskripsi);
-                            itemTugas.setGuru(guru);
-                            itemTugas.setNilai(nilai);
-                            itemTugasList.add(itemTugas);
-                        }
-                        tugasAdapter = new TugasAdapter(itemTugasList,TugasAnak.this);
-                        no_ujian.setVisibility(View.GONE);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TugasAnak.this, LinearLayoutManager.VERTICAL, false);
-                        linearLayoutManager.setStackFromEnd(true);
-                        linearLayoutManager.setReverseLayout(true);
-                        rv_tugas.setLayoutManager(linearLayoutManager);
-                        rv_tugas.setAdapter(tugasAdapter);
-                        hideKeyboard(TugasAnak.this);
-                        et_kata_kunci.clearFocus();
-                    }else {
-                        hideKeyboard(TugasAnak.this);
-                        et_kata_kunci.clearFocus();
-                        no_ujian.setVisibility(View.VISIBLE);
-                        rv_tugas.setVisibility(View.GONE);
+                        itemTugas = new TugasModel();
+                        itemTugas.setTanggal(tanggal);
+                        itemTugas.setMapel(mapel);
+                        itemTugas.setType_id(type);
+                        itemTugas.setDeskripsi(deskripsi);
+                        itemTugas.setGuru(guru);
+                        itemTugas.setNilai(nilai);
+                        itemTugasList.add(itemTugas);
                     }
+                    tugasAdapter = new TugasAdapter(itemTugasList,TugasAnak.this);
+                    no_ujian.setVisibility(View.GONE);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(TugasAnak.this, LinearLayoutManager.VERTICAL, false);
+                    linearLayoutManager.setStackFromEnd(true);
+                    linearLayoutManager.setReverseLayout(true);
+                    rv_tugas.setLayoutManager(linearLayoutManager);
+                    rv_tugas.setAdapter(tugasAdapter);
+                    hideKeyboard(TugasAnak.this);
+                    et_kata_kunci.clearFocus();
+
+                }else {
+                    hideKeyboard(TugasAnak.this);
+                    et_kata_kunci.clearFocus();
+                    no_ujian.setVisibility(View.VISIBLE);
+                    rv_tugas.setVisibility(View.GONE);
                 }
             }
 
