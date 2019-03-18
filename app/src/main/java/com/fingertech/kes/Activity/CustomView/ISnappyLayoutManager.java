@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity.RecycleView;
+package com.fingertech.kes.Activity.CustomView;
 
 public interface ISnappyLayoutManager {
 

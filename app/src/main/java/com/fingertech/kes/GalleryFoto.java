@@ -6,22 +6,19 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Adapter.FotoAdapter;
-import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.FotoModel;
-import com.fingertech.kes.Activity.RecycleView.AutoFitGridLayoutManager;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +65,7 @@ public class GalleryFoto extends AppCompatActivity {
                 hideDialog();
                 JSONResponse.Foto_sekolah resource = response.body();
                 if (resource==null){
-
+                    FancyToast.makeText(getApplicationContext(),"Tidak ada foto", Toast.LENGTH_LONG,FancyToast.ERROR,false);
                 }else {
                     status = resource.status;
                     if (status == 1) {

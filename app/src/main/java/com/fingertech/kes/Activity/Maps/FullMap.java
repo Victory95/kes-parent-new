@@ -7,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -20,23 +18,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ViewConfiguration;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 //import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
-import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
+import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import  com.rey.material.widget.Spinner;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -47,9 +44,8 @@ import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.ClusterItemSekolah;
-import com.fingertech.kes.Activity.MenuGuest;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
-import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
+import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Controller.Auth;
@@ -135,12 +131,17 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     private ProgressDialog dialog;
     double lat,lng,Jarak;
     String placeName,vicinity,schooldetailid,akreditasi,member_id;
+    LinearLayout drag;
+    ImageView arrow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_map);
         mApiInterface = ApiClient.getClient().create(Auth.class);
+        arrow   = findViewById(R.id.arrow);
+        drag    = findViewById(R.id.dragView);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.full_maps);
         mapFragment.getMapAsync(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -203,7 +204,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onItemSelected(Spinner parent, View view, int position, long id) {
                 provid= arrayList.get(position).getProvinsiid();
-//                Toast.makeText(FullMap.this, "Kamu memilih  " + provid, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -235,21 +235,34 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             }
         });
 
+        slidingLayout.setFadeOnClickListener(view -> {
+            slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            arrow.setImageResource(R.drawable.ic_up_arrow);
+        });
+
         slidingLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                Log.i("KES", "onPanelSlide, offset " + slideOffset);
+            public void onPanelSlide(View view, float v) {
+
             }
 
             @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Log.i("KES", "onPanelStateChanged " + newState);
+            public void onPanelStateChanged(View view, SlidingUpPanelLayout.PanelState panelState, SlidingUpPanelLayout.PanelState panelState1) {
+                if (panelState.equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
+                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                }else if (panelState.equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                    arrow.setImageResource(R.drawable.ic_arrow_down);
+                }
             }
         });
-        slidingLayout.setFadeOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+
+        drag.setOnClickListener(v -> {
+            if (slidingLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.EXPANDED)){
                 slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                arrow.setImageResource(R.drawable.ic_up_arrow);
+            }else if (slidingLayout.getPanelState().equals(SlidingUpPanelLayout.PanelState.COLLAPSED)){
+                slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+                arrow.setImageResource(R.drawable.ic_arrow_down);
             }
         });
 
@@ -288,11 +301,12 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                         });
 
                 mClusterManager.setRenderer(new MarkerClusterRenderer(FullMap.this, mapF, mClusterManager));
-                //mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mapF.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lati.latitude, lati.longitude), 10));
-//                mapF.animateCamera(CameraUpdateFactory.zoomTo(11));
+                mapF.animateCamera(CameraUpdateFactory.zoomTo(11));
                 mClusterManager.cluster();
                 snappyrecyclerView.setVisibility(View.GONE);
+                slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                arrow.setImageResource(R.drawable.ic_up_arrow);
 
             }
         });
@@ -337,13 +351,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             mGoogleApiClient.connect();
         }
 
-        InfoWindowData info = new InfoWindowData();
-        info.setNama("CurrentLocation");
-        info.setAlamat("");
-        info.setSchooldetailid("");
-        info.setAkreditasi("");
-        info.setJarak(0.0);
-        CurrlocationMarker.setTag(info);
         currentLatitudef = location.getLatitude();
         currentLongitudef = location.getLongitude();
         updateLocation(location);
@@ -385,11 +392,15 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onInfoWindowClick(Marker marker) {
                 InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
-                String SchoolDetailId = infoWindowData.getSchooldetailid();
-                Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                intent.putExtra("detailid",SchoolDetailId);
-                intent.putExtra("member_id",member_id);
-                startActivity(intent);
+                if (infoWindowData != null) {
+                    String SchoolDetailId = infoWindowData.getSchooldetailid();
+                    Intent intent = new Intent(getBaseContext(), DetailSekolah.class);
+                    intent.putExtra("detailid", SchoolDetailId);
+                    intent.putExtra("member_id", member_id);
+                    startActivity(intent);
+                }else {
+                    Log.d("Lokasi","Lokasi Anda");
+                }
             }
         });
     }

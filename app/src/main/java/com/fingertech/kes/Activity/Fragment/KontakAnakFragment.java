@@ -25,11 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Anak.EditProfileAnak;
 import com.fingertech.kes.Activity.AnakMain;
 import com.fingertech.kes.Activity.Masuk;
-import com.fingertech.kes.Activity.RecycleView.DialogFactorykps;
-import com.fingertech.kes.Activity.RecycleView.DialogKps;
+import com.fingertech.kes.Activity.CustomView.DialogFactorykps;
+import com.fingertech.kes.Activity.CustomView.DialogKps;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;

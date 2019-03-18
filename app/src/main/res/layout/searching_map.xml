@@ -6,18 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Maps.SearchingMAP"
     tools:ignore="ContentDescription,RtlSymmetry">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_satu"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+    <FrameLayout
+        android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_satu"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay"/>
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/MaterialSearchViewStyle"/>
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/loc"
-        android:layout_below="@id/toolbar_satu"
+        android:layout_below="@id/toolbar_container"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -75,50 +88,53 @@
                 android:layout_marginTop="3dp"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:background="@drawable/ic_bookmark" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_below="@id/searchh"
-        android:id="@+id/search_school"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_below="@id/searchh"-->
+        <!--android:id="@+id/search_school"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:layout_marginTop="10dp">-->
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/rectangle_line22"/>
-    </RelativeLayout>
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/ic_controls_blue"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:foreground="?android:attr/selectableItemBackground"-->
+                <!--android:clickable="true"-->
+                <!--android:focusable="true" />-->
+
+    <!--</LinearLayout>-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search_school"
+        android:layout_below="@id/searchh"
         android:orientation="vertical">
 
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/mapSearch"
-        android:layout_marginTop="10dp"
-        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapSearch"
+            android:layout_marginTop="10dp"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="10dp"
                 android:visibility="gone"
-                android:layout_marginRight="10dp"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content">
             </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
@@ -133,29 +149,29 @@
         android:layout_marginBottom="20dp"
         android:background="@color/grey_100">
 
-    <RelativeLayout
-        android:id="@+id/tick_mark_labels_rl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"/>
+        <RelativeLayout
+            android:id="@+id/tick_mark_labels_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"/>
 
-    <com.etiennelawlor.discreteslider.library.ui.DiscreteSlider
-        android:id="@+id/discrete_slider"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="bottom"
-        android:background="@color/grey_100"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        app:backdropFillColor="@color/grey_200"
-        app:backdropStrokeColor="@color/grey_300"
-        app:backdropStrokeWidth="1dp"
-        app:horizontalBarThickness="5dp"
-        app:position="0"
-        app:progressDrawable="@drawable/transparent_progress_drawable"
-        app:thumb="@drawable/thumb"
-        app:tickMarkCount="4"
-        app:tickMarkRadius="5dp" />
-    </LinearLayout>
+            <com.etiennelawlor.discreteslider.library.ui.DiscreteSlider
+                android:id="@+id/discrete_slider"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:background="@color/grey_100"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                app:backdropFillColor="@color/grey_200"
+                app:backdropStrokeColor="@color/grey_300"
+                app:backdropStrokeWidth="1dp"
+                app:horizontalBarThickness="5dp"
+                app:position="0"
+                app:progressDrawable="@drawable/transparent_progress_drawable"
+                app:thumb="@drawable/thumb"
+                app:tickMarkCount="4"
+                app:tickMarkRadius="5dp" />
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

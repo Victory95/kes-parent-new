@@ -137,12 +137,4 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="Lihat PDF"
-        android:id="@+id/lihat"
-        android:layout_margin="20dp"
-        android:gravity="center"/>
-
 </LinearLayout>

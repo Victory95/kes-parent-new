@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,7 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -72,8 +70,8 @@ import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
-import com.fingertech.kes.Activity.RecycleView.SnappyLinearLayoutManager;
-import com.fingertech.kes.Activity.RecycleView.SnappyRecycleView;
+import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
+import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
 import com.fingertech.kes.Controller.Auth;
@@ -789,13 +787,7 @@ public class MenuUtama extends AppCompatActivity
 
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-        InfoWindowData info = new InfoWindowData();
-        info.setNama("CurrentLocation");
-        info.setAlamat("");
-        info.setSchooldetailid("");
-        info.setAkreditasi("");
-        info.setJarak(0.0);
-        CurrLocationMarker.setTag(info);
+
         dapat_map();
 
     }
@@ -821,10 +813,16 @@ public class MenuUtama extends AppCompatActivity
         mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                intent.putExtra("detailid",schooldetailid);
-                intent.putExtra("member_id",parent_id);
-                startActivity(intent);
+                InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
+                if (infoWindowData != null) {
+                    String SchoolDetailId = infoWindowData.getSchooldetailid();
+                    Intent intent = new Intent(getBaseContext(), DetailSekolah.class);
+                    intent.putExtra("detailid", SchoolDetailId);
+                    intent.putExtra("member_id", parent_id);
+                    startActivity(intent);
+                }else {
+                    Log.d("Lokasi","Lokasi Anda");
+                }
             }
         });
     }
@@ -863,42 +861,17 @@ public class MenuUtama extends AppCompatActivity
         @Override
         public View getInfoContents(Marker marker) {
             View view = ((Activity)context).getLayoutInflater()
-                    .inflate(R.layout.custom_snippet, null);
+                    .inflate(R.layout.snippet, null);
 
             TextView tvSch = view.findViewById(R.id.nama_school);
 
             // Getting reference to the TextView to set longitude
             TextView tvAkr = view.findViewById(R.id.akreditasi);
 
-            // Getting reference to the TextView to set latitude
-            TextView tvJrk = view.findViewById(R.id.jarak);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvAlm = view.findViewById(R.id.alamat_school);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvLht = view.findViewById(R.id.Lihat);
-
-
-            ImageView img = view.findViewById(R.id.imageS);
-
             tvSch.setText(marker.getTitle());
             tvAkr.setText("Akreditasi "+marker.getSnippet());
 
-            InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
 
-            tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
-            tvAlm.setText(infoWindowData.getAlamat());
-            final String SchoolDetailId = infoWindowData.getSchooldetailid();
-
-            mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                    intent.putExtra("detailid",SchoolDetailId);
-                    startActivity(intent);
-                }
-            });
             return view;
         }
     }
@@ -945,8 +918,7 @@ public class MenuUtama extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sd));
-                            markerOptions.title(placeName);
-                            markerOptions.snippet(akreditasi);
+
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -959,8 +931,7 @@ public class MenuUtama extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
-                            markerOptions.title(placeName);
-                            markerOptions.snippet(akreditasi);
+
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -972,8 +943,7 @@ public class MenuUtama extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
-                            markerOptions.title(placeName);
-                            markerOptions.snippet(akreditasi);
+
                             // Remove Marker
 
                             // Adding Marker to the Camera.
@@ -986,18 +956,18 @@ public class MenuUtama extends AppCompatActivity
                             markerOptions.position(latLng);
                             // Adding colour to the marker
                             markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sma));
-                            markerOptions.title(placeName);
-                            markerOptions.snippet(akreditasi);
+
                             // Remove Marker
 
                             // Adding Marker to the Camera.
                             m= mapG.addMarker(markerOptions);
                         }
 
-
                         InfoWindowData info = new InfoWindowData();
-                        info.setJarak(Jarak);
+                        info.setNama(placeName);
                         info.setAlamat(vicinity);
+                        info.setAkreditasi(akreditasi);
+                        info.setJarak(Jarak);
                         info.setSchooldetailid(schooldetailid);
 
                         CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuUtama.this);

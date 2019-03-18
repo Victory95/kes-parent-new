@@ -60,7 +60,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginRight="20dp">
 
-            <com.fingertech.kes.Activity.RecycleView.SnappyRecycleView
+            <com.fingertech.kes.Activity.CustomView.SnappyRecycleView
                 android:id="@+id/recycler_view2"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -72,8 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:clickable="true"
-        android:focusable="true"
-        android:id="@+id/dragView">
+        android:focusable="true">
         <include layout="@layout/activity_maps"/>
     </RelativeLayout>
 
