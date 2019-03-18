@@ -31,7 +31,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Activity.test"></activity>
+        <activity android:name=".Activity.Pesan.Pesan"></activity>
+        <activity
+            android:name=".Activity.Pesan"
+            android:label="@string/title_activity_pesan"
+            android:parentActivityName=".Activity.MenuUtama">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.MenuUtama" />
+        </activity>
+        <activity android:name=".Activity.test" />
 
         <uses-library
             android:name="org.apache.http.legacy"

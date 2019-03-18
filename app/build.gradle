@@ -24,7 +24,7 @@ android {
 
     configurations {
         cleanedAnnotations
-        compile.exclude group: 'org.jetbrains' , module:'annotations'
+        compile.exclude group: 'org.jetbrains', module: 'annotations'
     }
     useLibrary 'org.apache.http.legacy'
 }

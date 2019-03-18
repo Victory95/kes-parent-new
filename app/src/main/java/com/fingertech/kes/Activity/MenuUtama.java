@@ -72,6 +72,7 @@ import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
+import com.fingertech.kes.Activity.Pesan.Pesan;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
 import com.fingertech.kes.Controller.Auth;
@@ -466,6 +467,9 @@ public class MenuUtama extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
+            startActivity(intent);
+        } else if (id==R.id.nav_pesan){
+            Intent intent = new Intent(MenuUtama.this, Pesan.class);
             startActivity(intent);
         }
 
