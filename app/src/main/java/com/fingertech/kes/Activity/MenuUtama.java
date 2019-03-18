@@ -312,6 +312,7 @@ public class MenuUtama extends AppCompatActivity
                 get_profile();
                 get_children();
                 send_data();
+                send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -357,6 +358,7 @@ public class MenuUtama extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
+
 
     }
 
@@ -564,6 +566,7 @@ public class MenuUtama extends AppCompatActivity
                         classroom_id    = response.body().getData().get(0).getClassroom_id();
                         school_name     = response.body().getData().get(0).getSchool_name();
                         send_data();
+                        send_data2();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -577,7 +580,7 @@ public class MenuUtama extends AppCompatActivity
                             classroom_id    = profileModels.get(position).getClassroom_id();
                             school_name     = profileModels.get(position).getSchool_name();
                             send_data();
-
+                            send_data2();
                         });
                     }else {
                         recyclerView.setVisibility(GONE);

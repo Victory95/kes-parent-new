@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Anak.BalasPesan"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:ignore="Autofill,LabelFor,TextFields" >
 
     <android.support.v7.widget.Toolbar

@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -112,6 +113,8 @@ public class JadwalUjian extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());
         Check_Semester();
+
+        et_kata_kunci.clearFocus();
 
         et_kata_kunci.addTextChangedListener(new TextWatcher() {
 
@@ -350,35 +353,33 @@ public class JadwalUjian extends AppCompatActivity {
 
                 ItemUjian itemUjian= null;
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    if (response.body().getData() != null) {
-                        for (int i = 0; i < response.body().getData().size(); i++) {
-                            jam         = response.body().getData().get(i).getExam_time_ok();
-                            tanggal     = response.body().getData().get(i).getExam_date_ok();
-                            mapel       = response.body().getData().get(i).getCources_name();
-                            type        = response.body().getData().get(i).getType_name();
-                            deskripsi   = response.body().getData().get(i).getExam_desc();
-                            nilai       = response.body().getData().get(i).getScore_value();
-                            itemUjian = new ItemUjian();
-                            itemUjian.setJam(jam);
-                            itemUjian.setTanggal(tanggal);
-                            itemUjian.setMapel(mapel);
-                            itemUjian.setType_id(type);
-                            itemUjian.setDeskripsi(deskripsi);
-                            itemUjian.setNilai(nilai);
-                            itemUjianList.add(itemUjian);
-                        }
-                        no_ujian.setVisibility(View.GONE);
-                        ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
-                        rv_ujian.setLayoutManager(layoutManager);
-                        rv_ujian.setAdapter(ujianAdapter);
-                        hideKeyboard(JadwalUjian.this);
-                        et_kata_kunci.clearFocus();
-                    }else {
-                        hideKeyboard(JadwalUjian.this);
-                        et_kata_kunci.clearFocus();
-                        no_ujian.setVisibility(View.VISIBLE);
+                    for (int i = 0; i < response.body().getData().size(); i++) {
+                        jam         = response.body().getData().get(i).getExam_time_ok();
+                        tanggal     = response.body().getData().get(i).getExam_date_ok();
+                        mapel       = response.body().getData().get(i).getCources_name();
+                        type        = response.body().getData().get(i).getType_name();
+                        deskripsi   = response.body().getData().get(i).getExam_desc();
+                        nilai       = response.body().getData().get(i).getScore_value();
+                        itemUjian = new ItemUjian();
+                        itemUjian.setJam(jam);
+                        itemUjian.setTanggal(tanggal);
+                        itemUjian.setMapel(mapel);
+                        itemUjian.setType_id(type);
+                        itemUjian.setDeskripsi(deskripsi);
+                        itemUjian.setNilai(nilai);
+                        itemUjianList.add(itemUjian);
                     }
+                    no_ujian.setVisibility(View.GONE);
+                    ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                    rv_ujian.setLayoutManager(layoutManager);
+                    rv_ujian.setAdapter(ujianAdapter);
+                }
+                else {
+                    hideKeyboard(JadwalUjian.this);
+                    et_kata_kunci.clearFocus();
+                    no_ujian.setVisibility(View.VISIBLE);
+                    rv_ujian.setVisibility(View.GONE);
                 }
 
             }
@@ -450,5 +451,11 @@ public class JadwalUjian extends AppCompatActivity {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
 }
 

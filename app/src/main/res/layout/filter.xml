@@ -5,62 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Search.FilterActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_back"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+    <FrameLayout
+        android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"/>
+        android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#f0f0f0"
-        android:layout_below="@id/toolbar_back"
-        android:id="@+id/a">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/fab_margin"
-        android:layout_marginTop="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:id="@+id/b"
-        android:text="@string/tv_bookmark"
-        android:textStyle="bold" />
-        <LinearLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_back"
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/c"
-            android:layout_below="@id/b"
-            android:layout_marginBottom="20dp">
-    <android.support.v7.widget.SearchView
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:id="@+id/search_filter"
-        android:background="@drawable/rectangle_line22"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp">
-    </android.support.v7.widget.SearchView>
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="20dp"
-            android:layout_gravity="center"
-            android:id="@+id/filter"
-            android:background="@drawable/ic_filter"/>
-        </LinearLayout>
-    </RelativeLayout>
+            android:theme="@style/AppTheme.AppBarOverlay"/>
+
+        <com.miguelcatalan.materialsearchview.MaterialSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/searchviewstyle"/>
+
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/a"
+        android:layout_below="@id/toolbar_container"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView

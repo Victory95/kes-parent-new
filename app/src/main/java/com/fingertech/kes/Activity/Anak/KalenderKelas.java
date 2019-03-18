@@ -252,6 +252,27 @@ public class KalenderKelas extends AppCompatActivity {
                                     calendarModel.setCalendar_desc(calendar.getCalendar_desc());
                                     calendarModel.setCalendar_type(calendar_type);
                                     calendarModelList.add(calendarModel);
+                                }else {
+                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+                                    try {
+                                        date = format.parse(calendar_date + " " + calendar_time);
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    cal.setTime(date);
+                                    setToMidnight(cal);
+                                    Long timee = cal.getTimeInMillis();
+                                    eventList = getevent(calendar_colour,timee);
+                                    compactCalendarView.addEvents(eventList);
+                                    calendarModel = new CalendarModel();
+                                    calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
+                                    calendarModel.setCalendar_time(calendar.getCalendar_time());
+                                    calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
+                                    calendarModel.setCalendar_title(calendar.getCalendar_title());
+                                    calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                    calendarModel.setCalendar_type(calendar_type);
+                                    calendarModelList.add(calendarModel);
                                 }
 
                             }

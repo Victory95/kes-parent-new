@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -109,13 +110,13 @@ PesanAnak extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         final DatePickerDialog mDatePicker;
         mDatePicker = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 date_from.setText(convertDate(selectedyear, selectedmonth, selectedday));
             }
         }, mYear, mMonth, mDay);
-
 
         date_from.setOnClickListener(view -> mDatePicker.show());
 
@@ -218,6 +219,9 @@ PesanAnak extends AppCompatActivity {
                 code    = resource.code;
 
                 if (status == 1 & code.equals("DTS_SCS_0001")){
+                    hideKeyboard(PesanAnak.this);
+//                    date_from.clearFocus();
+//                    date_to.clearFocus();
                     pesanModelList  = new ArrayList<PesanModel>();
                     for (int i = 0; i < response.body().getData().size();i++){
                         tanggal     = response.body().getData().get(i).getMessage_date();
@@ -250,9 +254,7 @@ PesanAnak extends AppCompatActivity {
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PesanAnak.this);
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(pesanAdapter);
-                    hideKeyboard(PesanAnak.this);
-                    date_from.clearFocus();
-                    date_to.clearFocus();
+
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){
                     hideKeyboard(PesanAnak.this);
@@ -304,16 +306,20 @@ PesanAnak extends AppCompatActivity {
         }
         return super.dispatchTouchEvent( event );
     }
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
         if (view == null) {
             view = new View(activity);
         }
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
 }
