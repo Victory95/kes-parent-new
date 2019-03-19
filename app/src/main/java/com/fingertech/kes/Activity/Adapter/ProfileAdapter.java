@@ -83,15 +83,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
         Glide.with(getContext()).load(profileModel.getPicture()).into(holder.imageView);
 
         if (row_index == position){
-            if (profileModel.getWidth() < 1080){
+            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        150,
-                        150
+                        115,
+                        115
                 );
                 params.setMargins(0,10,0,0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                        150,
-                        35
+                        115,
+                        25
                 );
 
                 paramsanak.setMargins(0,10,0,10);
@@ -112,7 +112,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            }else if (profileModel.getWidth() > 1080){
+            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         250,
                         250
@@ -141,7 +141,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            } else if (profileModel.getWidth() == 1080){
+            } else if (profileModel.getHeight() == 1986 || profileModel.getWidth() == 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         200,
                         200
@@ -174,15 +174,15 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
 
 
         }else {
-            if (profileModel.getWidth() < 1080){
+            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        130,
-                        130
+                        100,
+                        100
                 );
                 params.setMargins(0, 30, 0, 0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
-                        130,
-                        25
+                        100,
+                        20
                 );
                 paramsanak.setMargins(0, 10, 0, 5);
 
@@ -203,7 +203,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff3d00&color=fff").into(holder.imageView);
                     }
                 }
-            }else if (profileModel.getWidth() > 1080){
+            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         200,
                         200
@@ -213,6 +213,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         200,
                         35
                 );
+
                 paramsanak.setMargins(0,10,0,10);
                 holder.namaanak.setCardBackgroundColor(Color.parseColor("#40bfe8"));
                 holder.namaprofile.setTextColor(Color.parseColor("#FFFFFF"));
@@ -231,7 +232,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            } else if (profileModel.getWidth() == 1080){
+            } else if (profileModel.getHeight() == 1986 || profileModel.getWidth() == 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         175,
                         175

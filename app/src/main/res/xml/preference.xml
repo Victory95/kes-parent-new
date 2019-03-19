@@ -12,6 +12,9 @@
             android:key="SW_Notifikasi"
             android:title="Aktifkan Nada Pemberitahuan"
             android:editable="true"
+            android:thumb="@color/colorPrimary"
+            android:trackTint="@color/colorPrimary"
+            android:theme="@style/SwitchCompatStyle"
             />
         <RingtonePreference
             android:key="Ringtone"

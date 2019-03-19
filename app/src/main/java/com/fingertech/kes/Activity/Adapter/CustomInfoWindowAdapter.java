@@ -63,7 +63,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
             tvAlm.setText(infoWindowData.getAlamat());
         }
         else {
-            tvSch.setText("Current Location");
+            tvSch.setText("I'm here");
             img.setVisibility(View.GONE);
             tvLht.setVisibility(View.GONE);
             tvAlm.setVisibility(View.GONE);
