@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.AbsensiAnak;
 import com.fingertech.kes.Activity.Anak.AbsenAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
@@ -130,7 +131,7 @@ public class MenuSatuFragment extends Fragment{
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
             editor.commit();
-            Intent intent = new Intent(getContext(), AbsenAnak.class);
+            Intent intent = new Intent(getContext(), AbsensiAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);

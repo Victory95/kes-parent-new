@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
+import com.fingertech.kes.Activity.Anak.PesanAnakDua;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -88,7 +89,7 @@ public class MenuDuaFragment extends Fragment {
                 editor.putString("school_name",school_name);
                 editor.putString("student_id",student_id);
                 editor.apply();
-                Intent intent = new Intent(getContext(), PesanAnak.class);
+                Intent intent = new Intent(getContext(), PesanAnakDua.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("member_id", member_id);

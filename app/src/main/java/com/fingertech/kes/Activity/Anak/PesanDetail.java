@@ -44,6 +44,7 @@ public class PesanDetail extends AppCompatActivity {
         kelas               = findViewById(R.id.kelas_pesan);
         pesan               = findViewById(R.id.isi_pesan);
         balas               = findViewById(R.id.btn_balas);
+
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         parent_id           = getIntent().getStringExtra("parent_id");

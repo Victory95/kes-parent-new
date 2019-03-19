@@ -67,7 +67,7 @@ public class SearchMapAdapter extends RecyclerView.Adapter<SearchMapAdapter.MyHo
         final String SchooldetailId     = viewItem.getSchooldetailid();
         final String jenjang            = viewItem.getJenjang_pendidikan();
         if (country.contains(searchString )) {
-            Log.e("test", country + " contains: " + searchString);
+            Log.e("AbsensiAnak", country + " contains: " + searchString);
             int startPos    = country.indexOf(searchString);
             int endPos      = startPos + searchString.length();
             Spannable spanText = Spannable.Factory.getInstance().newSpannable(holder.name.getText());
