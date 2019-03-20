@@ -57,6 +57,7 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.bumptech.glide.Glide;
+import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
@@ -459,7 +460,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, test.class);
+            Intent intent = new Intent(MenuUtama.this, AbsensiAnak.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
@@ -864,36 +865,6 @@ public class MenuUtama extends AppCompatActivity
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
-
-        private Context context;
-
-        public CustomInfoWindowGoogleMap(Context ctx){
-            context = ctx;
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            View view = ((Activity)context).getLayoutInflater()
-                    .inflate(R.layout.snippet, null);
-
-            TextView tvSch = view.findViewById(R.id.nama_school);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvAkr = view.findViewById(R.id.akreditasi);
-
-            tvSch.setText(marker.getTitle());
-            tvAkr.setText("Akreditasi "+marker.getSnippet());
-
-
-            return view;
-        }
-    }
 
     public void dapat_map(){
 
@@ -1028,7 +999,6 @@ public class MenuUtama extends AppCompatActivity
                             final LatLng StartlatLng = new LatLng(latitude, longitude);
                             GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
                             String $key = getResources().getString(R.string.google_maps_key);
-
 
                             GoogleDirection.withServerKey($key)
                                     .from(latLng)

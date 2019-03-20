@@ -49,8 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class
-PesanAnak extends AppCompatActivity {
+public class PesanAnak extends AppCompatActivity {
 
     Toolbar toolbar;
     String authorization,school_code,parent_id;

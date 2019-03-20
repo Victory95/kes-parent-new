@@ -366,13 +366,19 @@ public interface Auth {
                                                              @Query("school_code") String school_code,
                                                              @Query("calendar_id") String calendar_id);
 
-    ///// Pesan
+    ///// Pesan orang tua
     @GET("parents/kes_message_inbox")
     Call<JSONResponse.PesanAnak>kes_message_inbox_get(@Header("Authorization") String authorization,
                                                       @Query("school_code") String school_code,
                                                       @Query("parent_id") String parent_id,
                                                       @Query("date_from") String date_from,
                                                       @Query("date_to") String date_to);
+
+    //// pesan anak
+    @GET("students/kes_message_inbox")
+    Call<JSONResponse.Pesan_Anak>kes_message_anak_get(@Header("Authorization") String authorization,
+                                                      @Query("school_code") String school_code,
+                                                      @Query("student_id") String student_id);
 
     //// Detail Pesan
     @GET("parents/kes_message_inbox_detail")

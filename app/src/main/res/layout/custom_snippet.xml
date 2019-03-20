@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_width="150dp"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_width="wrap_content"
+    android:layout_height="100dp">
 
     <ImageView
         android:id="@+id/imageS"
@@ -14,6 +13,7 @@
         android:scaleType="fitCenter"
         android:src="@drawable/school"
         tools:ignore="ContentDescription" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -61,7 +61,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyHold
         String nama = viewItem.getName().toLowerCase(Locale.getDefault());
         String alamat = viewItem.getAddress().toLowerCase(Locale.getDefault());
         if (nama.contains(searchString)) {
-            Log.e("test", nama + " contains: " + searchString);
+            Log.e("AbsensiAnak", nama + " contains: " + searchString);
             int startPos = nama.indexOf(searchString);
             int endPos = startPos + searchString.length();
             Spannable spanText = Spannable.Factory.getInstance().newSpannable(holder.name.getText());

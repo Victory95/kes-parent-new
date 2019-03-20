@@ -55,26 +55,27 @@
         android:layout_height="250dp"
         app:compactCalendarTargetHeight="250dp"
         app:compactCalendarTextSize="12sp"
-        app:compactCalendarBackgroundColor="@color/colorPrimary"
-        app:compactCalendarTextColor="@color/ic_logo_background"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/ic_logo_background"
+        app:compactCalendarBackgroundColor="@color/ic_logo_background"
+        app:compactCalendarTextColor="@color/black"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorPrimary"
         app:compactCalendarCurrentDayBackgroundColor="@color/ic_logo_background"
-        app:compactCalendarMultiEventIndicatorColor="#fff"
+        app:compactCalendarMultiEventIndicatorColor="@color/colorPrimary"
         app:compactCalendarCurrentDayTextColor="@color/black"
         app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
-        app:compactCalendarCurrentSelectedDayTextColor="@color/colorPrimary"
+        app:compactCalendarCurrentSelectedDayTextColor="@color/ic_logo_background"
         app:compactCalendarOtherMonthDaysTextColor="@color/gray_active_icon"
         app:compactCalendarDisplayOtherMonthDays="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hint_no_event"
-        android:layout_margin="30dp"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textSize="20sp"
-        android:id="@+id/no_kalendar" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_no_event"
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textSize="20sp"
+            android:id="@+id/no_kalendar" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recylceview_calendar"
             android:layout_below="@+id/compactcalendar_view"

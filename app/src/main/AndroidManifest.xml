@@ -31,8 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-
-        <activity android:name=".Activity.test" />
+        <activity android:name=".Activity.kalendartest" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -294,13 +293,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Pesan.Detail_Pesan_Guru"
-            android:label="Balas Pesan Guru"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Pesan.Pesan"
-            android:label="Pesan Guru"
+            android:name=".Activity.Language.Layout_Pengaturan"
+            android:label="@string/tv_toolbar"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -378,11 +372,6 @@
             android:label="Rekap Presensi"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".Activity.Pesan.Balas_chat"
-            android:label="Kirim Balasan Guru "
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.LihatPdf"
             android:label=""
@@ -390,9 +379,19 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.TestVideo" />
         <activity
+            android:name=".Activity.AbsensiAnak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".Activity.Setting.Setting_Activity"
             android:label="@string/title_activity_setting_"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activity.Anak.PesanAnakDua"
+            android:label="Pesan Anak"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

@@ -1304,6 +1304,7 @@ public class JSONResponse{
         }
     }
 
+    //// Cari Sekolah per provinsi
     public class School_Provinsi{
         @SerializedName("code")
         public String code;
@@ -2142,6 +2143,7 @@ public class JSONResponse{
         }
     }
 
+    //// Provinsi di indonesia
     public class Provinsi{
         @SerializedName("code")
         public String code;
@@ -2188,6 +2190,7 @@ public class JSONResponse{
         }
     }
 
+    ///// Detail Sekolah
     public class DetailSchool{
 
         @SerializedName("code")
@@ -3075,6 +3078,7 @@ public class JSONResponse{
         }
     }
 
+    //// Hapus kode
     public class DeleteCode{
         @SerializedName("message")
         public String message;
@@ -3084,6 +3088,7 @@ public class JSONResponse{
 
     }
 
+    ///// Detail Student
     public class DetailStudent{
         @SerializedName("status")
         public Integer status;
@@ -3482,6 +3487,8 @@ public class JSONResponse{
         }
     }
 
+
+    ///// Dapat Profile
     public class GetProfile{
 
         @SerializedName("status")
@@ -3773,6 +3780,7 @@ public class JSONResponse{
 
     }
 
+    //// update foto profile
     public class UpdatePicture{
         @SerializedName("status")
         public Integer status;
@@ -3792,6 +3800,7 @@ public class JSONResponse{
         }
     }
 
+    //// dapat jadwal ujian
     public class  JadwalUjian{
         @SerializedName("status")
         public int status;
@@ -4055,6 +4064,7 @@ public class JSONResponse{
         }
     }
 
+    //// dapat jadwal pelajaran
     public class JadwalPelajaran{
 
 
@@ -4091,7 +4101,6 @@ public class JSONResponse{
             return status;
         }
     }
-
     public class JadwalData{
 
         @SerializedName("day_type")
@@ -4149,7 +4158,6 @@ public class JSONResponse{
             return dayStatus;
         }
     }
-
     public class ScheduleClassItem{
 
 
@@ -4242,6 +4250,7 @@ public class JSONResponse{
         }
     }
 
+    //// dapat tugas anak
     public class TugasAnak{
         @SerializedName("code")
         public String code;
@@ -4512,6 +4521,7 @@ public class JSONResponse{
         }
     }
 
+    //// dapat nilai raport anak
     public class Raport{
         @SerializedName("status")
         public int status;
@@ -4737,7 +4747,6 @@ public class JSONResponse{
             return courcesid;
         }
     }
-
     public class Classroom{
         @SerializedName("classroom_desc")
         private String classroomDesc;
@@ -4849,7 +4858,6 @@ public class JSONResponse{
             return edulevelId;
         }
     }
-
     public class TypeExam{
 
         @SerializedName("1")
@@ -4963,7 +4971,6 @@ public class JSONResponse{
             return scoreExam;
         }
     }
-
     public class UjianNegara{
 
         @SerializedName("type_name")
@@ -5191,6 +5198,7 @@ public class JSONResponse{
         }
     }
 
+    /// cek semester sekarang
     public class CheckSemester{
         @SerializedName("status")
         public Integer status;
@@ -5408,6 +5416,7 @@ public class JSONResponse{
         }
     }
 
+    ////// List anak
     public class ListChildren{
         @SerializedName("status")
         public int status;
@@ -5532,6 +5541,7 @@ public class JSONResponse{
         }
     }
 
+    //// Absensi anak
     public class AbsenSiswa{
         @SerializedName("status")
         public int status;
@@ -5566,7 +5576,6 @@ public class JSONResponse{
             this.data = data;
         }
     }
-
     public class DataJam{
         @SerializedName("schedule_time")
         public String schedule_time;
@@ -5680,6 +5689,7 @@ public class JSONResponse{
         }
     }
 
+    ///// Dapat kalendar kelas
     public class ClassCalendar{
         @SerializedName("status")
         public int status;
@@ -5794,6 +5804,7 @@ public class JSONResponse{
         }
     }
 
+    //// detail kelas
     public class ClassroomDetail{
 
         @SerializedName("status")
@@ -5908,6 +5919,7 @@ public class JSONResponse{
         }
     }
 
+    //// Detail kalendar
     public class CalendarDetail{
         @SerializedName("status")
         public int status;
@@ -6197,6 +6209,7 @@ public class JSONResponse{
         }
     }
 
+    //// dapat pesan orang tua
     public class PesanAnak{
         @SerializedName("status")
         public int status;
@@ -6317,6 +6330,17 @@ public class JSONResponse{
 
         @SerializedName("reply_status")
         public int reply_status;
+
+        @SerializedName("message_title")
+        public String message_title;
+
+        public String getMessage_title() {
+            return message_title;
+        }
+
+        public void setMessage_title(String message_title) {
+            this.message_title = message_title;
+        }
 
         public String getMessageid() {
             return messageid;
@@ -6519,6 +6543,7 @@ public class JSONResponse{
         }
     }
 
+    /// pesan detail
     public class PesanDetail{
         @SerializedName("status")
         public int status;
@@ -7107,6 +7132,7 @@ public class JSONResponse{
         }
     }
 
+    ///// List nofitication
     public class ListNotification{
         @SerializedName("status")
         public int status;
@@ -7242,6 +7268,7 @@ public class JSONResponse{
         }
     }
 
+    ///// Balas Pesan
     public class BalasPesan{
         @SerializedName("status")
         public Integer status;
@@ -7649,5 +7676,330 @@ public class JSONResponse{
         @SerializedName("code")
         public String code;
     }
+
+
+    //// dapat pesan anak
+    public class Pesan_Anak{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<Data_Pesan> data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<Data_Pesan> getData() {
+            return data;
+        }
+
+        public void setData(List<Data_Pesan> data) {
+            this.data = data;
+        }
+    }
+    public class Data_Pesan{
+        @SerializedName("messageid")
+        public String messageid;
+
+        @SerializedName("user_id_from")
+        public String user_id_from;
+
+        @SerializedName("user_id_to")
+        public String user_id_to;
+
+        @SerializedName("message_cont")
+        public String message_cont;
+
+        @SerializedName("message_date")
+        public String message_date;
+
+        @SerializedName("message_status")
+        public String message_status;
+
+        @SerializedName("message_type")
+        public String message_type;
+
+        @SerializedName("classroom_id")
+        public String classroom_id;
+
+        @SerializedName("cources_id")
+        public String cources_id;
+
+        @SerializedName("datez")
+        public String datez;
+
+        @SerializedName("member_id")
+        public String member_id;
+
+        @SerializedName("reply_message_id")
+        public String reply_message_id;
+
+        @SerializedName("read_status")
+        public String read_status;
+
+        @SerializedName("read_date")
+        public String read_date;
+
+        @SerializedName("read_message_id")
+        public String read_message_id;
+
+        @SerializedName("school_id")
+        public String school_id;
+
+        @SerializedName("parent_status")
+        public String parent_status;
+
+        @SerializedName("teacher_id")
+        public String teacher_id;
+
+        @SerializedName("datez_ok")
+        public String datez_ok;
+
+        @SerializedName("classroom_name")
+        public String classroom_name;
+
+        @SerializedName("cources_name")
+        public String cources_name;
+
+        @SerializedName("sender_name")
+        public String sender_name;
+
+        @SerializedName("member_type_text")
+        public String member_type_text;
+
+        @SerializedName("parent_message_id")
+        public String parent_message_id;
+
+        @SerializedName("reply_status")
+        public int reply_status;
+
+        @SerializedName("message_title")
+        public String message_title;
+
+        public String getMessage_title() {
+            return message_title;
+        }
+
+        public void setMessage_title(String message_title) {
+            this.message_title = message_title;
+        }
+
+        public String getMessageid() {
+            return messageid;
+        }
+
+        public void setMessageid(String messageid) {
+            this.messageid = messageid;
+        }
+
+        public String getUser_id_from() {
+            return user_id_from;
+        }
+
+        public void setUser_id_from(String user_id_from) {
+            this.user_id_from = user_id_from;
+        }
+
+        public String getUser_id_to() {
+            return user_id_to;
+        }
+
+        public void setUser_id_to(String user_id_to) {
+            this.user_id_to = user_id_to;
+        }
+
+        public String getMessage_cont() {
+            return message_cont;
+        }
+
+        public void setMessage_cont(String message_cont) {
+            this.message_cont = message_cont;
+        }
+
+        public String getMessage_date() {
+            return message_date;
+        }
+
+        public void setMessage_date(String message_date) {
+            this.message_date = message_date;
+        }
+
+        public String getMessage_status() {
+            return message_status;
+        }
+
+        public void setMessage_status(String message_status) {
+            this.message_status = message_status;
+        }
+
+        public String getMessage_type() {
+            return message_type;
+        }
+
+        public void setMessage_type(String message_type) {
+            this.message_type = message_type;
+        }
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
+
+        public String getCources_id() {
+            return cources_id;
+        }
+
+        public void setCources_id(String cources_id) {
+            this.cources_id = cources_id;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getReply_message_id() {
+            return reply_message_id;
+        }
+
+        public void setReply_message_id(String reply_message_id) {
+            this.reply_message_id = reply_message_id;
+        }
+
+        public String getRead_status() {
+            return read_status;
+        }
+
+        public void setRead_status(String read_status) {
+            this.read_status = read_status;
+        }
+
+        public String getRead_date() {
+            return read_date;
+        }
+
+        public void setRead_date(String read_date) {
+            this.read_date = read_date;
+        }
+
+        public String getRead_message_id() {
+            return read_message_id;
+        }
+
+        public void setRead_message_id(String read_message_id) {
+            this.read_message_id = read_message_id;
+        }
+
+        public String getSchool_id() {
+            return school_id;
+        }
+
+        public void setSchool_id(String school_id) {
+            this.school_id = school_id;
+        }
+
+        public String getParent_status() {
+            return parent_status;
+        }
+
+        public void setParent_status(String parent_status) {
+            this.parent_status = parent_status;
+        }
+
+        public String getTeacher_id() {
+            return teacher_id;
+        }
+
+        public void setTeacher_id(String teacher_id) {
+            this.teacher_id = teacher_id;
+        }
+
+        public String getDatez_ok() {
+            return datez_ok;
+        }
+
+        public void setDatez_ok(String datez_ok) {
+            this.datez_ok = datez_ok;
+        }
+
+        public String getClassroom_name() {
+            return classroom_name;
+        }
+
+        public void setClassroom_name(String classroom_name) {
+            this.classroom_name = classroom_name;
+        }
+
+        public String getCources_name() {
+            return cources_name;
+        }
+
+        public void setCources_name(String cources_name) {
+            this.cources_name = cources_name;
+        }
+
+        public String getSender_name() {
+            return sender_name;
+        }
+
+        public void setSender_name(String sender_name) {
+            this.sender_name = sender_name;
+        }
+
+        public String getMember_type_text() {
+            return member_type_text;
+        }
+
+        public void setMember_type_text(String member_type_text) {
+            this.member_type_text = member_type_text;
+        }
+
+        public String getParent_message_id() {
+            return parent_message_id;
+        }
+
+        public void setParent_message_id(String parent_message_id) {
+            this.parent_message_id = parent_message_id;
+        }
+
+        public int getReply_status() {
+            return reply_status;
+        }
+
+        public void setReply_status(int reply_status) {
+            this.reply_status = reply_status;
+        }
+    }
+
 
 }

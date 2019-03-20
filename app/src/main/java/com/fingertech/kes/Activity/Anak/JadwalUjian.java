@@ -42,6 +42,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.stone.vega.library.VegaLayoutManager;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
@@ -371,8 +372,8 @@ public class JadwalUjian extends AppCompatActivity {
                     }
                     no_ujian.setVisibility(View.GONE);
                     ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
-                    rv_ujian.setLayoutManager(layoutManager);
+//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                    rv_ujian.setLayoutManager(new VegaLayoutManager());
                     rv_ujian.setAdapter(ujianAdapter);
                 }
                 else {

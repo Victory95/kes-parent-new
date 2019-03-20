@@ -1,6 +1,7 @@
 
 package com.fingertech.kes.Activity.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
         import android.util.Log;
         import android.view.LayoutInflater;
@@ -43,7 +44,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
         // Get car item dto in list.
         CalendarModel viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.tanggal.setText(viewItem.getCalendar_date());;
+        holder.tanggal.setText(viewItem.getCalendar_date());
+        holder.tanggal.setTextColor(Color.parseColor(viewItem.getCalendar_color()));
         holder.jam.setText(viewItem.getCalendar_time());
         holder.mapel.setText(viewItem.getCalendar_title());
         holder.type_id.setText(viewItem.getCalendar_desc());

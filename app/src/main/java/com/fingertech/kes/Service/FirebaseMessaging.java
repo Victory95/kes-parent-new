@@ -30,6 +30,9 @@ import com.fingertech.kes.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Objects;
 
 import static com.joooonho.SelectableRoundedImageView.TAG;
@@ -46,6 +49,8 @@ public class FirebaseMessaging extends FirebaseMessagingService {
     public static final String ANDROID_CHANNEL_ID = "com.fingertech.kes";
     public static final String ANDROID_CHANNEL_NAME = "ANDROID CHANNEL";
 
+    String in,fullname;
+    JSONObject reader;
 
     @Override
     public void onMessageReceived(RemoteMessage remotemsg) {
@@ -54,13 +59,26 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         String title       = remotemsg.getData().get("title");
         String body        = remotemsg.getData().get("body");
         Log.d("Title",remotemsg.getData()+"");
+
+        try {
+            reader = new JSONObject(remotemsg.getData().get("data"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            fullname = reader.getString("fullname");
+            in      = reader.getString("type");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d("fullname",fullname+"/"+in);
+
         nada();
-//        sendnotification(title,body);
+        sendnotification(title,body);
     }
 
     private void nada() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         String path = preferences.getString("Ringtone", "");
         if (!path.isEmpty()) {
             ringtone = RingtoneManager.getRingtone(this, Uri.parse(path));
@@ -76,28 +94,28 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         }
 
     }
-//    private void sendnotification(String title,String messageBody){
-//
-//        Intent intent = new Intent(this, MenuUtama.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-//                PendingIntent.FLAG_ONE_SHOT);
-//
-//        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
-//                .setSmallIcon(R.drawable.ic_logo)
-//                .setContentTitle(title)
-//                .setContentText(messageBody)
-//                .setAutoCancel(true)
-//                .setSound(soundUri)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
-//                .setContentIntent(pendingIntent);
-//
-//        create();
-//        notificationManager.notify(0, notificationBuilder.build());
-//
-//    }
+    private void sendnotification(String title,String messageBody){
+
+        Intent intent = new Intent(this, MenuUtama.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,ANDROID_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setContentTitle(title)
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_logo))
+                .setContentIntent(pendingIntent);
+
+        create();
+        notificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificationBuilder.build());
+
+    }
 
 
 

@@ -7,6 +7,16 @@ public class CalendarModel {
     public String calendar_time;
     public String calendar_date;
 
+    public String getCalendar_color() {
+        return calendar_color;
+    }
+
+    public void setCalendar_color(String calendar_color) {
+        this.calendar_color = calendar_color;
+    }
+
+    public String calendar_color;
+
     public String getCalendar_title() {
         return calendar_title;
     }
