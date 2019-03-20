@@ -7,12 +7,14 @@
     <PreferenceCategory
         android:key="Nada"
         android:title="Ringtone"
+
         >
         <SwitchPreference
             android:key="SW_Notifikasi"
             android:title="Aktifkan Nada Pemberitahuan"
             android:editable="true"
-            android:thumb="@color/colorPrimary"
+            android:thumb="@color/mint_color"
+            android:textColor="@color/colorPrimary"
             android:trackTint="@color/colorPrimary"
             android:theme="@style/SwitchCompatStyle"
             />

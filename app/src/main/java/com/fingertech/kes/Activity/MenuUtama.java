@@ -194,6 +194,7 @@ public class MenuUtama extends AppCompatActivity
     InkPageIndicator inkPageIndicator;
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
+    SharedPreferences sharedPreferences;
 
     int height,width;
     @Override
@@ -471,7 +472,18 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
+
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putString("member_id", parent_id);
+            editor.putString("school_code", school_code);
+            editor.putString("authorization", authorization);
+            editor.putString("fullname",fullname);
+            editor.commit();
             Intent intent = new Intent(MenuUtama.this, Pesan.class);
+            intent.putExtra("authorization",authorization);
+            intent.putExtra("school_code",school_code);
+            intent.putExtra("parent_id",parent_id);
+            intent.putExtra("fullname",fullname);
             startActivity(intent);
         }
 

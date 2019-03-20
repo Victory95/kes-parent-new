@@ -1,7 +1,7 @@
 package com.fingertech.kes.Activity.Model;
 
 public class PesanModel {
-    String tanggal,jam,dari,pesan,mapel,kelas;
+    String tanggal,jam,dari,pesan,mapel,kelas,title;
 
     public String getTanggal() {
         return tanggal;
@@ -50,4 +50,8 @@ public class PesanModel {
     public void setKelas(String kelas) {
         this.kelas = kelas;
     }
+
+    public String getTitle() { return title; }
+
+    public void setTitle(String title) { this.title = title; }
 }

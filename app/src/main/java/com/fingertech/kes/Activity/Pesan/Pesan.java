@@ -1,19 +1,240 @@
 package com.fingertech.kes.Activity.Pesan;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Adapter.PesanAdapter;
+import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
+import com.fingertech.kes.Activity.Anak.PesanAnak;
+import com.fingertech.kes.Activity.Anak.PesanDetail;
+import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.Model.PesanModel;
+import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
+import com.fingertech.kes.Rest.ApiClient;
+import com.fingertech.kes.Rest.JSONResponse;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Pesan extends AppCompatActivity {
+
+    TextView pengirim,pesan,title,tanggal;
+    ProgressDialog dialog;
+    Auth mApiInterface;
+    SharedPreferences sharedPreferences;
+    String authorization,school_code,parent_id,student_id,school_name,classroom_id,fullname;
+    RecyclerView recyclerView;
+    int status;
+    String code,date_from,date_to;
+    List<PesanModel> pesanModelList;
+    PesanGuruAdapter pesanGuruAdapter;
+    TextView no_pesan;
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    String kirim,pesanku,titleku,tanggalku;
+    PesanModel pesanModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pesan);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
+
+        tanggal         = findViewById(R.id.tanggal_pesan);
+        pengirim        = findViewById(R.id.Tvpengirim);
+        pesan           = findViewById(R.id.Tvpesan);
+        title           = findViewById(R.id.Tvsubject);
+        mApiInterface   = ApiClient.getClient().create(Auth.class);
+        recyclerView    = findViewById(R.id.Rv_chat);
+
+        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedPreferences.getString("authorization",null);
+        school_code         = sharedPreferences.getString("school_code",null);
+        parent_id           = sharedPreferences.getString("member_id",null);
+        student_id          = sharedPreferences.getString("student_id",null);
+        school_name         = sharedPreferences.getString("school_name",null);
+        classroom_id        = sharedPreferences.getString("classroom_id",null);
+        fullname            = sharedPreferences.getString("fullname",null);
+
+        date_from = "2018-12-30";
+        date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
+        dapat_pesan();
+    }
+
+    String convertDate(int year, int month, int day) {
+        Log.d("Tanggal", year + "/" + month + "/" + day);
+        String temp = year + "-" + (month + 1) + "-" + day;
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(temp));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    String converDate(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTanggal(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
+        try {
+            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+//
+
+    public void dapat_pesan(){
+        progressBar();
+        showDialog();
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
+            @Override
+            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
+                Log.d("onRespone",response.code()+"");
+                hideDialog();
+                JSONResponse.PesanAnak resource = response.body();
+
+                status  = resource.status;
+                code    = resource.code;
+
+
+                if (status == 1 & code.equals("DTS_SCS_0001")){
+                    hideKeyboard(Pesan.this);
+//                    date_from.clearFocus();
+//                    date_to.clearFocus();
+                    pesanModelList  = new ArrayList<PesanModel>();
+                    Log.e("jumlah",response.body().getData().size()+"");
+                    for (int i = 0; i < response.body().getData().size();i++){
+                        tanggalku = response.body().getData().get(i).getDatez();
+                        kirim= response.body().getData().get(i).getSender_name();
+                        pesanku=response.body().getData().get(i).getMessage_cont();
+                        titleku=response.body().getData().get(i).getMessage_title();
+                        pesanModel = new PesanModel();
+                        pesanModel.setTanggal(tanggalku);
+                        pesanModel.setDari(kirim);
+                        pesanModel.setPesan(pesanku);
+                        pesanModel.setTitle(titleku);
+                        pesanModelList.add(pesanModel);
+                    }
+                    pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+                    pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Intent intent = new Intent(getApplicationContext(), Detail_Pesan_Guru.class);
+                            intent.putExtra("fullname",fullname);
+                            intent.putExtra("authorization",authorization);
+                            intent.putExtra("school_code",school_code);
+                            intent.putExtra("parent_id",parent_id);
+                            intent.putExtra("message_id",response.body().getData().get(position).getMessageid());
+                            intent.putExtra("parent_message_id",response.body().getData().get(position).getParent_message_id());
+                            startActivity(intent);
+                        }
+                    });
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Pesan.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(pesanGuruAdapter);
+
+                }
+                else if (status == 0 & code.equals("DTS_ERR_0001")){
+                    hideKeyboard(Pesan.this);
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
+                Log.i("onFailure",t.toString());
+                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        });
+    }
 
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
+
+    private void showDialog() {
+        if (!dialog.isShowing())
+            dialog.show();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    private void hideDialog() {
+        if (dialog.isShowing())
+            dialog.dismiss();
+        dialog.setContentView(R.layout.progressbar);
+    }
+    public void progressBar(){
+        dialog = new ProgressDialog(Pesan.this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

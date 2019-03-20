@@ -83,7 +83,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
         Glide.with(getContext()).load(profileModel.getPicture()).into(holder.imageView);
 
         if (row_index == position){
-            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
+            if ( profileModel.getWidth() < 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         115,
                         115
@@ -112,7 +112,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
+            }else if (profileModel.getWidth() > 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         250,
                         250
@@ -174,7 +174,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
 
 
         }else {
-            if (profileModel.getHeight() < 1986 || profileModel.getWidth() < 1080){
+            if (profileModel.getWidth() < 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         100,
                         100
@@ -203,7 +203,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama() + "&background=ff3d00&color=fff").into(holder.imageView);
                     }
                 }
-            }else if (profileModel.getHeight() > 1986 || profileModel.getWidth() > 1080){
+            }else if (profileModel.getWidth() > 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         200,
                         200
@@ -232,7 +232,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + profileModel.getNama()+"&background=ff3d00&color=fff&size=256").into(holder.imageView);
                     }
                 }
-            } else if (profileModel.getHeight() == 1986 || profileModel.getWidth() == 1080){
+            } else if (profileModel.getWidth() == 1080){
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         175,
                         175

@@ -119,6 +119,7 @@ public class BalasPesan extends AppCompatActivity {
                 JSONResponse.BalasPesan resource = response.body();
                 status = resource.status;
                 code    = resource.code;
+
                 if (status == 1 && code.equals("DTS_SCS_0001")){
                     Intent intent = new Intent(BalasPesan.this,PesanDetail.class);
                     intent.putExtra("authorization",authorization);

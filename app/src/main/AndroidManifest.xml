@@ -31,15 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Activity.Pesan.Pesan"></activity>
-        <activity
-            android:name=".Activity.Pesan"
-            android:label="@string/title_activity_pesan"
-            android:parentActivityName=".Activity.MenuUtama">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fingertech.kes.Activity.MenuUtama" />
-        </activity>
+
         <activity android:name=".Activity.test" />
 
         <uses-library
@@ -302,8 +294,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Language.Layout_Pengaturan"
-            android:label="@string/tv_toolbar"
+            android:name=".Activity.Pesan.Detail_Pesan_Guru"
+            android:label="Balas Pesan Guru"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Pesan.Pesan"
+            android:label="Pesan Guru"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -379,6 +376,11 @@
         <activity
             android:name=".Activity.Anak.RekapAbsensi"
             android:label="Rekap Presensi"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".Activity.Pesan.Balas_chat"
+            android:label="Kirim Balasan Guru "
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
