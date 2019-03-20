@@ -58,7 +58,6 @@ public class Pesan extends Fragment {
     String code,date_from,date_to;
     List<PesanModel> pesanModelList;
     PesanGuruAdapter pesanGuruAdapter;
-    TextView no_pesan;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String kirim,pesanku,titleku,tanggalku;
     PesanModel pesanModel;
@@ -95,43 +94,6 @@ public class Pesan extends Fragment {
     }
 
 
-    String convertDate(int year, int month, int day) {
-        Log.d("Tanggal", year + "/" + month + "/" + day);
-        String temp = year + "-" + (month + 1) + "-" + day;
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
-        try {
-            String e = newDateFormat.format(calendarDateFormat.parse(temp));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    String converDate(String tanggal){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
-
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
-        try {
-            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-    String convertTanggal(String tanggal){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy",Locale.getDefault());
-        try {
-            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
 //
 
     public void dapat_pesan(){
