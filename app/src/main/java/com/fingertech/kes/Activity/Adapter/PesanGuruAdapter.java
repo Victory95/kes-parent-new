@@ -23,6 +23,11 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
 
     private List<PesanModel> viewItemList;
     String base_url = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
+    private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+    private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+
     private PesanGuruAdapter.OnItemClickListener onItemClickListener;
     public int row_index = 0;
     public PesanGuruAdapter(List<PesanModel> viewItemList) {
@@ -46,12 +51,22 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
     @Override
     public void onBindViewHolder(PesanGuruAdapter.MyHolder holder, int position) {
 
+
+
+
+
+
         // Get car item dto in list.
         PesanModel viewItem = viewItemList.get(position);
+
+
+
         // Set car item title.
+
+
+
+
         holder.tanggal.setText(convertDate(viewItem.getTanggal()));
-
-
         holder.pengirim.setText(viewItem.getDari());
         holder.pesan.setText(viewItem.getPesan());
         holder.title.setText(viewItem.getTitle());

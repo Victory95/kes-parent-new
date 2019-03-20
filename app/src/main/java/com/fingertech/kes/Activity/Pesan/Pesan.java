@@ -7,15 +7,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Pesan extends AppCompatActivity {
+public class Pesan extends Fragment {
 
     TextView pengirim,pesan,title,tanggal;
     ProgressDialog dialog;
@@ -58,24 +63,23 @@ public class Pesan extends AppCompatActivity {
     String kirim,pesanku,titleku,tanggalku;
     PesanModel pesanModel;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pesan);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_pesan, container, false);
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
-        tanggal         = findViewById(R.id.tanggal_pesan);
-        pengirim        = findViewById(R.id.Tvpengirim);
-        pesan           = findViewById(R.id.Tvpesan);
-        title           = findViewById(R.id.Tvsubject);
+        tanggal         = v.findViewById(R.id.tanggal_pesan);
+        pengirim        = v.findViewById(R.id.Tvpengirim);
+        pesan           = v.findViewById(R.id.Tvpesan);
+        title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        recyclerView    = findViewById(R.id.Rv_chat);
+        recyclerView    = v.findViewById(R.id.Rv_chat);
 
-        sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
         school_code         = sharedPreferences.getString("school_code",null);
         parent_id           = sharedPreferences.getString("member_id",null);
@@ -87,7 +91,9 @@ public class Pesan extends AppCompatActivity {
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
         dapat_pesan();
+        return v;
     }
+
 
     String convertDate(int year, int month, int day) {
         Log.d("Tanggal", year + "/" + month + "/" + day);
@@ -144,7 +150,7 @@ public class Pesan extends AppCompatActivity {
 
 
                 if (status == 1 & code.equals("DTS_SCS_0001")){
-                    hideKeyboard(Pesan.this);
+                    hideKeyboard(getActivity());
 //                    date_from.clearFocus();
 //                    date_to.clearFocus();
                     pesanModelList  = new ArrayList<PesanModel>();
@@ -165,7 +171,7 @@ public class Pesan extends AppCompatActivity {
                     pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Intent intent = new Intent(getApplicationContext(), Detail_Pesan_Guru.class);
+                            Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("authorization",authorization);
                             intent.putExtra("school_code",school_code);
@@ -175,13 +181,13 @@ public class Pesan extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(Pesan.this);
+                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(pesanGuruAdapter);
 
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){
-                    hideKeyboard(Pesan.this);
+                    hideKeyboard(getActivity());
                     recyclerView.setVisibility(View.GONE);
                 }
             }
@@ -189,7 +195,7 @@ public class Pesan extends AppCompatActivity {
             @Override
             public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
                 Log.i("onFailure",t.toString());
-                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),t.toString(),Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         });
@@ -208,6 +214,10 @@ public class Pesan extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void onBackPressed() {
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
@@ -224,7 +234,7 @@ public class Pesan extends AppCompatActivity {
         dialog.setContentView(R.layout.progressbar);
     }
     public void progressBar(){
-        dialog = new ProgressDialog(Pesan.this);
+        dialog = new ProgressDialog(getActivity());
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
@@ -237,4 +247,9 @@ public class Pesan extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
+
+
+
 }
