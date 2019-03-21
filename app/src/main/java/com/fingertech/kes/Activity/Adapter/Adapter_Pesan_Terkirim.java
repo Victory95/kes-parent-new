@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.R;
 import com.github.florent37.shapeofview.shapes.CircleView;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.fingertech.kes.Service.App.getContext;
 
 public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_Terkirim.MyHolder> {
 
@@ -62,6 +65,8 @@ public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_T
         holder.pengirim.setText(viewItem.getDari());
         holder.pesan.setText(viewItem.getPesan());
         holder.title.setText(viewItem.getTitle());
+        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + viewItem.getDari()+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(holder.imageView);
+
 
 
 

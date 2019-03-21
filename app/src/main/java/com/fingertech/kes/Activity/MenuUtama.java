@@ -198,7 +198,7 @@ public class MenuUtama extends AppCompatActivity
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
     SharedPreferences sharedPreferences;
-    int mCartItemCount = 10;
+    int mCartItemCount = 20;
     TextView countmenu;
 
     int height,width;

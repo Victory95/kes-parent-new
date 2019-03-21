@@ -59,21 +59,8 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
     @Override
     public void onBindViewHolder(PesanGuruAdapter.MyHolder holder, int position) {
         PesanModel viewItem = viewItemList.get(position);
+//
 
-        String tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
-        // Set car item title.
-        try {
-            date_now    = times_format.parse(tanggal);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } Long times_now = date_now.getTime();
-
-        try {
-            date_pesan = times_format.parse(viewItem.getTanggal());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Long times_pesan = date_pesan.getTime();
 
 
         if (viewItem.getStatus().equals("1")){
@@ -88,13 +75,8 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
 
 
-
-        if (times_pesan.equals(times_now)){
-            holder.waktu.setText(convertDate(viewItem.getTanggal()));
-        }else {
-//            holder.waktu.setText(convertTanggal(viewItem.getTanggal()));
-        }
-
+//
+//
 
 
         holder.pengirim.setText(viewItem.getDari());
@@ -106,7 +88,7 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         holder.pesan.setText(viewItem.getPesan());
         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + viewItem.getDari()+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(holder.imageView);
 
-
+        holder.tanggal.setText(convertDate(viewItem.getTanggal()));
 
 //        holder.pengirim.setText(viewItem.getDari());
 //        holder.pesan.setText(viewItem.getPesan());
@@ -142,7 +124,7 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
         @Override
         public void onClick(View v) {
-//            onItemClickListener.onItemClick(v, getAdapterPosition());
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     public interface OnItemClickListener {
@@ -150,33 +132,11 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         void onItemClick(View view, int position);
     }
     String convertDate(String date) {
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd ",Locale.getDefault());
-        try {
-            String e = calendarDateFormat.format(newDateFormat.parse(date));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
 
-//    String convertjam(String tanggal){
-//        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-//        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd",Locale.getDefault());
-//        try {
-//            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
-//            return e;
-//        } catch (java.text.ParseException e) {
-//            e.printStackTrace();
-//            return "";
-//        }
-//    }
-    String convertTanggal(String tanggalku){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+        DateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd ", Locale.getDefault());
+        DateFormat newDateFormat = new SimpleDateFormat("dd MMM yyyy ",Locale.getDefault());
         try {
-            String e = calendarDateFormat.format(newDateFormat.parse(tanggalku));
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();
