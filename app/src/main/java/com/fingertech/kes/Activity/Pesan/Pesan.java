@@ -143,6 +143,7 @@ public class Pesan extends Fragment {
                             startActivity(intent);
                         }
                     });
+//                    setUserVisibleHint(isVisible());
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setAdapter(pesanGuruAdapter);
@@ -212,6 +213,15 @@ public class Pesan extends Fragment {
 
 
 
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (isVisibleToUser) {
+//            // Refresh your fragment here
+//            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+//            Log.i("IsRefresh", "Yes");
+//        }
+//    }
 
 
 }

@@ -58,6 +58,7 @@ public class PesanTerkirim extends Fragment {
     PesanModel pesanModel;
     Adapter_Pesan_Terkirim adapter_pesan_terkirim;
     List<PesanModel> pesanModelList;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,6 +104,7 @@ public class PesanTerkirim extends Fragment {
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
                 Log.d("onRespone",response.code()+"");
                 hideDialog();
+//                setUserVisibleHint(isVisible());
                 JSONResponse.PesanAnak resource = response.body();
 
                 status  = resource.status;
@@ -131,14 +133,14 @@ public class PesanTerkirim extends Fragment {
                     adapter_pesan_terkirim.setOnItemClickListener(new Adapter_Pesan_Terkirim.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
+                            Intent intent = new Intent(getActivity(), PesanTerkirim.class);
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("authorization",authorization);
                             intent.putExtra("school_code",school_code);
                             intent.putExtra("parent_id",parent_id);
                             intent.putExtra("message_id",response.body().getData().get(position).getMessageid());
                             intent.putExtra("parent_message_id",response.body().getData().get(position).getParent_message_id());
-                            startActivity(intent);
+//                            startActivity(intent);
                         }
                     });
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -148,7 +150,9 @@ public class PesanTerkirim extends Fragment {
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){
                     hideKeyboard(getActivity());
+
                     recyclerView.setVisibility(View.GONE);
+
                 }
             }
 
@@ -206,7 +210,15 @@ public class PesanTerkirim extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // Refresh your fragment here
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            Log.i("IsRefresh", "Yes");
+        }
+    }
 
 
 }
