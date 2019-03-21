@@ -25,7 +25,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Adapter.PesanAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.PesanDetail;
@@ -66,17 +65,13 @@ public class Pesan extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_pesan, container, false);
-        Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         tanggal         = v.findViewById(R.id.tanggal_pesan);
         pengirim        = v.findViewById(R.id.Tvpengirim);
         pesan           = v.findViewById(R.id.Tvpesan);
         title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        recyclerView    = v.findViewById(R.id.Rv_chat);
+        recyclerView    = v.findViewById(R.id.rv_chat);
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);

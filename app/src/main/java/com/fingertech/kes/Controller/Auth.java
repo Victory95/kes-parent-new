@@ -457,4 +457,13 @@ public interface Auth {
                                                         @Query("school_code") String school_code,
                                                         @Query("student_id") String student_id);
 
+    //// Recommend sekolah ke kes
+    @FormUrlEncoded
+    @POST("auth/kes_recommended_school")
+    Call<JSONResponse.BalasPesan>kes_recommend_school_post(@Header("Authorization") String authorization,
+                                                        @Field("school_id") String school_id,
+                                                        @Field("school_code") String school_code,
+                                                        @Field("school_name") String school_name,
+                                                        @Field("member_id") String member_id);
+
 }

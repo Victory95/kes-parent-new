@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity.Anak;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -37,10 +38,10 @@ import static com.fingertech.kes.Service.App.getContext;
 public class PesanDetail extends AppCompatActivity {
 
     Auth mApiInterface;
-    String authorization,school_code,student_id,classroom_id,message_id;
+    String authorization,school_code,student_id,classroom_id,message_id,nama_anak,read_status;
     int status;
     String code;
-    TextView tv_subject,tv_pengirim,tv_kelas,tv_pesan,tv_mapel,tv_jam;
+    TextView tv_subject,tv_pengirim,tv_kelas,tv_pesan,tv_mapel,tv_jam,tv_anak,tv_read_status;
     String subject,pengirim,kelas,pesan,mapel,jam;
     Toolbar toolbar;
     SharedPreferences sharedPreferences;
@@ -62,8 +63,10 @@ public class PesanDetail extends AppCompatActivity {
         tv_subject      = findViewById(R.id.subject);
         tv_pengirim     = findViewById(R.id.pengirim_pesan);
         tv_kelas        = findViewById(R.id.kelas_pesan);
+        tv_anak         = findViewById(R.id.anak_pesan);
         tv_jam          = findViewById(R.id.jam);
         tv_pesan        = findViewById(R.id.pesan);
+        tv_read_status  = findViewById(R.id.read_status);
         tv_mapel        = findViewById(R.id.mapel_pesan);
         imageView       = findViewById(R.id.image_pesan);
 
@@ -75,6 +78,7 @@ public class PesanDetail extends AppCompatActivity {
         student_id          = sharedPreferences.getString("student_id",null);
         classroom_id        = sharedPreferences.getString("classroom_id",null);
         message_id          = sharedPreferences.getString("message_id",null);
+        nama_anak           = sharedPreferences.getString("student_name",null);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -100,6 +104,16 @@ public class PesanDetail extends AppCompatActivity {
                     pesan       = response.body().getData().getDataMessage().getMessage_cont();
                     mapel       = response.body().getData().getDataMessage().getCources_name();
                     tanggals    = response.body().getData().getDataMessage().getMessage_date();
+                    read_status = response.body().getData().getDataMessage().getRead_status();
+                    if (read_status.equals("1")){
+                        tv_read_status.setText("Sudah dibaca anak anda");
+                        tv_read_status.setBackgroundColor(Color.parseColor("#14e715"));
+                        tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                    }else {
+                        tv_read_status.setText("Belum dibaca anak anda");
+                        tv_read_status.setBackgroundColor(Color.parseColor("#ff0000"));
+                        tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                    }
 
 
                     if (subject.equals("")){
@@ -135,6 +149,7 @@ public class PesanDetail extends AppCompatActivity {
                     tv_mapel.setText(mapel);
                     tv_kelas.setText(kelas);
                     tv_pesan.setText(pesan);
+                    tv_anak.setText(nama_anak);
 
                 }
             }

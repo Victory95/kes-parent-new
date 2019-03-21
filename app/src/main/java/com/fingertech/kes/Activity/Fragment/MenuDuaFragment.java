@@ -26,7 +26,7 @@ public class MenuDuaFragment extends Fragment {
         // Required empty public constructor
     }
 
-    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
     CardView btn_kalender,btn_pesan;
     SharedPreferences sharedPreferences;
 
@@ -41,6 +41,7 @@ public class MenuDuaFragment extends Fragment {
         student_id          = sharedPreferences.getString("student_id",null);
         school_name         = sharedPreferences.getString("school_name",null);
         parent_nik          = sharedPreferences.getString("parent_nik",null);
+        nama_anak           = sharedPreferences.getString("student_name",null);
 
     }
     @Override
@@ -81,6 +82,7 @@ public class MenuDuaFragment extends Fragment {
                 editor.putString("classroom_id",classroom_id);
                 editor.putString("school_name",school_name);
                 editor.putString("student_id",student_id);
+                editor.putString("student_name",nama_anak);
                 editor.apply();
                 Intent intent = new Intent(getContext(), PesanAnak.class);
                 intent.putExtra("authorization", authorization);
@@ -89,6 +91,7 @@ public class MenuDuaFragment extends Fragment {
                 intent.putExtra("classroom_id", classroom_id);
                 intent.putExtra("school_name",school_name);
                 intent.putExtra("student_id", student_id);
+                intent.putExtra("student_name",nama_anak);
                 startActivity(intent);
 
             }

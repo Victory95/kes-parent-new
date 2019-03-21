@@ -31,17 +31,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
+        <activity android:name=".Activity.kalendartest" />
 
-        <activity android:name=".Activity.kalendartest" /> <!-- <activity android:name=".Activity.Pesan.Pesan"></activity> -->
-        <!-- <activity -->
-        <!-- android:name=".Activity.Pesan" -->
-        <!-- android:label="@string/title_activity_pesan" -->
-        <!-- android:parentActivityName=".Activity.MenuUtama"> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="com.fingertech.kes.Activity.MenuUtama" /> -->
-        <!-- </activity> -->
-        <!-- <activity android:name=".Activity.test" /> -->
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -376,10 +367,28 @@
             android:label="Pesan Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.PesanDetail"
+        <activity
+            android:name=".Activity.Anak.PesanDetail"
             android:label="Pesan Detail"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- <activity -->
+        <!-- android:name=".Activity.Pesan.Pesan" -->
+        <!-- android:label="Message" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
+        <activity
+            android:name=".Activity.Pesan.Balas_chat"
+            android:label="Balas Chat"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Pesan.Detail_Pesan_Guru"
+            android:label="Balas Guru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Pesan.Content_Pesan_Guru"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

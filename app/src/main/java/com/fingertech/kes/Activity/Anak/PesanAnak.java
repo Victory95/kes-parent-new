@@ -69,7 +69,7 @@ public class PesanAnak extends AppCompatActivity {
     List<PesanAnakModel> pesanAnakModelList = new ArrayList<>();
     PesanAnakModel pesanAnakModel;
     ProgressDialog dialog;
-    String tanggal,jam,mapel,pesan,guru,classroom_id,message_id,school_name,title,read_status;
+    String tanggal,jam,mapel,pesan,guru,classroom_id,message_id,school_name,title,read_status,nama_anak;
     TextView no_pesan;
 
     ArrayList<HashMap<String, String>> contactList;
@@ -91,6 +91,7 @@ public class PesanAnak extends AppCompatActivity {
         student_id          = sharedPreferences.getString("student_id",null);
         school_name         = sharedPreferences.getString("school_name",null);
         classroom_id        = sharedPreferences.getString("classroom_id",null);
+        nama_anak           = sharedPreferences.getString("student_name",null);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -166,6 +167,7 @@ public class PesanAnak extends AppCompatActivity {
                                 editor.putString("student_id",student_id);
                                 editor.putString("classroom_id",classroom_id);
                                 editor.putString("message_id",message_id);
+                                editor.putString("student_name",nama_anak);
                                 editor.apply();
                                 Intent intent = new Intent(PesanAnak.this, PesanDetail.class);
                                 intent.putExtra("authorization",authorization);
@@ -173,6 +175,7 @@ public class PesanAnak extends AppCompatActivity {
                                 intent.putExtra("student_id",student_id);
                                 intent.putExtra("classroom_id",classroom_id);
                                 intent.putExtra("message_id",message_id);
+                                intent.putExtra("student_name",nama_anak);
                                 startActivity(intent);
                             }
                         });
@@ -336,95 +339,4 @@ public class PesanAnak extends AppCompatActivity {
             return "";
         }
     }
-
-    private class get_pesan extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressBar();
-            showDialog();
-            Toast.makeText(PesanAnak.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            Call<JSONResponse.Pesan_Anak> call = mApiInterface.kes_message_anak_get(authorization.toString(),school_code.toLowerCase(),student_id.toString());
-            call.enqueue(new Callback<JSONResponse.Pesan_Anak>() {
-                @Override
-                public void onResponse(Call<JSONResponse.Pesan_Anak> call, final Response<JSONResponse.Pesan_Anak> response) {
-                    Log.d("onRespone",response.code()+"");
-                    JSONResponse.Pesan_Anak resource = response.body();
-
-                    status  = resource.status;
-                    code    = resource.code;
-
-                    if (status == 1 & code.equals("DTS_SCS_0001")){
-                        for (int i = 0; i < response.body().getData().size();i++){
-                            jam     = response.body().getData().get(i).getDatez();
-                            tanggal     = response.body().getData().get(i).getMessage_date();
-                            mapel       = response.body().getData().get(i).getCources_name();
-                            pesan       = response.body().getData().get(i).getMessage_cont();
-                            guru        = response.body().getData().get(i).getSender_name();
-                            title       = response.body().getData().get(i).getMessage_title();
-                            read_status = response.body().getData().get(i).getRead_status();
-                            message_id  = response.body().getData().get(i).getMessageid();
-
-                            pesanAnakModel = new PesanAnakModel();
-                            pesanAnakModel.setTanggal(tanggal);
-                            pesanAnakModel.setJam(jam);
-                            pesanAnakModel.setTitle(title);
-                            pesanAnakModel.setPesan(pesan);
-                            pesanAnakModel.setDari(guru);
-                            pesanAnakModel.setRead_status(read_status);
-                            pesanAnakModelList.add(pesanAnakModel);
-                        }
-                        no_pesan.setVisibility(View.GONE);
-
-                    }
-                    else if (status == 0 & code.equals("DTS_ERR_0001")){
-                        hideKeyboard(PesanAnak.this);
-                        no_pesan.setVisibility(View.VISIBLE);
-                        rv_pesan.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<JSONResponse.Pesan_Anak> call, Throwable t) {
-                    Log.i("onFailure",t.toString());
-                    Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
-                }
-            });
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
-
-            pesanAnakAdapter = new PesanAnakAdapter(pesanAnakModelList);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PesanAnak.this);
-            rv_pesan.setLayoutManager(layoutManager);
-            rv_pesan.setAdapter(pesanAnakAdapter);
-            pesanAnakAdapter.setOnItemClickListener(new PesanAnakAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("authorization",authorization);
-                    editor.putString("school_code",school_code);
-                    editor.putString("student_id",student_id);
-                    editor.putString("classroom_id",classroom_id);
-                    editor.putString("message_id",message_id);
-                    editor.apply();
-                    Intent intent = new Intent(PesanAnak.this, PesanDetail.class);
-                    intent.putExtra("authorization",authorization);
-                    intent.putExtra("school_code",school_code);
-                    intent.putExtra("student_id",student_id);
-                    intent.putExtra("classroom_id",classroom_id);
-                    intent.putExtra("message_id",message_id);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
-
 }

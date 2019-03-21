@@ -28,35 +28,33 @@ public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_T
     private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
 
-    private Adapter_Pesan_Terkirim.OnItemClickListener onItemClickListener;
+    private OnItemClickListener onItemClickListener;
     public int row_index = 0;
     public Adapter_Pesan_Terkirim(List<PesanModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
-    public void setOnItemClickListener(Adapter_Pesan_Terkirim.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     @Override
-    public Adapter_Pesan_Terkirim.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_pesan, parent, false);
 
-        Adapter_Pesan_Terkirim.MyHolder myHolder = new Adapter_Pesan_Terkirim.MyHolder(itemView,onItemClickListener);
+        MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
     }
     @SuppressLint("SetTextI18n")
+
     @Override
-    public void onBindViewHolder(Adapter_Pesan_Terkirim.MyHolder holder, int position) {
+    public void onBindViewHolder(MyHolder holder, int position) {
 
 
         // Get car item dto in list.
         PesanModel viewItem = viewItemList.get(position);
-
-
-
-        // Set car item titl
+        // Set car item tit
 
         holder.tanggal.setText(convertDate(viewItem.getTanggal()));
         holder.pengirim.setText(viewItem.getDari());
@@ -75,19 +73,17 @@ public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_T
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView pengirim,pesan,title,tanggal,waktu;
-        CircleView circleView;
         ImageView imageView;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            tanggal = (TextView) itemView.findViewById(R.id.Tv_tanggal);
+            tanggal = itemView.findViewById(R.id.Tv_tanggal);
             pengirim = itemView.findViewById(R.id.Tvpengirim);
             pesan    = itemView.findViewById(R.id.Tvpesan);
             title = itemView.findViewById(R.id.Tvsubject);
-            waktu = (TextView) itemView.findViewById(R.id.Tvwaktu);
-            circleView  = itemView.findViewById(R.id.profilanak);
-            imageView = itemView.findViewById(R.id.image_guru);
+            waktu = itemView.findViewById(R.id.Tvwaktu);
+            imageView   = itemView.findViewById(R.id.image_guru);
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;
         }

@@ -30,7 +30,7 @@ public class MenuSatuFragment extends Fragment{
     public MenuSatuFragment() {
         // Required empty public constructor
     }
-    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
@@ -51,6 +51,8 @@ public class MenuSatuFragment extends Fragment{
         student_id          = sharedPreferences.getString("student_id",null);
         school_name         = sharedPreferences.getString("school_name",null);
         parent_nik          = sharedPreferences.getString("parent_nik",null);
+        nama_anak           = sharedPreferences.getString("student_name",null);
+
 
     }
 

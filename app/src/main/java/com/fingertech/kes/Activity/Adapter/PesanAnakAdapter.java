@@ -80,11 +80,11 @@ public class PesanAnakAdapter extends RecyclerView.Adapter<PesanAnakAdapter.MyHo
         }
         Long times_pesan = date_pesan.getTime();
 
-        if (viewItem.getRead_status().equals("1")){
+        if (viewItem.getRead_status().equals("0")){
             holder.jam.setTextColor(Color.parseColor("#000000"));
             holder.pengirim.setTextColor(Color.parseColor("#000000"));
             holder.subject.setTextColor(Color.parseColor("#000000"));
-        }else if (viewItem.getRead_status().equals("0")){
+        }else if (viewItem.getRead_status().equals("1")){
             holder.jam.setTextColor(Color.parseColor("#808080"));
             holder.pengirim.setTextColor(Color.parseColor("#808080"));
             holder.subject.setTextColor(Color.parseColor("#808080"));

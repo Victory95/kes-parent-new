@@ -2,6 +2,7 @@
 <com.github.florent37.shapeofview.shapes.RoundRectView
 
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -34,15 +35,13 @@
                 android:id="@+id/profilanak">
 
                 <ImageView
-                    xmlns:app="http://schemas.android.com/apk/lib/com.app.chasebank"
                     android:id="@+id/image_guru"
                     android:scaleType="centerCrop"
-                    app:border_color="@color/colorPrimary"
                     android:layout_gravity="center"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:src="@drawable/guru"
-                    />
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    app:srcCompat="@drawable/ic_kes"
+                    tools:ignore="ContentDescription" />
 
             </com.github.florent37.shapeofview.shapes.CircleView>
         </LinearLayout>

@@ -184,13 +184,13 @@ public class RekapAbsensi extends AppCompatActivity {
                 status = resource.status;
                 code    = resource.code;
                 if (status == 1 && code.equals("CSCH_SCS_0001")) {
-                    jadwalDataList = response.body().getData();
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        scheduleClassItemList = response.body().getData().get(i).getScheduleClass();
-                        days_name = response.body().getData().get(i).getDayName();
-                        day_status = response.body().getData().get(i).getDayStatus();
-                        daysid = response.body().getData().get(i).getDayid();
-                        day_type = response.body().getData().get(i).getDayType();
+                    jadwalDataList = response.body().getData().getClass_schedule();
+                    for (int i = 0; i < response.body().getData().getClass_schedule().size(); i++) {
+                        scheduleClassItemList = response.body().getData().getClass_schedule().get(i).getScheduleClass();
+                        days_name = response.body().getData().getClass_schedule().get(i).getDayName();
+                        day_status = response.body().getData().getClass_schedule().get(i).getDayStatus();
+                        daysid = response.body().getData().getClass_schedule().get(i).getDayid();
+                        day_type = response.body().getData().getClass_schedule().get(i).getDayType();
 
                         for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
                             absensiModel = new AbsensiModel();
