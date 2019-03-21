@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
@@ -197,6 +198,8 @@ public class MenuUtama extends AppCompatActivity
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
     SharedPreferences sharedPreferences;
+    int mCartItemCount = 20;
+    TextView countmenu;
 
     int height,width;
     @Override
@@ -430,28 +433,65 @@ public class MenuUtama extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_utama, menu);
+        final MenuItem menuItem = menu.findItem(R.id.action_cart);
+        View actionView = MenuItemCompat.getActionView(menuItem);
+
+        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
+
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        switch (item.getItemId()) {
-////            case R.id.action_settings:
-//                return true;
-//            case R.id.activity_main_update_menu_item:
-//                // TODO update alert menu icon
-////                alertCount = (alertCount + 1) % 11; // cycle through 0 - 10
-////                updateAlertIcon();
-////                return true;
-////            case R.id.activity_main_alerts_menu_item:
-////                Toast.makeText(this, "update clicked", Toast.LENGTH_SHORT).show();
-////                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    private void setupBadge() {
+
+        if (countmenu != null) {
+            if (mCartItemCount == 0) {
+                if (countmenu.getVisibility() != View.GONE) {
+                    countmenu.setVisibility(View.GONE);
+                }
+            } else {
+                countmenu.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                if (countmenu.getVisibility() != View.VISIBLE) {
+                    countmenu.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+
+   @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_cart: {
+                // Do something
+                SharedPreferences.Editor editor = sharedviewpager.edit();
+                editor.putString("member_id", parent_id);
+                editor.putString("school_code", school_code);
+                editor.putString("authorization", authorization);
+                editor.putString("fullname",fullname);
+                editor.commit();
+                Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("parent_id",parent_id);
+                intent.putExtra("fullname",fullname);
+                startActivity(intent);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
