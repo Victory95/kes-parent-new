@@ -61,6 +61,7 @@ import com.bumptech.glide.Glide;
 //import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
+import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
@@ -71,10 +72,12 @@ import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
+import com.fingertech.kes.Activity.Pesan.Detail_Pesan_Guru;
 import com.fingertech.kes.Activity.Pesan.Pesan;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
@@ -139,10 +142,13 @@ public class MenuUtama extends AppCompatActivity
     View header;
     TextView tv_profile;
     CircleImageView image_profile;
-    String nama_anak,foto;
+    String nama_anak,foto,statusku;
+    PesanGuruAdapter pesanGuruAdapter;
     int status;
     String Base_url;
     ProgressDialog dialog;
+    String date_from,date_to;
+    List<PesanModel> pesanModelList;
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
 
     Auth mApiInterface;
@@ -197,8 +203,9 @@ public class MenuUtama extends AppCompatActivity
     InkPageIndicator inkPageIndicator;
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
+    PesanModel pesanModel;
     SharedPreferences sharedPreferences;
-    int mCartItemCount = 20;
+    int mCartItemCount = 0;
     TextView countmenu;
 
     int height,width;
@@ -429,69 +436,7 @@ public class MenuUtama extends AppCompatActivity
     };
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_utama, menu);
-        final MenuItem menuItem = menu.findItem(R.id.action_cart);
-        View actionView = MenuItemCompat.getActionView(menuItem);
 
-        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
-
-
-        setupBadge();
-
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(menuItem);
-            }
-        });
-
-        return true;
-    }
-
-    private void setupBadge() {
-
-        if (countmenu != null) {
-            if (mCartItemCount == 0) {
-                if (countmenu.getVisibility() != View.GONE) {
-                    countmenu.setVisibility(View.GONE);
-                }
-            } else {
-                countmenu.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                if (countmenu.getVisibility() != View.VISIBLE) {
-                    countmenu.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    }
-
-
-   @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.action_cart: {
-                // Do something
-                SharedPreferences.Editor editor = sharedviewpager.edit();
-                editor.putString("member_id", parent_id);
-                editor.putString("school_code", school_code);
-                editor.putString("authorization", authorization);
-                editor.putString("fullname",fullname);
-                editor.commit();
-                Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-                intent.putExtra("authorization",authorization);
-                intent.putExtra("school_code",school_code);
-                intent.putExtra("parent_id",parent_id);
-                intent.putExtra("fullname",fullname);
-                startActivity(intent);
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -1198,6 +1143,53 @@ public class MenuUtama extends AppCompatActivity
 
         });
     }
+
+
+//    public void jumlah_pesan(){
+//
+//
+//        progressBar();
+//        showDialog();
+//        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+//        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
+//            @Override
+//            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
+//                Log.d("onRespone",response.code()+"");
+//                hideDialog();
+//                JSONResponse.PesanAnak resource = response.body();
+//
+//                status  = resource.status;
+//                code    = resource.code;
+//
+//
+//                if (status == 0 & code.equals("DTS_SCS_0001")) {
+//                    pesanModelList = new ArrayList<PesanModel>();
+//                    Log.e("jumlah", response.body().getData().size() + "");
+//                    for (int i = 0; i < response.body().getData().size(); i++) {
+//                        statusku = response.body().getData().get(i).getRead_status();
+//                        pesanModel = new PesanModel();
+//                        pesanModel.setStatus(statusku);
+//                        pesanModelList.add(pesanModel);
+//                    }
+//                    pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+//                }else if(status==1 & code.equals("DTS_SCS_0001")){
+//
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
+//                Log.i("onFailure",t.toString());
+//                hideDialog();
+//            }
+//        });
+//    }
+
+
+
+
 
 
     private void setCameraWithCoordinationBounds(Route route) {
