@@ -59,7 +59,7 @@ public class Pesan extends Fragment {
     List<PesanModel> pesanModelList;
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    String kirim,pesanku,titleku,tanggalku;
+    String kirim,pesanku,titleku,tanggalku,statusku;
     PesanModel pesanModel;
 
     @Nullable
@@ -122,11 +122,13 @@ public class Pesan extends Fragment {
                         kirim= response.body().getData().get(i).getSender_name();
                         pesanku=response.body().getData().get(i).getMessage_cont();
                         titleku=response.body().getData().get(i).getMessage_title();
+                        statusku =response.body().getData().get(i).getRead_status();
                         pesanModel = new PesanModel();
                         pesanModel.setTanggal(tanggalku);
                         pesanModel.setDari(kirim);
                         pesanModel.setPesan(pesanku);
                         pesanModel.setTitle(titleku);
+                        pesanModel.setStatus(statusku);
                         pesanModelList.add(pesanModel);
                     }
                     pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);

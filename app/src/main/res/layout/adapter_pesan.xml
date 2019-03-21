@@ -62,7 +62,6 @@
             android:textSize="15sp"
             android:textColor="#000"
             android:id="@+id/Tvpengirim"
-            android:textStyle="bold"
             />
 
             <TextView
@@ -73,7 +72,6 @@
                 android:text="Subject"
                 android:textColor="#000"
                 android:textSize="13sp"
-                android:textStyle="bold"
                 />
             <TextView
                 android:layout_width="match_parent"

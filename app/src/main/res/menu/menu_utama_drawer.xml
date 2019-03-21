@@ -17,7 +17,7 @@
             android:id="@+id/nav_pesan"
             android:title="Pesan Orang Tua"
             android:icon="@drawable/ic_mail_white"
-            app:actionLayout="@layout/view_alertsbadge"/>
+            />
         <item
             android:id="@+id/nav_tentang"
             android:icon="@drawable/ic_about"

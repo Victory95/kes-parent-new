@@ -17,12 +17,11 @@
         <!--android:title="@string/action_settings"-->
         <!--app:showAsAction="never" />-->
 
-    <!--<item-->
-        <!--android:id="@+id/item_pesan"-->
-        <!--android:icon="@drawable/ic_notifications_black_24dp"-->
-        <!--android:title="Pesan"-->
-        <!--app:showAsAction="ifRoom"/>-->
-        <!--&lt;!&ndash;app:actionLayout="@layout/view_alertsbadge"&ndash;&gt;-->
-
+    <item
+        android:id="@+id/action_cart"
+        android:icon="@drawable/ic_icon_inbox"
+        android:title="Cart"
+        app:actionLayout="@layout/view_alertsbadge"
+        app:showAsAction="always"/>
 
 </menu>
