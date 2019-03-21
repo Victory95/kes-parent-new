@@ -346,7 +346,8 @@ public class Masuk extends AppCompatActivity {
     public void login_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), deviceid.toString(),firebase_token);
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), device_id.toString(),firebase_token);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -523,6 +524,7 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onCancel() {
                 // App code
+                hideDialog();
                 Toast.makeText(Masuk.this, getResources().getString(R.string.toast_cancel), Toast.LENGTH_SHORT).show();
             }
 
@@ -562,12 +564,14 @@ public class Masuk extends AppCompatActivity {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
         deviceid = tm.getDeviceId();
+        Log.d("device_id",deviceid);
     }
 
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString(),firebase_token);
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), device_id.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -647,7 +651,8 @@ public class Masuk extends AppCompatActivity {
     public void login_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), device_id.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

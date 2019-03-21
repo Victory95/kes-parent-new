@@ -384,7 +384,8 @@ public class DaftarParent extends AppCompatActivity {
     public void register_orangtua_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_nik.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), hubungan.toString(), jenis_kelamin.toString(), deviceid.toString());
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_nik.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), hubungan.toString(), jenis_kelamin.toString(), device_id.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

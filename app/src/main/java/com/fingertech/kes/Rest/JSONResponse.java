@@ -6663,6 +6663,28 @@ public class JSONResponse{
         @SerializedName("cources_name")
         public String cources_name;
 
+        @SerializedName("sender_name")
+        public String sender_name;
+
+        public String getSender_name() {
+            return sender_name;
+        }
+
+        public void setSender_name(String sender_name) {
+            this.sender_name = sender_name;
+        }
+
+        public String getMessage_title() {
+            return message_title;
+        }
+
+        public void setMessage_title(String message_title) {
+            this.message_title = message_title;
+        }
+
+        @SerializedName("message_title")
+        public String message_title;
+
         public String getMessageid() {
             return messageid;
         }

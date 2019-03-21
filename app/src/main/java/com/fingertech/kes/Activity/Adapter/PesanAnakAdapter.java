@@ -123,13 +123,13 @@ public class PesanAnakAdapter extends RecyclerView.Adapter<PesanAnakAdapter.MyHo
             subject       = itemView.findViewById(R.id.subject);
             isi_pesan     = itemView.findViewById(R.id.isi_pesan);
             image_pesan   = itemView.findViewById(R.id.image_pesan);
-//            itemView.setOnClickListener(this);
-//            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+            this.onItemClickListener = onItemClickListener;
         }
 
         @Override
         public void onClick(View v) {
-//            onItemClickListener.onItemClick(v, getAdapterPosition());
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     public interface OnItemClickListener {

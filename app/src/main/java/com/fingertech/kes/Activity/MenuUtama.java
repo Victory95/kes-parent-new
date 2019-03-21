@@ -459,8 +459,6 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, AbsensiAnak.class);
-            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);

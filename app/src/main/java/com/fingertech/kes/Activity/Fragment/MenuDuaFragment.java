@@ -1,25 +1,18 @@
 package com.fingertech.kes.Activity.Fragment;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
-import com.fingertech.kes.Activity.Anak.PesanAnakDua;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -89,7 +82,7 @@ public class MenuDuaFragment extends Fragment {
                 editor.putString("school_name",school_name);
                 editor.putString("student_id",student_id);
                 editor.apply();
-                Intent intent = new Intent(getContext(), PesanAnakDua.class);
+                Intent intent = new Intent(getContext(), PesanAnak.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("member_id", member_id);

@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -388,6 +389,14 @@ public interface Auth {
                                                                @Query("message_id") String message_id,
                                                                @Query("parent_message_id") String parent_message_id);
 
+    //// Detail Pesan
+    @GET("students/kes_message_detail")
+    Call<JSONResponse.PesanDetail>kes_message_anak_detail_get(@Header("Authorization") String authorization,
+                                                               @Query("school_code") String school_code,
+                                                               @Query("student_id") String student_id,
+                                                               @Query("classroom_id") String classroom_id,
+                                                               @Query("message_id") String message_id);
+
     ///// List Notifikasi
     @GET("parents/kes_notification_list")
     Call<JSONResponse.ListNotification>kes_notification_list_get(@Header("Authorization") String authorization,
@@ -435,5 +444,9 @@ public interface Auth {
                                     @Query("classroom_id") String classroom_id,
                                     @Query("semester_id") String semester_id);
 
+    @GET("students/kes_message_inbox")
+    Observable<JSONResponse.Pesan_Anak>kes_message_get(@Header("Authorization") String authorization,
+                                                        @Query("school_code") String school_code,
+                                                        @Query("student_id") String student_id);
 
 }

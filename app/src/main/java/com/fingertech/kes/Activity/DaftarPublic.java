@@ -60,7 +60,7 @@ public class DaftarPublic extends AppCompatActivity {
         setContentView(R.layout.daftar_public);
         getSupportActionBar().setElevation(0);
 
-        btn_buat_akun        =(Button)findViewById(R.id.btn_buat_akun);
+        btn_buat_akun        = findViewById(R.id.btn_buat_akun);
         cb_ketentuan         =(CheckBox)findViewById(R.id.cb_ketentuan);
         et_fullname          =(EditText)findViewById(R.id.et_nama_lengkap);
         et_email             =(EditText)findViewById(R.id.et_email);
@@ -241,7 +241,8 @@ public class DaftarPublic extends AppCompatActivity {
     public void register_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_post(et_fullname.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), deviceid.toString());
+        String device_id = "android_" + deviceid;
+        Call<JSONResponse> postCall = mApiInterface.register_post(et_fullname.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), device_id.toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
