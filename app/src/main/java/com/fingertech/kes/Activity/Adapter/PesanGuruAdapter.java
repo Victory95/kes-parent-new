@@ -77,21 +77,26 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
 
 
         if (viewItem.getStatus().equals("1")){
-            holder.waktu.setTextColor(Color.parseColor("#000000"));
-            holder.pengirim.setTextColor(Color.parseColor("#000000"));
-            holder.title.setTextColor(Color.parseColor("#000000"));
-        }else if (viewItem.getStatus().equals("0")){
             holder.waktu.setTextColor(Color.parseColor("#808080"));
             holder.pengirim.setTextColor(Color.parseColor("#808080"));
             holder.title.setTextColor(Color.parseColor("#808080"));
+
+        }else if (viewItem.getStatus().equals("0")){
+            holder.waktu.setTextColor(Color.parseColor("#000000"));
+            holder.pengirim.setTextColor(Color.parseColor("#000000"));
+            holder.title.setTextColor(Color.parseColor("#000000"));
         }
+
 
 
         if (times_pesan.equals(times_now)){
-            holder.waktu.setText(convertjam(viewItem.getJam()));
+            holder.waktu.setText(convertDate(viewItem.getTanggal()));
         }else {
-            holder.tanggal.setText(convertTanggal(viewItem.getTanggal()));
+//            holder.waktu.setText(convertTanggal(viewItem.getTanggal()));
         }
+
+
+
         holder.pengirim.setText(viewItem.getDari());
         if (viewItem.getTitle().equals("")){
             holder.title.setText("( Tidak ada subject )");
@@ -100,8 +105,16 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
         holder.pesan.setText(viewItem.getPesan());
         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + viewItem.getDari()+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(holder.imageView);
-    }
 
+
+
+//        holder.pengirim.setText(viewItem.getDari());
+//        holder.pesan.setText(viewItem.getPesan());
+//        holder.title.setText(viewItem.getTitle());
+//        holder.waktu.setText(viewItem.getJam());
+
+
+    }
 
     @Override
     public int getItemCount() {
@@ -129,7 +142,7 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
         @Override
         public void onClick(View v) {
-            onItemClickListener.onItemClick(v, getAdapterPosition());
+//            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     public interface OnItemClickListener {
@@ -138,7 +151,7 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
     }
     String convertDate(String date) {
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd ",Locale.getDefault());
         try {
             String e = calendarDateFormat.format(newDateFormat.parse(date));
             return e;
@@ -148,22 +161,22 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
     }
 
-    String convertjam(String tanggal){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd",Locale.getDefault());
-        try {
-            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-    String convertTanggal(String tanggal){
+//    String convertjam(String tanggal){
+//        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+//        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd",Locale.getDefault());
+//        try {
+//            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
+//            return e;
+//        } catch (java.text.ParseException e) {
+//            e.printStackTrace();
+//            return "";
+//        }
+//    }
+    String convertTanggal(String tanggalku){
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("dd MMM", Locale.getDefault());
         SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
         try {
-            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
+            String e = calendarDateFormat.format(newDateFormat.parse(tanggalku));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();

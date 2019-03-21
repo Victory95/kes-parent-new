@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -61,6 +62,7 @@ public class Pesan extends Fragment {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String kirim,pesanku,titleku,tanggalku,statusku;
     PesanModel pesanModel;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
@@ -77,6 +79,7 @@ public class Pesan extends Fragment {
         title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         recyclerView    = v.findViewById(R.id.Rv_chat);
+        swipeRefreshLayout  = v.findViewById(R.id.pullToRefresh);
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -89,11 +92,30 @@ public class Pesan extends Fragment {
 
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
+
+
         dapat_pesan();
+        refresh();
         return v;
     }
 
+public void refresh(){
 
+
+    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        int Refreshcounter = 1;
+        @Override
+        public void onRefresh() {
+            dapat_pesan();
+
+            Refreshcounter = Refreshcounter + 1;
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    });
+
+
+
+}
 //
 
     public void dapat_pesan(){
@@ -212,6 +234,8 @@ public class Pesan extends Fragment {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
 
 
 
