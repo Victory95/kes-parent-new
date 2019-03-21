@@ -14,19 +14,14 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay" />
 
-   <android.support.v7.widget.RecyclerView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:layout_below="@id/toolbar"
-       android:id="@+id/Rv_chat"
-       >
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:id="@+id/Rv_terkirim"
+        >
 
-   </android.support.v7.widget.RecyclerView>
-
-
-
-
-
+    </android.support.v7.widget.RecyclerView>
 
 
 </RelativeLayout>

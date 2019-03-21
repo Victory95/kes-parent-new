@@ -57,7 +57,7 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.bumptech.glide.Glide;
-import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
+//import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
@@ -73,6 +73,7 @@ import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
+import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
 import com.fingertech.kes.Activity.Pesan.Pesan;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
@@ -195,6 +196,7 @@ public class MenuUtama extends AppCompatActivity
     InkPageIndicator inkPageIndicator;
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
+    SharedPreferences sharedPreferences;
 
     int height,width;
     @Override
@@ -470,7 +472,18 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
-            Intent intent = new Intent(MenuUtama.this, Pesan.class);
+
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putString("member_id", parent_id);
+            editor.putString("school_code", school_code);
+            editor.putString("authorization", authorization);
+            editor.putString("fullname",fullname);
+            editor.commit();
+            Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+            intent.putExtra("authorization",authorization);
+            intent.putExtra("school_code",school_code);
+            intent.putExtra("parent_id",parent_id);
+            intent.putExtra("fullname",fullname);
             startActivity(intent);
         }
 

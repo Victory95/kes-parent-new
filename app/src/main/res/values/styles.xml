@@ -5,15 +5,17 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
     <style name="SwitchCompatStyle" >
+        <item name="android:colorControlActivated">@color/default_background</item>
         <item name="thumbTint">@color/colorPrimaryDark</item>
         <item name="trackTint">@color/colorPrimary</item>
     </style>
@@ -21,7 +23,7 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -143,6 +145,20 @@
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="colorControlNormal">@color/ic_logo_background</item>
         <item name="colorControlActivated">@color/ic_logo_background</item>
+    </style>
+
+
+    <style name="buttonbalas" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/colorPrimaryDark</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="android:textColorHint">@color/ic_logo_background</item>
+        <item name="android:textColorHighlight">@color/colorPrimaryDark</item>
+        <item name="android:textColorLink">@color/colorPrimaryDark</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/ic_logo_background</item>
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
     </style>
 
     <style name="MaterialDialogSheet" parent="@android:style/Theme.Dialog">

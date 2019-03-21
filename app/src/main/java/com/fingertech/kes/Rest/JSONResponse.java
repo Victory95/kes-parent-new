@@ -6260,6 +6260,9 @@ public class JSONResponse{
         @SerializedName("message_date")
         public String message_date;
 
+        @SerializedName("message_title")
+        public String message_title;
+
         @SerializedName("message_status")
         public String message_status;
 
@@ -6319,9 +6322,6 @@ public class JSONResponse{
 
         @SerializedName("reply_status")
         public int reply_status;
-
-        @SerializedName("message_title")
-        public String message_title;
 
         public String getMessage_title() {
             return message_title;

@@ -25,10 +25,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Adapter.PesanAdapter;
+import com.fingertech.kes.Activity.Adapter.Adapter_Pesan_Terkirim;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
-import com.fingertech.kes.Activity.Anak.PesanAnak;
-import com.fingertech.kes.Activity.Anak.PesanDetail;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Controller.Auth;
@@ -46,37 +44,39 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Pesan extends Fragment {
+public class PesanTerkirim extends Fragment {
 
-    TextView pengirim,pesan,title,tanggal;
-    ProgressDialog dialog;
-    Auth mApiInterface;
-    SharedPreferences sharedPreferences;
-    String authorization,school_code,parent_id,student_id,school_name,classroom_id,fullname;
-    RecyclerView recyclerView;
-    int status;
-    String code,date_from,date_to;
-    List<PesanModel> pesanModelList;
-    PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    String authorization,school_code,parent_id,student_id,school_name,classroom_id,fullname,date_from,date_to,code;
+    int status;
+    SharedPreferences sharedPreferences;
+    Auth mApiInterface;
+    RecyclerView recyclerView;
+    TextView tanggal,pengirim,pesan,title;
+    ProgressDialog dialog;
     String kirim,pesanku,titleku,tanggalku;
     PesanModel pesanModel;
+    Adapter_Pesan_Terkirim adapter_pesan_terkirim;
+    List<PesanModel> pesanModelList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_pesan, container, false);
+        View v = inflater.inflate(R.layout.pesan_terkirim, container, false);
         Toolbar toolbar = v.findViewById(R.id.toolbar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
+        mApiInterface   = ApiClient.getClient().create(Auth.class);
+        recyclerView    = v.findViewById(R.id.Rv_terkirim);
         tanggal         = v.findViewById(R.id.tanggal_pesan);
         pengirim        = v.findViewById(R.id.Tvpengirim);
         pesan           = v.findViewById(R.id.Tvpesan);
         title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        recyclerView    = v.findViewById(R.id.Rv_chat);
+
+
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -91,20 +91,20 @@ public class Pesan extends Fragment {
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
         dapat_pesan();
         return v;
+
     }
 
-
-//
 
     public void dapat_pesan(){
         progressBar();
         showDialog();
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_send_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
                 Log.d("onRespone",response.code()+"");
                 hideDialog();
+//                setUserVisibleHint(isVisible());
                 JSONResponse.PesanAnak resource = response.body();
 
                 status  = resource.status;
@@ -129,29 +129,30 @@ public class Pesan extends Fragment {
                         pesanModel.setTitle(titleku);
                         pesanModelList.add(pesanModel);
                     }
-                    pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-                    pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
+                    adapter_pesan_terkirim = new Adapter_Pesan_Terkirim(pesanModelList);
+                    adapter_pesan_terkirim.setOnItemClickListener(new Adapter_Pesan_Terkirim.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
+                            Intent intent = new Intent(getActivity(), PesanTerkirim.class);
                             intent.putExtra("fullname",fullname);
                             intent.putExtra("authorization",authorization);
                             intent.putExtra("school_code",school_code);
                             intent.putExtra("parent_id",parent_id);
                             intent.putExtra("message_id",response.body().getData().get(position).getMessageid());
                             intent.putExtra("parent_message_id",response.body().getData().get(position).getParent_message_id());
-                            startActivity(intent);
+//                            startActivity(intent);
                         }
                     });
-//                    setUserVisibleHint(isVisible());
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(pesanGuruAdapter);
+                    recyclerView.setAdapter(adapter_pesan_terkirim);
 
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){
                     hideKeyboard(getActivity());
+
                     recyclerView.setVisibility(View.GONE);
+
                 }
             }
 
@@ -163,8 +164,6 @@ public class Pesan extends Fragment {
             }
         });
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -211,17 +210,15 @@ public class Pesan extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-
-
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser) {
-//            // Refresh your fragment here
-//            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-//            Log.i("IsRefresh", "Yes");
-//        }
-//    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // Refresh your fragment here
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+            Log.i("IsRefresh", "Yes");
+        }
+    }
 
 
 }
