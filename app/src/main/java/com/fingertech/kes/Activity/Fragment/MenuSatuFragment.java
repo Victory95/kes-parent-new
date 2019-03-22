@@ -13,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.fingertech.kes.Activity.Anak.AbsensiAnak;
+import com.fingertech.kes.Activity.Anak.AgendaAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
+import com.fingertech.kes.Activity.Anak.KalenderKelas;
+import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Anak.RaporAnak;
 import com.fingertech.kes.Activity.Anak.TugasAnak;
@@ -31,7 +34,7 @@ public class MenuSatuFragment extends Fragment{
         // Required empty public constructor
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
-    CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
+    CardView btn_profile,btn_jadwal, btn_agenda,btn_absensi, btn_pesan, btn_kalendar;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
     public static final String myViewpagerPreferences = "myViewpagerPreferences";
@@ -53,7 +56,6 @@ public class MenuSatuFragment extends Fragment{
         parent_nik          = sharedPreferences.getString("parent_nik",null);
         nama_anak           = sharedPreferences.getString("student_name",null);
 
-
     }
 
     @Override
@@ -64,12 +66,11 @@ public class MenuSatuFragment extends Fragment{
 
         btn_profile     = view.findViewById(R.id.btn_profil);
         btn_jadwal      = view.findViewById(R.id.btn_jadwal);
-        btn_ujian       = view.findViewById(R.id.btn_jadwal_ujian);
+        btn_agenda      = view.findViewById(R.id.btn_agenda);
         btn_absensi     = view.findViewById(R.id.btn_absen);
-        btn_tugas_anak  = view.findViewById(R.id.btn_tugas);
-        btn_raport      = view.findViewById(R.id.btn_raport);
+        btn_pesan       = view.findViewById(R.id.btn_pesan);
+        btn_kalendar    = view.findViewById(R.id.btn_kalender);
         frameLayout     = view.findViewById(R.id.fragment1);
-
 
         btn_profile.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences2.edit();
@@ -98,7 +99,7 @@ public class MenuSatuFragment extends Fragment{
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
-            editor.commit();
+            editor.apply();
             Intent intent = new Intent(getContext(), JadwalPelajaran.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
@@ -107,14 +108,14 @@ public class MenuSatuFragment extends Fragment{
             startActivity(intent);
         });
 
-        btn_ujian.setOnClickListener(v -> {
+        btn_agenda.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
-            editor.commit();
-            Intent intent = new Intent(getContext(), JadwalUjian.class);
+            editor.apply();
+            Intent intent = new Intent(getContext(), AgendaAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);
@@ -128,7 +129,7 @@ public class MenuSatuFragment extends Fragment{
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
-            editor.commit();
+            editor.apply();
             Intent intent = new Intent(getContext(), AbsensiAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
@@ -137,28 +138,34 @@ public class MenuSatuFragment extends Fragment{
             startActivity(intent);
         });
 
-        btn_tugas_anak.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences2.edit();
-            editor.putString("school_code",school_code);
+        btn_pesan.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("member_id",member_id);
+            editor.putString("school_code",school_code.toLowerCase());
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
+            editor.putString("school_name",school_name);
             editor.putString("student_id",student_id);
-            editor.commit();
-            Intent intent = new Intent(getContext(), TugasAnak.class);
+            editor.putString("student_name",nama_anak);
+            editor.apply();
+            Intent intent = new Intent(getContext(), PesanAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
-            intent.putExtra("student_id", student_id);
+            intent.putExtra("member_id", member_id);
             intent.putExtra("classroom_id", classroom_id);
+            intent.putExtra("school_name",school_name);
+            intent.putExtra("student_id", student_id);
+            intent.putExtra("student_name",nama_anak);
             startActivity(intent);
         });
-        btn_raport.setOnClickListener(v -> {
+        btn_kalendar.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
-            editor.commit();
-            Intent intent = new Intent(getContext(), RaporAnak.class);
+            editor.apply();
+            Intent intent = new Intent(getContext(), KalenderKelas.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);

@@ -111,7 +111,6 @@ public class KalenderKelas extends AppCompatActivity {
             calendar_month = calendar_month.substring(1);
         }
         hari    = formattanggal.format(Calendar.getInstance().getTime());
-        Log.d("tanggal",Calendar.getInstance().getTime()+"");
         calendar_year   = tahunFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override

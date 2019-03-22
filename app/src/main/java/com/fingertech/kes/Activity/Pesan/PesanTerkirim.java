@@ -115,7 +115,6 @@ public class PesanTerkirim extends Fragment {
 //                    date_from.clearFocus();
 //                    date_to.clearFocus();
                     pesanModelList  = new ArrayList<PesanModel>();
-                    Log.e("jumlah",response.body().getData().size()+"");
                     for (int i = 0; i < response.body().getData().size();i++){
                         tanggalku = response.body().getData().get(i).getDatez();
                         kirim= response.body().getData().get(i).getSender_name();
@@ -158,7 +157,7 @@ public class PesanTerkirim extends Fragment {
             @Override
             public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
                 Log.i("onFailure",t.toString());
-                Toast.makeText(getActivity(),t.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Data Tidak Ada",Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         });

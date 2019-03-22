@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
+import com.fingertech.kes.Activity.Anak.RaporAnak;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -27,13 +29,16 @@ public class MenuDuaFragment extends Fragment {
     }
 
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
-    CardView btn_kalender,btn_pesan;
-    SharedPreferences sharedPreferences;
+    CardView btn_jadwal_ujian, btn_raport;
+    SharedPreferences sharedPreferences,sharedPreferences2;
+
+    public static final String myViewpagerPreferences = "myViewpagerPreferences";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences   = getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
+        sharedPreferences2  = getActivity().getSharedPreferences(myViewpagerPreferences,Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
         school_code         = sharedPreferences.getString("school_code",null);
         member_id           = sharedPreferences.getString("member_id",null);
@@ -50,11 +55,11 @@ public class MenuDuaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_dua, container, false);
 
-        btn_kalender    = view.findViewById(R.id.btn_kalender);
-        btn_pesan       = view.findViewById(R.id.btn_pesan);
+        btn_jadwal_ujian = view.findViewById(R.id.btn_jadwal_ujian);
+        btn_raport = view.findViewById(R.id.btn_raport);
 
 
-        btn_kalender.setOnClickListener(new View.OnClickListener() {
+        btn_jadwal_ujian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -63,7 +68,7 @@ public class MenuDuaFragment extends Fragment {
                 editor.putString("classroom_id",classroom_id);
                 editor.putString("student_id",student_id);
                 editor.apply();
-                Intent intent = new Intent(getContext(), KalenderKelas.class);
+                Intent intent = new Intent(getContext(), JadwalUjian.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
@@ -72,28 +77,21 @@ public class MenuDuaFragment extends Fragment {
 
             }
         });
-        btn_pesan.setOnClickListener(new View.OnClickListener() {
+        btn_raport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("member_id",member_id);
-                editor.putString("school_code",school_code.toLowerCase());
+                SharedPreferences.Editor editor = sharedPreferences2.edit();
+                editor.putString("school_code",school_code);
                 editor.putString("authorization",authorization);
                 editor.putString("classroom_id",classroom_id);
-                editor.putString("school_name",school_name);
                 editor.putString("student_id",student_id);
-                editor.putString("student_name",nama_anak);
                 editor.apply();
-                Intent intent = new Intent(getContext(), PesanAnak.class);
+                Intent intent = new Intent(getContext(), RaporAnak.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
-                intent.putExtra("member_id", member_id);
-                intent.putExtra("classroom_id", classroom_id);
-                intent.putExtra("school_name",school_name);
                 intent.putExtra("student_id", student_id);
-                intent.putExtra("student_name",nama_anak);
+                intent.putExtra("classroom_id", classroom_id);
                 startActivity(intent);
-
             }
         });
         return view;

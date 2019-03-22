@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -30,6 +31,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -207,6 +209,7 @@ public class MenuUtama extends AppCompatActivity
     int mCartItemCount = 100;
     TextView countmenu;
     String date_to,date_from;
+    int count = 0;
 
     int height,width;
     @Override
@@ -446,7 +449,6 @@ public class MenuUtama extends AppCompatActivity
 
         countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
 
-
         setupBadge();
 
         actionView.setOnClickListener(new View.OnClickListener() {
@@ -456,7 +458,41 @@ public class MenuUtama extends AppCompatActivity
             }
         });
 
+//        MenuItem menuItem = menu.findItem(R.id.testAction);
+//        menuItem.setIcon(buildCounterDrawable(count, R.drawable.ic_alarm_white));
+
         return true;
+    }
+
+    private Drawable buildCounterDrawable(int count, int backgroundImageId) {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.counter_menu_item, null);
+        view.setBackgroundResource(backgroundImageId);
+
+        if (count == 0) {
+            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
+            counterTextPanel.setVisibility(View.GONE);
+        } else {
+            TextView textView = (TextView) view.findViewById(R.id.count);
+            textView.setText("" + count);
+        }
+
+        view.measure(
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        view.setDrawingCacheEnabled(true);
+        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+
+        return new BitmapDrawable(getResources(), bitmap);
+    }
+
+    private void doIncrease() {
+        count++;
+        invalidateOptionsMenu();
     }
 
     private void setupBadge() {
@@ -591,15 +627,8 @@ public class MenuUtama extends AppCompatActivity
                 code   = resource.code;
                 if (status == 1 && code.equals("DTS_SCS_0001")){
                     dataLists   = response.body().getData();
-                    alertCount = response.body().getData().size();
-                    Toast.makeText(getApplicationContext(),""+alertCount,Toast.LENGTH_LONG).show();
-                    if (0 < alertCount && alertCount < dataLists.size()) {
-                        countTextView.setText(String.valueOf(alertCount));
-                    } else {
-                        countTextView.setText("");
-                    }
-
-                    redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
+                    count = response.body().getData().size();
+                    invalidateOptionsMenu();
                 }
             }
 
@@ -669,6 +698,7 @@ public class MenuUtama extends AppCompatActivity
                         nama_anak       = response.body().getData().get(0).getChildren_name();
                         send_data();
                         send_data2();
+                        get_list();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -794,13 +824,13 @@ public class MenuUtama extends AppCompatActivity
     public void send_data2(){
         Bundle bundle = new Bundle();
         SharedPreferences.Editor editor = sharedviewpager.edit();
-        editor.putString("member_id",parent_id);
-        editor.putString("school_code",school_code);
-        editor.putString("authorization",authorization);
-        editor.putString("classroom_id",classroom_id);
-        editor.putString("parent_nik",parent_nik);
-        editor.putString("school_name",school_name);
-        editor.putString("student_id",student_id);
+        editor.putString("member_id", parent_id);
+        editor.putString("school_code", school_code);
+        editor.putString("authorization", authorization);
+        editor.putString("classroom_id", classroom_id);
+        editor.putString("parent_nik", parent_nik);
+        editor.putString("school_name", school_name);
+        editor.putString("student_id", student_id);
         editor.putString("student_name",nama_anak);
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
@@ -809,7 +839,7 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("member_id", parent_id);
         bundle.putString("authorization", authorization);
         bundle.putString("classroom_id", classroom_id);
-        bundle.putString("school_name",school_name);
+        bundle.putString("school_name", school_name);
         bundle.putString("student_name",nama_anak);
         MenuDuaFragment menuDuaFragment = new MenuDuaFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();

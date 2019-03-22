@@ -56,8 +56,6 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
         dapat_pesan();
         balas_pesan();
 
-
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
@@ -113,7 +111,12 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                Intent intent = new Intent(Detail_Pesan_Guru.this,Pesan.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("parent_id", parent_id);
+                setResult(RESULT_OK, intent);
+                finish();
                 return true;
         }
 

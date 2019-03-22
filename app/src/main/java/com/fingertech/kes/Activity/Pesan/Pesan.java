@@ -46,6 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.app.Activity.RESULT_OK;
+
 public class Pesan extends Fragment {
 
     TextView pengirim,pesan,title,tanggal;
@@ -59,7 +61,7 @@ public class Pesan extends Fragment {
     List<PesanModel> pesanModelList;
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    String kirim,pesanku,titleku,tanggalku;
+    String kirim,pesanku,titleku,tanggalku,jam;
     SwipeRefreshLayout swipeRefreshLayout;
     PesanModel pesanModel;
 
@@ -132,16 +134,17 @@ public class Pesan extends Fragment {
 //                    date_from.clearFocus();
 //                    date_to.clearFocus();
                     pesanModelList  = new ArrayList<PesanModel>();
-                    Log.e("jumlah",response.body().getData().size()+"");
                     for (int i = 0; i < response.body().getData().size();i++){
-                        tanggalku = response.body().getData().get(i).getDatez();
-                        kirim= response.body().getData().get(i).getSender_name();
-                        pesanku=response.body().getData().get(i).getMessage_cont();
-                        titleku=response.body().getData().get(i).getMessage_title();
-                        statusku=response.body().getData().get(i).getRead_status();
-                        pesanModel = new PesanModel();
+                        jam         = response.body().getData().get(i).getDatez();
+                        tanggalku   = response.body().getData().get(i).getMessage_date();
+                        kirim       = response.body().getData().get(i).getSender_name();
+                        pesanku     =response.body().getData().get(i).getMessage_cont();
+                        titleku     =response.body().getData().get(i).getMessage_title();
+                        statusku    =response.body().getData().get(i).getRead_status();
 
+                        pesanModel  = new PesanModel();
                         pesanModel.setTanggal(tanggalku);
+                        pesanModel.setJam(jam);
                         pesanModel.setDari(kirim);
                         pesanModel.setPesan(pesanku);
                         pesanModel.setTitle(titleku);
@@ -160,7 +163,7 @@ public class Pesan extends Fragment {
                             intent.putExtra("parent_id",parent_id);
                             intent.putExtra("message_id",response.body().getData().get(position).getMessageid());
                             intent.putExtra("parent_message_id",response.body().getData().get(position).getParent_message_id());
-                            startActivity(intent);
+                            startActivityForResult(intent,1);
                         }
                     });
 //                    setUserVisibleHint(isVisible());
@@ -183,28 +186,6 @@ public class Pesan extends Fragment {
             }
         });
     }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void onBackPressed() {
-        getActivity().getSupportFragmentManager().popBackStack();
-    }
-
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
 
     private void showDialog() {
         if (!dialog.isShowing())
@@ -232,16 +213,18 @@ public class Pesan extends Fragment {
     }
 
 
-
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if (isVisibleToUser) {
-//            // Refresh your fragment here
-//            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-//            Log.i("IsRefresh", "Yes");
-//        }
-//    }
-
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                authorization = data.getStringExtra("authorization");
+                school_code   = data.getStringExtra("school_code");
+                parent_id     = data.getStringExtra("parent_id");
+                date_from = "2018-12-30";
+                date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
+                dapat_pesan();
+            }
+        }
+    }
 
 }

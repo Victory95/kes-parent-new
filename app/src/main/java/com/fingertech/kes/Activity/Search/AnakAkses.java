@@ -166,13 +166,13 @@ public class AnakAkses extends AppCompatActivity {
         newFilters[editFilters.length] = new InputFilter.AllCaps();
         et_nik.setFilters(newFilters);
         et_nik.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                if (!validateNikNiora()) {
-                    hideKeyboard(AnakAkses.this);
-                    et_nik.clearFocus();
-                    return true;
-                }
-            }
+//            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+//                if (!validateNikNiora()) {
+//                    hideKeyboard(AnakAkses.this);
+//                    et_nik.clearFocus();
+//                    return true;
+//                }
+//            }
             return false;
         });
 

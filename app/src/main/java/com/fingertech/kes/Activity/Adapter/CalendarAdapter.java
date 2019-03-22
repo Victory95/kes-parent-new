@@ -3,16 +3,14 @@ package com.fingertech.kes.Activity.Adapter;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-        import android.util.Log;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.TextView;
-
-        import com.fingertech.kes.Activity.Model.CalendarModel;
-        import com.fingertech.kes.R;
-
-        import java.util.List;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import com.fingertech.kes.Activity.Model.CalendarModel;
+import com.fingertech.kes.R;
+import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHolder> {
 
@@ -79,4 +77,5 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.MyHold
 
         void onItemClick(View view, int position);
     }
+
 }

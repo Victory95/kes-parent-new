@@ -24,4 +24,11 @@
         app:actionLayout="@layout/view_alertsbadge"
         app:showAsAction="always"/>
 
+    <!--<item-->
+        <!--android:id="@+id/testAction"-->
+        <!--android:title=""-->
+        <!--android:orderInCategory="1"-->
+        <!--app:showAsAction="always" />-->
+
+
 </menu>
