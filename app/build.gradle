@@ -22,10 +22,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    configurations {
-        cleanedAnnotations
-        compile.exclude group: 'org.jetbrains', module: 'annotations'
-    }
     useLibrary 'org.apache.http.legacy'
 }
 
@@ -55,7 +51,7 @@ dependencies {
     }
     //////glide
     //////glide
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     ///////// Retrofit
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -125,5 +121,6 @@ dependencies {
     implementation 'ru.cleverpumpkin:crunchycalendar:1.1.0'
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
     implementation 'com.github.pepperonas:materialdialog:0.3.4'
+    implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
 }
 apply plugin: 'com.google.gms.google-services'

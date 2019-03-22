@@ -33,9 +33,9 @@ public class OpsiMasuk extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.opsi_masuk);
 
-        btn_masuk=(Button)findViewById(R.id.btn_Masuk);
-        btn_masuk_tamu=(Button)findViewById(R.id.btn_Masuk_tamu);
-        tv_daftar=(TextView)findViewById(R.id.tv_Daftar);
+        btn_masuk= findViewById(R.id.btn_Masuk);
+        btn_masuk_tamu= findViewById(R.id.btn_Masuk_tamu);
+        tv_daftar= findViewById(R.id.tv_Daftar);
 
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
         session = sharedpreferences.getBoolean(session_status, false);

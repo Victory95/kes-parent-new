@@ -15,13 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Anak.BalasPesan;
 import com.fingertech.kes.Activity.Anak.PesanDetail;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,7 +65,6 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
 
     public void balas_pesan(){
 
-
         balas.setOnClickListener(v -> {
             Intent intent = new Intent(Detail_Pesan_Guru.this, Balas_chat.class);
             intent.putExtra("authorization",authorization);
@@ -82,14 +82,12 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
     public void dapat_pesan(){
         progressBar();
         showDialog();
-        balas.setVisibility(View.GONE);
         Call<JSONResponse.PesanDetail> call = mApiInterface.kes_message_inbox_detail_get(authorization.toString(),school_code.toLowerCase().toString(),parent_id.toString(),message_id.toString(),parent_message_id.toString());
         call.enqueue(new Callback<JSONResponse.PesanDetail>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanDetail> call, Response<JSONResponse.PesanDetail> response) {
                 Log.i("onResponse",response.code()+"");
                 hideDialog();
-                balas.setVisibility(View.VISIBLE);
                 JSONResponse.PesanDetail resource = response.body();
                 status  = resource.status;
                 code    = resource.code;
@@ -98,15 +96,14 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
                     pesanguru.setText(response.body().getData().getDataMessage().getMessage_cont());
                     namapengirim.setText(response.body().getData().getDataMessage().getCreated_by());
                     namamurid.setText(response.body().getData().getDataMessage().getStudent_name());
-
-                }else{
-
                 }
             }
 
             @Override
             public void onFailure(Call<JSONResponse.PesanDetail> call, Throwable t) {
                 Log.i("onFailure",t.toString());
+                FancyToast.makeText(getApplicationContext(),"Pesan Rusak", Toast.LENGTH_LONG,FancyToast.ERROR,false).show();
+                hideDialog();
             }
         });
     }

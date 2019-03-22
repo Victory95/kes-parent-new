@@ -7,6 +7,15 @@ public class PesanAnakModel {
     private String mapel;
     private String kelas;
     private String tanggal;
+    private String message_id;
+
+    public String getMessage_id() {
+        return message_id;
+    }
+
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
+    }
 
     public String getRead_status() {
         return read_status;

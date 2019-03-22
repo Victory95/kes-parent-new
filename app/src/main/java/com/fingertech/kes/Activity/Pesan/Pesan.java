@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,7 +25,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Adapter.PesanAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.PesanDetail;
@@ -60,26 +58,20 @@ public class Pesan extends Fragment {
     List<PesanModel> pesanModelList;
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    String kirim,pesanku,titleku,tanggalku,statusku;
+    String kirim,pesanku,titleku,tanggalku;
     PesanModel pesanModel;
-    SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_pesan, container, false);
-        Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         tanggal         = v.findViewById(R.id.tanggal_pesan);
         pengirim        = v.findViewById(R.id.Tvpengirim);
         pesan           = v.findViewById(R.id.Tvpesan);
         title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
-        recyclerView    = v.findViewById(R.id.Rv_chat);
-        swipeRefreshLayout  = v.findViewById(R.id.pullToRefresh);
+        recyclerView    = v.findViewById(R.id.rv_chat);
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -92,30 +84,11 @@ public class Pesan extends Fragment {
 
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
-
-
         dapat_pesan();
-        refresh();
         return v;
     }
 
-public void refresh(){
 
-
-    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-        int Refreshcounter = 1;
-        @Override
-        public void onRefresh() {
-            dapat_pesan();
-
-            Refreshcounter = Refreshcounter + 1;
-            swipeRefreshLayout.setRefreshing(false);
-        }
-    });
-
-
-
-}
 //
 
     public void dapat_pesan(){
@@ -144,13 +117,11 @@ public void refresh(){
                         kirim= response.body().getData().get(i).getSender_name();
                         pesanku=response.body().getData().get(i).getMessage_cont();
                         titleku=response.body().getData().get(i).getMessage_title();
-                        statusku =response.body().getData().get(i).getRead_status();
                         pesanModel = new PesanModel();
                         pesanModel.setTanggal(tanggalku);
                         pesanModel.setDari(kirim);
                         pesanModel.setPesan(pesanku);
                         pesanModel.setTitle(titleku);
-                        pesanModel.setStatus(statusku);
                         pesanModelList.add(pesanModel);
                     }
                     pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
@@ -234,8 +205,6 @@ public void refresh(){
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-
 
 
 

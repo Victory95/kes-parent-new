@@ -31,6 +31,9 @@ import android.widget.RadioButton;
 //import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
@@ -290,7 +293,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                             @Override
                             public boolean onClusterItemClick(ClusterItemSekolah item) {
                                 clusterItemSekolah = item;
-
                                 String schooldetail = item.getSchooldetailid();
                                 Intent intent = new Intent(FullMap.this,DetailSekolah.class);
                                 intent.putExtra("detailid", schooldetail);
@@ -613,9 +615,15 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                     // Create the recyclerview.
                     snappyrecyclerView = findViewById(R.id.recycler_view2);
                     // Create the grid layout manager with 2 columns.
-                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(FullMap.this);
-                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    snappyrecyclerView.setLayoutManager(new SnappyLinearLayoutManager(FullMap.this));
+//                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(FullMap.this);
+//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//                    snappyrecyclerView.setLayoutManager(new SnappyLinearLayoutManager(FullMap.this));
+                    final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+                    layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
+                    snappyrecyclerView.addOnScrollListener(new CenterScrollListener());
+                    snappyrecyclerView.setHasFixedSize(true);
+
 
                     //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
                     // Set layout manager.
@@ -689,7 +697,7 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                             if (lines != null) {
                                 lines.remove();
                             }
-
+                            currentItem = layoutManager.getCenterItemPosition();
                             if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
                                 latitudef = response.body().getData().get(currentItem).getLatitude();
                                 longitudef = response.body().getData().get(currentItem).getLongitude();

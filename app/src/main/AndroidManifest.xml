@@ -31,7 +31,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Activity.Pesan.PesanTerkirim"></activity>
         <activity android:name=".Activity.kalendartest" />
 
         <uses-library
@@ -292,11 +291,7 @@
             android:name=".Activity.Maps.TentangKami"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- <activity -->
-        <!-- android:name=".Activity.Language.Layout_Pengaturan" -->
-        <!-- android:label="@string/tv_toolbar" -->
-        <!-- android:screenOrientation="portrait" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.ProfilAnak"
             android:label="Profile Anak"
@@ -308,27 +303,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Pesan.Pesan"
-            android:label="Message"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Pesan.Balas_chat"
-            android:label="Balas Chat"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Pesan.Detail_Pesan_Guru"
-            android:label="Balas Guru"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.KalenderKelas"
             android:label="Kalendar Kelas"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Anak.AbsenAnak"
-            android:label="Absensi Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -342,33 +318,13 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Pesan.Content_Pesan_Guru"
-            android:label="Message"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Anak.PesanAnak"
-            android:label="Pesan Anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.KalendarDetail"
             android:label="Kalender Detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.PesanDetail"
-            android:label="Detail Pesan"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.EditProfileAnak"
             android:label="Edit Data Anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Anak.BalasPesan"
-            android:label="Balas Pesan"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -398,7 +354,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.TestVideo" />
         <activity
-            android:name=".Activity.AbsensiAnak"
+            android:name=".Activity.Anak.AbsensiAnak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -407,8 +363,30 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.PesanAnakDua"
+            android:name=".Activity.Anak.PesanAnak"
             android:label="Pesan Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Anak.PesanDetail"
+            android:label="Pesan Detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" /> <!-- <activity -->
+        <!-- android:name=".Activity.Pesan.Pesan" -->
+        <!-- android:label="Message" -->
+        <!-- android:screenOrientation="portrait" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
+        <activity
+            android:name=".Activity.Pesan.Balas_chat"
+            android:label="Balas Chat"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Pesan.Detail_Pesan_Guru"
+            android:label="Balas Guru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.Pesan.Content_Pesan_Guru"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.NextProject.Signin" />

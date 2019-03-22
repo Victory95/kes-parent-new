@@ -1,22 +1,18 @@
 package com.fingertech.kes.Activity.Fragment;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.fingertech.kes.Activity.AbsensiAnak;
-import com.fingertech.kes.Activity.Anak.AbsenAnak;
+import com.fingertech.kes.Activity.Anak.AbsensiAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
 import com.fingertech.kes.Activity.Anak.RaporAnak;
@@ -34,7 +30,7 @@ public class MenuSatuFragment extends Fragment{
     public MenuSatuFragment() {
         // Required empty public constructor
     }
-    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name;
+    String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
     CardView btn_profile,btn_jadwal,btn_ujian,btn_absensi,btn_tugas_anak,btn_raport;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
@@ -55,6 +51,8 @@ public class MenuSatuFragment extends Fragment{
         student_id          = sharedPreferences.getString("student_id",null);
         school_name         = sharedPreferences.getString("school_name",null);
         parent_nik          = sharedPreferences.getString("parent_nik",null);
+        nama_anak           = sharedPreferences.getString("student_name",null);
+
 
     }
 

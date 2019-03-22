@@ -40,6 +40,7 @@ public class ItemSekolahAdapter extends RecyclerView.Adapter<ItemSekolahAdapter.
 
             // Get car item dto in list.
             ItemSekolah viewItem = viewItemList.get(position);
+
                 // Set car item title.
                 holder.name.setText(viewItem.getName());;
                 holder.jarak.setText("Jarak > "+String.format("%.2f", viewItem.getJarak())+"Km");
@@ -49,6 +50,13 @@ public class ItemSekolahAdapter extends RecyclerView.Adapter<ItemSekolahAdapter.
     @Override
     public int getItemCount() {
         return viewItemList.size();
+//        return Integer.MAX_VALUE;
+//        return viewItemList == null ? 0 : viewItemList.size() * 2;
+    }
+
+    public ItemSekolah getItem(int position) {
+        int positionInList = position % viewItemList.size();
+        return viewItemList.get(positionInList);
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

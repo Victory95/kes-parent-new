@@ -18,15 +18,28 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.facebook.login.LoginManager;
 import com.fingertech.kes.Activity.MainActivity;
+import com.fingertech.kes.Activity.Masuk;
+import com.fingertech.kes.Activity.MenuGuest;
 import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.OpsiMasuk;
+import com.fingertech.kes.Activity.ProfileParent;
 import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -34,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import static com.joooonho.SelectableRoundedImageView.TAG;
 
@@ -51,6 +65,22 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     String in,fullname;
     JSONObject reader;
+    public static final String TAG_EMAIL        = "email";
+    public static final String TAG_FULLNAME     = "fullname";
+    public static final String TAG_TOKEN        = "token";
+    public static final String TAG_MEMBER_ID    = "member_id"; /// PARENT ID
+    public static final String TAG_STUDENT_ID   = "student_id";
+    public static final String TAG_STUDENT_NIK  = "student_nik";
+    public static final String TAG_SCHOOL_ID    = "school_id";
+    public static final String TAG_MEMBER_TYPE  = "member_type";
+    public static final String TAG_NAMA_ANAK    = "childrenname";
+    public static final String TAG_NAMA_SEKOLAH = "school_name";
+    public static final String TAG_SCHOOL_CODE  = "school_code";
+    public static final String TAG_PARENT_NIK   = "parent_nik";
+
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
+    SharedPreferences sharedpreferences;
 
     @Override
     public void onMessageReceived(RemoteMessage remotemsg) {
@@ -58,6 +88,7 @@ public class FirebaseMessaging extends FirebaseMessagingService {
         Log.d("Token", "From -> " + remotemsg.getFrom());
         String title       = remotemsg.getData().get("title");
         String body        = remotemsg.getData().get("body");
+
         Log.d("Title",remotemsg.getData()+"");
 
         try {
@@ -66,15 +97,47 @@ public class FirebaseMessaging extends FirebaseMessagingService {
             e.printStackTrace();
         }
         try {
-            fullname = reader.getString("fullname");
-            in      = reader.getString("type");
+            in      = reader.getString("type_id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("fullname",fullname+"/"+in);
+        Log.d("fullname",in+"");
 
         nada();
         sendnotification(title,body);
+//        if (remotemsg.getData().get("title") != null && remotemsg.getData().get("body") !=null){
+//            String title       = remotemsg.getData().get("title");
+//            String body        = remotemsg.getData().get("body");
+//
+//            Log.d("Title",remotemsg.getData()+"");
+//
+//            try {
+//                reader = new JSONObject(remotemsg.getData().get("data"));
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                fullname = reader.getString("fullname");
+//                in      = reader.getString("type");
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            Log.d("fullname",fullname+"/"+in);
+//
+//            nada();
+//            sendnotification(title,body);
+//        }else {
+//            sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedpreferences.edit();
+//            editor.putBoolean(Masuk.session_status, false);
+//            editor.putString(TAG_EMAIL, null);
+//            editor.putString(TAG_MEMBER_ID, null);
+//            editor.putString(TAG_FULLNAME, null);
+//            editor.putString(TAG_MEMBER_TYPE, null);
+//            editor.putString(TAG_TOKEN, null);
+//            editor.apply();
+//
+//        }
     }
 
     private void nada() {

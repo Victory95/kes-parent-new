@@ -127,7 +127,7 @@ public class DetailSekolah extends AppCompatActivity {
         hint_detail         = findViewById(R.id.hint_detail);
         fab                 = findViewById(R.id.fab);
         member_id           = getIntent().getStringExtra("member_id");
-
+        Log.d("member_id",member_id);
 
         setupViewPager(viewPager);
 

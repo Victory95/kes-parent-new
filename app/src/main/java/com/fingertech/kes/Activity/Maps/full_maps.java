@@ -110,7 +110,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         REQUEST_CODE = typeLocation;
 
         // Filter hanya tmpat yg ada di Indonesia
-        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("ID").build();
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder().setCountry("ID").setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).build();
         try {
             // Intent untuk mengirim Implisit Intent
             Intent mIntent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)

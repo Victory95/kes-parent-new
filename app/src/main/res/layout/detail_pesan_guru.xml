@@ -47,9 +47,9 @@
                     android:scaleType="centerCrop"
                     app:border_color="@color/colorPrimary"
                     android:layout_gravity="center"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:src="@drawable/guru"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/ic_kes"
                     />
 
             </com.github.florent37.shapeofview.shapes.CircleView>

@@ -1,7 +1,6 @@
 package com.fingertech.kes.Activity.Adapter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,22 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.R;
 import com.github.florent37.shapeofview.shapes.CircleView;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.fingertech.kes.Service.App.getContext;
 
 public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHolder> {
 
@@ -34,7 +27,6 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
 
     private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    Date date_now,date_pesan;
 
     private PesanGuruAdapter.OnItemClickListener onItemClickListener;
     public int row_index = 0;
@@ -58,43 +50,15 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(PesanGuruAdapter.MyHolder holder, int position) {
+
+        // Get car item dto in list.
         PesanModel viewItem = viewItemList.get(position);
-//
-
-
-
-        if (viewItem.getStatus().equals("1")){
-            holder.waktu.setTextColor(Color.parseColor("#808080"));
-            holder.pengirim.setTextColor(Color.parseColor("#808080"));
-            holder.title.setTextColor(Color.parseColor("#808080"));
-
-        }else if (viewItem.getStatus().equals("0")){
-            holder.waktu.setTextColor(Color.parseColor("#000000"));
-            holder.pengirim.setTextColor(Color.parseColor("#000000"));
-            holder.title.setTextColor(Color.parseColor("#000000"));
-        }
-
-
-//
-//
-
-
-        holder.pengirim.setText(viewItem.getDari());
-        if (viewItem.getTitle().equals("")){
-            holder.title.setText("( Tidak ada subject )");
-        }else {
-            holder.title.setText(viewItem.getTitle());
-        }
-        holder.pesan.setText(viewItem.getPesan());
-        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + viewItem.getDari()+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(holder.imageView);
+        // Set car item title.
 
         holder.tanggal.setText(convertDate(viewItem.getTanggal()));
-
-//        holder.pengirim.setText(viewItem.getDari());
-//        holder.pesan.setText(viewItem.getPesan());
-//        holder.title.setText(viewItem.getTitle());
-//        holder.waktu.setText(viewItem.getJam());
-
+        holder.pengirim.setText(viewItem.getDari());
+        holder.pesan.setText(viewItem.getPesan());
+        holder.title.setText(viewItem.getTitle());
 
     }
 

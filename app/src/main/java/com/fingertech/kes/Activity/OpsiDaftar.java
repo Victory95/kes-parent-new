@@ -297,7 +297,8 @@ public class OpsiDaftar extends AppCompatActivity {
     public void register_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), deviceid.toString(),firebase_token);
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), device_id.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -374,7 +375,8 @@ public class OpsiDaftar extends AppCompatActivity {
     public void login_sosmed_post(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), deviceid.toString(),firebase_token);
+        String device_id = "android_"+deviceid;
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), device_id.toString(),firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

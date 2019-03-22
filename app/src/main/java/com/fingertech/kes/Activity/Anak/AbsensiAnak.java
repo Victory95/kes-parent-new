@@ -1,4 +1,4 @@
-package com.fingertech.kes.Activity;
+package com.fingertech.kes.Activity.Anak;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Adapter.AbsensiAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.AbsenModel;
 import com.fingertech.kes.Activity.Model.AbsensiModel;
 import com.fingertech.kes.Controller.Auth;
@@ -328,14 +329,14 @@ public class AbsensiAnak extends AppCompatActivity{
                 status = resource.status;
                 code    = resource.code;
                 if (status == 1 && code.equals("CSCH_SCS_0001")) {
-                    jadwalDataList = response.body().getData();
+                    jadwalDataList = response.body().getData().getClass_schedule();
 
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        scheduleClassItemList = response.body().getData().get(i).getScheduleClass();
-                        days_name = response.body().getData().get(i).getDayName();
-                        day_status = response.body().getData().get(i).getDayStatus();
-                        daysid = response.body().getData().get(i).getDayid();
-                        day_type = response.body().getData().get(i).getDayType();
+                    for (int i = 0; i < response.body().getData().getClass_schedule().size(); i++) {
+                        scheduleClassItemList = response.body().getData().getClass_schedule().get(i).getScheduleClass();
+                        days_name = response.body().getData().getClass_schedule().get(i).getDayName();
+                        day_status = response.body().getData().getClass_schedule().get(i).getDayStatus();
+                        daysid = response.body().getData().getClass_schedule().get(i).getDayid();
+                        day_type = response.body().getData().getClass_schedule().get(i).getDayType();
                         if (days_name.equals(hari)){
                             if (hari.equals("Sabtu") || hari.equals("Minggu")){
                                 tv_absen.setVisibility(VISIBLE);

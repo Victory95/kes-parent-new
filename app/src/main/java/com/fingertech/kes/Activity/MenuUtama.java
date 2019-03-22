@@ -1,7 +1,6 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -57,11 +56,13 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.bumptech.glide.Glide;
 //import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
-import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
@@ -72,13 +73,9 @@ import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
-import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
-import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
-import com.fingertech.kes.Activity.Pesan.Detail_Pesan_Guru;
-import com.fingertech.kes.Activity.Pesan.Pesan;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
 import com.fingertech.kes.Controller.Auth;
@@ -142,13 +139,10 @@ public class MenuUtama extends AppCompatActivity
     View header;
     TextView tv_profile;
     CircleImageView image_profile;
-    String nama_anak,foto,statusku;
-    PesanGuruAdapter pesanGuruAdapter;
+    String nama_anak,foto;
     int status;
     String Base_url;
     ProgressDialog dialog;
-    String date_from,date_to;
-    List<PesanModel> pesanModelList;
     String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
 
     Auth mApiInterface;
@@ -203,9 +197,8 @@ public class MenuUtama extends AppCompatActivity
     InkPageIndicator inkPageIndicator;
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
-    PesanModel pesanModel;
     SharedPreferences sharedPreferences;
-    int mCartItemCount = 0;
+    int mCartItemCount = 20;
     TextView countmenu;
 
     int height,width;
@@ -399,7 +392,7 @@ public class MenuUtama extends AppCompatActivity
                     .setMessage("Apakah anda ingin keluar dari aplikasi.")
                     .setNegativeBtnText("Tidak")
                     .setNegativeBtnBackground("#40bfe8")
-                    .setPositiveBtnBackground("#f0f0f0")
+                    .setPositiveBtnBackground("#ff0000")
                     .setPositiveBtnText("Ya")
                     .setGifResource(R.drawable.home)   //Pass your Gif here
                     .isCancellable(true)
@@ -436,7 +429,69 @@ public class MenuUtama extends AppCompatActivity
     };
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_utama, menu);
+        final MenuItem menuItem = menu.findItem(R.id.action_cart);
+        View actionView = MenuItemCompat.getActionView(menuItem);
 
+        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
+
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
+    }
+
+    private void setupBadge() {
+
+        if (countmenu != null) {
+            if (mCartItemCount == 0) {
+                if (countmenu.getVisibility() != View.GONE) {
+                    countmenu.setVisibility(View.GONE);
+                }
+            } else {
+                countmenu.setText(String.valueOf(Math.min(mCartItemCount, 99)));
+                if (countmenu.getVisibility() != View.VISIBLE) {
+                    countmenu.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+
+   @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.action_cart: {
+                // Do something
+                SharedPreferences.Editor editor = sharedviewpager.edit();
+                editor.putString("member_id", parent_id);
+                editor.putString("school_code", school_code);
+                editor.putString("authorization", authorization);
+                editor.putString("fullname",fullname);
+                editor.commit();
+                Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+                intent.putExtra("authorization",authorization);
+                intent.putExtra("school_code",school_code);
+                intent.putExtra("parent_id",parent_id);
+                intent.putExtra("fullname",fullname);
+                startActivity(intent);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -446,8 +501,6 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, AbsensiAnak.class);
-            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -459,7 +512,6 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
-
             SharedPreferences.Editor editor = sharedviewpager.edit();
             editor.putString("member_id", parent_id);
             editor.putString("school_code", school_code);
@@ -564,6 +616,7 @@ public class MenuUtama extends AppCompatActivity
                         school_code     = response.body().getData().get(0).getSchool_code();
                         classroom_id    = response.body().getData().get(0).getClassroom_id();
                         school_name     = response.body().getData().get(0).getSchool_name();
+                        nama_anak       = response.body().getData().get(0).getChildren_name();
                         send_data();
                         send_data2();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
@@ -578,6 +631,7 @@ public class MenuUtama extends AppCompatActivity
                             school_code     = profileModels.get(position).getSchool_code();
                             classroom_id    = profileModels.get(position).getClassroom_id();
                             school_name     = profileModels.get(position).getSchool_name();
+                            nama_anak       = profileModels.get(position).getNama();
                             send_data();
                             send_data2();
                         });
@@ -663,6 +717,7 @@ public class MenuUtama extends AppCompatActivity
         editor.putString("parent_nik", parent_nik);
         editor.putString("school_name", school_name);
         editor.putString("student_id", student_id);
+        editor.putString("student_name",nama_anak);
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
@@ -671,6 +726,7 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("authorization", authorization);
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name", school_name);
+        bundle.putString("student_name",nama_anak);
         Fragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -695,6 +751,7 @@ public class MenuUtama extends AppCompatActivity
         editor.putString("parent_nik",parent_nik);
         editor.putString("school_name",school_name);
         editor.putString("student_id",student_id);
+        editor.putString("student_name",nama_anak);
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
@@ -703,6 +760,7 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("authorization", authorization);
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name",school_name);
+        bundle.putString("student_name",nama_anak);
         MenuDuaFragment menuDuaFragment = new MenuDuaFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -963,18 +1021,22 @@ public class MenuUtama extends AppCompatActivity
 
                     // Create the recyclerview.
                     snappyRecyclerView = findViewById(R.id.recycler_view);
-                    // Create the grid layout manager with 2 columns.
-                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
-                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    snappyRecyclerView.setLayoutManager(new SnappyLinearLayoutManager(MenuUtama.this));
+//                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
+//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                    final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+                    layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
+                    snappyRecyclerView.addOnScrollListener(new CenterScrollListener());
+                    snappyRecyclerView.setHasFixedSize(true);
+
 
                     //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
                     // Set layout manager.
+//
                     snappyRecyclerView.setLayoutManager(layoutManager);
-
+//                    snappyRecyclerView.scrollToPosition(Integer.MAX_VALUE / 2);
                     // Create car recycler view data adapter with car item list.
                     itemSekolahAdapter = new ItemSekolahAdapter(itemList);
-
                     itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
@@ -1027,7 +1089,8 @@ public class MenuUtama extends AppCompatActivity
 
                     snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
                             int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
                             int scrollOffset = recyclerView.computeHorizontalScrollOffset();
                             int currentItem = 0;
@@ -1036,11 +1099,12 @@ public class MenuUtama extends AppCompatActivity
                             if (scrollOffset != 0) {
                                 currentItem = Math.round(scrollOffset / itemWidth);
                             }
-                            currentItem = (currentItem < 0) ? 0 : currentItem;
                             currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
                             if(line != null){
                                 line.remove();
                             }
+                            currentItem  = layoutManager.getCenterItemPosition();
+
                             if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
@@ -1115,6 +1179,7 @@ public class MenuUtama extends AppCompatActivity
                             }
                         }
                     });
+
                     // Set data adapter.
                     snappyRecyclerView.setAdapter(itemSekolahAdapter);
 
@@ -1143,53 +1208,6 @@ public class MenuUtama extends AppCompatActivity
 
         });
     }
-
-
-//    public void jumlah_pesan(){
-//
-//
-//        progressBar();
-//        showDialog();
-//        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
-//        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
-//            @Override
-//            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
-//                Log.d("onRespone",response.code()+"");
-//                hideDialog();
-//                JSONResponse.PesanAnak resource = response.body();
-//
-//                status  = resource.status;
-//                code    = resource.code;
-//
-//
-//                if (status == 0 & code.equals("DTS_SCS_0001")) {
-//                    pesanModelList = new ArrayList<PesanModel>();
-//                    Log.e("jumlah", response.body().getData().size() + "");
-//                    for (int i = 0; i < response.body().getData().size(); i++) {
-//                        statusku = response.body().getData().get(i).getRead_status();
-//                        pesanModel = new PesanModel();
-//                        pesanModel.setStatus(statusku);
-//                        pesanModelList.add(pesanModel);
-//                    }
-//                    pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-//                }else if(status==1 & code.equals("DTS_SCS_0001")){
-//
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
-//                Log.i("onFailure",t.toString());
-//                hideDialog();
-//            }
-//        });
-//    }
-
-
-
-
 
 
     private void setCameraWithCoordinationBounds(Route route) {
