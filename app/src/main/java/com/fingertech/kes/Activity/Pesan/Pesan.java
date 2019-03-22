@@ -139,6 +139,7 @@ public class Pesan extends Fragment {
                         pesanku=response.body().getData().get(i).getMessage_cont();
                         titleku=response.body().getData().get(i).getMessage_title();
                         statusku=response.body().getData().get(i).getRead_status();
+
                         pesanModel = new PesanModel();
 
                         pesanModel.setTanggal(tanggalku);

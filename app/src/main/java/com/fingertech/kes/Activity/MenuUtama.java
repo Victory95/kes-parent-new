@@ -112,8 +112,11 @@ import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -166,6 +169,8 @@ public class MenuUtama extends AppCompatActivity
     public static final String TAG_NAMA_SEKOLAH = "school_name";
     public static final String TAG_SCHOOL_CODE  = "school_code";
     public static final String TAG_PARENT_NIK   = "parent_nik";
+    public static final String TAG_DATE_FROM    = "date_from";
+    public static final String TAG_DATE_TO      = "date_to";
 
     private List<ItemSekolah> itemList;
     private ItemSekolahAdapter itemSekolahAdapter = null;
@@ -204,10 +209,10 @@ public class MenuUtama extends AppCompatActivity
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
     SharedPreferences sharedPreferences;
-    int mCartItemCount = 100;
+    int mCartItemCount=1 ;
     TextView countmenu;
     String date_to,date_from;
-
+    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     int height,width;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,9 +268,13 @@ public class MenuUtama extends AppCompatActivity
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,null);
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,null);
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
+//        date_from     =  sharedPreferences.getString(TAG_DATE_FROM,null);
+//        date_to       =  sharedPreferences.getString(TAG_DATE_TO,null);
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
+        date_from = "2018-12-30";
+        date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
         sharedviewpager = getSharedPreferences(my_viewpager_preferences,Context.MODE_PRIVATE);
 
         ParentPager.setAdapter(fragmentAdapter);
@@ -273,7 +282,7 @@ public class MenuUtama extends AppCompatActivity
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
-        setupBadge();
+
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -326,6 +335,7 @@ public class MenuUtama extends AppCompatActivity
                 get_profile();
                 get_children();
                 send_data();
+                dapat_pesan();
                 send_data2();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
@@ -447,7 +457,6 @@ public class MenuUtama extends AppCompatActivity
         countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
 
 
-        setupBadge();
 
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -459,63 +468,13 @@ public class MenuUtama extends AppCompatActivity
         return true;
     }
 
-    private void setupBadge() {
-//
-//        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
-//        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
-//            @Override
-//            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
-//                Log.d("onRespone",response.code()+"");
-//                hideDialog();
-//                JSONResponse.PesanAnak resource = response.body();
-//
-//                status  = resource.status;
-//                code    = resource.code;
-//
-//
-//                if (status == 1 & code.equals("DTS_SCS_0001")) {
-//
-//                    pesanModelList = new ArrayList<PesanModel>();
-//                    Log.e("jumlah", response.body().getData().size() + "");
-//                    for (int i = 0; i < response.body().getData().size(); i++) {
-//                        statusku = response.body().getData().get(i).getRead_status();
-//                        pesanModel = new PesanModel();
-//                        pesanModel.setPesan(statusku);
-//                        pesanModelList.add(pesanModel);
-////
-////                    }
-//                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-////
-//                    }
-//                }
-//                else if (status == 0 & code.equals("DTS_ERR_0001")){
-//
-//                    recyclerView.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
-//                Log.i("onFailure",t.toString());
-//
-//                hideDialog();
-//            }
-//        });
 
 
-        if (countmenu != null) {
-            if (mCartItemCount == 0) {
-                if (countmenu.getVisibility() != View.GONE) {
-                    countmenu.setVisibility(View.GONE);
-                }
-            } else {
-                countmenu.setText(String.valueOf(Math.min(mCartItemCount, 99)));
-                if (countmenu.getVisibility() != View.VISIBLE) {
-                    countmenu.setVisibility(View.VISIBLE);
-                }
-            }
-        }
-    }
+
+
+
+
+
 
 
    @Override
@@ -530,12 +489,16 @@ public class MenuUtama extends AppCompatActivity
                 editor.putString("school_code", school_code);
                 editor.putString("authorization", authorization);
                 editor.putString("fullname",fullname);
+//                editor.putString("date_to",date_to);
+//                editor.putString("date_from",date_from);
                 editor.commit();
                 Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
                 intent.putExtra("authorization",authorization);
                 intent.putExtra("school_code",school_code);
                 intent.putExtra("parent_id",parent_id);
                 intent.putExtra("fullname",fullname);
+//                intent.putExtra("date_to",date_to);
+//                intent.putExtra("date_from",date_from);
                 startActivity(intent);
                 return true;
             }
@@ -567,12 +530,16 @@ public class MenuUtama extends AppCompatActivity
             editor.putString("school_code", school_code);
             editor.putString("authorization", authorization);
             editor.putString("fullname",fullname);
+//            editor.putString("date_from",date_from);
+//            editor.putString("date_to",date_to);
             editor.commit();
             Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
             intent.putExtra("authorization",authorization);
             intent.putExtra("school_code",school_code);
             intent.putExtra("parent_id",parent_id);
             intent.putExtra("fullname",fullname);
+//            intent.putExtra("date_to",date_to);
+//            intent.putExtra("date_from",date_from);
             startActivity(intent);
         }
 
@@ -622,6 +589,67 @@ public class MenuUtama extends AppCompatActivity
         redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
     }
 
+    public void dapat_pesan(){
+
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization,school_code.toLowerCase(),parent_id,date_from.toString(),date_to.toString());
+        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
+            @Override
+            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
+                Log.d("onRespone",response.code()+"");
+                hideDialog();
+                JSONResponse.PesanAnak resource = response.body();
+
+                status  = resource.status;
+                code    = resource.code;
+
+
+                if (status == 1 & code.equals("DTS_SCS_0001")) {
+                    pesanModelList = new ArrayList<PesanModel>();
+                    Log.e("jumlah", response.body().getData().size() + "");
+//                    for (int i = 0; i < response.body().getData().size(); i++) {
+                        statusku = response.body().getData().get(0).getRead_status();
+                        String myString = statusku;
+                        int foo = Integer.parseInt(myString);
+
+                        Log.e("hasil",statusku.toString());
+                        if (countmenu!=null) {
+                            if (mCartItemCount==foo) {
+                                if (countmenu.getVisibility() != View.GONE) {
+                                    countmenu.setVisibility(View.GONE);
+                                } else {
+
+                                }
+
+                            }
+                        }
+
+
+                        pesanModel = new PesanModel();
+                        pesanModel.setPesan(statusku);
+                        pesanModelList.add(pesanModel);
+                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+//
+//                    }
+                }
+                else if (status == 0 & code.equals("DTS_ERR_0001")){
+
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
+                Log.i("onFailure",t.toString());
+
+                hideDialog();
+            }
+        });
+
+
+
+    }
+
+
     public void get_children(){
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
@@ -669,6 +697,7 @@ public class MenuUtama extends AppCompatActivity
                         nama_anak       = response.body().getData().get(0).getChildren_name();
                         send_data();
                         send_data2();
+                        dapat_pesan();
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
@@ -684,6 +713,7 @@ public class MenuUtama extends AppCompatActivity
                             nama_anak       = profileModels.get(position).getNama();
                             send_data();
                             send_data2();
+                            dapat_pesan();
                         });
                     }else {
                         recyclerView.setVisibility(GONE);
