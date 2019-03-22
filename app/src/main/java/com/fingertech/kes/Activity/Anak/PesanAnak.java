@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,8 +24,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeNoticeDialog;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.fingertech.kes.Activity.Adapter.PesanAnakAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.HariModel.PesanAnakModel;
@@ -105,33 +101,17 @@ public class PesanAnak extends AppCompatActivity {
 
     }
     private void pilihan(){
-//        new LovelyInfoDialog(this)
-//                .setTopColorRes(R.color.mint_color)
-//                .setIcon(R.drawable.ic_info_white)
-//                //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
-//                .setNotShowAgainOptionEnabled(0)
-//                .setNotShowAgainOptionChecked(true)
-//                .setTitle("Pesan Anak")
-//                .setMessage("*/ Pesan pesan yang masuk dan keluar hanya dapat dilihat. Hak akses untuk mengirim dan membalas hanya bisa dilakukan oleh anak anda")
-//                .setConfirmButtonText("Ok")
-//                .show();
-        new AwesomeNoticeDialog(this)
+        new LovelyInfoDialog(this)
+                .setTopColorRes(R.color.mint_color)
+                .setIcon(R.drawable.ic_info_white)
+                //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                .setNotShowAgainOptionEnabled(0)
+                .setNotShowAgainOptionChecked(true)
                 .setTitle("Pesan Anak")
                 .setMessage("*/ Pesan pesan yang masuk dan keluar hanya dapat dilihat. Hak akses untuk mengirim dan membalas hanya bisa dilakukan oleh anak anda")
-                .setColoredCircle(R.color.colorPrimary)
-                .setDialogIconAndColor(R.drawable.ic_info, R.color.white)
-                .setCancelable(true)
-                .setButtonText(getString(R.string.dialog_ok_button))
-                .setButtonBackgroundColor(R.color.colorPrimary)
-                .setButtonText(getString(R.string.dialog_ok_button))
-                .setNoticeButtonClick(new Closure() {
-                    @Override
-                    public void exec() {
-                        dapat();
-                    }
-                })
+                .setConfirmButtonText("Ok")
                 .show();
-
+        dapat();
     }
 
     void dapat(){
