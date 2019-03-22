@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.PesanDetail;
+import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Controller.Auth;
@@ -46,6 +47,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.fingertech.kes.Activity.MenuUtama.TAG_FULLNAME;
+import static com.fingertech.kes.Activity.MenuUtama.TAG_MEMBER_ID;
+import static com.fingertech.kes.Activity.MenuUtama.TAG_PARENT_NIK;
+import static com.fingertech.kes.Activity.MenuUtama.TAG_TOKEN;
+import static com.fingertech.kes.Activity.ProfileParent.TAG_LASTLOGIN;
+import static com.fingertech.kes.Activity.ProfileParent.TAG_MEMBER_TYPE;
+
 public class Pesan extends Fragment {
 
     TextView pengirim,pesan,title,tanggal;
@@ -62,6 +70,7 @@ public class Pesan extends Fragment {
     String kirim,pesanku,titleku,tanggalku;
     SwipeRefreshLayout swipeRefreshLayout;
     PesanModel pesanModel;
+    String parent_nik,lastlogin,member_type;
 
     @Nullable
     @Override
@@ -84,6 +93,14 @@ public class Pesan extends Fragment {
         school_name         = sharedPreferences.getString("school_name",null);
         classroom_id        = sharedPreferences.getString("classroom_id",null);
         fullname            = sharedPreferences.getString("fullname",null);
+
+        sharedPreferences = this.getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        authorization = sharedPreferences.getString(TAG_TOKEN,"token");
+        parent_id     = sharedPreferences.getString(TAG_MEMBER_ID,"member_id");
+        fullname      = sharedPreferences.getString(TAG_FULLNAME,"fullname");
+        parent_nik    = sharedPreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        lastlogin     = sharedPreferences.getString(TAG_LASTLOGIN,"");
+        member_type   = sharedPreferences.getString(TAG_MEMBER_TYPE,"member_type");
 
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
@@ -116,6 +133,7 @@ public class Pesan extends Fragment {
         showDialog();
         refresh();
         Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
@@ -124,6 +142,7 @@ public class Pesan extends Fragment {
                 JSONResponse.PesanAnak resource = response.body();
 
                 status  = resource.status;
+
                 code    = resource.code;
 
 

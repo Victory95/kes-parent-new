@@ -451,20 +451,24 @@ public class MenuUtama extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_utama, menu);
-        final MenuItem menuItem = menu.findItem(R.id.action_cart);
-        View actionView = MenuItemCompat.getActionView(menuItem);
 
-        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
+        if (school_code==null){
 
 
+        }else {
+            final MenuItem menuItem = menu.findItem(R.id.action_cart);
+            View actionView = MenuItemCompat.getActionView(menuItem);
 
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOptionsItemSelected(menuItem);
-            }
-        });
+            countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
 
+
+            actionView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onOptionsItemSelected(menuItem);
+                }
+            });
+        }
         return true;
     }
 
@@ -484,6 +488,7 @@ public class MenuUtama extends AppCompatActivity
 
             case R.id.action_cart: {
                 // Do something
+
                 SharedPreferences.Editor editor = sharedviewpager.edit();
                 editor.putString("member_id", parent_id);
                 editor.putString("school_code", school_code);
@@ -525,22 +530,26 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
-            SharedPreferences.Editor editor = sharedviewpager.edit();
-            editor.putString("member_id", parent_id);
-            editor.putString("school_code", school_code);
-            editor.putString("authorization", authorization);
-            editor.putString("fullname",fullname);
+                if (school_code==null){
+                    Toast.makeText(MenuUtama.this,"Silahkan daftar menjadi orang tua Terlebih dahulu",Toast.LENGTH_SHORT).show();
+                }else {
+                    SharedPreferences.Editor editor = sharedviewpager.edit();
+                    editor.putString("member_id", parent_id);
+                    editor.putString("school_code", school_code);
+                    editor.putString("authorization", authorization);
+                    editor.putString("fullname", fullname);
 //            editor.putString("date_from",date_from);
 //            editor.putString("date_to",date_to);
-            editor.commit();
-            Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-            intent.putExtra("authorization",authorization);
-            intent.putExtra("school_code",school_code);
-            intent.putExtra("parent_id",parent_id);
-            intent.putExtra("fullname",fullname);
+                    editor.commit();
+                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+                    intent.putExtra("authorization", authorization);
+                    intent.putExtra("school_code", school_code);
+                    intent.putExtra("parent_id", parent_id);
+                    intent.putExtra("fullname", fullname);
 //            intent.putExtra("date_to",date_to);
 //            intent.putExtra("date_from",date_from);
-            startActivity(intent);
+                    startActivity(intent);
+                }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
