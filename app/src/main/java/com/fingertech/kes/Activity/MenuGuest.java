@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -133,7 +134,7 @@ public class MenuGuest extends AppCompatActivity
     String location;
     String code;
     Auth mApiInterface;
-    Button carisekolah,carisekolah2;
+    CardView carisekolah,carisekolah2;
     int status;
     private OnInfoWindowElemTouchListener infoButtonListener;
 
@@ -187,9 +188,10 @@ public class MenuGuest extends AppCompatActivity
         else {
             Log.d("onCreate", "Google Play Services available. Continuing.");
         }
-        carisekolah = (Button)findViewById(R.id.cari_sekolah);
-        carisekolah2 = (Button)findViewById(R.id.cari_sekolah2);
-        carisekolah.setOnClickListener(new View.OnClickListener() {
+
+        carisekolah = (CardView)findViewById(R.id.btn_search);
+//        carisekolah2 = (Button)findViewById(R.id.cari_sekolah2);
+            carisekolah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -198,15 +200,15 @@ public class MenuGuest extends AppCompatActivity
 
             }
         });
-        carisekolah2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent mIntent = new Intent(MenuGuest.this,SearchingMAP.class);
-                startActivity(mIntent);
-
-            }
-        });
+//        carisekolah2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Intent mIntent = new Intent(MenuGuest.this,SearchingMAP.class);
+//                startActivity(mIntent);
+//
+//            }
+//        });
 
     }
 

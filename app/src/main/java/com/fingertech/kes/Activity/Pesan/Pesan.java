@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,11 +55,12 @@ public class Pesan extends Fragment {
     String authorization,school_code,parent_id,student_id,school_name,classroom_id,fullname;
     RecyclerView recyclerView;
     int status;
-    String code,date_from,date_to;
+    String code,date_from,date_to,statusku;
     List<PesanModel> pesanModelList;
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String kirim,pesanku,titleku,tanggalku;
+    SwipeRefreshLayout swipeRefreshLayout;
     PesanModel pesanModel;
 
     @Nullable
@@ -72,6 +74,7 @@ public class Pesan extends Fragment {
         title           = v.findViewById(R.id.Tvsubject);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         recyclerView    = v.findViewById(R.id.rv_chat);
+        swipeRefreshLayout  = v.findViewById(R.id.pullToRefresh);
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -85,15 +88,33 @@ public class Pesan extends Fragment {
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
         dapat_pesan();
+        refresh();
+
         return v;
     }
 
 
 //
 
+    public  void refresh(){
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            int Refreshcounter = 1;
+            @Override
+            public void onRefresh() {
+                dapat_pesan();
+                Refreshcounter = Refreshcounter + 1;
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
+    }
+
     public void dapat_pesan(){
         progressBar();
         showDialog();
+        refresh();
         Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
@@ -117,12 +138,16 @@ public class Pesan extends Fragment {
                         kirim= response.body().getData().get(i).getSender_name();
                         pesanku=response.body().getData().get(i).getMessage_cont();
                         titleku=response.body().getData().get(i).getMessage_title();
+                        statusku=response.body().getData().get(i).getRead_status();
                         pesanModel = new PesanModel();
+
                         pesanModel.setTanggal(tanggalku);
                         pesanModel.setDari(kirim);
                         pesanModel.setPesan(pesanku);
                         pesanModel.setTitle(titleku);
+                        pesanModel.setStatus(statusku);
                         pesanModelList.add(pesanModel);
+
                     }
                     pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
                     pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {

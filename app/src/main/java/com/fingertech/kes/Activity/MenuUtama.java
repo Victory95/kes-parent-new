@@ -63,6 +63,7 @@ import com.bumptech.glide.Glide;
 //import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
+import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
@@ -73,9 +74,11 @@ import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
+import com.fingertech.kes.Activity.Pesan.Detail_Pesan_Guru;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
 import com.fingertech.kes.Controller.Auth;
@@ -132,6 +135,7 @@ public class MenuUtama extends AppCompatActivity
 
     private ViewPager ParentPager;
     private FragmentAdapter fragmentAdapter;
+    PesanGuruAdapter pesanGuruAdapter;
     public static int PAGE_COUNT = 2;
     NavigationView navigationView;
     DrawerLayout drawer;
@@ -142,8 +146,9 @@ public class MenuUtama extends AppCompatActivity
     String nama_anak,foto;
     int status;
     String Base_url;
+    PesanModel pesanModel;
     ProgressDialog dialog;
-    String verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
+    String  statusku,verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
 
     Auth mApiInterface;
     SharedPreferences sharedpreferences,sharedviewpager;
@@ -189,6 +194,7 @@ public class MenuUtama extends AppCompatActivity
     SwipeRefreshLayout swipeRefreshLayout;
     static int i;
     List<ProfileModel> profileModels = new ArrayList<ProfileModel>();
+    List<PesanModel> pesanModelList;
     ProfileAdapter profileAdapter;
     private FrameLayout redCircle;
     private TextView countTextView;
@@ -198,8 +204,9 @@ public class MenuUtama extends AppCompatActivity
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
     SharedPreferences sharedPreferences;
-    int mCartItemCount = 20;
+    int mCartItemCount = 100;
     TextView countmenu;
+    String date_to,date_from;
 
     int height,width;
     @Override
@@ -266,6 +273,7 @@ public class MenuUtama extends AppCompatActivity
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
+        setupBadge();
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -452,6 +460,48 @@ public class MenuUtama extends AppCompatActivity
     }
 
     private void setupBadge() {
+//
+//        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+//        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
+//            @Override
+//            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
+//                Log.d("onRespone",response.code()+"");
+//                hideDialog();
+//                JSONResponse.PesanAnak resource = response.body();
+//
+//                status  = resource.status;
+//                code    = resource.code;
+//
+//
+//                if (status == 1 & code.equals("DTS_SCS_0001")) {
+//
+//                    pesanModelList = new ArrayList<PesanModel>();
+//                    Log.e("jumlah", response.body().getData().size() + "");
+//                    for (int i = 0; i < response.body().getData().size(); i++) {
+//                        statusku = response.body().getData().get(i).getRead_status();
+//                        pesanModel = new PesanModel();
+//                        pesanModel.setPesan(statusku);
+//                        pesanModelList.add(pesanModel);
+////
+////                    }
+//                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+////
+//                    }
+//                }
+//                else if (status == 0 & code.equals("DTS_ERR_0001")){
+//
+//                    recyclerView.setVisibility(View.GONE);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
+//                Log.i("onFailure",t.toString());
+//
+//                hideDialog();
+//            }
+//        });
+
 
         if (countmenu != null) {
             if (mCartItemCount == 0) {

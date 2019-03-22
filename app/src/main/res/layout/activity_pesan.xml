@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Activity.Pesan.Pesan">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
 
    <android.support.v7.widget.RecyclerView
        android:layout_width="match_parent"
@@ -16,7 +21,7 @@
 
    </android.support.v7.widget.RecyclerView>
 
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 
