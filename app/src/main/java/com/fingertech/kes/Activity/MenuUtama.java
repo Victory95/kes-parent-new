@@ -63,8 +63,11 @@ import com.bumptech.glide.Glide;
 //import com.dingmouren.layoutmanagergroup.banner.BannerLayoutManager;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
+import com.fingertech.kes.Activity.Adapter.NewsAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
+import com.fingertech.kes.Activity.Berita.DetailBerita;
+import com.fingertech.kes.Activity.Berita.FullBerita;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 
@@ -74,6 +77,7 @@ import com.fingertech.kes.Activity.Maps.SearchingMAP;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Model.NewsModel;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
@@ -85,6 +89,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Rest.UtilsApi;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -120,6 +125,11 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -154,7 +164,7 @@ public class MenuUtama extends AppCompatActivity
     ProgressDialog dialog;
     String  statusku,verification_code,parent_id,student_id,student_nik,school_id,childrenname,school_name,email,fullname,school_code,parent_nik;
 
-    Auth mApiInterface;
+    Auth mApiInterface,mApi;
     SharedPreferences sharedpreferences,sharedviewpager;
 
     public static final String my_viewpager_preferences = "my_viewpager_preferences";
@@ -206,7 +216,7 @@ public class MenuUtama extends AppCompatActivity
     private TextView countTextView;
     private int alertCount = 0;
     List<JSONResponse.DataList>dataLists = new ArrayList<>();
-    InkPageIndicator inkPageIndicator;
+    InkPageIndicator inkPageIndicator,indikator_sekolah;
     MapWrapperLayout mapWrapperLayout;
     String placeName,vicinity,akreditasi,schooldetailid;
     SharedPreferences sharedPreferences;
@@ -217,6 +227,13 @@ public class MenuUtama extends AppCompatActivity
     int height,width;
     String member,count;
     View actionView;
+    NewsAdapter newsAdapter;
+    List <NewsModel>newsModelList = new ArrayList<>();
+    RecyclerView rv_berita;
+    NewsModel newsModel;
+    String news_title,news_id,news_body,news_date,news_image;
+    String base_url_news;
+    TextView no_berita,view_more;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -244,6 +261,12 @@ public class MenuUtama extends AppCompatActivity
         recyclerView        = findViewById(R.id.recycle_profile);
         inkPageIndicator    = findViewById(R.id.indicators);
         mapWrapperLayout    = findViewById(R.id.map_relative_layout);
+        rv_berita           = findViewById(R.id.rv_berita);
+        no_berita           = findViewById(R.id.no_berita);
+        mApi                = UtilsApi.getAPIService();
+        view_more           = findViewById(R.id.view_more);
+
+
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -275,6 +298,7 @@ public class MenuUtama extends AppCompatActivity
 //        date_to       =  sharedPreferences.getString(TAG_DATE_TO,null);
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
+        base_url_news = "http://www.kes.co.id/schoolm/assets/images/news/mm_";
 
         date_from = "2018-12-30";
         date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
@@ -285,7 +309,7 @@ public class MenuUtama extends AppCompatActivity
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
-
+        Daftar_Berita();
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -294,6 +318,10 @@ public class MenuUtama extends AppCompatActivity
 
         image_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
+            startActivity(intent);
+        });
+        view_more.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuUtama.this, FullBerita.class);
             startActivity(intent);
         });
 
@@ -346,7 +374,6 @@ public class MenuUtama extends AppCompatActivity
                             get_profile();
                             get_children();
                             send_data();
-                            dapat_pesan();
                             send_data2();
                             Refreshcounter = Refreshcounter + 1;
                             swipeRefreshLayout.setRefreshing(false);
@@ -562,22 +589,46 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
-            SharedPreferences.Editor editor = sharedviewpager.edit();
-            editor.putString("member_id", parent_id);
-            editor.putString("school_code", school_code);
-            editor.putString("authorization", authorization);
-            editor.putString("fullname",fullname);
-//            editor.putString("date_from",date_from);
-//            editor.putString("date_to",date_to);
-            editor.commit();
-            Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-            intent.putExtra("authorization",authorization);
-            intent.putExtra("school_code",school_code);
-            intent.putExtra("parent_id",parent_id);
-            intent.putExtra("fullname",fullname);
-//            intent.putExtra("date_to",date_to);
-//            intent.putExtra("date_from",date_from);
-            startActivity(intent);
+            if (member.equals("3")){
+                if (count.equals("0")){
+                    actionView.setVisibility(GONE);
+                    new LovelyInfoDialog(MenuUtama.this)
+                            .setTopColorRes(R.color.yellow_A400)
+                            .setIcon(R.drawable.ic_info_white)
+                            //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                            .setNotShowAgainOptionEnabled(0)
+                            .setNotShowAgainOptionChecked(false)
+                            .setTitle("Warning")
+                            .setMessage("Harap menambah data anak anda terlebih dahulu")
+                            .setConfirmButtonText("Ok")
+                            .show();
+                }else {
+                    SharedPreferences.Editor editor = sharedviewpager.edit();
+                    editor.putString("member_id", parent_id);
+                    editor.putString("school_code", school_code);
+                    editor.putString("authorization", authorization);
+                    editor.putString("fullname",fullname);
+                    editor.commit();
+                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+                    intent.putExtra("authorization",authorization);
+                    intent.putExtra("school_code",school_code);
+                    intent.putExtra("parent_id",parent_id);
+                    intent.putExtra("fullname",fullname);
+                    startActivity(intent);
+                }
+            }else {
+                new LovelyInfoDialog(MenuUtama.this)
+                        .setTopColorRes(R.color.yellow_A400)
+                        .setIcon(R.drawable.ic_info_white)
+                        //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                        .setNotShowAgainOptionEnabled(0)
+                        .setNotShowAgainOptionChecked(false)
+                        .setTitle("Warning")
+                        .setMessage("Harap merubah data anda terlebih dahulu menjadi orang tua")
+                        .setConfirmButtonText("Ok")
+                        .show();
+            }
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -642,12 +693,10 @@ public class MenuUtama extends AppCompatActivity
 
                 if (status == 1 & code.equals("DTS_SCS_0001")) {
                     pesanModelList = new ArrayList<PesanModel>();
-                    Log.e("jumlah", response.body().getData().size() + "");
 //                    for (int i = 0; i < response.body().getData().size(); i++) {
                         statusku = response.body().getData().get(0).getRead_status();
                         String myString = statusku;
                         int foo = Integer.parseInt(myString);
-                        Log.e("hasil",statusku.toString());
                         if (countmenu!=null) {
                             if (mCartItemCount==foo) {
                                 if (countmenu.getVisibility() != View.GONE) {
@@ -848,8 +897,9 @@ public class MenuUtama extends AppCompatActivity
         Fragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment1, menuSatuFragment);
+        fragmentTransaction.add(R.id.fragment1, menuSatuFragment);
         fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.addToBackStack(null);
         menuSatuFragment.setArguments(bundle);
     }
 
@@ -882,8 +932,9 @@ public class MenuUtama extends AppCompatActivity
         MenuDuaFragment menuDuaFragment = new MenuDuaFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment2, menuDuaFragment);
+        fragmentTransaction.add(R.id.fragment2, menuDuaFragment);
         fragmentTransaction.commitAllowingStateLoss();
+        fragmentTransaction.addToBackStack(null);
         menuDuaFragment.setArguments(bundle);
     }
 
@@ -1148,12 +1199,7 @@ public class MenuUtama extends AppCompatActivity
                     snappyRecyclerView.setHasFixedSize(true);
 
 
-                    //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
-                    // Set layout manager.
-//
                     snappyRecyclerView.setLayoutManager(layoutManager);
-//                    snappyRecyclerView.scrollToPosition(Integer.MAX_VALUE / 2);
-                    // Create car recycler view data adapter with car item list.
                     itemSekolahAdapter = new ItemSekolahAdapter(itemList);
                     itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
                         @Override
@@ -1355,5 +1401,66 @@ public class MenuUtama extends AppCompatActivity
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
+    }
+
+    private void Daftar_Berita(){
+        mApi.latest_news_get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONResponse.last_news>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JSONResponse.last_news last_news) {
+                        status = last_news.status;
+                        if (status == 1){
+                            no_berita.setVisibility(GONE);
+                            rv_berita.setVisibility(VISIBLE);
+                            for (int i = 0;i < 3;i++){
+                                news_id    = last_news.getData().get(i).getNewsid();
+                                news_title = last_news.getData().get(i).getNewstitle();
+                                news_body  = last_news.getData().get(i).getNewsbody();
+                                news_image = last_news.getData().get(i).getNewspicture();
+                                news_date  = last_news.getData().get(i).getDatez();
+                                newsModel = new NewsModel();
+                                newsModel.setNews_id(news_id);
+                                newsModel.setNews_title(news_title);
+                                newsModel.setNews_body(news_body);
+                                newsModel.setDatez(news_date);
+                                newsModel.setNews_picture(base_url_news+news_image);
+                                newsModelList.add(newsModel);
+                            }
+                        }else if (status == 0){
+                            rv_berita.setVisibility(GONE);
+                            no_berita.setVisibility(VISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("Eror",e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        newsAdapter = new NewsAdapter(MenuUtama.this,newsModelList);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
+                        rv_berita.setLayoutManager(layoutManager);
+                        rv_berita.setAdapter(newsAdapter);
+                        newsAdapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                String newsid = newsModelList.get(position).getNews_id();
+                                Intent intent = new Intent(MenuUtama.this, DetailBerita.class);
+                                intent.putExtra("news_id",newsid);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
     }
 }

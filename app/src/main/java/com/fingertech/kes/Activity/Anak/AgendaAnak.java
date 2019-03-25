@@ -11,7 +11,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.pepperonas.materialdialog.MaterialDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +68,7 @@ public class AgendaAnak extends AppCompatActivity {
         classroom_id        = sharedPreferences.getString("classroom_id",null);
         dapat_agenda();
     }
+
     private void dapat_agenda(){
         progressBar();
         showDialog();
@@ -100,6 +105,27 @@ public class AgendaAnak extends AppCompatActivity {
                             LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this);
                             rv_agenda.setLayoutManager(layoutManager);
                             rv_agenda.setAdapter(agendaAdapter);
+                            agendaAdapter.setOnItemClickListener(new AgendaAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    String type     = agendaModelList.get(position).getType();
+                                    String desc     = agendaModelList.get(position).getDesc();
+                                    String content = agendaModelList.get(position).getContent();
+                                    if (type.equals("Agenda Kelas")){
+                                        new MaterialDialog.Builder(AgendaAnak.this)
+                                                .title(type)
+                                                .message(desc+"\n\n"+ content)
+                                                .positiveText("Ok")
+                                                .show();
+                                    }else {
+                                        new MaterialDialog.Builder(AgendaAnak.this)
+                                                .title(type)
+                                                .message(desc)
+                                                .positiveText("Ok")
+                                                .show();
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -129,4 +155,19 @@ public class AgendaAnak extends AppCompatActivity {
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
 }

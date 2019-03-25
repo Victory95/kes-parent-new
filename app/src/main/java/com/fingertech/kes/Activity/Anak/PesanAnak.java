@@ -95,8 +95,8 @@ public class PesanAnak extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
-//        dapat_pesan();
-//        dapat();
+
+
         pilihan();
 
     }
@@ -106,7 +106,7 @@ public class PesanAnak extends AppCompatActivity {
                 .setIcon(R.drawable.ic_info_white)
                 //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
                 .setNotShowAgainOptionEnabled(0)
-                .setNotShowAgainOptionChecked(true)
+                .setNotShowAgainOptionChecked(false)
                 .setTitle("Pesan Anak")
                 .setMessage("*/ Pesan pesan yang masuk dan keluar hanya dapat dilihat. Hak akses untuk mengirim dan membalas hanya bisa dilakukan oleh anak anda")
                 .setConfirmButtonText("Ok")
@@ -161,6 +161,7 @@ public class PesanAnak extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        hideDialog();
                         Log.d("eror",e.toString());
                     }
 
@@ -213,92 +214,6 @@ public class PesanAnak extends AppCompatActivity {
         return true;
     }
 
-
-    public void dapat_pesan(){
-        progressBar();
-        showDialog();
-        Call<JSONResponse.Pesan_Anak> call = mApiInterface.kes_message_anak_get(authorization.toString(),school_code.toLowerCase(),student_id.toString());
-        call.enqueue(new Callback<JSONResponse.Pesan_Anak>() {
-            @Override
-            public void onResponse(Call<JSONResponse.Pesan_Anak> call, final Response<JSONResponse.Pesan_Anak> response) {
-                Log.d("onRespone",response.code()+"");
-                hideDialog();
-                JSONResponse.Pesan_Anak resource = response.body();
-
-                status  = resource.status;
-                code    = resource.code;
-
-                if (status == 1 & code.equals("DTS_SCS_0001")){
-                    for (int i = 0; i < response.body().getData().size();i++){
-                        jam     = response.body().getData().get(i).getDatez();
-                        tanggal     = response.body().getData().get(i).getMessage_date();
-                        mapel       = response.body().getData().get(i).getCources_name();
-                        pesan       = response.body().getData().get(i).getMessage_cont();
-                        guru        = response.body().getData().get(i).getSender_name();
-                        title       = response.body().getData().get(i).getMessage_title();
-                        read_status = response.body().getData().get(i).getRead_status();
-                        message_id  = response.body().getData().get(i).getMessageid();
-                        if (response.raw().networkResponse()!= null){
-                            pesanAnakModel = new PesanAnakModel();
-                            pesanAnakModel.setTanggal(tanggal);
-                            pesanAnakModel.setJam(jam);
-                            pesanAnakModel.setTitle(title);
-                            pesanAnakModel.setPesan(pesan);
-                            pesanAnakModel.setDari(guru);
-                            pesanAnakModel.setRead_status(read_status);
-                            pesanAnakModelList.add(pesanAnakModel);
-                        }else {
-                            pesanAnakModel = new PesanAnakModel();
-                            pesanAnakModel.setTanggal(tanggal);
-                            pesanAnakModel.setJam(jam);
-                            pesanAnakModel.setTitle(title);
-                            pesanAnakModel.setPesan(pesan);
-                            pesanAnakModel.setDari(guru);
-                            pesanAnakModel.setRead_status(read_status);
-                            pesanAnakModelList.add(pesanAnakModel);
-                        }
-
-                    }
-                    no_pesan.setVisibility(View.GONE);
-                    pesanAnakAdapter = new PesanAnakAdapter(pesanAnakModelList);
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(PesanAnak.this);
-                    rv_pesan.setLayoutManager(layoutManager);
-                    rv_pesan.setAdapter(pesanAnakAdapter);
-                    pesanAnakAdapter.setOnItemClickListener(new PesanAnakAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("authorization",authorization);
-                            editor.putString("school_code",school_code);
-                            editor.putString("student_id",student_id);
-                            editor.putString("classroom_id",classroom_id);
-                            editor.putString("message_id",message_id);
-                            editor.apply();
-                            Intent intent = new Intent(PesanAnak.this, PesanDetail.class);
-                            intent.putExtra("authorization",authorization);
-                            intent.putExtra("school_code",school_code);
-                            intent.putExtra("student_id",student_id);
-                            intent.putExtra("classroom_id",classroom_id);
-                            intent.putExtra("message_id",message_id);
-                            startActivity(intent);
-                        }
-                    });
-                }
-                else if (status == 0 & code.equals("DTS_ERR_0001")){
-                    hideKeyboard(PesanAnak.this);
-                    no_pesan.setVisibility(View.VISIBLE);
-                    rv_pesan.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JSONResponse.Pesan_Anak> call, Throwable t) {
-                Log.i("onFailure",t.toString());
-                Toast.makeText(getApplicationContext(),t.toString(),Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        });
-    }
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();
@@ -331,26 +246,5 @@ public class PesanAnak extends AppCompatActivity {
             }
         }
         return super.dispatchTouchEvent( event );
-    }
-
-    public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = activity.getCurrentFocus();
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    String convertjam(String tanggal){
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:dd",Locale.getDefault());
-        try {
-            String e = calendarDateFormat.format(newDateFormat.parse(tanggal));
-            return e;
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return "";
-        }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -30,6 +31,7 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.pepperonas.materialdialog.MaterialDialog;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -163,7 +166,6 @@ public class KalenderKelas extends AppCompatActivity {
                             calendarAdapter.notifyDataSetChanged();
                         }
                     }
-                compactCalendarView.setCurrentDayBackgroundColor(R.color.colorPrimary);
             }
 
             @Override
@@ -195,7 +197,11 @@ public class KalenderKelas extends AppCompatActivity {
         calendarAdapter = new CalendarAdapter(calendarModelList);
         calendarAdapter.setOnItemClickListener((view, position) -> {
             if (calendarModelList.get(position).getCalendar_type().equals("-1")) {
-                Toast.makeText(getApplicationContext(),calendarModelList.get(position).getCalendar_title(),Toast.LENGTH_LONG).show();
+                new MaterialDialog.Builder(KalenderKelas.this)
+                        .title(calendarModelList.get(position).getCalendar_title())
+                        .message("Seharian")
+                        .positiveText("Ok")
+                        .show();
             }else {
                 calendar_date = calendarModelList.get(position).getCalendar_date();
                 calendar_time = calendarModelList.get(position).getCalendar_time();
@@ -227,7 +233,6 @@ public class KalenderKelas extends AppCompatActivity {
                 skeletonScreen.hide();
             }
         }, 3000);
-        return;
     }
 
     private void setToMidnight(Calendar calendar) {
@@ -307,7 +312,7 @@ public class KalenderKelas extends AppCompatActivity {
                                     }
                                     cal.setTime(date);
                                     setToMidnight(cal);
-                                    Long times = cal.getTimeInMillis();
+                                    long times = cal.getTimeInMillis();
                                     events = getEventList(calendar_colour,times);
                                     compactCalendarView.addEvents(events);
 
@@ -321,7 +326,7 @@ public class KalenderKelas extends AppCompatActivity {
                                     }
                                     cal.setTime(date);
                                     setToMidnight(cal);
-                                    Long timee = cal.getTimeInMillis();
+                                    long timee = cal.getTimeInMillis();
                                     eventList = getevent(calendar_colour,timee);
                                     compactCalendarView.addEvents(eventList);
                                 }
@@ -336,7 +341,7 @@ public class KalenderKelas extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<JSONResponse.ClassCalendar> call, Throwable t) {
+            public void onFailure(@NonNull Call<JSONResponse.ClassCalendar> call, @NonNull Throwable t) {
                 Log.d("onFailure",t.toString());
             }
         });
@@ -345,10 +350,10 @@ public class KalenderKelas extends AppCompatActivity {
         return word.replace(remove,"");
     }
     private List<Event> getevent(String color,long timeinMilis){
-        return Arrays.asList(new Event(Color.parseColor(color),timeinMilis));
+        return Collections.singletonList(new Event(Color.parseColor(color), timeinMilis));
     }
     private List<Event>getEventList(String color,long timeinMilis){
-        return Arrays.asList(new Event(Color.parseColor(color),timeinMilis));
+        return Collections.singletonList(new Event(Color.parseColor(color), timeinMilis));
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -369,8 +374,7 @@ public class KalenderKelas extends AppCompatActivity {
 
         SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
         try {
-            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
-            return e;
+            return newDateFormat.format(calendarDateFormat.parse(tanggal));
         } catch (java.text.ParseException e) {
             e.printStackTrace();
             return "";

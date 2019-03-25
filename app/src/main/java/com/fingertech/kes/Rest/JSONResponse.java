@@ -4182,7 +4182,6 @@ public class JSONResponse{
             return dayStatus;
         }
     }
-
     public class AgendaData{
         @SerializedName("desc")
         private String desc;
@@ -7757,8 +7756,6 @@ public class JSONResponse{
         @SerializedName("code")
         public String code;
     }
-
-
     //// dapat pesan anak
     public class Pesan_Anak{
         @SerializedName("status")
@@ -8082,5 +8079,122 @@ public class JSONResponse{
         }
     }
 
+    /// berita terakhir
+    public class last_news{
+        @SerializedName("status")
+        public int status;
 
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public List<Data_Last_News> getData() {
+            return data;
+        }
+
+        public void setData(List<Data_Last_News> data) {
+            this.data = data;
+        }
+
+        @SerializedName("data")
+        public List<Data_Last_News> data;
+    }
+    public class DetailBerita{
+        @SerializedName("status")
+        public int status;
+
+        public Data_Last_News getData() {
+            return data;
+        }
+
+        public void setData(Data_Last_News data) {
+            this.data = data;
+        }
+
+        @SerializedName("data")
+
+        public Data_Last_News data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+    }
+
+    public class Data_Last_News{
+        @SerializedName("newsid")
+        public String newsid;
+
+        @SerializedName("newspicture")
+        public String newspicture;
+
+        @SerializedName("newstitle")
+        public String newstitle;
+
+        @SerializedName("newsbody")
+        public String newsbody;
+
+        @SerializedName("datez")
+        public String datez;
+
+        @SerializedName("member_id")
+        public String member_id;
+
+        public String getNewsid() {
+            return newsid;
+        }
+
+        public void setNewsid(String newsid) {
+            this.newsid = newsid;
+        }
+
+        public String getNewspicture() {
+            return newspicture;
+        }
+
+        public void setNewspicture(String newspicture) {
+            this.newspicture = newspicture;
+        }
+
+        public String getNewstitle() {
+            return newstitle;
+        }
+
+        public void setNewstitle(String newstitle) {
+            this.newstitle = newstitle;
+        }
+
+        public String getNewsbody() {
+            return newsbody;
+        }
+
+        public void setNewsbody(String newsbody) {
+            this.newsbody = newsbody;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+
+    }
 }

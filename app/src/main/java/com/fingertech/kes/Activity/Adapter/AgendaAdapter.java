@@ -101,13 +101,13 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
             tv_type         = itemView.findViewById(R.id.tv_type);
             tv_desc         = itemView.findViewById(R.id.tv_desc);
             ll_agenda       = itemView.findViewById(R.id.ll_agenda);
-//            itemView.setOnClickListener(this);
-//            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+            this.onItemClickListener = onItemClickListener;
         }
 
         @Override
         public void onClick(View v) {
-//            onItemClickListener.onItemClick(v, getAdapterPosition());
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
     public interface OnItemClickListener {

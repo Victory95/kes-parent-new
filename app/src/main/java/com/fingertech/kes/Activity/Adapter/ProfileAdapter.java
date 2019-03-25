@@ -120,11 +120,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0,10,0,0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         150,
-                        35
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+
                 );
 
                 holder.circle.setVisibility(View.VISIBLE);
-                paramsanak.setMargins(0,10,0,10);
+                paramsanak.setMargins(0,10,0,5);
                 holder.circleView.setLayoutParams(params);
                 holder.namaanak.setLayoutParams(paramsanak);
                 holder.linearLayout.setGravity(Gravity.CENTER);
@@ -148,10 +149,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0,10,0,0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         250,
-                        50
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+
                 );
                 holder.circle.setVisibility(View.VISIBLE);
-                paramsanak.setMargins(0,10,0,10);
+                paramsanak.setMargins(0,10,0,5);
                 holder.circleView.setLayoutParams(params);
                 holder.namaanak.setLayoutParams(paramsanak);
                 holder.linearLayout.setGravity(Gravity.CENTER);
@@ -175,11 +177,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0,10,0,0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         200,
-                        50
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+
                 );
 
                 holder.circle.setVisibility(View.VISIBLE);
-                paramsanak.setMargins(0,10,0,10);
+                paramsanak.setMargins(0,10,0,5);
                 holder.circleView.setLayoutParams(params);
                 holder.namaanak.setLayoutParams(paramsanak);
                 holder.linearLayout.setGravity(Gravity.CENTER);
@@ -207,7 +210,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0, 30, 0, 0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         125,
-                        30
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+
                 );
                 paramsanak.setMargins(0, 10, 0, 5);
                 holder.circle.setVisibility(View.GONE);
@@ -234,10 +238,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0,10,0,0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         200,
-                        35
+                        LinearLayout.LayoutParams.WRAP_CONTENT
                 );
 
-                paramsanak.setMargins(0,10,0,10);
+                paramsanak.setMargins(0,10,0,5);
                 holder.circle.setVisibility(View.GONE);
                 holder.circleView.setLayoutParams(params);
                 holder.namaanak.setLayoutParams(paramsanak);
@@ -262,7 +266,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 params.setMargins(0, 30, 0, 0);
                 LinearLayout.LayoutParams paramsanak = new LinearLayout.LayoutParams(
                         175,
-                        35
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+
                 );
                 paramsanak.setMargins(0, 10, 0, 5);
                 holder.circle.setVisibility(View.GONE);

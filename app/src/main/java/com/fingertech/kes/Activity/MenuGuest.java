@@ -49,6 +49,13 @@ import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
+import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
+import com.fingertech.kes.Activity.Adapter.NewsAdapter;
+import com.fingertech.kes.Activity.Berita.DetailBerita;
+import com.fingertech.kes.Activity.Berita.FullBerita;
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.OnInfoWindowElemTouchListener;
@@ -59,11 +66,13 @@ import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
+import com.fingertech.kes.Activity.Model.NewsModel;
 import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Rest.UtilsApi;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -92,10 +101,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.fingertech.kes.Activity.ParentMain.MY_PERMISSIONS_REQUEST_LOCATION;
 
 public class MenuGuest extends AppCompatActivity
@@ -137,12 +152,24 @@ public class MenuGuest extends AppCompatActivity
     CardView carisekolah,carisekolah2;
     int status;
     private OnInfoWindowElemTouchListener infoButtonListener;
-
+    Auth mApi;
+    NewsAdapter newsAdapter;
+    List <NewsModel>newsModelList = new ArrayList<>();
+    RecyclerView rv_berita;
+    NewsModel newsModel;
+    String news_title,news_id,news_body,news_date,news_image;
+    String base_url_news;
+    TextView no_berita,view_more;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_guest);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        rv_berita           = findViewById(R.id.rv_berita);
+        no_berita           = findViewById(R.id.no_berita);
+        mApi                = UtilsApi.getAPIService();
+        view_more           = findViewById(R.id.view_more);
         setSupportActionBar(toolbar);
 
 
@@ -200,16 +227,13 @@ public class MenuGuest extends AppCompatActivity
 
             }
         });
-//        carisekolah2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Intent mIntent = new Intent(MenuGuest.this,SearchingMAP.class);
-//                startActivity(mIntent);
-//
-//            }
-//        });
+        view_more.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuGuest.this, FullBerita.class);
+            startActivity(intent);
+        });
 
+        base_url_news = "http://www.kes.co.id/schoolm/assets/images/news/mm_";
+        Daftar_Berita();
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -396,7 +420,20 @@ public class MenuGuest extends AppCompatActivity
             mapG.setMyLocationEnabled(true);
         }
 
-
+        mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
+                if (infoWindowData != null) {
+                    String SchoolDetailId = infoWindowData.getSchooldetailid();
+                    Intent intent = new Intent(getBaseContext(), DetailSekolah.class);
+                    intent.putExtra("detailid", SchoolDetailId);
+                    startActivity(intent);
+                }else {
+                    Log.d("Lokasi","Lokasi Anda");
+                }
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -475,63 +512,6 @@ public class MenuGuest extends AppCompatActivity
         background.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
-    public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
-
-        private Context context;
-
-        public CustomInfoWindowGoogleMap(Context ctx){
-            context = ctx;
-        }
-
-        @Override
-        public View getInfoWindow(Marker marker) {
-            return null;
-        }
-
-        @Override
-        public View getInfoContents(Marker marker) {
-            View view = ((Activity)context).getLayoutInflater()
-                    .inflate(R.layout.custom_snippet, null);
-
-            TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvAkr = (TextView) view.findViewById(R.id.akreditasi);
-
-            // Getting reference to the TextView to set latitude
-            TextView tvJrk = (TextView) view.findViewById(R.id.jarak);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvAlm = (TextView) view.findViewById(R.id.alamat_school);
-
-            // Getting reference to the TextView to set longitude
-            TextView tvLht = (TextView) view.findViewById(R.id.Lihat);
-
-
-            ImageView img = view.findViewById(R.id.imageS);
-
-            tvSch.setText(marker.getTitle());
-            tvAkr.setText("Akreditasi "+marker.getSnippet());
-
-            InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
-
-            tvJrk.setText("Jarak > "+ String.format("%.2f", infoWindowData.getJarak())+ "Km");
-            tvAlm.setText(infoWindowData.getAlamat());
-            final String SchoolDetailId = infoWindowData.getSchooldetailid();
-
-            mapG.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Intent intent = new Intent(getBaseContext(),DetailSekolah.class);
-                    intent.putExtra("detailid",SchoolDetailId);
-                    startActivity(intent);
-                }
-            });
-            return view;
-        }
-    }
-
 
     public void dapat_map(){
 
@@ -630,7 +610,7 @@ public class MenuGuest extends AppCompatActivity
                         info.setAlamat(vicinity);
                         info.setSchooldetailid(schooldetailid);
 
-                        CustomInfoWindowGoogleMap customInfoWindow = new CustomInfoWindowGoogleMap(MenuGuest.this);
+                        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuGuest.this);
                         mapG.setInfoWindowAdapter(customInfoWindow);
 
                         m.setTag(info);
@@ -647,19 +627,18 @@ public class MenuGuest extends AppCompatActivity
                     // Create the recyclerview.
                     snappyRecyclerView = (SnappyRecycleView) findViewById(R.id.recycler_view);
                     // Create the grid layout manager with 2 columns.
-                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuGuest.this);
-                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    snappyRecyclerView.setLayoutManager(new SnappyLinearLayoutManager(MenuGuest.this));
+                    final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+                    layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+
+                    snappyRecyclerView.addOnScrollListener(new CenterScrollListener());
+                    snappyRecyclerView.setHasFixedSize(true);
+
 
                     snappyRecyclerView.setLayoutManager(layoutManager);
-
-                    // Create car recycler view data adapter with car item list.
                     itemSekolahAdapter = new ItemSekolahAdapter(itemList);
-
                     itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Toast.makeText(MenuGuest.this, "Clicked at index "+ position, Toast.LENGTH_SHORT).show();
 
                             LatLng latLng = new LatLng(currentLatitude,currentLongitude);
                             latitude = response.body().getData().get(position).getLatitude();
@@ -667,7 +646,6 @@ public class MenuGuest extends AppCompatActivity
                             final LatLng StartlatLng = new LatLng(latitude, longitude);
                             GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
                             String $key = getResources().getString(R.string.google_maps_key);
-
 
                             GoogleDirection.withServerKey($key)
                                     .from(latLng)
@@ -686,7 +664,7 @@ public class MenuGuest extends AppCompatActivity
                                                 Route route = direction.getRouteList().get(0);
                                                 Leg leg = route.getLegList().get(0);
                                                 ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(getApplication(), directionPositionList, 5, Color.RED);
+                                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(getApplication(), directionPositionList, 4, Color.BLUE);
                                                 line = mapG.addPolyline(polylineOptions);
                                                 setCameraWithCoordinationBounds(direction.getRouteList().get(0));
 
@@ -710,7 +688,8 @@ public class MenuGuest extends AppCompatActivity
 
                     snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                         @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
                             int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
                             int scrollOffset = recyclerView.computeHorizontalScrollOffset();
                             int currentItem = 0;
@@ -719,12 +698,13 @@ public class MenuGuest extends AppCompatActivity
                             if (scrollOffset != 0) {
                                 currentItem = Math.round(scrollOffset / itemWidth);
                             }
-                            currentItem = (currentItem < 0) ? 0 : currentItem;
                             currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
                             if(line != null){
                                 line.remove();
                             }
-                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SD")) {
+                            currentItem  = layoutManager.getCenterItemPosition();
+
+                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -743,7 +723,7 @@ public class MenuGuest extends AppCompatActivity
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
 
                             }
-                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMP")){
+                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -761,7 +741,7 @@ public class MenuGuest extends AppCompatActivity
                                 mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SMA")){
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -778,7 +758,7 @@ public class MenuGuest extends AppCompatActivity
                                 m = mapG.addMarker(markerOptions);
                                 mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                                 mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().toString().equals("SPK SMP")){
+                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")){
                                 latitude = response.body().getData().get(currentItem).getLatitude();
                                 longitude = response.body().getData().get(currentItem).getLongitude();
                                 final LatLng latLng = new LatLng(latitude, longitude);
@@ -856,6 +836,67 @@ public class MenuGuest extends AppCompatActivity
     public static int getPixelsFromDp(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int)(dp * scale + 0.5f);
+    }
+
+    private void Daftar_Berita(){
+        mApi.latest_news_get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONResponse.last_news>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(JSONResponse.last_news last_news) {
+                        status = last_news.status;
+                        if (status == 1){
+                            no_berita.setVisibility(GONE);
+                            rv_berita.setVisibility(VISIBLE);
+                            for (int i = 0;i < 3;i++){
+                                news_id    = last_news.getData().get(i).getNewsid();
+                                news_title = last_news.getData().get(i).getNewstitle();
+                                news_body  = last_news.getData().get(i).getNewsbody();
+                                news_image = last_news.getData().get(i).getNewspicture();
+                                news_date  = last_news.getData().get(i).getDatez();
+                                newsModel = new NewsModel();
+                                newsModel.setNews_id(news_id);
+                                newsModel.setNews_title(news_title);
+                                newsModel.setNews_body(news_body);
+                                newsModel.setDatez(news_date);
+                                newsModel.setNews_picture(base_url_news+news_image);
+                                newsModelList.add(newsModel);
+                            }
+                        }else if (status == 0){
+                            rv_berita.setVisibility(GONE);
+                            no_berita.setVisibility(VISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d("Eror",e.toString());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        newsAdapter = new NewsAdapter(MenuGuest.this,newsModelList);
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MenuGuest.this);
+                        rv_berita.setLayoutManager(layoutManager);
+                        rv_berita.setAdapter(newsAdapter);
+                        newsAdapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                String newsid = newsModelList.get(position).getNews_id();
+                                Intent intent = new Intent(MenuGuest.this, DetailBerita.class);
+                                intent.putExtra("news_id",newsid);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                });
     }
 }
 

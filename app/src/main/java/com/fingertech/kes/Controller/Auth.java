@@ -466,4 +466,14 @@ public interface Auth {
                                                         @Field("school_name") String school_name,
                                                         @Field("member_id") String member_id);
 
+    @GET("news/latest_news")
+    Observable<JSONResponse.last_news> latest_news_get();
+
+    @GET("news/full_news")
+    Observable<JSONResponse.last_news> full_news_get();
+
+    @GET("news/detail_news")
+    Observable<JSONResponse.DetailBerita> detail_news_get(@Query("news") String news);
+
+
 }
