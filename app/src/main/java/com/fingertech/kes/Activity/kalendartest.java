@@ -11,15 +11,16 @@ import java.util.List;
 import ru.cleverpumpkin.calendar.CalendarDate;
 import ru.cleverpumpkin.calendar.CalendarView;
 
+import static com.fingertech.kes.Service.App.getContext;
+
 public class kalendartest extends AppCompatActivity {
 
-    CalendarView calendarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kalendartest);
 
-        calendarView = findViewById(R.id.calendar_view);
 
     }
 }

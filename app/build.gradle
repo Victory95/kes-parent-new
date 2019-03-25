@@ -122,6 +122,6 @@ dependencies {
     implementation 'com.github.DingMouRen:LayoutManagerGroup:1e6f4f96eb'
     implementation 'com.github.pepperonas:materialdialog:0.3.4'
     implementation 'com.azoft.carousellayoutmanager:carousel:1.2.4'
-
+    implementation 'com.yarolegovich:lovely-dialog:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

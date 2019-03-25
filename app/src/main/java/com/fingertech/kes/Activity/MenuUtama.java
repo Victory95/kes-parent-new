@@ -111,6 +111,7 @@ import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -214,6 +215,8 @@ public class MenuUtama extends AppCompatActivity
     String date_to,date_from;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     int height,width;
+    String member,count;
+    View actionView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -328,17 +331,35 @@ public class MenuUtama extends AppCompatActivity
         });
 
         get_children();
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             int Refreshcounter = 1;
             @Override
             public void onRefresh() {
-                get_profile();
-                get_children();
-                send_data();
-                dapat_pesan();
-                send_data2();
-                Refreshcounter = Refreshcounter + 1;
-                swipeRefreshLayout.setRefreshing(false);
+                Log.d("member",member+"");
+                if (member.equals("3")){
+                    if (count.equals("0")){
+                        Refreshcounter = Refreshcounter + 1;
+                        swipeRefreshLayout.setRefreshing(false);
+                    }else {
+                        if (profileModels!=null){
+                            get_profile();
+                            get_children();
+                            send_data();
+                            dapat_pesan();
+                            send_data2();
+                            Refreshcounter = Refreshcounter + 1;
+                            swipeRefreshLayout.setRefreshing(false);
+                        }else {
+                            Log.d("Eror","Data Belum ada");
+                        }
+                    }
+                }else {
+                    Refreshcounter = Refreshcounter + 1;
+                    swipeRefreshLayout.setRefreshing(false);
+
+                }
+
             }
         });
 
@@ -451,35 +472,47 @@ public class MenuUtama extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_utama, menu);
+        final MenuItem menuItem = menu.findItem(R.id.action_cart);
+        actionView = MenuItemCompat.getActionView(menuItem);
 
-        if (school_code==null){
+        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
 
-
-        }else {
-            final MenuItem menuItem = menu.findItem(R.id.action_cart);
-            View actionView = MenuItemCompat.getActionView(menuItem);
-
-            countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
-
-
-            actionView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onOptionsItemSelected(menuItem);
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (member.equals("3")){
+                    if (count.equals("0")){
+                        actionView.setVisibility(GONE);
+                        new LovelyInfoDialog(MenuUtama.this)
+                                .setTopColorRes(R.color.yellow_A400)
+                                .setIcon(R.drawable.ic_info_white)
+                                //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                                .setNotShowAgainOptionEnabled(0)
+                                .setNotShowAgainOptionChecked(true)
+                                .setTitle("Warning")
+                                .setMessage("Harap menambah data anak anda terlebih dahulu")
+                                .setConfirmButtonText("Ok")
+                                .show();
+                    }else {
+                        onOptionsItemSelected(menuItem);
+                    }
+                }else {
+                    new LovelyInfoDialog(MenuUtama.this)
+                            .setTopColorRes(R.color.yellow_A400)
+                            .setIcon(R.drawable.ic_info_white)
+                            //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                            .setNotShowAgainOptionEnabled(0)
+                            .setNotShowAgainOptionChecked(true)
+                            .setTitle("Warning")
+                            .setMessage("Harap merubah data anda terlebih dahulu menjadi orang tua")
+                            .setConfirmButtonText("Ok")
+                            .show();
                 }
-            });
-        }
+            }
+        });
+
         return true;
     }
-
-
-
-
-
-
-
-
-
 
    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -488,7 +521,6 @@ public class MenuUtama extends AppCompatActivity
 
             case R.id.action_cart: {
                 // Do something
-
                 SharedPreferences.Editor editor = sharedviewpager.edit();
                 editor.putString("member_id", parent_id);
                 editor.putString("school_code", school_code);
@@ -530,26 +562,22 @@ public class MenuUtama extends AppCompatActivity
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
         } else if (id==R.id.nav_pesan){
-                if (school_code==null){
-                    Toast.makeText(MenuUtama.this,"Silahkan daftar menjadi orang tua Terlebih dahulu",Toast.LENGTH_SHORT).show();
-                }else {
-                    SharedPreferences.Editor editor = sharedviewpager.edit();
-                    editor.putString("member_id", parent_id);
-                    editor.putString("school_code", school_code);
-                    editor.putString("authorization", authorization);
-                    editor.putString("fullname", fullname);
+            SharedPreferences.Editor editor = sharedviewpager.edit();
+            editor.putString("member_id", parent_id);
+            editor.putString("school_code", school_code);
+            editor.putString("authorization", authorization);
+            editor.putString("fullname",fullname);
 //            editor.putString("date_from",date_from);
 //            editor.putString("date_to",date_to);
-                    editor.commit();
-                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-                    intent.putExtra("authorization", authorization);
-                    intent.putExtra("school_code", school_code);
-                    intent.putExtra("parent_id", parent_id);
-                    intent.putExtra("fullname", fullname);
+            editor.commit();
+            Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+            intent.putExtra("authorization",authorization);
+            intent.putExtra("school_code",school_code);
+            intent.putExtra("parent_id",parent_id);
+            intent.putExtra("fullname",fullname);
 //            intent.putExtra("date_to",date_to);
 //            intent.putExtra("date_from",date_from);
-                    startActivity(intent);
-                }
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -619,7 +647,6 @@ public class MenuUtama extends AppCompatActivity
                         statusku = response.body().getData().get(0).getRead_status();
                         String myString = statusku;
                         int foo = Integer.parseInt(myString);
-
                         Log.e("hasil",statusku.toString());
                         if (countmenu!=null) {
                             if (mCartItemCount==foo) {
@@ -759,8 +786,8 @@ public class MenuUtama extends AppCompatActivity
                 if (status == 1) {
                         String picture = response.body().getData().getPicture();
                         String nama    = response.body().getData().getFullname();
-                        String member  = response.body().getData().getMember_Type();
-                        String count   = response.body().getData().getTotal_Children();
+                        member  = response.body().getData().getMember_Type();
+                        count   = response.body().getData().getTotal_Children();
                         tv_profile.setText(nama);
                         parent_nik = response.body().getData().getParent_NIK();
                         String imagefile = Base_url + picture;
@@ -768,19 +795,21 @@ public class MenuUtama extends AppCompatActivity
                             Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);
                         }
                         Picasso.get().load(imagefile).into(image_profile);
-
                     if (member.equals("3")){
                         if (count.equals("0")){
                             recycleview_ln.setVisibility(VISIBLE);
                             viewpager.setVisibility(GONE);
+                            actionView.setVisibility(GONE);
                         }else {
                             recycleview_ln.setVisibility(VISIBLE);
                             viewpager.setVisibility(VISIBLE);
                             recyclerView.setVisibility(VISIBLE);
+                            actionView.setVisibility(VISIBLE);
                         }
                     }else {
                         recycleview_ln.setVisibility(GONE);
                         viewpager.setVisibility(GONE);
+                        actionView.setVisibility(GONE);
                     }
                 }
 

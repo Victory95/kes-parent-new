@@ -4188,6 +4188,19 @@ public class JSONResponse{
         private String desc;
         @SerializedName("type")
         private String type;
+        @SerializedName("date")
+        private String date;
+        @SerializedName("content")
+        private String content;
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
 
         public String getDesc() {
             return desc;
@@ -4213,8 +4226,7 @@ public class JSONResponse{
             this.date = date;
         }
 
-        @SerializedName("date")
-        private String date;
+
     }
     public class ScheduleClassItem{
 

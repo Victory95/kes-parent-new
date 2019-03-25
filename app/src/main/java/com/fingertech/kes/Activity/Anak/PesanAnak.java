@@ -9,8 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +34,7 @@ import com.fingertech.kes.Rest.ClientApi;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Rest.UtilsApi;
 import com.fingertech.kes.Service.HttpHandler;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,9 +96,24 @@ public class PesanAnak extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 //        dapat_pesan();
-        dapat();
+//        dapat();
+        pilihan();
 
     }
+    private void pilihan(){
+        new LovelyInfoDialog(this)
+                .setTopColorRes(R.color.mint_color)
+                .setIcon(R.drawable.ic_info_white)
+                //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+                .setNotShowAgainOptionEnabled(0)
+                .setNotShowAgainOptionChecked(true)
+                .setTitle("Pesan Anak")
+                .setMessage("*/ Pesan pesan yang masuk dan keluar hanya dapat dilihat. Hak akses untuk mengirim dan membalas hanya bisa dilakukan oleh anak anda")
+                .setConfirmButtonText("Ok")
+                .show();
+        dapat();
+    }
+
     void dapat(){
         progressBar();
         showDialog();
