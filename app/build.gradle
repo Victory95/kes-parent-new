@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0.13"
+        versionName "1.0.15"
         testInstrumentationRunner "android.support.AbsensiAnak.runner.AndroidJUnitRunner"
 
     }
@@ -58,8 +58,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     //////// Frebase
-    implementation 'com.google.firebase:firebase-messaging:17.4.0'
-    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-messaging:17.5.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
     //////// Camera Scan Text and number
     implementation 'com.google.android.gms:play-services-vision:17.0.2'
     // Google MAPS
@@ -73,7 +73,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:4.40.0'
     //// Login Seomed Google
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-auth:16.1.0'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
 
     ///////// Search Material Design
     implementation 'com.github.arimorty:floatingsearchview:2.1.1'

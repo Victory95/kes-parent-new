@@ -49,6 +49,7 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Util.JWTUtils;
+//import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -56,6 +57,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -113,8 +115,6 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_LASTLOGIN    = "last_login";
     public static final String TAG_COUNT        = "count_children";
     public static final String TAG_PHOTO        = "foto_profile";
-
-
 
     Auth mApiInterface;
     String password,last_login;
@@ -178,7 +178,7 @@ public class Masuk extends AppCompatActivity {
 
         ////// Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.Deafult_web_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -545,16 +545,14 @@ public class Masuk extends AppCompatActivity {
         //////// Google
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            GoogleSignInAccount account = null;
             try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                account = task.getResult(ApiException.class);
             } catch (ApiException e) {
-//                Log.w(TAG,e.toString());
-                // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
-                // ...
             }
+            firebaseAuthWithGoogle(account);
+            Log.d("acount",account+"");
         }
     }
 
@@ -564,7 +562,7 @@ public class Masuk extends AppCompatActivity {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
         deviceid = tm.getDeviceId();
-        Log.d("device_id",deviceid);
+
     }
 
     public void register_sosmed_post(){

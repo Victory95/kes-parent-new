@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "860440761767-hqq4n3ma5hpudplm36qupoumqgcai46g.apps.googleusercontent.com",
+          "client_id": "860440761767-nrclk82ke9oej5tp0st10794e8omj9kn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fingertech.kes",
@@ -23,7 +23,7 @@
           }
         },
         {
-          "client_id": "860440761767-r6qds1du7aqrifjieguujinflr5t9drp.apps.googleusercontent.com",
+          "client_id": "860440761767-sv4j41ulrgjorp12jkc8b1i0g4qi9gpk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
