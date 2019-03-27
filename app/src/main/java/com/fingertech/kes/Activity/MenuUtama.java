@@ -134,9 +134,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 
 public class MenuUtama extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -358,8 +355,6 @@ public class MenuUtama extends AppCompatActivity
             startActivity(intent);
         });
 
-        get_children();
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             int Refreshcounter = 1;
             @Override
@@ -372,7 +367,6 @@ public class MenuUtama extends AppCompatActivity
                     }else {
                         if (profileModels!=null){
                             get_profile();
-                            get_children();
                             send_data();
                             send_data2();
                             Refreshcounter = Refreshcounter + 1;
@@ -509,7 +503,7 @@ public class MenuUtama extends AppCompatActivity
             public void onClick(View v) {
                 if (member.equals("3")){
                     if (count.equals("0")){
-                        actionView.setVisibility(GONE);
+                        actionView.setVisibility(View.GONE);
                         new LovelyInfoDialog(MenuUtama.this)
                                 .setTopColorRes(R.color.yellow_A400)
                                 .setIcon(R.drawable.ic_info_white)
@@ -591,7 +585,7 @@ public class MenuUtama extends AppCompatActivity
         } else if (id==R.id.nav_pesan){
             if (member.equals("3")){
                 if (count.equals("0")){
-                    actionView.setVisibility(GONE);
+                    actionView.setVisibility(View.GONE);
                     new LovelyInfoDialog(MenuUtama.this)
                             .setTopColorRes(R.color.yellow_A400)
                             .setIcon(R.drawable.ic_info_white)
@@ -654,7 +648,7 @@ public class MenuUtama extends AppCompatActivity
                         countTextView.setText("");
                     }
 
-                    redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
+                    redCircle.setVisibility((alertCount > 0) ? View.VISIBLE : View.GONE);
                 }
             }
 
@@ -674,7 +668,7 @@ public class MenuUtama extends AppCompatActivity
             countTextView.setText("");
         }
 
-        redCircle.setVisibility((alertCount > 0) ? VISIBLE : GONE);
+        redCircle.setVisibility((alertCount > 0) ? View.VISIBLE : View.GONE);
     }
 
     public void dapat_pesan(){
@@ -716,10 +710,6 @@ public class MenuUtama extends AppCompatActivity
 //
 //                    }
                 }
-                else if (status == 0 & code.equals("DTS_ERR_0001")){
-
-                    recyclerView.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -751,6 +741,7 @@ public class MenuUtama extends AppCompatActivity
 
                 ProfileModel profileModel = null;
                 if (status == 1 && code.equals("LCH_SCS_0001")) {
+                    recyclerView.setVisibility(View.VISIBLE);
                     if (response.body().getData() != null){
                         profileModels = new ArrayList<ProfileModel>();
                         for (int i = 0;i < response.body().getData().size();i++) {
@@ -772,7 +763,7 @@ public class MenuUtama extends AppCompatActivity
                             profileModel.setPicture(imagefiles);
                             profileModels.add(profileModel);
                         }
-                        profileAdapter = new ProfileAdapter(MenuUtama.this,profileModels);
+                        profileAdapter = new ProfileAdapter(profileModels);
                         profileAdapter.notifyDataSetChanged();
                         profileAdapter.selectRow(0);
                         student_id      = response.body().getData().get(0).getStudent_id();
@@ -786,6 +777,7 @@ public class MenuUtama extends AppCompatActivity
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                         recyclerView.setLayoutManager(layoutManager);
+
                         recyclerView.setAdapter(profileAdapter);
 
                         profileAdapter.setOnItemClickListener((view, position) -> {
@@ -800,8 +792,6 @@ public class MenuUtama extends AppCompatActivity
                             send_data2();
                             dapat_pesan();
                         });
-                    }else {
-                        recyclerView.setVisibility(GONE);
                     }
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {
@@ -826,7 +816,7 @@ public class MenuUtama extends AppCompatActivity
 
             @Override
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
-                Log.i("KES", response.code() + "");
+                Log.i("profile", response.code() + "");
                 hideDialog();
                 JSONResponse.GetProfile resource = response.body();
 
@@ -846,19 +836,21 @@ public class MenuUtama extends AppCompatActivity
                         Picasso.get().load(imagefile).into(image_profile);
                     if (member.equals("3")){
                         if (count.equals("0")){
-                            recycleview_ln.setVisibility(VISIBLE);
-                            viewpager.setVisibility(GONE);
-                            actionView.setVisibility(GONE);
+                            recycleview_ln.setVisibility(View.VISIBLE);
+                            viewpager.setVisibility(View.GONE);
+                            actionView.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         }else {
-                            recycleview_ln.setVisibility(VISIBLE);
-                            viewpager.setVisibility(VISIBLE);
-                            recyclerView.setVisibility(VISIBLE);
-                            actionView.setVisibility(VISIBLE);
+                            get_children();
+                            recycleview_ln.setVisibility(View.VISIBLE);
+                            viewpager.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                            actionView.setVisibility(View.VISIBLE);
                         }
                     }else {
-                        recycleview_ln.setVisibility(GONE);
-                        viewpager.setVisibility(GONE);
-                        actionView.setVisibility(GONE);
+                        recycleview_ln.setVisibility(View.GONE);
+                        viewpager.setVisibility(View.GONE);
+                        actionView.setVisibility(View.GONE);
                     }
                 }
 
@@ -1417,8 +1409,8 @@ public class MenuUtama extends AppCompatActivity
                     public void onNext(JSONResponse.last_news last_news) {
                         status = last_news.status;
                         if (status == 1){
-                            no_berita.setVisibility(GONE);
-                            rv_berita.setVisibility(VISIBLE);
+                            no_berita.setVisibility(View.GONE);
+                            rv_berita.setVisibility(View.VISIBLE);
                             for (int i = 0;i < 3;i++){
                                 news_id    = last_news.getData().get(i).getNewsid();
                                 news_title = last_news.getData().get(i).getNewstitle();
@@ -1434,8 +1426,8 @@ public class MenuUtama extends AppCompatActivity
                                 newsModelList.add(newsModel);
                             }
                         }else if (status == 0){
-                            rv_berita.setVisibility(GONE);
-                            no_berita.setVisibility(VISIBLE);
+                            rv_berita.setVisibility(View.GONE);
+                            no_berita.setVisibility(View.VISIBLE);
                         }
 
                     }

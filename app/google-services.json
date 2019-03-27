@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "860440761767-nrclk82ke9oej5tp0st10794e8omj9kn.apps.googleusercontent.com",
+          "client_id": "860440761767-cb5mbu5d5kb1umob35nqsfot66q5ctf6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.fingertech.kes",
-            "certificate_hash": "24c53167db113da086d8d501a4e8a6b5362a4394"
+            "certificate_hash": "5fe7379031d4496ee7ea3cd36f14cbd743cdfbcb"
           }
         },
         {

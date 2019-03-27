@@ -51,7 +51,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="48" />
+                                                <entry key="scalingPercent" value="41" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -62,8 +62,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/logo kes 1024.png" />
+                                      <entry key="backgroundColor" value="4fc3fa" />
+                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/logo kes 1024 putih.png" />
                                     </map>
                                   </option>
                                 </PersistentState>

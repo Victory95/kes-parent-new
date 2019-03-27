@@ -72,7 +72,7 @@ public class JadwalPelajaran extends AppCompatActivity {
     KamisAdapter kamisAdapter;
     JumatAdapter jumatAdapter;
     SabtuAdapter sabtuAdapter;
-    private Boolean clicked = true;
+
 
     String classroom_id;
     String days_name;
@@ -90,7 +90,12 @@ public class JadwalPelajaran extends AppCompatActivity {
     CardView btn_senin,btn_selasa,btn_rabu,btn_kamis,btn_jumat,btn_sabtu;
     ImageView arrow_senin,arrow_selasa,arrow_rabu,arrow_kamis,arrow_jumat,arrow_sabtu;
     SharedPreferences sharedPreferences;
-    private boolean isExpanded = false;
+    private boolean isExpandedSelasa    = false;
+    private boolean isExpandedRabu      = false;
+    private boolean isExpandedKamis     = false;
+    private boolean isExpandedJumat     = false;
+    private boolean isExpandedSabtu     = false;
+    private boolean isExpandedSenin     = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,11 +190,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_senin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedSenin ? 0 : 90;
                 ViewCompat.animate(arrow_senin).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedSenin = !isExpandedSenin;
                 if (itemlist.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedSenin){
                         hint_senin.setVisibility(View.VISIBLE);
                         rv_senin.setVisibility(View.GONE);
                     }else {
@@ -197,7 +202,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_senin.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedSenin){
                         hint_senin.setVisibility(View.GONE);
                         rv_senin.setVisibility(View.VISIBLE);
                     }else {
@@ -210,11 +215,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_selasa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedSelasa ? 0 : 90;
                 ViewCompat.animate(arrow_selasa).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedSelasa = !isExpandedSelasa;
                 if (itemselasa.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedSelasa){
                         hint_selasa.setVisibility(View.VISIBLE);
                         rv_selasa.setVisibility(View.GONE);
                     }else {
@@ -222,7 +227,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_selasa.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedSelasa){
                         hint_selasa.setVisibility(View.GONE);
                         rv_selasa.setVisibility(View.VISIBLE);
                     }else {
@@ -235,11 +240,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_rabu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedRabu ? 0 : 90;
                 ViewCompat.animate(arrow_rabu).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedRabu = !isExpandedRabu;
                 if (itemRabu.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedRabu){
                         hint_rabu.setVisibility(View.VISIBLE);
                         rv_rabu.setVisibility(View.GONE);
                     }else {
@@ -247,7 +252,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_rabu.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedRabu){
                         hint_rabu.setVisibility(View.GONE);
                         rv_rabu.setVisibility(View.VISIBLE);
                     }else {
@@ -260,11 +265,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_kamis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedKamis ? 0 : 90;
                 ViewCompat.animate(arrow_kamis).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedKamis = !isExpandedKamis;
                 if (itemKamis.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedKamis){
                         hint_kamis.setVisibility(View.VISIBLE);
                         rv_kamis.setVisibility(View.GONE);
                     }else {
@@ -272,7 +277,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_kamis.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedKamis){
                         hint_kamis.setVisibility(View.GONE);
                         rv_kamis.setVisibility(View.VISIBLE);
                     }else {
@@ -285,11 +290,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_jumat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedJumat ? 0 : 90;
                 ViewCompat.animate(arrow_jumat).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedJumat = !isExpandedJumat;
                 if (itemJumat.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedJumat){
                         hint_jumat.setVisibility(View.VISIBLE);
                         rv_jumat.setVisibility(View.GONE);
                     }else {
@@ -297,7 +302,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_jumat.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedJumat){
                         hint_jumat.setVisibility(View.GONE);
                         rv_jumat.setVisibility(View.VISIBLE);
                     }else {
@@ -310,11 +315,11 @@ public class JadwalPelajaran extends AppCompatActivity {
         btn_sabtu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float rotation = isExpanded ? 0 : 90;
+                float rotation = isExpandedSabtu ? 0 : 90;
                 ViewCompat.animate(arrow_sabtu).rotation(rotation).start();
-                isExpanded = !isExpanded;
+                isExpandedSabtu = !isExpandedSabtu;
                 if (itemSabtu.size() == 0) {
-                    if (isExpanded){
+                    if (isExpandedSabtu){
                         hint_sabtu.setVisibility(View.VISIBLE);
                         rv_sabtu.setVisibility(View.GONE);
                     }else {
@@ -322,7 +327,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                         hint_sabtu.setVisibility(View.GONE);
                     }
                 }else {
-                    if (isExpanded){
+                    if (isExpandedSabtu){
                         hint_sabtu.setVisibility(View.GONE);
                         rv_sabtu.setVisibility(View.VISIBLE);
                     }else {
@@ -528,29 +533,29 @@ public class JadwalPelajaran extends AppCompatActivity {
                                 break;
                             }
                         }
-                        switch (day) {
-                            case "Senin":
-                                btn_senin.performClick();
-                                break;
-                            case "Selasa":
-                                btn_selasa.performClick();
-                                break;
-                            case "Rabu":
-                                btn_rabu.performClick();
-                                break;
-                            case "Kamis":
-                                btn_kamis.performClick();
-                                break;
-                            case "Jumat":
-                                btn_jumat.performClick();
-                                break;
-                            case "Sabtu":
-                                btn_sabtu.performClick();
-                                break;
-                            case "Minggu":
+                    }
+                    switch (day) {
+                        case "Senin":
+                            btn_senin.performClick();
+                            break;
+                        case "Selasa":
+                            btn_selasa.performClick();
+                            break;
+                        case "Rabu":
+                            btn_rabu.performClick();
+                            break;
+                        case "Kamis":
+                            btn_kamis.performClick();
+                            break;
+                        case "Jumat":
+                            btn_jumat.performClick();
+                            break;
+                        case "Sabtu":
+                            btn_sabtu.performClick();
+                            break;
+                        case "Minggu":
 
-                                break;
-                        }
+                            break;
                     }
 
                 }

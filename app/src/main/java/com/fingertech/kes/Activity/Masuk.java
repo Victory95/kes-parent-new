@@ -49,7 +49,6 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Util.JWTUtils;
-//import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -57,7 +56,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -116,6 +114,8 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_COUNT        = "count_children";
     public static final String TAG_PHOTO        = "foto_profile";
 
+
+
     Auth mApiInterface;
     String password,last_login;
     int min,second,year,month,date,jam;
@@ -139,17 +139,17 @@ public class Masuk extends AppCompatActivity {
         checkInternetCon();
 
 
-        btn_masuk      = (Button) findViewById(R.id.btn_Masuk);
-        btn_google     = (Button) findViewById(R.id.btn_Google);
-        btn_facebook   = (Button) findViewById(R.id.btn_Facebook);
-        tvb_lupa_pass  = (TextView) findViewById(R.id.tvb_lupa_pass);
-        tvb_daftar     = (TextView) findViewById(R.id.tvb_daftar);
-        et_email       = (EditText) findViewById(R.id.et_email);
-        et_kata_sandi  = (EditText) findViewById(R.id.et_kata_sandi);
-        til_email      = (TextInputLayout) findViewById(R.id.til_email);
-        til_kata_sandi = (TextInputLayout) findViewById(R.id.til_kata_sandi);
-        loginButton    = (LoginButton) findViewById(R.id.login_button);
-        sign_in_button = (SignInButton) findViewById(R.id.sign_in_button);
+        btn_masuk      = findViewById(R.id.btn_Masuk);
+        btn_google     = findViewById(R.id.btn_Google);
+        btn_facebook   = findViewById(R.id.btn_Facebook);
+        tvb_lupa_pass  = findViewById(R.id.tvb_lupa_pass);
+        tvb_daftar     = findViewById(R.id.tvb_daftar);
+        et_email       = findViewById(R.id.et_email);
+        et_kata_sandi  = findViewById(R.id.et_kata_sandi);
+        til_email      = findViewById(R.id.til_email);
+        til_kata_sandi = findViewById(R.id.til_kata_sandi);
+        loginButton    = findViewById(R.id.login_button);
+        sign_in_button = findViewById(R.id.sign_in_button);
 
         ////// sharedpreferences
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
@@ -175,10 +175,9 @@ public class Masuk extends AppCompatActivity {
         AppEventsLogger.activateApp(this);
 
 
-
         ////// Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.Deafult_web_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -347,7 +346,7 @@ public class Masuk extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), device_id,firebase_token);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -401,7 +400,7 @@ public class Masuk extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            if(count_student.toString().equals("0")) {
+                            if(count_student.equals("0")) {
                                 Intent intent = new Intent(Masuk.this, AnakAkses.class);
                                 intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                                 intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
@@ -541,18 +540,20 @@ public class Masuk extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.d("data",data+"");
         //////// Google
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            GoogleSignInAccount account = null;
             try {
-                account = task.getResult(ApiException.class);
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
+//                Log.w(TAG,e.toString());
+                // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
+                // ...
             }
-            firebaseAuthWithGoogle(account);
-            Log.d("acount",account+"");
         }
     }
 
@@ -562,14 +563,14 @@ public class Masuk extends AppCompatActivity {
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (ActivityCompat.checkSelfPermission(Masuk.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) { return; }
         deviceid = tm.getDeviceId();
-
+        Log.d("device_id",deviceid);
     }
 
     public void register_sosmed_post(){
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email, fullname, id, device_id,firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -579,7 +580,7 @@ public class Masuk extends AppCompatActivity {
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
-                token = resource.token;
+//                token = resource.token;
 
                 String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
                 String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
@@ -591,6 +592,8 @@ public class Masuk extends AppCompatActivity {
                 String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
 
                 if (status == 1 && code.equals("RS_SCS_0001")) {
+                    JSONResponse.Login_Data login_data = response.body().login_data;
+                    token = login_data.token;
                     Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
                     JSONObject jsonObject = null;
                     try {
@@ -650,7 +653,7 @@ public class Masuk extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id, device_id,firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -659,7 +662,7 @@ public class Masuk extends AppCompatActivity {
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
-                token = resource.token;
+//                token = resource.token;
 
                 String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
                 String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
@@ -667,6 +670,8 @@ public class Masuk extends AppCompatActivity {
 
                 if (status == 1 && code.equals("LS_SCS_0001")) {
                     JSONObject jsonObject = null;
+                    JSONResponse.Login_Data login_data = response.body().login_data;
+                    token = login_data.token;
                     Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
                     try {
                         jsonObject = new JSONObject(JWTUtils.decoded(token));
