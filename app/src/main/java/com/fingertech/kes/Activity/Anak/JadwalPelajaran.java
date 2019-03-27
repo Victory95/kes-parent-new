@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -89,6 +90,7 @@ public class JadwalPelajaran extends AppCompatActivity {
     CardView btn_senin,btn_selasa,btn_rabu,btn_kamis,btn_jumat,btn_sabtu;
     ImageView arrow_senin,arrow_selasa,arrow_rabu,arrow_kamis,arrow_jumat,arrow_sabtu;
     SharedPreferences sharedPreferences;
+    private boolean isExpanded = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +149,7 @@ public class JadwalPelajaran extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        SimpleDateFormat outFormat = new SimpleDateFormat("EEEE", new Locale("in","ID"));
         day = outFormat.format(dater);
         Jadwal_pelajaran();
 
@@ -158,141 +160,175 @@ public class JadwalPelajaran extends AppCompatActivity {
         itemJumat   = new ArrayList<JadwalJumat>();
         itemSabtu   = new ArrayList<JadwalSabtu>();
 
-        btn_senin.setOnClickListener(v -> {
-            if (itemlist.size() == 0) {
-                if (hint_senin.getVisibility() == View.GONE) {
-                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                    hint_senin.setVisibility(View.VISIBLE);
-                    rv_senin.setVisibility(View.GONE);
-                }else if (hint_senin.getVisibility() == View.VISIBLE){
-                    arrow_senin.setBackgroundResource(R.drawable.ic_right);
-                    rv_senin.setVisibility(View.GONE);
-                    hint_senin.setVisibility(View.GONE);
-                }
-            }else {
-                if (rv_senin.getVisibility() == View.GONE) {
-                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                    rv_senin.setVisibility(View.VISIBLE);
-                    hint_senin.setVisibility(View.GONE);
-                } else if (rv_senin.getVisibility() == View.VISIBLE) {
-                    arrow_senin.setBackgroundResource(R.drawable.ic_right);
-                    rv_senin.setVisibility(View.GONE);
-                    hint_senin.setVisibility(View.GONE);
-                }
-            }
-        });
-        btn_selasa.setOnClickListener(v -> {
-            if (itemselasa.size() == 0) {
-                if (hint_selasa.getVisibility() == View.GONE) {
-                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                    hint_selasa.setVisibility(View.VISIBLE);
-                    rv_selasa.setVisibility(View.GONE);
-                }else if (hint_selasa.getVisibility() == View.VISIBLE){
-                    arrow_selasa.setBackgroundResource(R.drawable.ic_right);
-                    rv_selasa.setVisibility(View.GONE);
-                    hint_selasa.setVisibility(View.GONE);
-                }
-            }else {
-                if (rv_selasa.getVisibility() == View.GONE) {
-                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                    rv_selasa.setVisibility(View.VISIBLE);
-                    hint_selasa.setVisibility(View.GONE);
-                } else if (rv_selasa.getVisibility() == View.VISIBLE) {
-                    arrow_selasa.setBackgroundResource(R.drawable.ic_right);
-                    rv_selasa.setVisibility(View.GONE);
-                    hint_selasa.setVisibility(View.GONE);
-                }
-            }
-        });
-        btn_rabu.setOnClickListener(v -> {
-            if (itemRabu.size() == 0) {
-                if (hint_rabu.getVisibility() == View.GONE) {
-                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                    hint_rabu.setVisibility(View.VISIBLE);
-                    rv_rabu.setVisibility(View.GONE);
-                }else if (hint_rabu.getVisibility() == View.VISIBLE){
-                    arrow_rabu.setBackgroundResource(R.drawable.ic_right);
-                    rv_rabu.setVisibility(View.GONE);
-                    hint_rabu.setVisibility(View.GONE);
-                }
-            }else {
-                if (rv_rabu.getVisibility() == View.GONE) {
-                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                    rv_rabu.setVisibility(View.VISIBLE);
-                    hint_rabu.setVisibility(View.GONE);
-                } else if (rv_rabu.getVisibility() == View.VISIBLE) {
-                    arrow_rabu.setBackgroundResource(R.drawable.ic_right);
-                    rv_rabu.setVisibility(View.GONE);
-                    hint_rabu.setVisibility(View.GONE);
+        switch (day) {
+            case "Senin":
+                btn_senin.callOnClick();
+                break;
+            case "Selasa":
+                btn_selasa.callOnClick();
+                break;
+            case "Rabu":
+                btn_rabu.callOnClick();
+                break;
+            case "Kamis":
+                btn_kamis.callOnClick();
+                break;
+            case "Jumat":
+                btn_jumat.callOnClick();
+                break;
+            case "Sabtu":
+                btn_sabtu.callOnClick();
+                break;
+            case "Minggu":
+                break;
+        }
+        btn_senin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_senin).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemlist.size() == 0) {
+                    if (isExpanded){
+                        hint_senin.setVisibility(View.VISIBLE);
+                        rv_senin.setVisibility(View.GONE);
+                    }else {
+                        rv_senin.setVisibility(View.GONE);
+                        hint_senin.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_senin.setVisibility(View.GONE);
+                        rv_senin.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_senin.setVisibility(View.GONE);
+                        hint_senin.setVisibility(View.GONE);
+                    }
                 }
             }
         });
-        btn_kamis.setOnClickListener(v -> {
-            if (itemKamis.size() == 0) {
-                if (hint_kamis.getVisibility() == View.GONE) {
-                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                    hint_kamis.setVisibility(View.VISIBLE);
-                    rv_kamis.setVisibility(View.GONE);
-                }else if (hint_kamis.getVisibility() == View.VISIBLE){
-                    arrow_kamis.setBackgroundResource(R.drawable.ic_right);
-                    rv_kamis.setVisibility(View.GONE);
-                    hint_kamis.setVisibility(View.GONE);
-                }
-            }else {
-                if (rv_kamis.getVisibility() == View.GONE) {
-                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                    rv_kamis.setVisibility(View.VISIBLE);
-                    hint_kamis.setVisibility(View.GONE);
-                } else if (rv_kamis.getVisibility() == View.VISIBLE) {
-                    arrow_kamis.setBackgroundResource(R.drawable.ic_right);
-                    rv_kamis.setVisibility(View.GONE);
-                    hint_kamis.setVisibility(View.GONE);
-                }
-            }
-        });
-        btn_jumat.setOnClickListener(v -> {
-            if (itemJumat.size() == 0) {
-                if (hint_jumat.getVisibility() == View.GONE) {
-                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                    hint_jumat.setVisibility(View.VISIBLE);
-                    rv_jumat.setVisibility(View.GONE);
-                }else if (hint_jumat.getVisibility() == View.VISIBLE){
-                    arrow_jumat.setBackgroundResource(R.drawable.ic_right);
-                    rv_jumat.setVisibility(View.GONE);
-                    hint_jumat.setVisibility(View.GONE);
-                }
-            }else {
-                if (rv_jumat.getVisibility() == View.GONE) {
-                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                    rv_jumat.setVisibility(View.VISIBLE);
-                    hint_jumat.setVisibility(View.GONE);
-                } else if (rv_jumat.getVisibility() == View.VISIBLE) {
-                    arrow_jumat.setBackgroundResource(R.drawable.ic_right);
-                    rv_jumat.setVisibility(View.GONE);
-                    hint_jumat.setVisibility(View.GONE);
+        btn_selasa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_selasa).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemselasa.size() == 0) {
+                    if (isExpanded){
+                        hint_selasa.setVisibility(View.VISIBLE);
+                        rv_selasa.setVisibility(View.GONE);
+                    }else {
+                        rv_selasa.setVisibility(View.GONE);
+                        hint_selasa.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_selasa.setVisibility(View.GONE);
+                        rv_selasa.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_selasa.setVisibility(View.GONE);
+                        hint_selasa.setVisibility(View.GONE);
+                    }
                 }
             }
         });
-        btn_sabtu.setOnClickListener(v -> {
-            if (itemSabtu.size() == 0) {
-                if (hint_sabtu.getVisibility() == View.GONE) {
-                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                    hint_sabtu.setVisibility(View.VISIBLE);
-                    rv_sabtu.setVisibility(View.GONE);
-                }else if (hint_sabtu.getVisibility() == View.VISIBLE){
-                    arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
-                    rv_sabtu.setVisibility(View.GONE);
-                    hint_sabtu.setVisibility(View.GONE);
+        btn_rabu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_rabu).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemRabu.size() == 0) {
+                    if (isExpanded){
+                        hint_rabu.setVisibility(View.VISIBLE);
+                        rv_rabu.setVisibility(View.GONE);
+                    }else {
+                        rv_rabu.setVisibility(View.GONE);
+                        hint_rabu.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_rabu.setVisibility(View.GONE);
+                        rv_rabu.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_rabu.setVisibility(View.GONE);
+                        hint_rabu.setVisibility(View.GONE);
+                    }
                 }
-            }else {
-                if (rv_sabtu.getVisibility() == View.GONE) {
-                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                    rv_sabtu.setVisibility(View.VISIBLE);
-                    hint_sabtu.setVisibility(View.GONE);
-                } else if (rv_sabtu.getVisibility() == View.VISIBLE) {
-                    arrow_sabtu.setBackgroundResource(R.drawable.ic_right);
-                    rv_sabtu.setVisibility(View.GONE);
-                    hint_sabtu .setVisibility(View.GONE);
+            }
+        });
+        btn_kamis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_kamis).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemKamis.size() == 0) {
+                    if (isExpanded){
+                        hint_kamis.setVisibility(View.VISIBLE);
+                        rv_kamis.setVisibility(View.GONE);
+                    }else {
+                        rv_kamis.setVisibility(View.GONE);
+                        hint_kamis.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_kamis.setVisibility(View.GONE);
+                        rv_kamis.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_kamis.setVisibility(View.GONE);
+                        hint_kamis.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        btn_jumat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_jumat).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemJumat.size() == 0) {
+                    if (isExpanded){
+                        hint_jumat.setVisibility(View.VISIBLE);
+                        rv_jumat.setVisibility(View.GONE);
+                    }else {
+                        rv_jumat.setVisibility(View.GONE);
+                        hint_jumat.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_jumat.setVisibility(View.GONE);
+                        rv_jumat.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_jumat.setVisibility(View.GONE);
+                        hint_jumat.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        btn_sabtu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                float rotation = isExpanded ? 0 : 90;
+                ViewCompat.animate(arrow_sabtu).rotation(rotation).start();
+                isExpanded = !isExpanded;
+                if (itemSabtu.size() == 0) {
+                    if (isExpanded){
+                        hint_sabtu.setVisibility(View.VISIBLE);
+                        rv_sabtu.setVisibility(View.GONE);
+                    }else {
+                        rv_sabtu.setVisibility(View.GONE);
+                        hint_sabtu.setVisibility(View.GONE);
+                    }
+                }else {
+                    if (isExpanded){
+                        hint_sabtu.setVisibility(View.GONE);
+                        rv_sabtu.setVisibility(View.VISIBLE);
+                    }else {
+                        rv_sabtu.setVisibility(View.GONE);
+                        hint_sabtu.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -493,68 +529,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                             }
                         }
                         switch (day) {
-                            case "Monday":
-                                if (itemlist.size() == 0) {
-                                    hint_senin.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                                    rv_senin.setVisibility(View.VISIBLE);
-                                    hint_senin.setVisibility(View.GONE);
-                                }
+                            case "Senin":
+                                btn_senin.performClick();
                                 break;
-                            case "Tuesday":
-                                if (itemselasa.size() == 0) {
-                                    hint_selasa.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_selasa.setBackgroundResource(R.drawable.ic_down);
-                                    rv_selasa.setVisibility(View.VISIBLE);
-                                    hint_selasa.setVisibility(View.GONE);
-                                }
+                            case "Selasa":
+                                btn_selasa.performClick();
                                 break;
-                            case "Wednesday":
-                                if (itemRabu.size() == 0) {
-                                    hint_rabu.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_rabu.setBackgroundResource(R.drawable.ic_down);
-                                    rv_rabu.setVisibility(View.VISIBLE);
-                                    hint_rabu.setVisibility(View.GONE);
-                                }
+                            case "Rabu":
+                                btn_rabu.performClick();
                                 break;
-                            case "Thursday":
-                                if (itemKamis.size() == 0) {
-                                    hint_kamis.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_kamis.setBackgroundResource(R.drawable.ic_down);
-                                    rv_kamis.setVisibility(View.VISIBLE);
-                                    hint_kamis.setVisibility(View.GONE);
-                                }
+                            case "Kamis":
+                                btn_kamis.performClick();
                                 break;
-                            case "Friday":
-                                if (itemJumat.size() == 0) {
-                                    hint_jumat.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_jumat.setBackgroundResource(R.drawable.ic_down);
-                                    rv_jumat.setVisibility(View.VISIBLE);
-                                    hint_jumat.setVisibility(View.GONE);
-                                }
+                            case "Jumat":
+                                btn_jumat.performClick();
                                 break;
-                            case "Saturday":
-                                if (itemSabtu.size() == 0) {
-                                    hint_sabtu.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_sabtu.setBackgroundResource(R.drawable.ic_down);
-                                    rv_sabtu.setVisibility(View.VISIBLE);
-                                    hint_sabtu.setVisibility(View.GONE);
-                                }
+                            case "Sabtu":
+                                btn_sabtu.performClick();
                                 break;
-                            case "Sunday":
-                                if (itemlist.size() == 0) {
-                                    hint_senin.setVisibility(View.VISIBLE);
-                                } else {
-                                    arrow_senin.setBackgroundResource(R.drawable.ic_down);
-                                    rv_senin.setVisibility(View.VISIBLE);
-                                    hint_senin.setVisibility(View.GONE);
-                                }
+                            case "Minggu":
+
                                 break;
                         }
                     }
