@@ -1,8 +1,10 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,8 +14,10 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -133,6 +137,8 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.fingertech.kes.Service.App.getContext;
 
 
 public class MenuUtama extends AppCompatActivity
@@ -291,8 +297,6 @@ public class MenuUtama extends AppCompatActivity
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,null);
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,null);
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
-//        date_from     =  sharedPreferences.getString(TAG_DATE_FROM,null);
-//        date_to       =  sharedPreferences.getString(TAG_DATE_TO,null);
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
         base_url_news = "http://www.kes.co.id/schoolm/assets/images/news/mm_";
@@ -425,9 +429,7 @@ public class MenuUtama extends AppCompatActivity
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
 
-
     }
-
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(this);
@@ -483,7 +485,7 @@ public class MenuUtama extends AppCompatActivity
             Baca.setOnClickListener(view -> {
 //            Toast.makeText(MenuUtama.this, "Clicked item: " + position, Toast.LENGTH_SHORT).show();
             });
-            customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.LEFT);
+            customCarouselView.setIndicatorGravity(Gravity.CENTER_HORIZONTAL|Gravity.BOTTOM |Gravity.START);
         return customView;
         }
     };
@@ -672,8 +674,7 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void dapat_pesan(){
-
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization,school_code.toLowerCase(),parent_id,date_from.toString(),date_to.toString());
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization,parent_id,date_from.toString(),date_to.toString());
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
@@ -981,7 +982,46 @@ public class MenuUtama extends AppCompatActivity
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+    private void setting_lokasi(){
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        boolean network_enabled = false;
 
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch(Exception ex) {
+            Log.d("GPS",ex.toString());
+        }
+
+        try {
+            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        } catch(Exception ex) {
+            Log.d("Network",ex.toString());
+        }
+
+        if(!gps_enabled && !network_enabled) {
+            // notify user
+            new FancyGifDialog.Builder(MenuUtama.this)
+                    .setTitle("Gps Tidak Aktif")
+                    .setMessage("Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda")
+                    .setNegativeBtnText("Tidak")
+                    .setNegativeBtnBackground("#f0f0f0")
+                    .setPositiveBtnBackground("#40bfe8")
+                    .setPositiveBtnText("Ya")
+                    .setGifResource(R.drawable.ic_location)   //Pass your Gif here
+                    .isCancellable(true)
+                    .OnPositiveClicked(() -> {
+                        getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    })
+                    .OnNegativeClicked(new FancyGifDialogListener() {
+                        @Override
+                        public void OnClick() {
+                        }
+                    })
+
+                    .build();
+        }
     }
 
     @Override
@@ -989,32 +1029,29 @@ public class MenuUtama extends AppCompatActivity
         lastLocation = location;
         if (CurrLocationMarker != null) {
             CurrLocationMarker.remove();
+            }
+            //Place current location marker
+            final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
 
-        }
+            final MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_map));
+            //move map camera
+            mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
+            CurrLocationMarker = mapG.addMarker(markerOptions);
+            CurrLocationMarker.hideInfoWindow();
+            //stop location updates
+            if (mGoogleApiClient != null) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                mGoogleApiClient.connect();
+            }
 
-        //Place current location marker
-        final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
+            currentLatitude = location.getLatitude();
+            currentLongitude = location.getLongitude();
 
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_map));
-        //move map camera
-        mapG.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mapG.animateCamera(CameraUpdateFactory.zoomTo(14));
-        CurrLocationMarker = mapG.addMarker(markerOptions);
-        CurrLocationMarker.hideInfoWindow();
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.connect();
-        }
-
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
-
-        dapat_map();
-
+            dapat_map();
     }
 
     @Override

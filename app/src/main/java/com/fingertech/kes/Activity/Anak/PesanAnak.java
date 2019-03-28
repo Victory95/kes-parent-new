@@ -1,7 +1,5 @@
 package com.fingertech.kes.Activity.Anak;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,7 +20,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.PesanAnakAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -30,30 +27,18 @@ import com.fingertech.kes.Activity.Model.HariModel.PesanAnakModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
-import com.fingertech.kes.Rest.ClientApi;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Rest.UtilsApi;
-import com.fingertech.kes.Service.HttpHandler;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PesanAnak extends AppCompatActivity {
 
@@ -96,10 +81,12 @@ public class PesanAnak extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
+        // use this to start and trigger a service
 
         pilihan();
 
     }
+
     private void pilihan(){
         new LovelyInfoDialog(this)
                 .setTopColorRes(R.color.mint_color)

@@ -173,21 +173,21 @@ public class ProfileParent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_parent);
-        toolbar                 = (Toolbar)findViewById(R.id.toolbar_profile);
-        header                  = (ImageView)findViewById(R.id.htab_header);
-        btn_edit                = (CardView)findViewById(R.id.btn_edit);
-        cv_profile              = (CardView)findViewById(R.id.btn_image);
-        btn_katasandi           = (CardView)findViewById(R.id.btn_katasandi);
-        image_profil            = (CircleImageView)findViewById(R.id.image_prof);
-        email_profile           = (TextView)findViewById(R.id.email_parent);
-        no_profile              = (TextView)findViewById(R.id.phone_parent);
-        jenis_kelamin_profile   = (TextView)findViewById(R.id.gender_parent);
-        tv_agama                = (TextView)findViewById(R.id.agama_parent);
-        last_login              = (TextView)findViewById(R.id.last_login);
-        member                  = (TextView)findViewById(R.id.user);
-        jadi_parent             = (TextView)findViewById(R.id.jd_parent);
+        toolbar                 = findViewById(R.id.toolbar_profile);
+        header                  = findViewById(R.id.htab_header);
+        btn_edit                = findViewById(R.id.btn_edit);
+        cv_profile              = findViewById(R.id.btn_image);
+        btn_katasandi           = findViewById(R.id.btn_katasandi);
+        image_profil            = findViewById(R.id.image_prof);
+        email_profile           = findViewById(R.id.email_parent);
+        no_profile              = findViewById(R.id.phone_parent);
+        jenis_kelamin_profile   = findViewById(R.id.gender_parent);
+        tv_agama                = findViewById(R.id.agama_parent);
+        last_login              = findViewById(R.id.last_login);
+        member                  = findViewById(R.id.user);
+        jadi_parent             = findViewById(R.id.jd_parent);
         mApiInterface           = ApiClient.getClient().create(Auth.class);
-        logout                  = (Button)findViewById(R.id.btn_logout);
+        logout                  = findViewById(R.id.btn_logout);
         tanggallahir            = findViewById(R.id.tanggal_lahir);
 
 
@@ -220,8 +220,8 @@ public class ProfileParent extends AppCompatActivity {
         no_hp           = sharedupdate.getString(TAG_NOMOR_HP,null);
 
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapse_profile);
-        appBarLayout = (AppBarLayout) findViewById(R.id.appbar_profile);
+        collapsingToolbarLayout = findViewById(R.id.collapse_profile);
+        appBarLayout = findViewById(R.id.appbar_profile);
 
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
@@ -374,7 +374,7 @@ public class ProfileParent extends AppCompatActivity {
                 file.getName(), photoBody);
         RequestBody ids = RequestBody.create(MediaType.parse("multipart/form-data"), parent_id);
         RequestBody picss = RequestBody.create(MediaType.parse("multipart/form-data"), pic_type);
-        Call<JSONResponse.UpdatePicture> call = mApiInterface.kes_update_picture_post(authorization.toString(),ids,photoPart,picss);
+        Call<JSONResponse.UpdatePicture> call = mApiInterface.kes_update_picture_post(authorization,ids,photoPart,picss);
 
         call.enqueue(new Callback<JSONResponse.UpdatePicture>() {
 
@@ -509,7 +509,7 @@ public class ProfileParent extends AppCompatActivity {
 
     public void get_profile(){
         final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
-        retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization.toString(),parent_id.toString());
+        retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization, parent_id);
 
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
 
@@ -536,7 +536,7 @@ public class ProfileParent extends AppCompatActivity {
                     no_profile.setText(nohp);
                     jenis_kelamin_profile.setText(jeniskelamin);
                     tv_agama.setText(agama);
-                    if(member_type.toString().equals("3")){
+                    if(member_type.equals("3")){
                         member.setText("Sebagai Orangtua");
                         jadi_parent.setVisibility(View.INVISIBLE);
                     }else{

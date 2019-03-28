@@ -117,7 +117,7 @@ public class Pesan extends Fragment {
         progressBar();
         showDialog();
         refresh();
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),school_code.toLowerCase(),parent_id.toString(),date_from.toString(),date_to.toString());
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),parent_id.toString(),date_from.toString(),date_to.toString());
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {

@@ -114,8 +114,6 @@ public class Masuk extends AppCompatActivity {
     public static final String TAG_COUNT        = "count_children";
     public static final String TAG_PHOTO        = "foto_profile";
 
-
-
     Auth mApiInterface;
     String password,last_login;
     int min,second,year,month,date,jam;
@@ -605,7 +603,6 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_PHOTO,image_google);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
@@ -616,7 +613,6 @@ public class Masuk extends AppCompatActivity {
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, "6");
                         intent.putExtra(TAG_TOKEN, token);
-                        intent.putExtra(TAG_PHOTO,image_google);
                         startActivity(intent);
                         finish();
                     } catch (Exception e) {
@@ -682,7 +678,6 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_PHOTO,image_google);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
@@ -692,7 +687,6 @@ public class Masuk extends AppCompatActivity {
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, "6");
-                        intent.putExtra(TAG_PHOTO,image_google);
                         intent.putExtra(TAG_TOKEN, token);
                         startActivity(intent);
                         finish();
