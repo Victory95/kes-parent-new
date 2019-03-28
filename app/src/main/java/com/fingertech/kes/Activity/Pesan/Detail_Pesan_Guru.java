@@ -46,6 +46,7 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
         namamurid = findViewById(R.id.Tvanak);
         balas     =findViewById(R.id.btn_balas);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
+
         authorization       = getIntent().getStringExtra("authorization");
         school_code         = getIntent().getStringExtra("school_code");
         parent_id           = getIntent().getStringExtra("parent_id");

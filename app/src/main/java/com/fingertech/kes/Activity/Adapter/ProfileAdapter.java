@@ -44,10 +44,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
     public int row_index = -1;
     private String base_url = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
 
-    private Context context;
-
-    public ProfileAdapter(Context context,List<ProfileModel> viewItemList) {
-        this.context       = context;
+    public ProfileAdapter(List<ProfileModel> viewItemList) {
         this.profileModels = viewItemList;
     }
 
