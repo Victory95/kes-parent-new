@@ -661,7 +661,8 @@ public class Masuk extends AppCompatActivity {
                 JSONResponse resource = response.body();
                 status = resource.status;
                 code = resource.code;
-                token = resource.token;
+//                token = resource.token;
+
 
                 String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
                 String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
@@ -669,8 +670,11 @@ public class Masuk extends AppCompatActivity {
 
                 if (status == 1 && code.equals("LS_SCS_0001")) {
                     JSONObject jsonObject = null;
+                    JSONResponse.Login_Data login_data = response.body().login_data;
+                    token = login_data.token;
                     Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
                     try {
+
                         jsonObject = new JSONObject(JWTUtils.decoded(token));
                         //// save session
                         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -679,7 +683,7 @@ public class Masuk extends AppCompatActivity {
                         editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_PHOTO,image_google);
+//                        editor.putString(TAG_PHOTO,image_google);
                         editor.putString(TAG_TOKEN, token);
                         editor.commit();
                         /// call session
@@ -689,7 +693,7 @@ public class Masuk extends AppCompatActivity {
                         intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                         intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
                         intent.putExtra(TAG_MEMBER_TYPE, "6");
-                        intent.putExtra(TAG_PHOTO,image_google);
+//                        intent.putExtra(TAG_PHOTO,image_google);
                         intent.putExtra(TAG_TOKEN, token);
                         startActivity(intent);
                         finish();

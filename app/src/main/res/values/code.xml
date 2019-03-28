@@ -53,7 +53,7 @@
     <string name="LS_SCS_0001">Berhasil Masuk</string>
     <string name="LS_ERR_0001">Device dan ID facebook tidak ditemukan</string>
     <string name="LS_ERR_0001b">Device dan ID Google tidak ditemukan</string>
-    <string name="LS_ERR_0002">Devices tidak sesuai dan Hanya boleh masuk pada hp yang sama</string>
+    <string name="LS_ERR_0002">Email sudah digunakan</string>
 
     /////// Forgot Password
     <string name="FP_SCS_0001">Berhasil request mengganti password silahlkan check email anda</string>
