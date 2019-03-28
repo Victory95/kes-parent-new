@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -109,6 +110,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -661,7 +663,6 @@ public class MenuUtama extends AppCompatActivity
         });
     }
 
-
     private void updateAlertIcon() {
         // if alert count extends into two digits, just show the red circle
         if (0 < alertCount && alertCount < dataLists.size()) {
@@ -669,7 +670,6 @@ public class MenuUtama extends AppCompatActivity
         } else {
             countTextView.setText("");
         }
-
         redCircle.setVisibility((alertCount > 0) ? View.VISIBLE : View.GONE);
     }
 
@@ -1057,7 +1057,16 @@ public class MenuUtama extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapG = googleMap;
+        try {
+            // Customise map styling via JSON file
+            boolean success = googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle( this, R.raw.json_style));
 
+            if (!success) {
+                Log.e("KES", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("KES", "Can't find style. Error: ", e);
+        }
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,

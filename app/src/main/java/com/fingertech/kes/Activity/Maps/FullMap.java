@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -37,6 +38,7 @@ import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import  com.rey.material.widget.Spinner;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -374,6 +376,17 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mapF = googleMap;
         //Initialize Google Play Services
+        try {
+            // Customise map styling via JSON file
+            boolean success = googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle( this, R.raw.json_style));
+
+            if (!success) {
+                Log.e("KES", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("KES", "Can't find style. Error: ", e);
+        }
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
