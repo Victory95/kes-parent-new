@@ -966,7 +966,7 @@ public class MenuUtama extends AppCompatActivity
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(1000);
         mlocationRequest.setFastestInterval(1000);
-        mlocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        mlocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -977,12 +977,13 @@ public class MenuUtama extends AppCompatActivity
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
+
     private void setting_lokasi(){
         LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
@@ -1125,7 +1126,7 @@ public class MenuUtama extends AppCompatActivity
 
             @Override
             public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
-                Log.i("KES", response.code() + "");
+                Log.i("mapResponse", response.code() + "");
 
                 JSONResponse.Nearby_School resource = response.body();
 
