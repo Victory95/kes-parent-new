@@ -4,7 +4,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#444444"
+        "color": "#000000"
       }
     ]
   },
@@ -22,7 +22,7 @@
     "elementType": "all",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -31,10 +31,10 @@
     "elementType": "all",
     "stylers": [
       {
-        "saturation": -100
+        "saturation": -80
       },
       {
-        "lightness": 45
+        "lightness": 30
       }
     ]
   },
@@ -43,7 +43,7 @@
     "elementType": "all",
     "stylers": [
       {
-        "visibility": "simplified"
+        "visibility": "on"
       }
     ]
   },
@@ -52,7 +52,7 @@
     "elementType": "labels.icon",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -61,7 +61,7 @@
     "elementType": "all",
     "stylers": [
       {
-        "visibility": "off"
+        "visibility": "on"
       }
     ]
   },
@@ -70,7 +70,7 @@
     "elementType": "all",
     "stylers": [
       {
-        "color": "#46bcec"
+        "color": "#4FC3FA"
       },
       {
         "visibility": "on"
