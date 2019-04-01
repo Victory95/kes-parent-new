@@ -63,7 +63,6 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
     }
 
     public void balas_pesan(){
-
         balas.setOnClickListener(v -> {
             Intent intent = new Intent(Detail_Pesan_Guru.this, Balas_chat.class);
             intent.putExtra("authorization",authorization);
@@ -76,8 +75,6 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
         });
     }
 
-
-
     public void dapat_pesan(){
         progressBar();
         showDialog();
@@ -87,14 +84,18 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.PesanDetail> call, Response<JSONResponse.PesanDetail> response) {
                 Log.i("onResponse",response.code()+"");
                 hideDialog();
-                JSONResponse.PesanDetail resource = response.body();
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("DTS_SCS_0001")){
-                    tanggal.setText(response.body().getData().getDataMessage().getDatez());
-                    pesanguru.setText(response.body().getData().getDataMessage().getMessage_cont());
-                    namapengirim.setText(response.body().getData().getDataMessage().getCreated_by());
-                    namamurid.setText(response.body().getData().getDataMessage().getStudent_name());
+                if (response.isSuccessful()) {
+                    JSONResponse.PesanDetail resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        tanggal.setText(response.body().getData().getDataMessage().getDatez());
+                        pesanguru.setText(response.body().getData().getDataMessage().getMessage_cont());
+                        namapengirim.setText(response.body().getData().getDataMessage().getCreated_by());
+                        namamurid.setText(response.body().getData().getDataMessage().getStudent_name());
+                    }
+                }else {
+                    FancyToast.makeText(getApplicationContext(),"Eror database",FancyToast.LENGTH_LONG,FancyToast.ERROR,false).show();
                 }
             }
 

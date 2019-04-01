@@ -1153,7 +1153,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         CurrentLatitude = LatLng.latitude;
         CurrentLongitude = LatLng.longitude;
     }
-    
+
     public static List<Address> getFromLocation(double lat, double lng, int maxResult){
 
         String address = String.format(Locale.ENGLISH,"http://maps.googleapis.com/maps/api/geocode/json?latlng=%1$f,%2$f&sensor=true&language="+Locale.getDefault().getCountry(), lat, lng);

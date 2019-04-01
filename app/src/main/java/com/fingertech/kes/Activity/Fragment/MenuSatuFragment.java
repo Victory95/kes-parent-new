@@ -15,12 +15,10 @@ import android.widget.FrameLayout;
 import com.fingertech.kes.Activity.Anak.AbsensiAnak;
 import com.fingertech.kes.Activity.Anak.AgendaAnak;
 import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
+import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
-import com.fingertech.kes.Activity.Anak.RaporAnak;
-import com.fingertech.kes.Activity.Anak.TugasAnak;
-import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -34,7 +32,7 @@ public class MenuSatuFragment extends Fragment{
         // Required empty public constructor
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
-    CardView btn_profile,btn_jadwal, btn_agenda,btn_absensi, btn_pesan, btn_kalendar;
+    CardView btn_jadwalujian,btn_jadwal, btn_agenda,btn_absensi, btn_pesan, btn_kalendar;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
     public static final String myViewpagerPreferences = "myViewpagerPreferences";
@@ -64,7 +62,7 @@ public class MenuSatuFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_menu_satu, container, false);
 
-        btn_profile     = view.findViewById(R.id.btn_profil);
+        btn_jadwalujian = view.findViewById(R.id.btn_jadwal_ujian);
         btn_jadwal      = view.findViewById(R.id.btn_jadwal);
         btn_agenda      = view.findViewById(R.id.btn_agenda);
         btn_absensi     = view.findViewById(R.id.btn_absen);
@@ -72,25 +70,19 @@ public class MenuSatuFragment extends Fragment{
         btn_kalendar    = view.findViewById(R.id.btn_kalender);
         frameLayout     = view.findViewById(R.id.fragment1);
 
-        btn_profile.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences2.edit();
-            editor.putString("member_id",member_id);
-            editor.putString("school_code",school_code);
+        btn_jadwalujian.setOnClickListener(v -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("school_code",school_code.toLowerCase());
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
-            editor.putString("parent_nik",parent_nik);
-            editor.putString("school_name",school_name);
             editor.putString("student_id",student_id);
             editor.apply();
-            Intent intent = new Intent(getContext(), ProfilAnak.class);
-            intent.putExtra("member_id",member_id);
-            intent.putExtra("parent_nik",parent_nik);
+            Intent intent = new Intent(getContext(), JadwalUjian.class);
             intent.putExtra("authorization", authorization);
-            intent.putExtra("parent_nik", parent_nik);
-            intent.putExtra("school_code", school_code);
+            intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);
-            intent.putExtra("school_name",school_name);
-            startActivityForResult(intent,1);
+            intent.putExtra("classroom_id", classroom_id);
+            startActivity(intent);
         });
 
         btn_jadwal.setOnClickListener(v -> {

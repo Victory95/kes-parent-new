@@ -13,6 +13,7 @@
     <color name="textColor_Grey">#cacaca</color>
     <color name="background_Grey_ios">#ededed</color>
 
+    <color name="white">#ffffff</color>
     <color name="colorGrey_level1">#f4f4f4</color>
     <color name="colorGrey_level2">#e4e4e4</color>
     <color name="colorGrey_level3">#d9d9d9</color>
