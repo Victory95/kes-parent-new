@@ -120,7 +120,7 @@
     <string name="validate_negara">* Masukkan negara asal anda</string>
     <string name="validate_kewarganegaraan">* Mohon pilih kewarganegaraan anda</string>
     <string name="validate_alamat_rumah">* Mohon masukkan alamat rumah anda</string>
-    <string name="validate2_nik">Pastikan NIK / NIORA benar, agar dapat mengaskses anak anda. Bisa dengan Scan NIK dari KTP/KK</string>
+    <string name="validate2_nik">Pastikan NIK / NIORA benar, agar dapat mengakses anak anda. Bisa dengan Scan NIK dari KTP/KK</string>
     <string name="validate2_mobile_phone">Pasikan nomor ponsel anda aktif untuk keamanan dan kemudahan akses</string>
     <string name="validate2_pass_lengh">Minimal 6 karakter</string>
     <string name="tcb_ketentuan">Mohon, Disetujui terlebih dahulu</string>
