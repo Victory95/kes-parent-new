@@ -315,7 +315,7 @@ public class MenuUtama extends AppCompatActivity
 
         get_profile();
         checkInternetCon();
-
+        Daftar_Berita();
         setting_lokasi();
 
         tv_profile.setOnClickListener(v -> {
@@ -372,18 +372,24 @@ public class MenuUtama extends AppCompatActivity
                 Log.d("member",member+"");
                 if (member==null){
                     checkInternetCon();
+                    dapat_map();
+                    Daftar_Berita();
                     swipeRefreshLayout.setRefreshing(false);
                     Refreshcounter = Refreshcounter + 1;
                 }else {
                     if (member.equals("3")) {
                         if (count.equals("0")) {
+                            dapat_map();
+                            Daftar_Berita();
                             Refreshcounter = Refreshcounter + 1;
                             swipeRefreshLayout.setRefreshing(false);
                         } else {
                             if (profileModels != null) {
+                                dapat_map();
                                 get_profile();
                                 send_data();
                                 send_data2();
+                                Daftar_Berita();
                                 Refreshcounter = Refreshcounter + 1;
                                 swipeRefreshLayout.setRefreshing(false);
                             } else {
@@ -391,9 +397,10 @@ public class MenuUtama extends AppCompatActivity
                             }
                         }
                     } else {
+                        dapat_map();
+                        Daftar_Berita();
                         Refreshcounter = Refreshcounter + 1;
                         swipeRefreshLayout.setRefreshing(false);
-
                     }
                 }
             }

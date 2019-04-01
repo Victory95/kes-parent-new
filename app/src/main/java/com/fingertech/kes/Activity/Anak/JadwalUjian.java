@@ -96,7 +96,6 @@ public class JadwalUjian extends AppCompatActivity {
         setContentView(R.layout.ujian_sheet);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         rv_ujian        = findViewById(R.id.recycleview_ujian);
-        rv_ujian_teratas = findViewById(R.id.recyclerviewteratas);
         toolbar         = findViewById(R.id.toolbar_ujian);
         no_ujian        = findViewById(R.id.tv_no_ujian);
         tv_semester     = findViewById(R.id.tv_semester);
