@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -79,32 +80,44 @@ public class Detail_Pesan_Guru extends AppCompatActivity {
 
 
     public void dapat_pesan(){
-        progressBar();
-        showDialog();
-        Call<JSONResponse.PesanDetail> call = mApiInterface.kes_message_inbox_detail_get(authorization.toString(),school_code.toLowerCase().toString(),parent_id.toString(),message_id.toString(),parent_message_id.toString());
-        call.enqueue(new Callback<JSONResponse.PesanDetail>() {
-            @Override
-            public void onResponse(Call<JSONResponse.PesanDetail> call, Response<JSONResponse.PesanDetail> response) {
-                Log.i("onResponse",response.code()+"");
-                hideDialog();
-                JSONResponse.PesanDetail resource = response.body();
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("DTS_SCS_0001")){
-                    tanggal.setText(response.body().getData().getDataMessage().getDatez());
-                    pesanguru.setText(response.body().getData().getDataMessage().getMessage_cont());
-                    namapengirim.setText(response.body().getData().getDataMessage().getCreated_by());
-                    namamurid.setText(response.body().getData().getDataMessage().getStudent_name());
-                }
-            }
+        if (TextUtils.isEmpty(authorization)){
 
-            @Override
-            public void onFailure(Call<JSONResponse.PesanDetail> call, Throwable t) {
-                Log.i("onFailure",t.toString());
-                FancyToast.makeText(getApplicationContext(),"Pesan Rusak", Toast.LENGTH_LONG,FancyToast.ERROR,false).show();
-                hideDialog();
-            }
-        });
+        }else if (TextUtils.isEmpty(school_code)){
+
+        }else if (TextUtils.isEmpty(parent_id)){
+
+        }else if (TextUtils.isEmpty(message_id)){
+
+        }else if (TextUtils.isEmpty(parent_message_id)){
+
+        }else {
+            progressBar();
+            showDialog();
+            Call<JSONResponse.PesanDetail> call = mApiInterface.kes_message_inbox_detail_get(authorization.toString(), school_code.toLowerCase().toString(), parent_id.toString(), message_id.toString(), parent_message_id.toString());
+            call.enqueue(new Callback<JSONResponse.PesanDetail>() {
+                @Override
+                public void onResponse(Call<JSONResponse.PesanDetail> call, Response<JSONResponse.PesanDetail> response) {
+                    Log.i("onResponse", response.code() + "");
+                    hideDialog();
+                    JSONResponse.PesanDetail resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        tanggal.setText(response.body().getData().getDataMessage().getDatez());
+                        pesanguru.setText(response.body().getData().getDataMessage().getMessage_cont());
+                        namapengirim.setText(response.body().getData().getDataMessage().getCreated_by());
+                        namamurid.setText(response.body().getData().getDataMessage().getStudent_name());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JSONResponse.PesanDetail> call, Throwable t) {
+                    Log.i("onFailure", t.toString());
+                    FancyToast.makeText(getApplicationContext(), "Pesan Rusak", Toast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                    hideDialog();
+                }
+            });
+        }
     }
 
 

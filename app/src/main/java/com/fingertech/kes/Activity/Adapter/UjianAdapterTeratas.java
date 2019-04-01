@@ -1,0 +1,97 @@
+package com.fingertech.kes.Activity.Adapter;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.fingertech.kes.Activity.Model.ItemUjian;
+import com.fingertech.kes.R;
+
+import java.util.List;
+
+public class UjianAdapterTeratas extends RecyclerView.Adapter<UjianAdapterTeratas.MyHolder> {
+
+
+    private List<ItemUjian> viewItemList;
+    private List<ItemUjian> itemUjianList;
+    private Context context;
+
+    private UjianAdapter.OnItemClickListener onItemClickListener;
+    public int row_index = 0;
+    String searchString = "";
+    String mapel ="";
+    String type = "";
+
+    public UjianAdapterTeratas(List<ItemUjian> viewItemList,Context context) {
+        this.viewItemList = viewItemList;
+        itemUjianList = viewItemList;
+        this.context = context;
+    }
+
+    public void setOnItemClickListener(UjianAdapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    @Override
+    public UjianAdapterTeratas.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ujian_teratas, parent, false);
+
+        UjianAdapterTeratas.MyHolder myHolder = new UjianAdapterTeratas.MyHolder(itemView,onItemClickListener);
+
+        return myHolder;
+
+    }
+
+    @Override
+    public void onBindViewHolder(UjianAdapterTeratas.MyHolder holder, int position) {
+
+        // Get car item dto in list.
+        ItemUjian viewItem = viewItemList.get(position);
+        // Set car item title.
+        holder.tanggal.setText(viewItem.getTanggal());
+        holder.waktu.setText(viewItem.getJam());
+        holder.judul.setText(viewItem.getMapel());
+        holder.deskripsi.setText(Html.fromHtml(viewItem.getDeskripsi()));
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return viewItemList.size();
+    }
+
+    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView bulan,tanggal,waktu,judul,deskripsi;
+        UjianAdapter.OnItemClickListener onItemClickListener;
+
+        public MyHolder(View itemView, UjianAdapter.OnItemClickListener onItemClickListener) {
+            super(itemView);
+            tanggal     = itemView.findViewById(R.id.tv_tanggal);
+            deskripsi   = itemView.findViewById(R.id.tv_deskripsi);
+            bulan       = itemView.findViewById(R.id.tv_bulan);
+            waktu       = itemView.findViewById(R.id.tv_waktu);
+            judul       = itemView.findViewById(R.id.tv_judul);
+//            itemView.setOnClickListener(this);
+//            this.onItemClickListener = onItemClickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+//            onItemClickListener.onItemClick(v, getAdapterPosition());
+        }
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(View view, int position);
+    }
+
+
+
+
+}
