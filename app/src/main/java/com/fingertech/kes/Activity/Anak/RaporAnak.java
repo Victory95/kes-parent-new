@@ -46,6 +46,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator;
 import com.rey.material.widget.Spinner;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -115,6 +116,9 @@ public class RaporAnak extends AppCompatActivity {
     };
     TableRow tr_teori,tr_harian,tr_praktikum,tr_eskul,tr_ujian_sekolah,tr_ujian_negara,tr_nilai_akhir,tr_rata;
     File file = new File("Your_File_path/name");
+    TextView tv_end_date;
+
+    IndefinitePagerIndicator indefinitePagerIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +138,7 @@ public class RaporAnak extends AppCompatActivity {
         star            = findViewById(R.id.star);
         slidingUpPanelLayout    = findViewById(R.id.sliding_layout);
         tv_teori           = findViewById(R.id.nilai_teori);
+        tv_end_date        = findViewById(R.id.end_date);
         tv_ulangan_harian  = findViewById(R.id.ulangan_harian);
         tv_praktikum       = findViewById(R.id.latihan_praktikum);
         tv_eskul           = findViewById(R.id.eskul);
@@ -149,7 +154,7 @@ public class RaporAnak extends AppCompatActivity {
         tr_ujian_sekolah   = findViewById(R.id.table6);
         tr_nilai_akhir     = findViewById(R.id.table7);
         tr_rata            = findViewById(R.id.table8);
-
+        indefinitePagerIndicator    = findViewById(R.id.recyclerview_pager_indicator);
         cardView           = findViewById(R.id.card);
         arrow              = findViewById(R.id.arrow);
         drag               = findViewById(R.id.dragView);
@@ -307,6 +312,7 @@ public class RaporAnak extends AppCompatActivity {
                             start_end   = converTahun(response.body().getData().get(i).getEnd_date());
                         }
                         tv_semester.setText("Semester "+semester_nama+" ("+start_year+"/"+start_end+")");
+
                     }
                     final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(
                             RaporAnak.this,R.layout.spinner_full,listSpinner){
@@ -351,6 +357,7 @@ public class RaporAnak extends AppCompatActivity {
                         }
                     });
                     sp_semester.setSelection(spinnerPosition);
+                    tv_end_date.setText(convertTanggal(start_date)+" Sampai "+convertTanggal(end_date));
                 }
             }
 
@@ -548,6 +555,7 @@ public class RaporAnak extends AppCompatActivity {
                         cardView.setVisibility(View.VISIBLE);
                         raporAdapter = new RaporAdapter(raportModelList);
                         snappyRecycleView.setOnFlingListener(null);
+                        indefinitePagerIndicator.attachToRecyclerView(snappyRecycleView);
                         snapHelper.attachToRecyclerView(snappyRecycleView);
                         snappyRecycleView.setLayoutManager(layoutManager);
                         snappyRecycleView.setAdapter(raporAdapter);
@@ -665,6 +673,19 @@ public class RaporAnak extends AppCompatActivity {
             return "";
         }
     }
+    String convertTanggal(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tahun));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
 
     public void download_rapor(){

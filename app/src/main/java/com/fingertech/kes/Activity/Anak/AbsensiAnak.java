@@ -135,6 +135,8 @@ public class AbsensiAnak extends AppCompatActivity{
 
         compactCalendarView.setShouldDrawDaysHeader(true);
 
+        datePickerButton.callOnClick();
+
         // Set current date to today
         setCurrentDate(new Date());
         datePickerButton.setOnClickListener(v -> {
@@ -308,7 +310,7 @@ public class AbsensiAnak extends AppCompatActivity{
                 if (status == 1 & code.equals("DTS_SCS_0001")){
                     dataJamList     = response.body().getData();
                     dapat_mapel();
-
+                    datePickerButton.performClick();
                 }
             }
 
