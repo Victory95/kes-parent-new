@@ -20,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -878,54 +879,60 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     public void dapat_sekolah(){
-        progressBar();
-        showDialog();
-        Call<JSONResponse.School_Provinsi> call = mApiInterface.school_onprov_get(provid,jenjang);
 
-        call.enqueue(new Callback<JSONResponse.School_Provinsi>() {
+        if (TextUtils.isEmpty(jenjang)){
+            Toast.makeText(getApplicationContext(),"Silahkan pilih jenjang sekolah",Toast.LENGTH_SHORT).show();
+        }else {
+            progressBar();
+            showDialog();
+            Call<JSONResponse.School_Provinsi> call = mApiInterface.school_onprov_get(provid, jenjang);
 
-            @Override
-            public void onResponse(Call<JSONResponse.School_Provinsi> call, final Response<JSONResponse.School_Provinsi> response) {
-                Log.i("KES", response.code() + "");
-                hideDialog();
+            call.enqueue(new Callback<JSONResponse.School_Provinsi>() {
 
-                JSONResponse.School_Provinsi resource = response.body();
+                @Override
+                public void onResponse(Call<JSONResponse.School_Provinsi> call, final Response<JSONResponse.School_Provinsi> response) {
+                    Log.i("KES", response.code() + "");
+                    hideDialog();
 
-                status = resource.status;
-                code = resource.code;
+                    JSONResponse.School_Provinsi resource = response.body();
 
-                String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
-                String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
+                    status = resource.status;
+                    code = resource.code;
 
 
-                if (status == 1 && code.equals("SOP_SCS_0001")) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        double lat          = response.body().getData().get(i).getLatitude();
-                        double lng          = response.body().getData().get(i).getLongitude();
-                        String nama         = response.body().getData().get(i).getSchoolName();
-                        String akreditas    = response.body().getData().get(i).getAkreditasi();
-                        String Alamat       = response.body().getData().get(i).getSchoolAddress();
-                        String schooldetailid   = response.body().getData().get(i).getSchooldetailid();
-                        mClusterManager.addItem(new ClusterItemSekolah(lat,lng,nama,akreditas,Alamat,schooldetailid));
+                    String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
+                    String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
 
+
+                    if (status == 1 && code.equals("SOP_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            double lat = response.body().getData().get(i).getLatitude();
+                            double lng = response.body().getData().get(i).getLongitude();
+                            String nama = response.body().getData().get(i).getSchoolName();
+                            String akreditas = response.body().getData().get(i).getAkreditasi();
+                            String Alamat = response.body().getData().get(i).getSchoolAddress();
+                            String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                            mClusterManager.addItem(new ClusterItemSekolah(lat, lng, nama, akreditas, Alamat, schooldetailid));
+
+                        }
+
+                    } else {
+                        if (status == 0 && code.equals("SOP_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
                     }
 
-                    } else{
-                    if (status == 0 && code.equals("SOP_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
                 }
 
-            }
+                @Override
+                public void onFailure(Call<JSONResponse.School_Provinsi> call, Throwable t) {
+                    hideDialog();
+                    Log.d("onFailure", t.toString());
+                }
 
-            @Override
-            public void onFailure(Call<JSONResponse.School_Provinsi> call, Throwable t) {
-                hideDialog();
-                Log.d("onFailure", t.toString());
-            }
-
-        });
-    }
+            });
+        }
+        }
 
     public class MarkerClusterRenderer extends DefaultClusterRenderer<ClusterItemSekolah> {
 

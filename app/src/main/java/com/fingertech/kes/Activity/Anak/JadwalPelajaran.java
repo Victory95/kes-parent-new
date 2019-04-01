@@ -141,7 +141,7 @@ public class JadwalPelajaran extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_launcher_background), PorterDuff.Mode.SRC_ATOP);
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());

@@ -504,6 +504,10 @@
     <string name="title_activity_pesan">Settings</string>
     <string name="btn_pesan_anak">Pesan Anak</string>
     <string name="btn_agenda_anak">Agenda Anak</string>
+    <string name="network_not_enabled">not</string>
+    <string name="open_location_settings">not</string>
+    <string name="yes">yes</string>
+    <string name="cancel">cancel</string>
     <!--<string name="pref_title_ringtone">Ringtone</string>-->
     <!--<string name="pref_ringtone_silent">Silent</string>-->
     <!--<string name="Tv_bahasa">Pilih_bahasa</string>-->

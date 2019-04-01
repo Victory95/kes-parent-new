@@ -78,11 +78,26 @@
         android:id="@+id/tv_no_ujian"
         android:visibility="gone"
         android:textSize="20sp"/>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerviewteratas"
+        >
+    </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recycleview_ujian">
-
     </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
 </LinearLayout>
