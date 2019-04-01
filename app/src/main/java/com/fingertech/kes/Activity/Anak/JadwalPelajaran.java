@@ -353,13 +353,12 @@ public class JadwalPelajaran extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
     private void Jadwal_pelajaran(){
         progressBar();
         showDialog();
         Call<JSONResponse.JadwalPelajaran> call = mApiInterface.kes_class_schedule_get(authorization.toString(), school_code.toString().toLowerCase(), memberid.toString(), classroom_id.toString());
-
         call.enqueue(new Callback<JSONResponse.JadwalPelajaran>() {
-
             @Override
             public void onResponse(Call<JSONResponse.JadwalPelajaran> call, final Response<JSONResponse.JadwalPelajaran> response) {
                 Log.i("KES", response.code() + "");

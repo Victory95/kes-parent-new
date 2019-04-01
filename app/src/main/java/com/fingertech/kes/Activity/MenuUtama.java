@@ -454,7 +454,6 @@ public class MenuUtama extends AppCompatActivity
         setting_lokasi();
     }
 
-
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(this);
@@ -750,12 +749,14 @@ public class MenuUtama extends AppCompatActivity
 
 
     public void get_children(){
+        progressBar();
+        showDialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
             public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
                 Log.d("TAG children",response.code()+"");
-
+                hideDialog();
                 JSONResponse.ListChildren resource = response.body();
                 status = resource.status;
                 code = resource.code;
@@ -826,6 +827,7 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
                 Log.d("onFailure",t.toString());
+                hideDialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -989,7 +991,7 @@ public class MenuUtama extends AppCompatActivity
         mlocationRequest = new LocationRequest();
         mlocationRequest.setInterval(1000);
         mlocationRequest.setFastestInterval(1000);
-        mlocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mlocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {

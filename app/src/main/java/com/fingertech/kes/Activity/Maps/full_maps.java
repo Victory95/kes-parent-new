@@ -30,7 +30,9 @@ import android.support.v7.widget.Toolbar;
 
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.R;
+import com.fingertech.kes.Util.GeocoderHelper;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -53,7 +55,18 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -104,6 +117,27 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         toolbar = (Toolbar) findViewById(R.id.toolbar_map);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (!isGooglePlayServicesAvailable()) {
+            Log.d("onCreate", "Google Play Services not available. Ending Test case.");
+            finish();
+        }
+        else {
+            Log.d("onCreate", "Google Play Services available. Continuing.");
+        }
+
+    }
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if(result != ConnectionResult.SUCCESS) {
+            if(googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(this, result,
+                        0).show();
+            }
+            return false;
+        }
+        return true;
     }
 
     private void showPlaceAutoComplete(int typeLocation) {
@@ -188,7 +222,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d("gagalkoneksi",connectionResult.getErrorMessage()+"");
     }
 
     @Override
@@ -197,7 +231,12 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         if (mcurrLocationMarker != null) {
             mcurrLocationMarker.remove();
 
+        } //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
+            mGoogleApiClient.connect();
         }
+
 
         //Place current location marker
         final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -208,11 +247,6 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
-            mGoogleApiClient.connect();
-        }
 
         updateLocation(location);
         getAddress();
@@ -228,8 +262,10 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                         position.tilt));
         final LatLng latLng = mmap.getCameraPosition().target;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
+        List<Address> addressList = null;
         try {
-            List<Address> addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             if (addressList != null && addressList.size() > 0) {
                 String address = addressList.get(0).getAddressLine(0);
                 String number = addressList.get(0).getFeatureName();
@@ -239,14 +275,69 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                 String postalCode = addressList.get(0).getPostalCode();
                 latitude1 = addressList.get(0).getLatitude();
                 longitude1 = addressList.get(0).getLongitude();
-
                 result = address ;
                 msearch.setText(result +"\n");
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public static List<Address> getFromLocation(double lat, double lng, int maxResult){
+
+        String address = String.format(Locale.ENGLISH,"http://maps.googleapis.com/maps/api/geocode/json?latlng=%1$f,%2$f&sensor=true&language="+Locale.getDefault().getCountry(), lat, lng);
+        HttpGet httpGet = new HttpGet(address);
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<Address> retList = null;
+
+        try {
+            response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream stream = entity.getContent();
+            int b;
+            while ((b = stream.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+
+            retList = new ArrayList<Address>();
+
+            JSONArray results = jsonObject.getJSONArray("results");
+            for (int i=0;i<results.length();i++ ) {
+                JSONObject result = results.getJSONObject(i);
+                String indiStr = result.getString("formatted_address");
+                Address addr = new Address(Locale.ITALY);
+                addr.setAddressLine(0, indiStr);
+                retList.add(addr);
+            }
+//            if("OK".equalsIgnoreCase(jsonObject.getString("status"))){
+//                JSONArray results = jsonObject.getJSONArray("results");
+//                for (int i=0;i<results.length();i++ ) {
+//                    JSONObject result = results.getJSONObject(i);
+//                    String indiStr = result.getString("formatted_address");
+//                    Address addr = new Address(Locale.ITALY);
+//                    addr.setAddressLine(0, indiStr);
+//                    retList.add(addr);
+//                }
+//            }
+
+
+        } catch (ClientProtocolException e) {
+            Log.e(full_maps.class.getName(), "Error calling Google geocode webservice.", e);
+        } catch (IOException e) {
+            Log.e(full_maps.class.getName(), "Error calling Google geocode webservice.", e);
+        } catch (JSONException e) {
+            Log.e(full_maps.class.getName(), "Error parsing Google geocode webservice response.", e);
+        }
+
+        return retList;
     }
     public class CustomInfoWindowGoogleMap implements GoogleMap.InfoWindowAdapter {
 
@@ -286,8 +377,10 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                         position.target.latitude,
                         position.target.longitude, position.zoom,
                         position.tilt));
-        if(mcurrLocationMarker!= null){
-            mcurrLocationMarker.remove();}
+        if(mcurrLocationMarker!= null)
+        {
+            mcurrLocationMarker.remove();
+        }
     }
 
     @Override
@@ -374,6 +467,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
                 .build();
         mGoogleApiClient.connect();
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -422,11 +516,7 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
             StringBuilder result = new StringBuilder();
 
 
-
             if (addresses.size() > 0) {
-
-
-
                 Address address = addresses.get(1);
 
                 int maxIndex = address.getMaxAddressLineIndex();
@@ -451,8 +541,6 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
 
                     Toast.LENGTH_LONG).show();
 
-
-
         }
 
     }
@@ -464,8 +552,6 @@ public class full_maps extends AppCompatActivity implements OnMapReadyCallback,
         currentLatitude = mlastLocation.getLatitude();
 
         currentLongitude = mlastLocation.getLongitude();
-
-
 
     }
 

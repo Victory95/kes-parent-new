@@ -1154,54 +1154,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         CurrentLongitude = LatLng.longitude;
     }
 
-    public static List<Address> getFromLocation(double lat, double lng, int maxResult){
-
-        String address = String.format(Locale.ENGLISH,"http://maps.googleapis.com/maps/api/geocode/json?latlng=%1$f,%2$f&sensor=true&language="+Locale.getDefault().getCountry(), lat, lng);
-        HttpGet httpGet = new HttpGet(address);
-        HttpClient client = new DefaultHttpClient();
-        HttpResponse response;
-        StringBuilder stringBuilder = new StringBuilder();
-
-        List<Address> retList = null;
-
-        try {
-            response = client.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-            InputStream stream = entity.getContent();
-            int b;
-            while ((b = stream.read()) != -1) {
-                stringBuilder.append((char) b);
-            }
-
-            JSONObject jsonObject = new JSONObject();
-            jsonObject = new JSONObject(stringBuilder.toString());
-
-
-            retList = new ArrayList<Address>();
-
-
-            if("OK".equalsIgnoreCase(jsonObject.getString("status"))){
-                JSONArray results = jsonObject.getJSONArray("results");
-                for (int i=0;i<results.length();i++ ) {
-                    JSONObject result = results.getJSONObject(i);
-                    String indiStr = result.getString("formatted_address");
-                    Address addr = new Address(Locale.ITALY);
-                    addr.setAddressLine(0, indiStr);
-                    retList.add(addr);
-                }
-            }
-
-
-        } catch (ClientProtocolException e) {
-            Log.e(EditProfileAnak.class.getName(), "Error calling Google geocode webservice.", e);
-        } catch (IOException e) {
-            Log.e(EditProfileAnak.class.getName(), "Error calling Google geocode webservice.", e);
-        } catch (JSONException e) {
-            Log.e(EditProfileAnak.class.getName(), "Error parsing Google geocode webservice response.", e);
-        }
-
-        return retList;
-    }
     @Override
     public void onCameraMoveCanceled() {
         CameraPosition position=Mmap.getCameraPosition();
@@ -1237,7 +1189,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             CurrLocationMarker.remove();
 
         }
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
@@ -1271,6 +1222,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         Mmap.setOnCameraMoveCanceledListener(this);
 
     }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(EditProfileAnak.this)
                 .addConnectionCallbacks(this)
