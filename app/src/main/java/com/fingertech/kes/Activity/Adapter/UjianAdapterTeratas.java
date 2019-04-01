@@ -17,38 +17,36 @@ public class UjianAdapterTeratas extends RecyclerView.Adapter<UjianAdapterTerata
 
 
     private List<ItemUjian> viewItemList;
-    private List<ItemUjian> itemUjianList;
     private Context context;
 
-    private UjianAdapter.OnItemClickListener onItemClickListener;
-    public int row_index = 0;
-    String searchString = "";
-    String mapel ="";
-    String type = "";
+    private UjianAdapterTeratas.OnItemClickListener onItemClickListener;
+
+
 
     public UjianAdapterTeratas(List<ItemUjian> viewItemList,Context context) {
         this.viewItemList = viewItemList;
-        itemUjianList = viewItemList;
         this.context = context;
     }
 
-    public void setOnItemClickListener(UjianAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     @Override
-    public UjianAdapterTeratas.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_ujian_teratas, parent, false);
 
-        UjianAdapterTeratas.MyHolder myHolder = new UjianAdapterTeratas.MyHolder(itemView,onItemClickListener);
+        MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
 
         return myHolder;
 
     }
 
+
+
     @Override
-    public void onBindViewHolder(UjianAdapterTeratas.MyHolder holder, int position) {
+    public void onBindViewHolder(MyHolder holder, int position) {
 
         // Get car item dto in list.
         ItemUjian viewItem = viewItemList.get(position);
@@ -69,7 +67,7 @@ public class UjianAdapterTeratas extends RecyclerView.Adapter<UjianAdapterTerata
         TextView bulan,tanggal,waktu,judul,deskripsi;
         UjianAdapter.OnItemClickListener onItemClickListener;
 
-        public MyHolder(View itemView, UjianAdapter.OnItemClickListener onItemClickListener) {
+        public MyHolder(View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             tanggal     = itemView.findViewById(R.id.tv_tanggal);
             deskripsi   = itemView.findViewById(R.id.tv_deskripsi);

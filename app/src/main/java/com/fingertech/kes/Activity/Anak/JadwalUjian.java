@@ -36,7 +36,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
-import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ItemUjian;
 import com.fingertech.kes.Controller.Auth;
@@ -62,7 +61,6 @@ public class JadwalUjian extends AppCompatActivity {
     List<ItemUjian> itemUjianList = new ArrayList<>();
     ItemUjian itemUjian;
     UjianAdapter ujianAdapter;
-    UjianAdapterTeratas ujianAdapterTeratas;
     Auth mApiInterface;
     String authorization,memberid,school_code,classroom_id;
     RecyclerView rv_ujian,rv_ujian_teratas;
@@ -119,8 +117,8 @@ public class JadwalUjian extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());
         Check_Semester();
+//        Jadwal_ujian_terbaru();
         et_kata_kunci.clearFocus();
-
 
         et_kata_kunci.addTextChangedListener(new TextWatcher() {
 
@@ -238,7 +236,7 @@ public class JadwalUjian extends AppCompatActivity {
                 semester_id = response.body().getData();
                 dapat_semester();
                 Jadwal_ujian();
-                Jadwal_ujian_terbaru();
+//                Jadwal_ujian_terbaru();
                 dapat_mapel();
             }
 
@@ -343,56 +341,59 @@ public class JadwalUjian extends AppCompatActivity {
         }
     }
 
-
-    private void Jadwal_ujian_terbaru() {
-        progressBar();
-        showDialog();
-        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
-
-        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
-
-            @Override
-            public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
-                Log.i("KES", response.code() + "");
-                hideDialog();
-
-                JSONResponse.JadwalUjian resource = response.body();
-
-                status = resource.status;
-                code    = resource.code;
-
-                ItemUjian itemUjian= null;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        waktu         = response.body().getData().get(i).getExam_time_ok();
-                        tanggal_teratas     = response.body().getData().get(i).getExam_date_ok();
-                        judul       = response.body().getData().get(i).getCources_name();
-                        des   = response.body().getData().get(i).getExam_desc();
-                        bulan = response.body().getData().get(i).getExam_date_ok();
-                        itemUjian = new ItemUjian();
-                        itemUjian.setJam(waktu);
-                        itemUjian.setTanggal(tanggal_teratas);
-                        itemUjian.setMapel(judul);
-                        itemUjian.setDeskripsi(deskripsi);
-                        itemUjianList.add(itemUjian);
-                    }
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this, LinearLayoutManager.HORIZONTAL, false);
-                    rv_ujian_teratas.setLayoutManager(layoutManager);
-                    rv_ujian_teratas.setAdapter(ujianAdapterTeratas);
-                }
-
-
-            }
-
-            @Override
-            public void onFailure(Call<JSONResponse.JadwalUjian> call, Throwable t) {
-                Log.d("onFailure", t.toString());
-                hideDialog();
-            }
-
-        });
-
-    }
+//
+//    private void Jadwal_ujian_terbaru() {
+//        progressBar();
+//        showDialog();
+//        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
+//
+//        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
+//
+//            @Override
+//            public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
+//                Log.i("KES", response.code() + "");
+//                hideDialog();
+//
+//                JSONResponse.JadwalUjian resource = response.body();
+//
+//                status = resource.status;
+//                code    = resource.code;
+//
+//                ItemUjian itemUjian= null;
+//                if (status == 1 && code.equals("DTS_SCS_0001")) {
+//                    for (int i = 0; i < response.body().getData().size(); i++) {
+//                        waktu         = response.body().getData().get(i).getExam_time_ok();
+//                        tanggal_teratas     = response.body().getData().get(i).getExam_date_ok();
+//                        judul       = response.body().getData().get(i).getCources_name();
+//                        type        = response.body().getData().get(i).getType_name();
+//                        deskripsi   = response.body().getData().get(i).getExam_desc();
+//                        nilai       = response.body().getData().get(i).getScore_value();
+//                        itemUjian = new ItemUjian();
+//                        itemUjian.setJam(jam);
+//                        itemUjian.setTanggal(tanggal);
+//                        itemUjian.setMapel(mapel);
+//                        itemUjian.setType_id(type);
+//                        itemUjian.setDeskripsi(deskripsi);
+//                        itemUjian.setNilai(nilai);
+//                        itemUjianList.add(itemUjian);
+//                    }
+//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this, LinearLayoutManager.HORIZONTAL, false);
+//                    rv_ujian_teratas.setLayoutManager(layoutManager);
+//                    rv_ujian_teratas.setAdapter(ujianAdapter);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JSONResponse.JadwalUjian> call, Throwable t) {
+//                Log.d("onFailure", t.toString());
+//                hideDialog();
+//            }
+//
+//        });
+//
+//    }
 
     private void Jadwal_ujian(){
         progressBar();
