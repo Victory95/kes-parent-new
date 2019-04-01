@@ -356,18 +356,6 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
         }
 
-        //Place current location marker
-        final LatLng latLng = new LatLng(latitude_parent, longitude_parent);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
-
-        //move map camera
-        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
 
         //stop location updates
@@ -514,6 +502,17 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                     longitude_parent        = Double.parseDouble(response.body().data.getParent_longitude());
                     Nomorrumah.setText(nomorrumah);
                     Nomorponsel.setText(nomorponsel);
+                    final LatLng latLng = new LatLng(latitude_parent, longitude_parent);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+                    final MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    markerOptions.title("Lokasi Rumah");
+                    markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
+                    mcurrLocationMarker =mmap.addMarker(markerOptions);
+                    //move map camera
+                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
                 } else {
                     if(status == 0 && code.equals("DPG_ERR_0001")){

@@ -46,6 +46,7 @@ import com.fingertech.kes.Activity.ParentMain;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.rey.material.widget.Spinner;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.R;
@@ -185,30 +186,30 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.mapKerja);
         mapFragment.getMapAsync(this);
-        arro           = view.findViewById(R.id.arrow);
-        Jabatan        = view.findViewById(R.id.et_jabatan);
+        arro = view.findViewById(R.id.arrow);
+        Jabatan = view.findViewById(R.id.et_jabatan);
         Namaperusahaan = view.findViewById(R.id.et_nama_perusahaan);
-        namakerja      = view.findViewById(R.id.nama_kerja);
-        et_pekerjaan   = view.findViewById(R.id.sp_pekerjaan);
+        namakerja = view.findViewById(R.id.nama_kerja);
+        et_pekerjaan = view.findViewById(R.id.sp_pekerjaan);
         et_penghasilan = view.findViewById(R.id.sp_penghasilan);
-        alamatkerja    = view.findViewById(R.id.alamat_kerja);
-        parentMain        = (ParentMain)getActivity();
-        indicator         = view.findViewById(R.id.indicators);
-        back              = view.findViewById(R.id.btn_kembali);
-        next              = view.findViewById(R.id.btn_berikut);
-        fragmentAdapter   = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        ParentPager       = parentMain.findViewById(R.id.PagerParent);
+        alamatkerja = view.findViewById(R.id.alamat_kerja);
+        parentMain = (ParentMain) getActivity();
+        indicator = view.findViewById(R.id.indicators);
+        back = view.findViewById(R.id.btn_kembali);
+        next = view.findViewById(R.id.btn_berikut);
+        fragmentAdapter = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+        ParentPager = parentMain.findViewById(R.id.PagerParent);
         til_nama_perusahaan = view.findViewById(R.id.til_nama_perusahaan);
-        til_jabatan         = view.findViewById(R.id.til_jabatan);
-        til_pendidikan      = view.findViewById(R.id.til_pendidikan);
-        til_penghasilan     = view.findViewById(R.id.til_penghasilan);
-        til_alamatkerja     = view.findViewById(R.id.til_alamat_kerja);
+        til_jabatan = view.findViewById(R.id.til_jabatan);
+        til_pendidikan = view.findViewById(R.id.til_pendidikan);
+        til_penghasilan = view.findViewById(R.id.til_penghasilan);
+        til_alamatkerja = view.findViewById(R.id.til_alamat_kerja);
 
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParentPager.setCurrentItem(getItem(-1),true);
+                ParentPager.setCurrentItem(getItem(-1), true);
             }
         });
         setUiPageViewController();
@@ -222,7 +223,7 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), full_maps.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -230,37 +231,37 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), full_maps.class);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
-        mApiInterface   = ApiClient.getClient().create(Auth.class);
+        mApiInterface = ApiClient.getClient().create(Auth.class);
 
         sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        authorization = sharedpreferences.getString(TAG_TOKEN,"token");
-        parent_id     = sharedpreferences.getString(TAG_MEMBER_ID,"member_id");
-        student_id    = sharedpreferences.getString(TAG_STUDENT_ID,"student_id");
-        student_nik   = sharedpreferences.getString(TAG_STUDENT_NIK,"student_nik");
-        school_id     = sharedpreferences.getString(TAG_SCHOOL_ID,"school_id");
-        fullname      = sharedpreferences.getString(TAG_FULLNAME,"fullname");
-        email         = sharedpreferences.getString(TAG_EMAIL,"email");
-        childrenname  = sharedpreferences.getString(TAG_NAMA_ANAK,"childrenname");
-        school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,"school_name");
-        school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,"school_code");
-        parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
+        authorization = sharedpreferences.getString(TAG_TOKEN, "token");
+        parent_id = sharedpreferences.getString(TAG_MEMBER_ID, "member_id");
+        student_id = sharedpreferences.getString(TAG_STUDENT_ID, "student_id");
+        student_nik = sharedpreferences.getString(TAG_STUDENT_NIK, "student_nik");
+        school_id = sharedpreferences.getString(TAG_SCHOOL_ID, "school_id");
+        fullname = sharedpreferences.getString(TAG_FULLNAME, "fullname");
+        email = sharedpreferences.getString(TAG_EMAIL, "email");
+        childrenname = sharedpreferences.getString(TAG_NAMA_ANAK, "childrenname");
+        school_name = sharedpreferences.getString(TAG_NAMA_SEKOLAH, "school_name");
+        school_code = sharedpreferences.getString(TAG_SCHOOL_CODE, "school_code");
+        parent_nik = sharedpreferences.getString(TAG_PARENT_NIK, "parent_nik");
 
-        sharedviewpager     = getActivity().getSharedPreferences(my_shared_viewpager, Context.MODE_PRIVATE);
-        namaparent          = sharedviewpager.getString(TAG_PARENT_NAME,"nama_parent");
-        emailparent         = sharedviewpager.getString(TAG_EMAIL_PARENT,"email_parent");
-        nikparent           = sharedviewpager.getString(TAG_NIK_PARENT,"nik_parent");
-        tempatlahir         = sharedviewpager.getString(TAG_TEMPAT_LAHIR,"tempat_lahir");
-        tanggallahir        = sharedviewpager.getString(TAG_TANGGAL_LAHIR,"tanggal_lahir");
-        hubungan            = sharedviewpager.getString(TAG_HUBUNGAN,"hubungan");
-        kewarganegaraan     = sharedviewpager.getString(TAG_KEWARGANEGARAAN,"type_warga");
-        nomorrumah          = sharedviewpager.getString(TAG_NOMOR_RUMAH,"nomor_rumah");
-        nomorponsel         = sharedviewpager.getString(TAG_NOMOR_PONSEL,"nomor_ponsel");
-        latitude_parent     = sharedviewpager.getString(TAG_LATITUDE_RUMAH,"latitude_rumah");
-        longitude_parent    = sharedviewpager.getString(TAG_LONGITUDE_RUMAH,"longitude_rumah");
-        alamatrumah         = sharedviewpager.getString(TAG_ALAMAT_RUMAH,"alamat_rumah");
+        sharedviewpager = getActivity().getSharedPreferences(my_shared_viewpager, Context.MODE_PRIVATE);
+        namaparent = sharedviewpager.getString(TAG_PARENT_NAME, "nama_parent");
+        emailparent = sharedviewpager.getString(TAG_EMAIL_PARENT, "email_parent");
+        nikparent = sharedviewpager.getString(TAG_NIK_PARENT, "nik_parent");
+        tempatlahir = sharedviewpager.getString(TAG_TEMPAT_LAHIR, "tempat_lahir");
+        tanggallahir = sharedviewpager.getString(TAG_TANGGAL_LAHIR, "tanggal_lahir");
+        hubungan = sharedviewpager.getString(TAG_HUBUNGAN, "hubungan");
+        kewarganegaraan = sharedviewpager.getString(TAG_KEWARGANEGARAAN, "type_warga");
+        nomorrumah = sharedviewpager.getString(TAG_NOMOR_RUMAH, "nomor_rumah");
+        nomorponsel = sharedviewpager.getString(TAG_NOMOR_PONSEL, "nomor_ponsel");
+        latitude_parent = sharedviewpager.getString(TAG_LATITUDE_RUMAH, "latitude_rumah");
+        longitude_parent = sharedviewpager.getString(TAG_LONGITUDE_RUMAH, "longitude_rumah");
+        alamatrumah = sharedviewpager.getString(TAG_ALAMAT_RUMAH, "alamat_rumah");
 
 
         data_parent_student_get();
@@ -276,6 +277,28 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         });
         return view;
     }
+//        if (!isGooglePlayServicesAvailable()) {
+//            Log.d("onCreate", "Google Play Services not available. Ending Test case.");
+//            parentMain.finish();
+//        }
+//        else {
+//            Log.d("onCreate", "Google Play Services available. Continuing.");
+//        }
+//        return view;
+//
+//    }
+//    private boolean isGooglePlayServicesAvailable() {
+//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+//        int result = googleAPI.isGooglePlayServicesAvailable(getContext());
+//        if(result != ConnectionResult.SUCCESS) {
+//            if(googleAPI.isUserResolvableError(result)) {
+//                googleAPI.getErrorDialog(getActivity(), result,
+//                        0).show();
+//            }
+//            return false;
+//        }
+//        return true;
+//    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -376,18 +399,6 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         }
 
         //Place current location marker
-        final LatLng latLng = new LatLng(latitude_kerja, longitude_kerja);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -596,6 +607,19 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
                             employment = plantsList.get(position);
                         }
                     });
+                    final LatLng latLng = new LatLng(latitude_kerja, longitude_kerja);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+                    final MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    markerOptions.title("Lokasi Kerja");
+                    markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
+                    mCurrLocationMarker = mMap.addMarker(markerOptions);
+                    //move map camera
+                    mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+
                     employment = et_pekerjaan.getSelectedItem().toString();
 
 
