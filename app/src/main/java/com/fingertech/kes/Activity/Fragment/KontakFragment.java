@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.Anak.EditProfileAnak;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.ParentMain;
@@ -79,7 +80,8 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnCameraMoveStartedListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnCameraMoveCanceledListener, GoogleMap.OnCameraIdleListener {
 
-
+    double CurrentLatitude;
+    double CurrentLongitude;
     private GoogleMap mmap;
     private LocationRequest mlocationRequest;
     private Marker mcurrLocationMarker;
@@ -314,9 +316,11 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         mmap = googleMap;
 
+
+
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getContext(),
+            if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
@@ -330,12 +334,10 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         if (mcurrLocationMarker != null) {
             mcurrLocationMarker.remove();
         }
-
+        mmap.setOnCameraIdleListener(this);
         mmap.setOnCameraMoveStartedListener(this);
         mmap.setOnCameraMoveListener(this);
         mmap.setOnCameraMoveCanceledListener(this);
-        mmap.setOnCameraIdleListener(this);
-
 
     }
 
@@ -347,6 +349,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 .build();
         mGoogleApiClient.connect();
     }
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -382,6 +385,8 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         }
 
     }
+
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -455,18 +460,22 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 final MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng1);
                 markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map));
+                markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
 
                 //move map camera
                 mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
                 if(mcurrLocationMarker!= null){
                     mcurrLocationMarker.remove();}
-                mcurrLocationMarker = mmap.addMarker(markerOptions);
+                     mcurrLocationMarker = mmap.addMarker(markerOptions);
                 alamatrumah.setText(strEditText);
+                CurrentLatitude     = lati;
+                CurrentLongitude    = longi;
             }
         }
     }
+
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable background = ContextCompat.getDrawable(context, vectorResId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());

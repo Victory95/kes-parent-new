@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
+import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ItemUjian;
 import com.fingertech.kes.Controller.Auth;
@@ -61,14 +62,17 @@ public class JadwalUjian extends AppCompatActivity {
     List<ItemUjian> itemUjianList = new ArrayList<>();
     ItemUjian itemUjian;
     UjianAdapter ujianAdapter;
+    UjianAdapterTeratas ujianAdapterTeratas;
     Auth mApiInterface;
     String authorization,memberid,school_code,classroom_id;
-    RecyclerView rv_ujian,rv_ujian_teratas;
+    RecyclerView rv_ujian,rv_teratas;
+    LinearLayout recyclerin;
     Toolbar toolbar;
     ProgressDialog dialog;
     int status;
     String code;
     String jam,tanggal,type,nilai,mapel,deskripsi,semester_id,start_date,end_date,semester,start_year,start_end;
+    String waktu,bulan,judul,tanggal_teratas,des;
     TextView no_ujian;
     String date,semester_nama;
     TextView tv_semester,tv_filter,tv_semesters,tv_reset,tv_slide;
@@ -100,6 +104,8 @@ public class JadwalUjian extends AppCompatActivity {
         tv_semester     = findViewById(R.id.tv_semester);
         tv_filter       = findViewById(R.id.tv_filter);
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
+        recyclerin      = findViewById(R.id.recycler_menu_teratas);
+        rv_teratas      = findViewById(R.id.recycle_teratas);
 //        ll_slide        = findViewById(R.id.slide_down);
 
         sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
@@ -339,10 +345,8 @@ public class JadwalUjian extends AppCompatActivity {
         }
     }
 
-
-//    private void Jadwal_ujian_terbaru() {
-//        progressBar();
-//        showDialog();
+//    private void Jadwal_ujian_terbaru(){
+//
 //        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
 //
 //        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
@@ -360,24 +364,23 @@ public class JadwalUjian extends AppCompatActivity {
 //                ItemUjian itemUjian= null;
 //                if (status == 1 && code.equals("DTS_SCS_0001")) {
 //                    for (int i = 0; i < response.body().getData().size(); i++) {
-//                        jam         = response.body().getData().get(i).getExam_time_ok();
-//                        tanggal     = response.body().getData().get(i).getExam_date_ok();
-//                        mapel       = response.body().getData().get(i).getCources_name();
-//                        type        = response.body().getData().get(i).getType_name();
-//                        deskripsi   = response.body().getData().get(i).getExam_desc();
-//                        nilai       = response.body().getData().get(i).getScore_value();
+//                        waktu            = response.body().getData().get(i).getExam_time_ok();
+//                        tanggal_teratas  = response.body().getData().get(i).getExam_date_ok();
+//                        judul            = response.body().getData().get(i).getCources_name();
+//                        des              = response.body().getData().get(i).getType_name();
+//                        bulan            = response.body().getData().get(i).getExam_date_ok();
 //                        itemUjian = new ItemUjian();
-//                        itemUjian.setJam(jam);
-//                        itemUjian.setTanggal(tanggal);
-//                        itemUjian.setMapel(mapel);
+//                        itemUjian.setJam(waktu);
+//                        itemUjian.setTanggal(tanggal_teratas);
+//                        itemUjian.setMapel(judul);
 //                        itemUjian.setType_id(type);
-//                        itemUjian.setDeskripsi(deskripsi);
-//                        itemUjian.setNilai(nilai);
+//                        itemUjian.setDeskripsi(des);
 //                        itemUjianList.add(itemUjian);
 //                    }
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this, LinearLayoutManager.HORIZONTAL, false);
-//                    rv_ujian_teratas.setLayoutManager(layoutManager);
-//                    rv_ujian_teratas.setAdapter(ujianAdapter);
+//                    LinearLayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//                    rv_teratas.setLayoutManager(layoutManager);
+//                    rv_teratas.setAdapter(ujianAdapterTeratas);
 //                }
 //
 //
@@ -390,7 +393,6 @@ public class JadwalUjian extends AppCompatActivity {
 //            }
 //
 //        });
-//
 //    }
 
     private void Jadwal_ujian(){

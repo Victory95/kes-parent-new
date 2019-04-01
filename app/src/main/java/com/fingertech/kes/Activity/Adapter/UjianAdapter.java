@@ -61,6 +61,7 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
         holder.type_id.setText(viewItem.getType_id());
         holder.nilai.setText(viewItem.getNilai());
         holder.deskripsi.setText(Html.fromHtml(viewItem.getDeskripsi()));
+
     }
 
     @Override
