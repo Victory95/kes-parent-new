@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -236,13 +237,11 @@ public class ProfileParent extends AppCompatActivity {
                         palette.getVibrantSwatch();
 
                 if (vibrant != null) {
-
                     collapsingToolbarLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                     collapsingToolbarLayout.setStatusBarScrimColor(getResources().getColor(R.color.colorPrimary));
                     collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.colorPrimary));
                 }
             }
-
         });
        cv_profile.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -300,20 +299,27 @@ public class ProfileParent extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+       super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
+    }
+
     private void selectImage() {
         final CharSequence[] items = {"Take Photo", "Choose from Library",
                 "Cancel"};
@@ -353,12 +359,10 @@ public class ProfileParent extends AppCompatActivity {
                     Glide.with(ProfileParent.this).load(fileUri).into(image_profil);
                     File files = FileUtils.getFile(ProfileParent.this, fileUri);
                     uploadImage(files);
-
                 }
             } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-
                 uri = data.getData();
-                Picasso.get().load(uri).into(image_profil);
+                Glide.with(ProfileParent.this).load(uri).into(image_profil);
                 File file = FileUtils.getFile(ProfileParent.this, uri);
                 uploadImage(file);
             }
@@ -407,6 +411,13 @@ public class ProfileParent extends AppCompatActivity {
         });
     }
 
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
     private void captureImage() {
         if (Build.VERSION.SDK_INT > 21) { //use this if Lollipop_Mr1 (API 22) or above

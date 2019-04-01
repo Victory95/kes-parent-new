@@ -90,7 +90,7 @@ public class MenuSatuFragment extends Fragment{
             intent.putExtra("school_code", school_code);
             intent.putExtra("student_id", student_id);
             intent.putExtra("school_name",school_name);
-            startActivity(intent);
+            startActivityForResult(intent,1);
         });
 
         btn_jadwal.setOnClickListener(v -> {

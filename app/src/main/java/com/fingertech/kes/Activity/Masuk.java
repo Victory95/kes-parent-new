@@ -139,17 +139,17 @@ public class Masuk extends AppCompatActivity {
         checkInternetCon();
 
 
-        btn_masuk      = (Button) findViewById(R.id.btn_Masuk);
-        btn_google     = (Button) findViewById(R.id.btn_Google);
-        btn_facebook   = (Button) findViewById(R.id.btn_Facebook);
-        tvb_lupa_pass  = (TextView) findViewById(R.id.tvb_lupa_pass);
-        tvb_daftar     = (TextView) findViewById(R.id.tvb_daftar);
-        et_email       = (EditText) findViewById(R.id.et_email);
-        et_kata_sandi  = (EditText) findViewById(R.id.et_kata_sandi);
-        til_email      = (TextInputLayout) findViewById(R.id.til_email);
-        til_kata_sandi = (TextInputLayout) findViewById(R.id.til_kata_sandi);
-        loginButton    = (LoginButton) findViewById(R.id.login_button);
-        sign_in_button = (SignInButton) findViewById(R.id.sign_in_button);
+        btn_masuk      = findViewById(R.id.btn_Masuk);
+        btn_google     = findViewById(R.id.btn_Google);
+        btn_facebook   = findViewById(R.id.btn_Facebook);
+        tvb_lupa_pass  = findViewById(R.id.tvb_lupa_pass);
+        tvb_daftar     = findViewById(R.id.tvb_daftar);
+        et_email       = findViewById(R.id.et_email);
+        et_kata_sandi  = findViewById(R.id.et_kata_sandi);
+        til_email      = findViewById(R.id.til_email);
+        til_kata_sandi = findViewById(R.id.til_kata_sandi);
+        loginButton    = findViewById(R.id.login_button);
+        sign_in_button = findViewById(R.id.sign_in_button);
 
         ////// sharedpreferences
         sharedpreferences = getSharedPreferences(my_shared_preferences, Context.MODE_PRIVATE);
@@ -347,7 +347,7 @@ public class Masuk extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> call = mApiInterface.login_post(et_email.getText().toString(), et_kata_sandi.getText().toString(), device_id,firebase_token);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -401,7 +401,7 @@ public class Masuk extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            if(count_student.toString().equals("0")) {
+                            if(count_student.equals("0")) {
                                 Intent intent = new Intent(Masuk.this, AnakAkses.class);
                                 intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                                 intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
@@ -571,7 +571,7 @@ public class Masuk extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email.toString(), fullname.toString(), id.toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> postCall = mApiInterface.register_sosmed_post(email, fullname, id, device_id,firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -653,7 +653,7 @@ public class Masuk extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id.toString(), device_id.toString(),firebase_token);
+        Call<JSONResponse> postCall = mApiInterface.login_sosmed_post(id, device_id,firebase_token);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

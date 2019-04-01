@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -299,20 +300,26 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         });
 
     }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                finish();
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        return true;
+//    }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onBackPressed() {
+        super.onBackPressed();
+        NavUtils.navigateUpFromSameTask(this);
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
 
     public void data_student_get(){
         progressBar();
@@ -389,7 +396,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     }else if (kelas.equals("15")){
                         kelas = "3 SMA";
                     }
-                    Log.d("location2",latitudeanak+"/"+longitudeanak);
+
                     kelas_anak.setText("Sedang bersekolah di "+school_name+" Kelas "+kelas);
                     jenis_kelamin.setText(jeniskelamin);
                     nis.setText("Nis : "+Nis);
@@ -419,6 +426,19 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                     int[] androidColors = getContext().getResources().getIntArray(R.array.androidcolors);
                     int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
                     String random  = String.valueOf(randomAndroidColor);
+
+                    final LatLng latLng = new LatLng(latitudeanak, longitudeanak);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+                    final MarkerOptions markerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .title("Location")
+                            .icon(bitmapDescriptorFromVector(ProfilAnak.this, R.drawable.ic_map));
+
+                    //move map camera
+                    mapAnak.addMarker(markerOptions);
+                    mapAnak.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    mapAnak.animateCamera(CameraUpdateFactory.zoomTo(17));
+
 
                     if (foto.equals("")){
                         Glide.with(ProfilAnak.this).load("https://ui-avatars.com/api/?name="+namalengkap+"&background=40bfe8&color=fff").into(image_anak);
@@ -459,18 +479,6 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapAnak = googleMap;
-        final LatLng latLng = new LatLng(latitudeanak, longitudeanak);
-        Log.d("location",latLng.latitude+"/"+latLng.longitude);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-        final MarkerOptions markerOptions = new MarkerOptions()
-                .position(latLng)
-                .title("Location")
-                .icon(bitmapDescriptorFromVector(ProfilAnak.this, R.drawable.ic_map));
-
-        //move map camera
-        mapAnak.addMarker(markerOptions);
-        mapAnak.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        mapAnak.animateCamera(CameraUpdateFactory.zoomTo(17));
 
     }
 

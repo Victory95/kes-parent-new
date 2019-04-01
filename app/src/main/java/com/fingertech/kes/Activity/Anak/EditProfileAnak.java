@@ -51,6 +51,7 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Service.DBHelper;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -68,12 +69,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.Spinner;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -334,6 +347,14 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             }
         });
 
+        if (!isGooglePlayServicesAvailable()) {
+            Log.d("onCreate", "Google Play Services not available. Ending Test case.");
+            finish();
+        }
+        else {
+            Log.d("onCreate", "Google Play Services available. Continuing.");
+        }
+
         data_student_get();
         btn_simpan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -342,6 +363,19 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             }
         });
     }
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if(result != ConnectionResult.SUCCESS) {
+            if(googleAPI.isUserResolvableError(result)) {
+                googleAPI.getErrorDialog(this, result,
+                        0).show();
+            }
+            return false;
+        }
+        return true;
+    }
+
 
     public void submitForm() {
         if (!validateTingkatan()) {
@@ -1029,6 +1063,19 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         }
                     });
 
+                    //Place current location marker
+                    final LatLng latLng = new LatLng(CurrentLatitude, CurrentLongitude);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+                    final MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    markerOptions.title("Current Position");
+                    markerOptions.icon(bitmapDescriptorFromVector(EditProfileAnak.this, R.drawable.ic_map));
+
+                    //move map camera
+                    Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                    CurrLocationMarker = Mmap.addMarker(markerOptions);
 
                 } else {
                     if(status == 0 && code.equals("DTS_ERR_0001")) {
@@ -1087,7 +1134,6 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onCameraIdle() {
         LatLng LatLng = Mmap.getCameraPosition().target;
-        Log.d("location",LatLng.latitude+"/"+LatLng.longitude);
         Geocoder geocode1 = new Geocoder(EditProfileAnak.this);
         try {
             List<Address> addressList = geocode1.getFromLocation(LatLng.latitude, LatLng.longitude, 1);
@@ -1107,7 +1153,55 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         CurrentLatitude = LatLng.latitude;
         CurrentLongitude = LatLng.longitude;
     }
+    
+    public static List<Address> getFromLocation(double lat, double lng, int maxResult){
 
+        String address = String.format(Locale.ENGLISH,"http://maps.googleapis.com/maps/api/geocode/json?latlng=%1$f,%2$f&sensor=true&language="+Locale.getDefault().getCountry(), lat, lng);
+        HttpGet httpGet = new HttpGet(address);
+        HttpClient client = new DefaultHttpClient();
+        HttpResponse response;
+        StringBuilder stringBuilder = new StringBuilder();
+
+        List<Address> retList = null;
+
+        try {
+            response = client.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            InputStream stream = entity.getContent();
+            int b;
+            while ((b = stream.read()) != -1) {
+                stringBuilder.append((char) b);
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject = new JSONObject(stringBuilder.toString());
+
+
+            retList = new ArrayList<Address>();
+
+
+            if("OK".equalsIgnoreCase(jsonObject.getString("status"))){
+                JSONArray results = jsonObject.getJSONArray("results");
+                for (int i=0;i<results.length();i++ ) {
+                    JSONObject result = results.getJSONObject(i);
+                    String indiStr = result.getString("formatted_address");
+                    Address addr = new Address(Locale.ITALY);
+                    addr.setAddressLine(0, indiStr);
+                    retList.add(addr);
+                }
+            }
+
+
+        } catch (ClientProtocolException e) {
+            Log.e(EditProfileAnak.class.getName(), "Error calling Google geocode webservice.", e);
+        } catch (IOException e) {
+            Log.e(EditProfileAnak.class.getName(), "Error calling Google geocode webservice.", e);
+        } catch (JSONException e) {
+            Log.e(EditProfileAnak.class.getName(), "Error parsing Google geocode webservice response.", e);
+        }
+
+        return retList;
+    }
     @Override
     public void onCameraMoveCanceled() {
         CameraPosition position=Mmap.getCameraPosition();
@@ -1143,27 +1237,12 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             CurrLocationMarker.remove();
 
         }
-        //Place current location marker
-        final LatLng latLng = new LatLng(CurrentLatitude, CurrentLongitude);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
 
-        final MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(bitmapDescriptorFromVector(EditProfileAnak.this, R.drawable.ic_map));
-
-        //move map camera
-        Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-        Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        CurrLocationMarker = Mmap.addMarker(markerOptions);
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,  this);
             mGoogleApiClient.connect();
         }
-        CurrentLatitude     = latLng.latitude;
-        CurrentLongitude    = latLng.longitude;
-
     }
 
     @Override

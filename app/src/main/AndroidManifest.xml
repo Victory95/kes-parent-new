@@ -270,7 +270,11 @@
             android:name=".Activity.ProfileParent"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.DarkStatusBar" />
+            android:theme="@style/AppTheme.DarkStatusBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.MenuUtama" />
+        </activity>
         <activity
             android:name=".Activity.ChangePassword"
             android:label="Change Password"
@@ -295,7 +299,11 @@
             android:name=".Activity.Anak.ProfilAnak"
             android:label="Profile Anak"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fingertech.kes.Activity.MenuUtama" />
+        </activity>
         <activity
             android:name=".Activity.Anak.JadwalPelajaran"
             android:label="Jadwal Kelas"
