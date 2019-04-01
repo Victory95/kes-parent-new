@@ -16,6 +16,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -231,6 +233,8 @@ public class MenuUtama extends AppCompatActivity
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     int height,width;
     String member,count;
+
+    ConnectivityManager conMgr;
     View actionView;
     NewsAdapter newsAdapter;
     List <NewsModel>newsModelList = new ArrayList<>();
@@ -312,7 +316,9 @@ public class MenuUtama extends AppCompatActivity
         inkPageIndicator.setViewPager(ParentPager);
 
         get_profile();
-        Daftar_Berita();
+        checkInternetCon();
+
+        setting_lokasi();
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -366,27 +372,32 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onRefresh() {
                 Log.d("member",member+"");
-                if (member.equals("3")){
-                    if (count.equals("0")){
-                        Refreshcounter = Refreshcounter + 1;
-                        swipeRefreshLayout.setRefreshing(false);
-                    }else {
-                        if (profileModels!=null){
-                            get_profile();
-                            send_data();
-                            send_data2();
+                if (member==null){
+                    checkInternetCon();
+                    swipeRefreshLayout.setRefreshing(false);
+                    Refreshcounter = Refreshcounter + 1;
+                }else {
+                    if (member.equals("3")) {
+                        if (count.equals("0")) {
                             Refreshcounter = Refreshcounter + 1;
                             swipeRefreshLayout.setRefreshing(false);
-                        }else {
-                            Log.d("Eror","Data Belum ada");
+                        } else {
+                            if (profileModels != null) {
+                                get_profile();
+                                send_data();
+                                send_data2();
+                                Refreshcounter = Refreshcounter + 1;
+                                swipeRefreshLayout.setRefreshing(false);
+                            } else {
+                                Log.d("Eror", "Data Belum ada");
+                            }
                         }
+                    } else {
+                        Refreshcounter = Refreshcounter + 1;
+                        swipeRefreshLayout.setRefreshing(false);
+
                     }
-                }else {
-                    Refreshcounter = Refreshcounter + 1;
-                    swipeRefreshLayout.setRefreshing(false);
-
                 }
-
             }
         });
 
@@ -984,44 +995,36 @@ public class MenuUtama extends AppCompatActivity
 
     }
 
+    protected boolean isLocationEnabled(){
+        String le = Context.LOCATION_SERVICE;
+       LocationManager locationManager = (LocationManager) getSystemService(le);
+        if(!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void setting_lokasi(){
-        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        boolean network_enabled = false;
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {
-            Log.d("GPS",ex.toString());
-        }
-
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {
-            Log.d("Network",ex.toString());
-        }
-
-        if(!gps_enabled && !network_enabled) {
-            // notify user
-            new FancyGifDialog.Builder(MenuUtama.this)
-                    .setTitle("Gps Tidak Aktif")
-                    .setMessage("Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda")
-                    .setNegativeBtnText("Tidak")
-                    .setNegativeBtnBackground("#f0f0f0")
-                    .setPositiveBtnBackground("#40bfe8")
-                    .setPositiveBtnText("Ya")
-                    .setGifResource(R.drawable.ic_location)   //Pass your Gif here
-                    .isCancellable(true)
-                    .OnPositiveClicked(() -> {
-                        getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    })
-                    .OnNegativeClicked(new FancyGifDialogListener() {
-                        @Override
-                        public void OnClick() {
-                        }
-                    })
-
-                    .build();
+        isLocationEnabled();
+        if(!isLocationEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MenuUtama.this);
+            builder.setTitle(R.string.network_not_enabled)
+                    .setMessage(R.string.open_location_settings)
+                    .setPositiveButton(R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                }
+                            })
+                    .setNegativeButton(R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 
@@ -1502,4 +1505,20 @@ public class MenuUtama extends AppCompatActivity
                     }
                 });
     }
+
+
+
+    public void checkInternetCon(){
+        conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        {
+            if (conMgr.getActiveNetworkInfo() != null
+                    && conMgr.getActiveNetworkInfo().isAvailable()
+                    && conMgr.getActiveNetworkInfo().isConnected()) {
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
 }

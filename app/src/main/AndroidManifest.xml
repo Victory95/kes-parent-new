@@ -298,7 +298,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.JadwalPelajaran"
-            android:label="Jadwal Pelajaran"
+            android:label="Jadwal Kelas"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -579,6 +579,7 @@ public class Masuk extends AppCompatActivity {
                 Log.d("TAG",response.code()+"");
 
                 JSONResponse resource = response.body();
+
                 status = resource.status;
                 code = resource.code;
                 token = resource.token;

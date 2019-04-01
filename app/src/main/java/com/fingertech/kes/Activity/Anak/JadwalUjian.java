@@ -63,7 +63,7 @@ public class JadwalUjian extends AppCompatActivity {
     UjianAdapter ujianAdapter;
     Auth mApiInterface;
     String authorization,memberid,school_code,classroom_id;
-    RecyclerView rv_ujian;
+    RecyclerView rv_ujian,rv_ujian_teratas;
     Toolbar toolbar;
     ProgressDialog dialog;
     int status;
@@ -88,12 +88,14 @@ public class JadwalUjian extends AppCompatActivity {
     View view;
     String mata_pelajaran,type_pelajaran;
     SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ujian_sheet);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         rv_ujian        = findViewById(R.id.recycleview_ujian);
+        rv_ujian_teratas = findViewById(R.id.recyclerviewteratas);
         toolbar         = findViewById(R.id.toolbar_ujian);
         no_ujian        = findViewById(R.id.tv_no_ujian);
         tv_semester     = findViewById(R.id.tv_semester);
@@ -109,12 +111,12 @@ public class JadwalUjian extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_launcher_background), PorterDuff.Mode.SRC_ATOP);
+        toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());
         Check_Semester();
-
+//        Jadwal_ujian_terbaru();
         et_kata_kunci.clearFocus();
 
         et_kata_kunci.addTextChangedListener(new TextWatcher() {
@@ -206,7 +208,9 @@ public class JadwalUjian extends AppCompatActivity {
         btn_down.setOnClickListener(v -> mBottomSheetDialog.dismiss());
         tv_slide.setOnClickListener(v -> mBottomSheetDialog.dismiss());
         tv_reset.setOnClickListener(v -> {
-            Jadwal_ujian();
+//
+
+
             mBottomSheetDialog.dismiss();
         });
         btn_cari.setOnClickListener(v -> {
@@ -231,6 +235,7 @@ public class JadwalUjian extends AppCompatActivity {
                 semester_id = response.body().getData();
                 dapat_semester();
                 Jadwal_ujian();
+//                Jadwal_ujian_terbaru();
                 dapat_mapel();
             }
 
@@ -334,6 +339,60 @@ public class JadwalUjian extends AppCompatActivity {
             return "";
         }
     }
+
+
+//    private void Jadwal_ujian_terbaru() {
+//        progressBar();
+//        showDialog();
+//        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
+//
+//        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
+//
+//            @Override
+//            public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
+//                Log.i("KES", response.code() + "");
+//                hideDialog();
+//
+//                JSONResponse.JadwalUjian resource = response.body();
+//
+//                status = resource.status;
+//                code    = resource.code;
+//
+//                ItemUjian itemUjian= null;
+//                if (status == 1 && code.equals("DTS_SCS_0001")) {
+//                    for (int i = 0; i < response.body().getData().size(); i++) {
+//                        jam         = response.body().getData().get(i).getExam_time_ok();
+//                        tanggal     = response.body().getData().get(i).getExam_date_ok();
+//                        mapel       = response.body().getData().get(i).getCources_name();
+//                        type        = response.body().getData().get(i).getType_name();
+//                        deskripsi   = response.body().getData().get(i).getExam_desc();
+//                        nilai       = response.body().getData().get(i).getScore_value();
+//                        itemUjian = new ItemUjian();
+//                        itemUjian.setJam(jam);
+//                        itemUjian.setTanggal(tanggal);
+//                        itemUjian.setMapel(mapel);
+//                        itemUjian.setType_id(type);
+//                        itemUjian.setDeskripsi(deskripsi);
+//                        itemUjian.setNilai(nilai);
+//                        itemUjianList.add(itemUjian);
+//                    }
+//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this, LinearLayoutManager.HORIZONTAL, false);
+//                    rv_ujian_teratas.setLayoutManager(layoutManager);
+//                    rv_ujian_teratas.setAdapter(ujianAdapter);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JSONResponse.JadwalUjian> call, Throwable t) {
+//                Log.d("onFailure", t.toString());
+//                hideDialog();
+//            }
+//
+//        });
+//
+//    }
 
     private void Jadwal_ujian(){
         progressBar();

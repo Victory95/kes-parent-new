@@ -795,10 +795,14 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         dialog.setContentView(R.layout.progressbar);
     }
     private void hideDialog() {
-        if (dialog.isShowing())
-            dialog.dismiss();
-        dialog.setContentView(R.layout.progressbar);
-    }
+        if (dialog==null){
+
+        }else {
+            if (dialog.isShowing())
+                dialog.dismiss();
+            dialog.setContentView(R.layout.progressbar);
+        }
+        }
     public void progressBar(){
         dialog = new ProgressDialog(this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
