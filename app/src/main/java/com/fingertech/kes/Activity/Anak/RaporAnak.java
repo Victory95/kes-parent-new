@@ -46,6 +46,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.pepperonas.materialdialog.MaterialDialog;
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator;
 import com.rey.material.widget.Spinner;
 import com.shashank.sony.fancytoastlib.FancyToast;
@@ -119,6 +120,7 @@ public class RaporAnak extends AppCompatActivity {
     TextView tv_end_date;
 
     IndefinitePagerIndicator indefinitePagerIndicator;
+    LinearLayout ll_status,ll_kritik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +156,8 @@ public class RaporAnak extends AppCompatActivity {
         tr_ujian_sekolah   = findViewById(R.id.table6);
         tr_nilai_akhir     = findViewById(R.id.table7);
         tr_rata            = findViewById(R.id.table8);
+        ll_kritik          = findViewById(R.id.ll_kritik);
+        ll_status          = findViewById(R.id.ll_status);
         indefinitePagerIndicator    = findViewById(R.id.recyclerview_pager_indicator);
         cardView           = findViewById(R.id.card);
         arrow              = findViewById(R.id.arrow);
@@ -209,6 +213,20 @@ public class RaporAnak extends AppCompatActivity {
             }
         });
 
+        ll_status.setOnClickListener(v ->
+                new MaterialDialog.Builder(RaporAnak.this)
+                .title("Status")
+                .message(statusrapor)
+                .positiveText("Ok")
+                .show());
+
+        ll_kritik.setOnClickListener(v ->
+                new MaterialDialog.Builder(RaporAnak.this)
+                .title("Kritik dan Saran")
+                .message(kritik)
+                .positiveText("Ok")
+                .show());
+
     }
     private void Check_Semester(){
 
@@ -216,16 +234,15 @@ public class RaporAnak extends AppCompatActivity {
         call.enqueue(new Callback<JSONResponse.CheckSemester>() {
             @Override
             public void onResponse(Call<JSONResponse.CheckSemester> call, final Response<JSONResponse.CheckSemester> response) {
-
                 Log.i("KES", response.code() + "");
-
-                JSONResponse.CheckSemester resource = response.body();
-
-                status = resource.status;
-                code    = resource.code;
-                semester_id = response.body().getData();
-                dapat_semester();
-                RaportAnak();
+                if (response.isSuccessful()) {
+                    JSONResponse.CheckSemester resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    semester_id = response.body().getData();
+                    dapat_semester();
+                    RaportAnak();
+                }
             }
 
             @Override
@@ -247,117 +264,111 @@ public class RaporAnak extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.ListSemester> call, final Response<JSONResponse.ListSemester> response) {
                 Log.i("KES", response.code() + "");
 
-                JSONResponse.ListSemester resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.ListSemester resource = response.body();
 
-                status = resource.status;
-                code = resource.code;
+                    status = resource.status;
+                    code = resource.code;
 
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        dataSemesters = response.body().getData();
+                        List<String> listSpinner = new ArrayList<String>();
+                        listSpinner.add("Pilih Semester...");
+                        for (int i = 0; i < dataSemesters.size(); i++) {
+                            listSpinner.add(dataSemesters.get(i).getSemester_name());
+                            if (dataSemesters.get(i).getSemester_id().equals(semester_id)) {
+                                semester_nama = response.body().getData().get(i).getSemester_name();
+                                start_date = response.body().getData().get(i).getStart_date();
+                                end_date = response.body().getData().get(i).getEnd_date();
 
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    dataSemesters = response.body().getData();
-                    List<String> listSpinner = new ArrayList<String>();
-                    listSpinner.add("Pilih Semester...");
-                    for (int i = 0; i < dataSemesters.size(); i++){
-                        listSpinner.add(dataSemesters.get(i).getSemester_name());
-                        if (dataSemesters.get(i).getSemester_id().equals(semester_id)){
-                            semester_nama    = response.body().getData().get(i).getSemester_name();
-                            start_date  = response.body().getData().get(i).getStart_date();
-                            end_date    = response.body().getData().get(i).getEnd_date();
-
-                            final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(
-                                    RaporAnak.this,R.layout.spinner_full,listSpinner){
-                                @Override
-                                public boolean isEnabled(int position){
-                                    if(position == 0)
-                                    {
-                                        // Disable the first item from Spinner
-                                        // First item will be use for hint
-                                        return false;
+                                final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(
+                                        RaporAnak.this, R.layout.spinner_full, listSpinner) {
+                                    @Override
+                                    public boolean isEnabled(int position) {
+                                        if (position == 0) {
+                                            // Disable the first item from Spinner
+                                            // First item will be use for hint
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }
                                     }
-                                    else
-                                    {
-                                        return true;
-                                    }
-                                }
 
-                                @Override
-                                public View getDropDownView(int position, View convertView,
-                                                            ViewGroup parent) {
-                                    View view = super.getDropDownView(position, convertView, parent);
-                                    TextView tv = (TextView) view;
-                                    if(position == 0){
-                                        // Set the hint text color gray
-                                        tv.setTextColor(Color.GRAY);
+                                    @Override
+                                    public View getDropDownView(int position, View convertView,
+                                                                ViewGroup parent) {
+                                        View view = super.getDropDownView(position, convertView, parent);
+                                        TextView tv = (TextView) view;
+                                        if (position == 0) {
+                                            // Set the hint text color gray
+                                            tv.setTextColor(Color.GRAY);
+                                        } else {
+                                            tv.setTextColor(Color.BLACK);
+                                        }
+                                        return view;
                                     }
-                                    else {
-                                        tv.setTextColor(Color.BLACK);
+                                };
+                                int spinnerPosition = adapterRaport.getPosition(semester_nama);
+                                adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                                sp_semester.setAdapter(adapterRaport);
+                                sp_semester.setOnItemSelectedListener((parent, view, position, id) -> {
+                                    if (position > 0) {
+                                        semester_id = dataSemesters.get(position - 1).getSemester_id();
                                     }
-                                    return view;
-                                }
-                            };
-                            int spinnerPosition = adapterRaport.getPosition(semester_nama);
-                            adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                            sp_semester.setAdapter(adapterRaport);
-                            sp_semester.setOnItemSelectedListener((parent, view, position, id) -> {
-                                if (position > 0) {
-                                    semester_id = dataSemesters.get(position - 1).getSemester_id();
-                                }
-                            });
+                                });
 
-                            sp_semester.setSelection(spinnerPosition);
+                                sp_semester.setSelection(spinnerPosition);
+                            }
+                            if (response.body().getData().get(i).getSemester_name().equals("Ganjil")) {
+                                start_year = converTahun(response.body().getData().get(i).getStart_date());
+                            } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
+                                start_end = converTahun(response.body().getData().get(i).getEnd_date());
+                            }
+                            tv_semester.setText("Semester " + semester_nama + " (" + start_year + "/" + start_end + ")");
+
                         }
-                        if (response.body().getData().get(i).getSemester_name().equals("Ganjil")){
-                            start_year  = converTahun(response.body().getData().get(i).getStart_date());
-                        } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
-                            start_end   = converTahun(response.body().getData().get(i).getEnd_date());
-                        }
-                        tv_semester.setText("Semester "+semester_nama+" ("+start_year+"/"+start_end+")");
+                        final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(
+                                RaporAnak.this, R.layout.spinner_full, listSpinner) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
 
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+                            }
+                        };
+                        int spinnerPosition = adapterRaport.getPosition(semester_nama);
+                        adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_semester.setAdapter(adapterRaport);
+                        sp_semester.setOnItemSelectedListener((parent, view, position, id) -> {
+                            if (position > 0) {
+                                semester_id = dataSemesters.get(position - 1).getSemester_id();
+                                dapat_semester();
+                                RaportAnak();
+                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                arrow.setImageResource(R.drawable.ic_up_arrow);
+                            }
+                        });
+                        sp_semester.setSelection(spinnerPosition);
+                        tv_end_date.setText(convertTanggal(start_date) + " Sampai " + convertTanggal(end_date));
                     }
-                    final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(
-                            RaporAnak.this,R.layout.spinner_full,listSpinner){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
-                            }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
-                        }
-                    };
-                    int spinnerPosition = adapterRaport.getPosition(semester_nama);
-                    adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_semester.setAdapter(adapterRaport);
-                    sp_semester.setOnItemSelectedListener((parent, view, position, id) ->{
-                        if (position>0) {
-                            semester_id = dataSemesters.get(position - 1).getSemester_id();
-                            RaportAnak();
-                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                            arrow.setImageResource(R.drawable.ic_up_arrow);
-                        }
-                    });
-                    sp_semester.setSelection(spinnerPosition);
-                    tv_end_date.setText(convertTanggal(start_date)+" Sampai "+convertTanggal(end_date));
                 }
             }
 
@@ -422,186 +433,186 @@ public class RaporAnak extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.Raport> call, final Response<JSONResponse.Raport> response) {
                 hideDialog();
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.Raport resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    RaportModel raportModel = null;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        raportModelList = new ArrayList<RaportModel>();
+                        detailScoreItemList = response.body().getData().getDetailScore();
+                        List<String> listSpinner = new ArrayList<String>();
+                        if (response.body().getData().getDetailScore() != null) {
+                            snapHelper  = new LinearSnapHelper();
+                            statusrapor = response.body().getData().getClassroom().getPromoteText();
+                            peringkat   = response.body().getData().getClassroom().getPromoteRanking();
+                            kritik      = response.body().getData().getClassroom().getDescriptionText();
 
-                JSONResponse.Raport resource = response.body();
-
-                status = resource.status;
-                code    = resource.code;
-                RaportModel raportModel = null;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    raportModelList = new ArrayList<RaportModel>();
-                    detailScoreItemList = response.body().getData().getDetailScore();
-                    List<String> listSpinner = new ArrayList<String>();
-                    if(response.body().getData().getDetailScore() != null) {
-                        snapHelper  = new LinearSnapHelper();
-                        statusrapor = response.body().getData().getClassroom().getPromoteText();
-                        peringkat   = response.body().getData().getClassroom().getPromoteRanking();
-                        kritik      = response.body().getData().getClassroom().getDescriptionText();
-
-                        status_rapor.setText(statusrapor);
-                        tv_peringkat.setText(peringkat);
-                        tv_kritik.setText(kritik);
-                        if (peringkat.equals("1")){
-                            star.setVisibility(View.VISIBLE);
-                        }else {
-                            star.setVisibility(View.GONE);
-                        }
-                        for (int i = 0; i < response.body().getData().getDetailScore().size(); i++) {
-
-                            listSpinner.add(response.body().getData().getDetailScore().get(i).getCourcesName());
-                            mapel           = response.body().getData().getDetailScore().get(i).getCourcesName();
-                            raportModel = new RaportModel();
-                            raportModel.setMapel(mapel);
-                            raportModelList.add(raportModel);
-
-                        }
-                        final CustomLayoutManager layoutManager = new CustomLayoutManager(RaporAnak.this);
-                        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-                        final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(RaporAnak.this,R.layout.spinner_full,listSpinner);
-                        adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                        sp_mapel.setAdapter(adapterRaport);
-                        sp_mapel.setOnItemSelectedListener((parent, view, position, id) ->{
-                            snappyRecycleView.smoothScrollToPosition(position);
-                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                            arrow.setImageResource(R.drawable.ic_up_arrow);
-                        });
-                        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(RaporAnak.this,R.layout.spinner_full,list_tipe);
-                        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                        sp_tipe_nilai.setAdapter(adapter);
-                        sp_tipe_nilai.setOnItemSelectedListener((parent, view, position, id) -> {
-                            if (position == 1){
-                                tr_teori.setVisibility(View.VISIBLE);
-                                tr_harian.setVisibility(View.GONE);
-                                tr_praktikum.setVisibility(View.GONE);
-                                tr_eskul.setVisibility(View.GONE);
-                                tr_ujian_sekolah.setVisibility(View.GONE);
-                                tr_ujian_negara.setVisibility(View.GONE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 2){
-                                tr_teori.setVisibility(View.GONE);
-                                tr_harian.setVisibility(View.VISIBLE);
-                                tr_praktikum.setVisibility(View.GONE);
-                                tr_eskul.setVisibility(View.GONE);
-                                tr_ujian_sekolah.setVisibility(View.GONE);
-                                tr_ujian_negara.setVisibility(View.GONE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 3){
-                                tr_teori.setVisibility(View.GONE);
-                                tr_harian.setVisibility(View.GONE);
-                                tr_praktikum.setVisibility(View.VISIBLE);
-                                tr_eskul.setVisibility(View.GONE);
-                                tr_ujian_sekolah.setVisibility(View.GONE);
-                                tr_ujian_negara.setVisibility(View.GONE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 4){
-                                tr_teori.setVisibility(View.GONE);
-                                tr_harian.setVisibility(View.GONE);
-                                tr_praktikum.setVisibility(View.GONE);
-                                tr_eskul.setVisibility(View.VISIBLE);
-                                tr_ujian_sekolah.setVisibility(View.GONE);
-                                tr_ujian_negara.setVisibility(View.GONE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 5){
-                                tr_teori.setVisibility(View.GONE);
-                                tr_harian.setVisibility(View.GONE);
-                                tr_praktikum.setVisibility(View.GONE);
-                                tr_eskul.setVisibility(View.GONE);
-                                tr_ujian_sekolah.setVisibility(View.VISIBLE);
-                                tr_ujian_negara.setVisibility(View.GONE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 6){
-                                tr_teori.setVisibility(View.GONE);
-                                tr_harian.setVisibility(View.GONE);
-                                tr_praktikum.setVisibility(View.GONE);
-                                tr_eskul.setVisibility(View.GONE);
-                                tr_ujian_sekolah.setVisibility(View.GONE);
-                                tr_ujian_negara.setVisibility(View.VISIBLE);
-                                tr_nilai_akhir.setVisibility(View.GONE);
-                                tr_rata.setVisibility(View.GONE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
-                            }else if (position == 0){
-                                tr_teori.setVisibility(View.VISIBLE);
-                                tr_harian.setVisibility(View.VISIBLE);
-                                tr_praktikum.setVisibility(View.VISIBLE);
-                                tr_eskul.setVisibility(View.VISIBLE);
-                                tr_ujian_sekolah.setVisibility(View.VISIBLE);
-                                tr_ujian_negara.setVisibility(View.VISIBLE);
-                                tr_nilai_akhir.setVisibility(View.VISIBLE);
-                                tr_rata.setVisibility(View.VISIBLE);
-                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                                arrow.setImageResource(R.drawable.ic_up_arrow);
+                            status_rapor.setText(statusrapor);
+                            tv_peringkat.setText(peringkat);
+                            tv_kritik.setText(kritik);
+                            if (peringkat.equals("1")) {
+                                star.setVisibility(View.VISIBLE);
+                            } else {
+                                star.setVisibility(View.GONE);
                             }
-                        });
+                            for (int i = 0; i < response.body().getData().getDetailScore().size(); i++) {
 
-                        no_rapor.setVisibility(View.GONE);
-                        snappyRecycleView.setVisibility(View.VISIBLE);
-                        cardView.setVisibility(View.VISIBLE);
-                        raporAdapter = new RaporAdapter(raportModelList);
-                        snappyRecycleView.setOnFlingListener(null);
-                        indefinitePagerIndicator.attachToRecyclerView(snappyRecycleView);
-                        snapHelper.attachToRecyclerView(snappyRecycleView);
-                        snappyRecycleView.setLayoutManager(layoutManager);
-                        snappyRecycleView.setAdapter(raporAdapter);
+                                listSpinner.add(response.body().getData().getDetailScore().get(i).getCourcesName());
+                                mapel = response.body().getData().getDetailScore().get(i).getCourcesName();
+                                raportModel = new RaportModel();
+                                raportModel.setMapel(mapel);
+                                raportModelList.add(raportModel);
 
-                        snappyRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrolled( RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
+                            }
+                            final CustomLayoutManager layoutManager = new CustomLayoutManager(RaporAnak.this);
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-                                int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
-                                int scrollOffset = recyclerView.computeHorizontalScrollOffset();
-                                int currentItem = 0;
-                                float itemWidth = horizontalScrollRange * 1.0f / raportModelList.size();
-                                itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
-                                if (scrollOffset != 0) {
-                                    currentItem = Math.round(scrollOffset / itemWidth);
+                            final ArrayAdapter<String> adapterRaport = new ArrayAdapter<String>(RaporAnak.this, R.layout.spinner_full, listSpinner);
+                            adapterRaport.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                            sp_mapel.setAdapter(adapterRaport);
+                            sp_mapel.setOnItemSelectedListener((parent, view, position, id) -> {
+                                snappyRecycleView.smoothScrollToPosition(position);
+                                slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                arrow.setImageResource(R.drawable.ic_up_arrow);
+                            });
+                            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(RaporAnak.this, R.layout.spinner_full, list_tipe);
+                            adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                            sp_tipe_nilai.setAdapter(adapter);
+                            sp_tipe_nilai.setOnItemSelectedListener((parent, view, position, id) -> {
+                                if (position == 1) {
+                                    tr_teori.setVisibility(View.VISIBLE);
+                                    tr_harian.setVisibility(View.GONE);
+                                    tr_praktikum.setVisibility(View.GONE);
+                                    tr_eskul.setVisibility(View.GONE);
+                                    tr_ujian_sekolah.setVisibility(View.GONE);
+                                    tr_ujian_negara.setVisibility(View.GONE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 2) {
+                                    tr_teori.setVisibility(View.GONE);
+                                    tr_harian.setVisibility(View.VISIBLE);
+                                    tr_praktikum.setVisibility(View.GONE);
+                                    tr_eskul.setVisibility(View.GONE);
+                                    tr_ujian_sekolah.setVisibility(View.GONE);
+                                    tr_ujian_negara.setVisibility(View.GONE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 3) {
+                                    tr_teori.setVisibility(View.GONE);
+                                    tr_harian.setVisibility(View.GONE);
+                                    tr_praktikum.setVisibility(View.VISIBLE);
+                                    tr_eskul.setVisibility(View.GONE);
+                                    tr_ujian_sekolah.setVisibility(View.GONE);
+                                    tr_ujian_negara.setVisibility(View.GONE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 4) {
+                                    tr_teori.setVisibility(View.GONE);
+                                    tr_harian.setVisibility(View.GONE);
+                                    tr_praktikum.setVisibility(View.GONE);
+                                    tr_eskul.setVisibility(View.VISIBLE);
+                                    tr_ujian_sekolah.setVisibility(View.GONE);
+                                    tr_ujian_negara.setVisibility(View.GONE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 5) {
+                                    tr_teori.setVisibility(View.GONE);
+                                    tr_harian.setVisibility(View.GONE);
+                                    tr_praktikum.setVisibility(View.GONE);
+                                    tr_eskul.setVisibility(View.GONE);
+                                    tr_ujian_sekolah.setVisibility(View.VISIBLE);
+                                    tr_ujian_negara.setVisibility(View.GONE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 6) {
+                                    tr_teori.setVisibility(View.GONE);
+                                    tr_harian.setVisibility(View.GONE);
+                                    tr_praktikum.setVisibility(View.GONE);
+                                    tr_eskul.setVisibility(View.GONE);
+                                    tr_ujian_sekolah.setVisibility(View.GONE);
+                                    tr_ujian_negara.setVisibility(View.VISIBLE);
+                                    tr_nilai_akhir.setVisibility(View.GONE);
+                                    tr_rata.setVisibility(View.GONE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
+                                } else if (position == 0) {
+                                    tr_teori.setVisibility(View.VISIBLE);
+                                    tr_harian.setVisibility(View.VISIBLE);
+                                    tr_praktikum.setVisibility(View.VISIBLE);
+                                    tr_eskul.setVisibility(View.VISIBLE);
+                                    tr_ujian_sekolah.setVisibility(View.VISIBLE);
+                                    tr_ujian_negara.setVisibility(View.VISIBLE);
+                                    tr_nilai_akhir.setVisibility(View.VISIBLE);
+                                    tr_rata.setVisibility(View.VISIBLE);
+                                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                                    arrow.setImageResource(R.drawable.ic_up_arrow);
                                 }
-                                currentItem = (currentItem < 0) ? 0 : currentItem;
-                                currentItem = (currentItem >= raportModelList.size()) ? raportModelList.size() - 1 : currentItem;
-                                teori           = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getLatihanTeori().getScoreExam());
-                                ulangan_harian  = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUlanganHarian().getScoreExam());
-                                praktikum       = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getPraktikum().getScoreExam());
-                                eskul           = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getEkstrakulikuler().getScoreExam());
-                                ujian_sekolah   = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUjianSekolah().getScoreExam());
-                                ujian_negara    = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUjianNegara().getScoreExam());
-                                nilai_akhir     = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getFinalScore());
-                                rata_rata       = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getClassAverageScore());
-                                tv_teori.setText(convertZero(teori));
-                                tv_ulangan_harian.setText(convertZero(ulangan_harian));
-                                tv_praktikum.setText(convertZero(praktikum));
-                                tv_eskul.setText(convertZero(eskul));
-                                tv_ujian_negara.setText(convertZero(ujian_negara));
-                                tv_ujian_sekolah.setText(convertZero(ujian_sekolah));
-                                tv_nilai_akhir.setText(convertZero(nilai_akhir));
-                                tv_rata_rata.setText(convertZero(rata_rata));
-                            }
-                        });
-                    }
-                    else {
-                        no_rapor.setVisibility(View.VISIBLE);
-                        snappyRecycleView.setVisibility(View.GONE);
-                        star.setVisibility(View.GONE);
-                        cardView.setVisibility(View.GONE);
-                        status_rapor.setText("-");
-                        tv_peringkat.setText("-");
-                        tv_kritik.setText("-");
+                            });
+
+                            no_rapor.setVisibility(View.GONE);
+                            snappyRecycleView.setVisibility(View.VISIBLE);
+                            cardView.setVisibility(View.VISIBLE);
+                            raporAdapter = new RaporAdapter(raportModelList);
+                            snappyRecycleView.setOnFlingListener(null);
+                            indefinitePagerIndicator.attachToRecyclerView(snappyRecycleView);
+                            snapHelper.attachToRecyclerView(snappyRecycleView);
+                            snappyRecycleView.setLayoutManager(layoutManager);
+                            snappyRecycleView.setAdapter(raporAdapter);
+
+                            snappyRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
+
+                                    int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
+                                    int scrollOffset = recyclerView.computeHorizontalScrollOffset();
+                                    int currentItem = 0;
+                                    float itemWidth = horizontalScrollRange * 1.0f / raportModelList.size();
+                                    itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
+                                    if (scrollOffset != 0) {
+                                        currentItem = Math.round(scrollOffset / itemWidth);
+                                    }
+                                    currentItem = (currentItem < 0) ? 0 : currentItem;
+                                    currentItem = (currentItem >= raportModelList.size()) ? raportModelList.size() - 1 : currentItem;
+                                    teori = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getLatihanTeori().getScoreExam());
+                                    ulangan_harian = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUlanganHarian().getScoreExam());
+                                    praktikum = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getPraktikum().getScoreExam());
+                                    eskul = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getEkstrakulikuler().getScoreExam());
+                                    ujian_sekolah = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUjianSekolah().getScoreExam());
+                                    ujian_negara = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getTypeExam().getUjianNegara().getScoreExam());
+                                    nilai_akhir = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getFinalScore());
+                                    rata_rata = String.valueOf(response.body().getData().getDetailScore().get(currentItem).getClassAverageScore());
+                                    tv_teori.setText(convertZero(teori));
+                                    tv_ulangan_harian.setText(convertZero(ulangan_harian));
+                                    tv_praktikum.setText(convertZero(praktikum));
+                                    tv_eskul.setText(convertZero(eskul));
+                                    tv_ujian_negara.setText(convertZero(ujian_negara));
+                                    tv_ujian_sekolah.setText(convertZero(ujian_sekolah));
+                                    tv_nilai_akhir.setText(convertZero(nilai_akhir));
+                                    tv_rata_rata.setText(convertZero(rata_rata));
+                                }
+                            });
+                        } else {
+                            no_rapor.setVisibility(View.VISIBLE);
+                            snappyRecycleView.setVisibility(View.GONE);
+                            star.setVisibility(View.GONE);
+                            cardView.setVisibility(View.GONE);
+                            status_rapor.setText("-");
+                            tv_peringkat.setText("-");
+                            tv_kritik.setText("-");
+                            indefinitePagerIndicator.setVisibility(View.GONE);
+                        }
                     }
                 }
 

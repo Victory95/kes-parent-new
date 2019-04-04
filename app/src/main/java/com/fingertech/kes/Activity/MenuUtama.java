@@ -17,7 +17,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -139,8 +138,6 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.fingertech.kes.Service.App.getContext;
 
 
 public class MenuUtama extends AppCompatActivity
@@ -447,7 +444,9 @@ public class MenuUtama extends AppCompatActivity
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         setting_lokasi();
+
     }
+
     @Override
     protected void onResume(){
         super.onResume();
@@ -757,70 +756,72 @@ public class MenuUtama extends AppCompatActivity
             public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
                 Log.d("TAG children",response.code()+"");
                 hideDialog();
-                JSONResponse.ListChildren resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                if (response.isSuccessful()) {
+                    JSONResponse.ListChildren resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+                    String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                    String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
-                ProfileModel profileModel = null;
-                if (status == 1 && code.equals("LCH_SCS_0001")) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    if (response.body().getData() != null){
-                        profileModels = new ArrayList<ProfileModel>();
-                        for (int i = 0;i < response.body().getData().size();i++) {
-                            student_id      = response.body().getData().get(i).getStudent_id();
-                            school_code     = response.body().getData().get(i).getSchool_code();
-                            nama_anak       = response.body().getData().get(i).getChildren_name();
-                            classroom_id    = response.body().getData().get(i).getClassroom_id();
-                            school_name     = response.body().getData().get(i).getSchool_name();
-                            foto            = response.body().getData().get(i).getPicture();
-                            String imagefiles = Base_anak + foto;
-                            profileModel = new ProfileModel();
-                            profileModel.setWidth(width);
-                            profileModel.setHeight(height);
-                            profileModel.setStudent_id(student_id);
-                            profileModel.setSchool_code(school_code);
-                            profileModel.setNama(nama_anak);
-                            profileModel.setSchool_name(school_name);
-                            profileModel.setClassroom_id(classroom_id);
-                            profileModel.setPicture(imagefiles);
-                            profileModels.add(profileModel);
-                        }
-                        profileAdapter = new ProfileAdapter(profileModels);
-                        profileAdapter.notifyDataSetChanged();
-                        profileAdapter.selectRow(0);
-                        student_id      = response.body().getData().get(0).getStudent_id();
-                        school_code     = response.body().getData().get(0).getSchool_code();
-                        classroom_id    = response.body().getData().get(0).getClassroom_id();
-                        school_name     = response.body().getData().get(0).getSchool_name();
-                        nama_anak       = response.body().getData().get(0).getChildren_name();
-                        send_data();
-                        send_data2();
-                        dapat_pesan();
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
-                        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                        recyclerView.setLayoutManager(layoutManager);
-
-                        recyclerView.setAdapter(profileAdapter);
-
-                        profileAdapter.setOnItemClickListener((view, position) -> {
+                    ProfileModel profileModel = null;
+                    if (status == 1 && code.equals("LCH_SCS_0001")) {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        if (response.body().getData() != null) {
+                            profileModels = new ArrayList<ProfileModel>();
+                            for (int i = 0; i < response.body().getData().size(); i++) {
+                                student_id = response.body().getData().get(i).getStudent_id();
+                                school_code = response.body().getData().get(i).getSchool_code();
+                                nama_anak = response.body().getData().get(i).getChildren_name();
+                                classroom_id = response.body().getData().get(i).getClassroom_id();
+                                school_name = response.body().getData().get(i).getSchool_name();
+                                foto = response.body().getData().get(i).getPicture();
+                                String imagefiles = Base_anak + foto;
+                                profileModel = new ProfileModel();
+                                profileModel.setWidth(width);
+                                profileModel.setHeight(height);
+                                profileModel.setStudent_id(student_id);
+                                profileModel.setSchool_code(school_code);
+                                profileModel.setNama(nama_anak);
+                                profileModel.setSchool_name(school_name);
+                                profileModel.setClassroom_id(classroom_id);
+                                profileModel.setPicture(imagefiles);
+                                profileModels.add(profileModel);
+                            }
+                            profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
-                            profileAdapter.selectRow(position);
-                            student_id      = profileModels.get(position).getStudent_id();
-                            school_code     = profileModels.get(position).getSchool_code();
-                            classroom_id    = profileModels.get(position).getClassroom_id();
-                            school_name     = profileModels.get(position).getSchool_name();
-                            nama_anak       = profileModels.get(position).getNama();
+                            profileAdapter.selectRow(0);
+                            student_id = response.body().getData().get(0).getStudent_id();
+                            school_code = response.body().getData().get(0).getSchool_code();
+                            classroom_id = response.body().getData().get(0).getClassroom_id();
+                            school_name = response.body().getData().get(0).getSchool_name();
+                            nama_anak = response.body().getData().get(0).getChildren_name();
                             send_data();
                             send_data2();
                             dapat_pesan();
-                        });
-                    }
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            recyclerView.setLayoutManager(layoutManager);
+
+                            recyclerView.setAdapter(profileAdapter);
+
+                            profileAdapter.setOnItemClickListener((view, position) -> {
+                                profileAdapter.notifyDataSetChanged();
+                                profileAdapter.selectRow(position);
+                                student_id = profileModels.get(position).getStudent_id();
+                                school_code = profileModels.get(position).getSchool_code();
+                                classroom_id = profileModels.get(position).getClassroom_id();
+                                school_name = profileModels.get(position).getSchool_name();
+                                nama_anak = profileModels.get(position).getNama();
+                                send_data();
+                                send_data2();
+                                dapat_pesan();
+                            });
+                        }
+                    } else {
+                        if (status == 0 && code.equals("DTS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -844,42 +845,44 @@ public class MenuUtama extends AppCompatActivity
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
                 Log.i("profile", response.code() + "");
                 hideDialog();
-                JSONResponse.GetProfile resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.GetProfile resource = response.body();
 
-                status = resource.status;
+                    status = resource.status;
 
-                if (status == 1) {
+                    if (status == 1) {
                         String picture = response.body().getData().getPicture();
-                        String nama    = response.body().getData().getFullname();
-                        member  = response.body().getData().getMember_Type();
-                        count   = response.body().getData().getTotal_Children();
+                        String nama = response.body().getData().getFullname();
+                        member = response.body().getData().getMember_Type();
+                        count = response.body().getData().getTotal_Children();
                         tv_profile.setText(nama);
                         parent_nik = response.body().getData().getParent_NIK();
                         String imagefile = Base_url + picture;
-                        if (picture.equals("")){
-                            Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profile);
+                        if (picture.equals("")) {
+                            Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name=" + nama + "&background=40bfe8&color=fff").into(image_profile);
                         }
                         Picasso.get().load(imagefile).into(image_profile);
-                    if (member.equals("3")){
-                        if (count.equals("0")){
-                            recycleview_ln.setVisibility(View.VISIBLE);
+                        if (member.equals("3")) {
+                            if (count.equals("0")) {
+                                recycleview_ln.setVisibility(View.VISIBLE);
+                                viewpager.setVisibility(View.GONE);
+                                actionView.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                            } else {
+                                get_children();
+                                recycleview_ln.setVisibility(View.VISIBLE);
+                                viewpager.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.VISIBLE);
+                                actionView.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            recycleview_ln.setVisibility(View.GONE);
                             viewpager.setVisibility(View.GONE);
                             actionView.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                        }else {
-                            get_children();
-                            recycleview_ln.setVisibility(View.VISIBLE);
-                            viewpager.setVisibility(View.VISIBLE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            actionView.setVisibility(View.VISIBLE);
                         }
-                    }else {
-                        recycleview_ln.setVisibility(View.GONE);
-                        viewpager.setVisibility(View.GONE);
-                        actionView.setVisibility(View.GONE);
                     }
-                }
 
+                }
             }
 
             @Override
@@ -1475,19 +1478,22 @@ public class MenuUtama extends AppCompatActivity
                         if (status == 1){
                             no_berita.setVisibility(View.GONE);
                             rv_berita.setVisibility(View.VISIBLE);
-                            for (int i = 0;i < 3;i++){
-                                news_id    = last_news.getData().get(i).getNewsid();
-                                news_title = last_news.getData().get(i).getNewstitle();
-                                news_body  = last_news.getData().get(i).getNewsbody();
-                                news_image = last_news.getData().get(i).getNewspicture();
-                                news_date  = last_news.getData().get(i).getDatez();
-                                newsModel = new NewsModel();
-                                newsModel.setNews_id(news_id);
-                                newsModel.setNews_title(news_title);
-                                newsModel.setNews_body(news_body);
-                                newsModel.setDatez(news_date);
-                                newsModel.setNews_picture(base_url_news+news_image);
-                                newsModelList.add(newsModel);
+                            if (newsModelList!=null) {
+                                newsModelList.clear();
+                                for (int i = 0; i < 3; i++) {
+                                    news_id = last_news.getData().get(i).getNewsid();
+                                    news_title = last_news.getData().get(i).getNewstitle();
+                                    news_body = last_news.getData().get(i).getNewsbody();
+                                    news_image = last_news.getData().get(i).getNewspicture();
+                                    news_date = last_news.getData().get(i).getDatez();
+                                    newsModel = new NewsModel();
+                                    newsModel.setNews_id(news_id);
+                                    newsModel.setNews_title(news_title);
+                                    newsModel.setNews_body(news_body);
+                                    newsModel.setDatez(news_date);
+                                    newsModel.setNews_picture(base_url_news + news_image);
+                                    newsModelList.add(newsModel);
+                                }
                             }
                         }else if (status == 0){
                             rv_berita.setVisibility(View.GONE);

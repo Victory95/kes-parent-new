@@ -54,7 +54,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:layout_marginTop="5dp"
             android:orientation="vertical">
             <LinearLayout
@@ -119,30 +119,47 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/ic_logo_background"
-                        android:text="@string/tv_status"
-                        android:textSize="13sp"/>
-                    <TextView
+                        android:id="@+id/ll_status"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/ic_logo_background"
+                            android:text="@string/tv_status"
+                            android:textSize="13sp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/status_raport"
+                            android:textSize="16sp"
+                            android:singleLine="true"
+                            android:textColor="@color/yellow_500"/>
+                    </LinearLayout>
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/status_raport"
-                        android:textSize="16sp"
-                        android:textColor="@color/yellow_500"/>
+                        android:id="@+id/ll_kritik"
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/tv_kritik_amp_saran"
                         android:textColor="@color/ic_logo_background"
                         android:textSize="13sp"/>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/kritik_saran"
                         android:textColor="@color/ic_logo_background"
+                        android:singleLine="true"
                         android:textSize="13sp"/>
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>

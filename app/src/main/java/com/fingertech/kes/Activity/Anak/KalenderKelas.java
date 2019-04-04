@@ -1,10 +1,16 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -247,96 +253,96 @@ public class KalenderKelas extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ClassCalendar> call, Response<JSONResponse.ClassCalendar> response) {
                 Log.i("KES",response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.ClassCalendar resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 & code.equals("DTS_SCS_0001")) {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        kalendar.setVisibility(View.GONE);
+                        if (response.body().getData() != null) {
+                            calendarList = response.body().getData();
 
-                JSONResponse.ClassCalendar resource = response.body();
-                status = resource.status;
-                code   = resource.code;
-                if (status == 1 & code.equals("DTS_SCS_0001")) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    kalendar.setVisibility(View.GONE);
-                    if (response.body().getData() != null) {
-                        calendarList = response.body().getData();
-
-                        if (calendarModelList != null) {
-                            calendarModelList.clear();
-                            for (JSONResponse.DataCalendar calendar : calendarList) {
-                                Calendar cal = Calendar.getInstance();
-                                calendar_date = calendar.getCalendar_date();
-                                calendar_time = calendar.getCalendar_time();
-                                calendar_type = calendar.getCalendar_type();
-                                calendar_colour = calendar.getCalendar_colour();
-                                if (calendar_date.equals(hari)){
-                                    if (calendar_date.equals(hari)){
-                                        if (calendar_type.equals("-1")) {
-                                            calendarModel = new CalendarModel();
-                                            calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
-                                            calendarModel.setCalendar_time("Seharian");
-                                            calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
-                                            String sentence = calendar.getCalendar_title();
-                                            String replaced = sentence.replace("Hari Libur - ", "");
-                                            calendarModel.setCalendar_title(replaced);
-                                            calendarModel.setCalendar_color(calendar_colour);
-                                            calendarModel.setCalendar_desc(calendar.getCalendar_desc());
-                                            calendarModel.setCalendar_type(calendar_type);
-                                            calendarModelList.add(calendarModel);
-                                        } else {
-                                            calendarModel = new CalendarModel();
-                                            calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
-                                            calendarModel.setCalendar_time(calendar.getCalendar_time());
-                                            calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
-                                            calendarModel.setCalendar_title(calendar.getCalendar_title());
-                                            calendarModel.setCalendar_desc(calendar.getCalendar_desc());
-                                            calendarModel.setCalendar_type(calendar_type);
-                                            calendarModel.setCalendar_color(calendar_colour);
-                                            calendarModelList.add(calendarModel);
+                            if (calendarModelList != null) {
+                                calendarModelList.clear();
+                                for (JSONResponse.DataCalendar calendar : calendarList) {
+                                    Calendar cal = Calendar.getInstance();
+                                    calendar_date = calendar.getCalendar_date();
+                                    calendar_time = calendar.getCalendar_time();
+                                    calendar_type = calendar.getCalendar_type();
+                                    calendar_colour = calendar.getCalendar_colour();
+                                    if (calendar_date.equals(hari)) {
+                                        if (calendar_date.equals(hari)) {
+                                            if (calendar_type.equals("-1")) {
+                                                calendarModel = new CalendarModel();
+                                                calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
+                                                calendarModel.setCalendar_time("Seharian");
+                                                calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
+                                                String sentence = calendar.getCalendar_title();
+                                                String replaced = sentence.replace("Hari Libur - ", "");
+                                                calendarModel.setCalendar_title(replaced);
+                                                calendarModel.setCalendar_color(calendar_colour);
+                                                calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                                calendarModel.setCalendar_type(calendar_type);
+                                                calendarModelList.add(calendarModel);
+                                            } else {
+                                                calendarModel = new CalendarModel();
+                                                calendarModel.setCalendar_id(String.valueOf(calendar.getCalendar_id()));
+                                                calendarModel.setCalendar_time(calendar.getCalendar_time());
+                                                calendarModel.setCalendar_date(converDate(calendar.getCalendar_date()));
+                                                calendarModel.setCalendar_title(calendar.getCalendar_title());
+                                                calendarModel.setCalendar_desc(calendar.getCalendar_desc());
+                                                calendarModel.setCalendar_type(calendar_type);
+                                                calendarModel.setCalendar_color(calendar_colour);
+                                                calendarModelList.add(calendarModel);
+                                            }
+                                        }
+                                        if (compactCalendarView.getEvents(Calendar.getInstance().getTime()) != null) {
+                                            kalendar.setVisibility(View.GONE);
+                                            recyclerView.setVisibility(View.VISIBLE);
+                                        }
+                                    } else {
+                                        if (compactCalendarView.getEvents(Calendar.getInstance().getTime()).size() == 0) {
+                                            kalendar.setVisibility(View.VISIBLE);
+                                            recyclerView.setVisibility(View.GONE);
                                         }
                                     }
-                                    if (compactCalendarView.getEvents(Calendar.getInstance().getTime())!=null){
-                                        kalendar.setVisibility(View.GONE);
-                                        recyclerView.setVisibility(View.VISIBLE);
-                                    }
-                                }else {
-                                    if (compactCalendarView.getEvents(Calendar.getInstance().getTime()).size() == 0){
-                                        kalendar.setVisibility(View.VISIBLE);
-                                        recyclerView.setVisibility(View.GONE);
-                                    }
-                                }
-                                calendarAdapter.notifyDataSetChanged();
-                                if (calendar_type.equals("-1")) {
-                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                                    try {
-                                        date = format.parse(calendar_date);
+                                    calendarAdapter.notifyDataSetChanged();
+                                    if (calendar_type.equals("-1")) {
+                                        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                        try {
+                                            date = format.parse(calendar_date);
 
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                    cal.setTime(date);
-                                    setToMidnight(cal);
-                                    long times = cal.getTimeInMillis();
-                                    events = getEventList(calendar_colour,times);
-                                    compactCalendarView.addEvents(events);
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        cal.setTime(date);
+                                        setToMidnight(cal);
+                                        long times = cal.getTimeInMillis();
+                                        events = getEventList(calendar_colour, times);
+                                        compactCalendarView.addEvents(events);
+                                    } else {
+                                        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
+                                        try {
+                                            date = format.parse(calendar_date + " " + calendar_time);
 
-                                }else {
-                                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm", Locale.getDefault());
-                                    try {
-                                        date = format.parse(calendar_date + " " + calendar_time);
-
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        cal.setTime(date);
+                                        setToMidnight(cal);
+                                        long timee = cal.getTimeInMillis();
+                                        eventList = getevent(calendar_colour, timee);
+                                        compactCalendarView.addEvents(eventList);
                                     }
-                                    cal.setTime(date);
-                                    setToMidnight(cal);
-                                    long timee = cal.getTimeInMillis();
-                                    eventList = getevent(calendar_colour,timee);
-                                    compactCalendarView.addEvents(eventList);
                                 }
                             }
                         }
+
+                    } else if (status == 0 && code.equals("DTS_ERR_0001")) {
+                        kalendar.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
-                }
-                else if (status == 0 &&code.equals("DTS_ERR_0001")){
-                    kalendar.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
                 }
             }
 
@@ -380,4 +386,6 @@ public class KalenderKelas extends AppCompatActivity {
             return "";
         }
     }
+
+
 }

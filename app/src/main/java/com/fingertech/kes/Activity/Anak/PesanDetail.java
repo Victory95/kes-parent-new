@@ -93,64 +93,66 @@ public class PesanDetail extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.PesanDetail> call, Response<JSONResponse.PesanDetail> response) {
                 Log.d("response",response.code()+"");
-                JSONResponse.PesanDetail resource = response.body();
-                status = resource.status;
-                code   = resource.code;
-                if (status==1&&code.equals("DTS_SCS_0001")){
-                    subject     = response.body().getData().getDataMessage().getMessage_title();
-                    pengirim    = response.body().getData().getDataMessage().getSender_name();
-                    jam         = response.body().getData().getDataMessage().getDatez();
-                    kelas       = response.body().getData().getDataMessage().getClassroom_name();
-                    pesan       = response.body().getData().getDataMessage().getMessage_cont();
-                    mapel       = response.body().getData().getDataMessage().getCources_name();
-                    tanggals    = response.body().getData().getDataMessage().getMessage_date();
-                    read_status = response.body().getData().getDataMessage().getRead_status();
-                    if (read_status.equals("1")){
-                        tv_read_status.setText("Sudah dibaca anak anda");
-                        tv_read_status.setBackgroundColor(Color.parseColor("#14e715"));
-                        tv_read_status.setTextColor(Color.parseColor("#ffffff"));
-                    }else {
-                        tv_read_status.setText("Belum dibaca anak anda");
-                        tv_read_status.setBackgroundColor(Color.parseColor("#ff0000"));
-                        tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                if (response.isSuccessful()) {
+                    JSONResponse.PesanDetail resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        subject = response.body().getData().getDataMessage().getMessage_title();
+                        pengirim = response.body().getData().getDataMessage().getSender_name();
+                        jam = response.body().getData().getDataMessage().getDatez();
+                        kelas = response.body().getData().getDataMessage().getClassroom_name();
+                        pesan = response.body().getData().getDataMessage().getMessage_cont();
+                        mapel = response.body().getData().getDataMessage().getCources_name();
+                        tanggals = response.body().getData().getDataMessage().getMessage_date();
+                        read_status = response.body().getData().getDataMessage().getRead_status();
+                        if (read_status.equals("1")) {
+                            tv_read_status.setText("Sudah dibaca anak anda");
+                            tv_read_status.setBackgroundColor(Color.parseColor("#14e715"));
+                            tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                        } else {
+                            tv_read_status.setText("Belum dibaca anak anda");
+                            tv_read_status.setBackgroundColor(Color.parseColor("#ff0000"));
+                            tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                        }
+
+
+                        if (subject.equals("")) {
+                            tv_subject.setText("( Tidak ada Subject )");
+                        } else {
+                            tv_subject.setText(subject);
+                        }
+
+                        String tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
+                        // Set car item title.
+                        try {
+                            date_now = times_format.parse(tanggal);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Long times_now = date_now.getTime();
+
+                        try {
+                            date_message = times_format.parse(tanggals);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Long times_pesan = date_message.getTime();
+                        if (times_pesan.equals(times_now)) {
+                            tv_jam.setText(convertjam(jam));
+                        } else {
+                            tv_jam.setText(convertTanggal(tanggals));
+                        }
+
+                        Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + pengirim + "&background=1de9b6&color=fff&font-size=0.40&length=1").into(imageView);
+
+                        tv_pengirim.setText(pengirim);
+                        tv_mapel.setText(mapel);
+                        tv_kelas.setText(kelas);
+                        tv_pesan.setText(pesan);
+                        tv_anak.setText(nama_anak);
+
                     }
-
-
-                    if (subject.equals("")){
-                        tv_subject.setText("( Tidak ada Subject )");
-                    }else {
-                        tv_subject.setText(subject);
-                    }
-
-                    String tanggal = tanggalFormat.format(Calendar.getInstance().getTime());
-                    // Set car item title.
-                    try {
-                        date_now    = times_format.parse(tanggal);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Long times_now = date_now.getTime();
-
-                    try {
-                        date_message = times_format.parse(tanggals);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    Long times_pesan = date_message.getTime();
-                    if (times_pesan.equals(times_now)){
-                        tv_jam.setText(convertjam(jam));
-                    }else {
-                        tv_jam.setText(convertTanggal(tanggals));
-                    }
-
-                    Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + pengirim+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(imageView);
-
-                    tv_pengirim.setText(pengirim);
-                    tv_mapel.setText(mapel);
-                    tv_kelas.setText(kelas);
-                    tv_pesan.setText(pesan);
-                    tv_anak.setText(nama_anak);
-
                 }
             }
 

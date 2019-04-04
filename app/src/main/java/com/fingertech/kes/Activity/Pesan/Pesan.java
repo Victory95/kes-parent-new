@@ -35,6 +35,7 @@ import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
+import com.fingertech.kes.Rest.UtilsApi;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +43,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.Subject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,7 +59,7 @@ public class Pesan extends Fragment {
 
     TextView pengirim,pesan,title,tanggal;
     ProgressDialog dialog;
-    Auth mApiInterface;
+    Auth mApiInterface,mApi;
     SharedPreferences sharedPreferences;
     String authorization,school_code,parent_id,student_id,school_name,classroom_id,fullname;
     RecyclerView recyclerView;
@@ -77,6 +84,7 @@ public class Pesan extends Fragment {
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         recyclerView    = v.findViewById(R.id.rv_chat);
         swipeRefreshLayout  = v.findViewById(R.id.pullToRefresh);
+        mApi            = UtilsApi.getAPIService();
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -87,9 +95,11 @@ public class Pesan extends Fragment {
         classroom_id        = sharedPreferences.getString("classroom_id",null);
         fullname            = sharedPreferences.getString("fullname",null);
 
-        date_from = "2018-12-30";
-        date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
-        dapat_pesan();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH,-4);
+        date_from   =  dateFormatForMonth.format(calendar.getTime());
+        date_to     =  dateFormatForMonth.format(Calendar.getInstance().getTime());
+        dapatPesan();
         refresh();
 
         return v;
@@ -104,7 +114,7 @@ public class Pesan extends Fragment {
             int Refreshcounter = 1;
             @Override
             public void onRefresh() {
-                dapat_pesan();
+                dapatPesan();
                 Refreshcounter = Refreshcounter + 1;
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -112,81 +122,85 @@ public class Pesan extends Fragment {
 
 
     }
-
-    public void dapat_pesan(){
+    public void dapatPesan(){
         progressBar();
         showDialog();
-        refresh();
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization.toString(),parent_id.toString(),date_from.toString(),date_to.toString());
-        call.enqueue(new Callback<JSONResponse.PesanAnak>() {
-            @Override
-            public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
-                Log.d("onRespone",response.code()+"");
-                hideDialog();
-                JSONResponse.PesanAnak resource = response.body();
-
-                status  = resource.status;
-                code    = resource.code;
-
-
-                if (status == 1 & code.equals("DTS_SCS_0001")){
-                    hideKeyboard(getActivity());
-//                    date_from.clearFocus();
-//                    date_to.clearFocus();
-                    pesanModelList  = new ArrayList<PesanModel>();
-                    for (int i = 0; i < response.body().getData().size();i++){
-                        jam         = response.body().getData().get(i).getDatez();
-                        tanggalku   = response.body().getData().get(i).getMessage_date();
-                        kirim       = response.body().getData().get(i).getSender_name();
-                        pesanku     =response.body().getData().get(i).getMessage_cont();
-                        titleku     =response.body().getData().get(i).getMessage_title();
-                        statusku    =response.body().getData().get(i).getRead_status();
-
-                        pesanModel  = new PesanModel();
-                        pesanModel.setTanggal(tanggalku);
-                        pesanModel.setJam(jam);
-                        pesanModel.setDari(kirim);
-                        pesanModel.setPesan(pesanku);
-                        pesanModel.setTitle(titleku);
-                        pesanModel.setStatus(statusku);
-                        pesanModelList.add(pesanModel);
+        mApi.kes_message_inbox_get(authorization,school_code.toLowerCase(),parent_id,date_from,date_to)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONResponse.PesanAnak>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
                     }
-                    pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-                    pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
-                            intent.putExtra("fullname",fullname);
-                            intent.putExtra("authorization",authorization);
-                            intent.putExtra("school_code",school_code);
-                            intent.putExtra("parent_id",parent_id);
-                            intent.putExtra("message_id",response.body().getData().get(position).getMessageid());
-                            intent.putExtra("parent_message_id",response.body().getData().get(position).getParent_message_id());
-                            startActivityForResult(intent,1);
+
+                    @Override
+                    public void onNext(JSONResponse.PesanAnak response) {
+                        status  = response.status;
+                        code    = response.code;
+                        if (status == 1 & code.equals("DTS_SCS_0001")){
+                            hideKeyboard(getActivity());
+                            pesanModelList  = new ArrayList<PesanModel>();
+                            for (int i = 0; i < response.getData().size();i++){
+                                jam         = response.getData().get(i).getDatez();
+                                tanggalku   = response.getData().get(i).getMessage_date();
+                                kirim       = response.getData().get(i).getSender_name();
+                                pesanku     =response.getData().get(i).getMessage_cont();
+                                titleku     =response.getData().get(i).getMessage_title();
+                                statusku    =response.getData().get(i).getRead_status();
+
+
+                                pesanModel  = new PesanModel();
+                                pesanModel.setTanggal(tanggalku);
+                                pesanModel.setJam(jam);
+                                pesanModel.setDari(kirim);
+                                pesanModel.setPesan(pesanku);
+                                pesanModel.setTitle(titleku);
+                                pesanModel.setStatus(statusku);
+                                pesanModel.setMessage_id(response.getData().get(i).getMessageid());
+                                pesanModel.setParent_message_id(response.getData().get(i).getParent_message_id());
+                                pesanModelList.add(pesanModel);
+
+                            }
+
                         }
-                    });
+                        else if (status == 0 & code.equals("DTS_ERR_0001")){
+                            hideKeyboard(getActivity());
+                            recyclerView.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        hideDialog();
+                        Log.d("eror",e.toString());
+                        Toast.makeText(getContext(),"Internet bermasalah",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        hideDialog();
+                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+                        pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
+                                intent.putExtra("fullname",fullname);
+                                intent.putExtra("authorization",authorization);
+                                intent.putExtra("school_code",school_code);
+                                intent.putExtra("parent_id",parent_id);
+                                intent.putExtra("message_id",pesanModelList.get(position).getMessage_id());
+                                intent.putExtra("parent_message_id",pesanModelList.get(position).getParent_message_id());
+                                startActivityForResult(intent,1);
+                            }
+                        });
 //                    setUserVisibleHint(isVisible());
-                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                    recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(pesanGuruAdapter);
-
-                }
-                else if (status == 0 & code.equals("DTS_ERR_0001")){
-                    hideKeyboard(getActivity());
-                    recyclerView.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
-                Log.i("onFailure",t.toString());
-                Toast.makeText(getActivity(),t.toString(),Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        });
+                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                        recyclerView.setLayoutManager(layoutManager);
+                        recyclerView.setAdapter(pesanGuruAdapter);
+                    }
+                });
     }
-
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();
@@ -220,9 +234,12 @@ public class Pesan extends Fragment {
                 authorization = data.getStringExtra("authorization");
                 school_code   = data.getStringExtra("school_code");
                 parent_id     = data.getStringExtra("parent_id");
-                date_from = "2018-12-30";
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.MONTH,-4);
+                date_from   =  dateFormatForMonth.format(calendar.getTime());
                 date_to=dateFormatForMonth.format(Calendar.getInstance().getTime());
-                dapat_pesan();
+                dapatPesan();
             }
         }
     }

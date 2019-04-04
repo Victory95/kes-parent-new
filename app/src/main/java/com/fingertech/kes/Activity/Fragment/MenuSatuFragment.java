@@ -18,7 +18,7 @@ import com.fingertech.kes.Activity.Anak.JadwalPelajaran;
 import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
-import com.fingertech.kes.Activity.Anak.ProfilAnak;
+import com.fingertech.kes.Activity.Anak.RaporAnak;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -32,7 +32,7 @@ public class MenuSatuFragment extends Fragment{
         // Required empty public constructor
     }
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
-    CardView btn_jadwalujian,btn_jadwal, btn_agenda,btn_absensi, btn_pesan, btn_kalendar;
+    CardView btn_jadwalujian,btn_jadwal, btn_agenda,btn_absensi, btn_pesan, btn_raport;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
     public static final String myViewpagerPreferences = "myViewpagerPreferences";
@@ -67,7 +67,7 @@ public class MenuSatuFragment extends Fragment{
         btn_agenda      = view.findViewById(R.id.btn_agenda);
         btn_absensi     = view.findViewById(R.id.btn_absen);
         btn_pesan       = view.findViewById(R.id.btn_pesan);
-        btn_kalendar    = view.findViewById(R.id.btn_kalender);
+        btn_raport      = view.findViewById(R.id.btn_raport);
         frameLayout     = view.findViewById(R.id.fragment1);
 
         btn_jadwalujian.setOnClickListener(v -> {
@@ -150,14 +150,14 @@ public class MenuSatuFragment extends Fragment{
             intent.putExtra("student_name",nama_anak);
             startActivity(intent);
         });
-        btn_kalendar.setOnClickListener(v -> {
+        btn_raport.setOnClickListener(v -> {
             SharedPreferences.Editor editor = sharedPreferences2.edit();
             editor.putString("school_code",school_code);
             editor.putString("authorization",authorization);
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
             editor.apply();
-            Intent intent = new Intent(getContext(), KalenderKelas.class);
+            Intent intent = new Intent(getContext(), RaporAnak.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);

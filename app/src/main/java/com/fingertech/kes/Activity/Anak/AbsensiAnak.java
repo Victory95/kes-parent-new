@@ -303,14 +303,16 @@ public class AbsensiAnak extends AppCompatActivity{
             public void onResponse(Call<JSONResponse.AbsenSiswa> call, Response<JSONResponse.AbsenSiswa> response) {
                 Log.i("KES",response.code() + "");
 
-                JSONResponse.AbsenSiswa resource = response.body();
-                status = resource.status;
-                code   = resource.code;
+                if (response.isSuccessful()) {
+                    JSONResponse.AbsenSiswa resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                if (status == 1 & code.equals("DTS_SCS_0001")){
-                    dataJamList     = response.body().getData();
-                    dapat_mapel();
-                    datePickerButton.performClick();
+                    if (status == 1 & code.equals("DTS_SCS_0001")) {
+                        dataJamList = response.body().getData();
+                        dapat_mapel();
+                        datePickerButton.performClick();
+                    }
                 }
             }
 
@@ -327,59 +329,61 @@ public class AbsensiAnak extends AppCompatActivity{
             @Override
             public void onResponse(Call<JSONResponse.JadwalPelajaran> call, Response<JSONResponse.JadwalPelajaran> response) {
                 Log.d("Success",response.code()+"");
-                JSONResponse.JadwalPelajaran resource = response.body();
-                status = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("CSCH_SCS_0001")) {
-                    jadwalDataList = response.body().getData().getClass_schedule();
+                if (response.isSuccessful()) {
+                    JSONResponse.JadwalPelajaran resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("CSCH_SCS_0001")) {
+                        jadwalDataList = response.body().getData().getClass_schedule();
 
-                    for (int i = 0; i < response.body().getData().getClass_schedule().size(); i++) {
-                        scheduleClassItemList = response.body().getData().getClass_schedule().get(i).getScheduleClass();
-                        days_name = response.body().getData().getClass_schedule().get(i).getDayName();
-                        day_status = response.body().getData().getClass_schedule().get(i).getDayStatus();
-                        daysid = response.body().getData().getClass_schedule().get(i).getDayid();
-                        day_type = response.body().getData().getClass_schedule().get(i).getDayType();
-                        if (days_name.equals(hari)){
-                            if (hari.equals("Sabtu") || hari.equals("Minggu")){
-                                tv_absen.setVisibility(VISIBLE);
-                                recyclerView.setVisibility(GONE);
-                                hint.setVisibility(GONE);
-                                no_absen.setVisibility(GONE);
-                            }else {
-                                if (scheduleClassItemList.size() == 0){
-                                    tv_absen.setVisibility(GONE);
-                                    no_absen.setVisibility(VISIBLE);
+                        for (int i = 0; i < response.body().getData().getClass_schedule().size(); i++) {
+                            scheduleClassItemList = response.body().getData().getClass_schedule().get(i).getScheduleClass();
+                            days_name = response.body().getData().getClass_schedule().get(i).getDayName();
+                            day_status = response.body().getData().getClass_schedule().get(i).getDayStatus();
+                            daysid = response.body().getData().getClass_schedule().get(i).getDayid();
+                            day_type = response.body().getData().getClass_schedule().get(i).getDayType();
+                            if (days_name.equals(hari)) {
+                                if (hari.equals("Sabtu") || hari.equals("Minggu")) {
+                                    tv_absen.setVisibility(VISIBLE);
                                     recyclerView.setVisibility(GONE);
                                     hint.setVisibility(GONE);
-                                }else {
-                                    tv_absen.setVisibility(GONE);
-                                    recyclerView.setVisibility(VISIBLE);
-                                    hint.setVisibility(VISIBLE);
                                     no_absen.setVisibility(GONE);
-                                    if (absensiModels != null) {
-                                        absensiModels.clear();
-                                        for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
-                                            absensiModel = new AbsensiModel();
-                                            absensiModel.setTanggal(tanggals);
-                                            absensiModel.setTimez_star(dataJam.getTimezOk());
-                                            absensiModel.setTimez_finish(dataJam.getTimezFinish());
-                                            absensiModel.setMapel(dataJam.getCourcesName());
-                                            absensiModel.setGuru(dataJam.getTeacherName());
-                                            absensiModels.add(absensiModel);
+                                } else {
+                                    if (scheduleClassItemList.size() == 0) {
+                                        tv_absen.setVisibility(GONE);
+                                        no_absen.setVisibility(VISIBLE);
+                                        recyclerView.setVisibility(GONE);
+                                        hint.setVisibility(GONE);
+                                    } else {
+                                        tv_absen.setVisibility(GONE);
+                                        recyclerView.setVisibility(VISIBLE);
+                                        hint.setVisibility(VISIBLE);
+                                        no_absen.setVisibility(GONE);
+                                        if (absensiModels != null) {
+                                            absensiModels.clear();
+                                            for (JSONResponse.ScheduleClassItem dataJam : scheduleClassItemList) {
+                                                absensiModel = new AbsensiModel();
+                                                absensiModel.setTanggal(tanggals);
+                                                absensiModel.setTimez_star(dataJam.getTimezOk());
+                                                absensiModel.setTimez_finish(dataJam.getTimezFinish());
+                                                absensiModel.setMapel(dataJam.getCourcesName());
+                                                absensiModel.setGuru(dataJam.getTeacherName());
+                                                absensiModels.add(absensiModel);
+                                            }
+                                            absensiAdapter.notifyDataSetChanged();
                                         }
-                                        absensiAdapter.notifyDataSetChanged();
-                                    }
-                                    if (absenModelList != null) {
-                                        absenModelList.clear();
-                                        for (JSONResponse.DataJam dataJam : dataJamList) {
-                                            absenModel = new AbsenModel();
-                                            absenModel.setTanggal(tanggals);
-                                            absenModel.setTimez_star(dataJam.getTimez_ok());
-                                            absenModel.setTimez_finish(dataJam.getTimez_finish());
-                                            absenModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day) - 1).getAbsen_status());
-                                            absenModelList.add(absenModel);
+                                        if (absenModelList != null) {
+                                            absenModelList.clear();
+                                            for (JSONResponse.DataJam dataJam : dataJamList) {
+                                                absenModel = new AbsenModel();
+                                                absenModel.setTanggal(tanggals);
+                                                absenModel.setTimez_star(dataJam.getTimez_ok());
+                                                absenModel.setTimez_finish(dataJam.getTimez_finish());
+                                                absenModel.setDay_id(dataJam.getDays().get(Integer.parseInt(day) - 1).getAbsen_status());
+                                                absenModelList.add(absenModel);
+                                            }
+                                            absensiAdapter.notifyDataSetChanged();
                                         }
-                                        absensiAdapter.notifyDataSetChanged();
                                     }
                                 }
                             }

@@ -330,124 +330,125 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.DetailStudent resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.DetailStudent resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                    String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
 
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        namalengkap = response.body().getData().getFullname();
+                        jeniskelamin = response.body().getData().getGender();
+                        kelas = response.body().getData().getEdulevel_id();
+                        Nis = response.body().getData().getMember_code();
+                        Sekolah = response.body().getData().getClassroom_id();
+                        Nik = response.body().getData().getNik();
+                        Nisn = response.body().getData().getNisn();
+                        rombel = response.body().getData().getRombel();
+                        tempatlahir = response.body().getData().getBirth_place();
+                        tanggallahir = response.body().getData().getBirth_date();
+                        agama = response.body().getData().getReligion();
+                        kebutuhankhusus = response.body().getData().getSpecial_needs();
+                        kewarga_negaraan = response.body().getData().getCitizen_status();
+                        nomorrumah = response.body().getData().getHome_phone();
+                        nomorhp = response.body().getData().getMobile_phone();
+                        Email = response.body().getData().getEmail();
+                        sk_un = response.body().getData().getSkhun();
+                        no_kps = response.body().getData().getNo_kps();
+                        penerimaankps = response.body().getData().getPenerima_kps();
+                        Alamat = response.body().getData().getAddress();
+                        Rt = response.body().getData().getRt();
+                        rw = response.body().getData().getRw();
+                        Kelurahan = response.body().getData().getKelurahan();
+                        Kecamatan = response.body().getData().getKecamatan();
+                        kodepos = response.body().getData().getPost_code();
+                        statustinggal = response.body().getData().getJenis_tinggal();
+                        transport = response.body().getData().getTransportasi();
+                        foto = response.body().getData().getPicture();
+                        latitudeanak = Double.parseDouble(response.body().getData().getLatitude());
+                        longitudeanak = Double.parseDouble(response.body().getData().getLongitude());
 
-                    namalengkap         = response.body().getData().getFullname();
-                    jeniskelamin        = response.body().getData().getGender();
-                    kelas               = response.body().getData().getEdulevel_id();
-                    Nis                 = response.body().getData().getMember_code();
-                    Sekolah             = response.body().getData().getClassroom_id();
-                    Nik                 = response.body().getData().getNik();
-                    Nisn                = response.body().getData().getNisn();
-                    rombel              = response.body().getData().getRombel();
-                    tempatlahir         = response.body().getData().getBirth_place();
-                    tanggallahir        = response.body().getData().getBirth_date();
-                    agama               = response.body().getData().getReligion();
-                    kebutuhankhusus     = response.body().getData().getSpecial_needs();
-                    kewarga_negaraan    = response.body().getData().getCitizen_status();
-                    nomorrumah          = response.body().getData().getHome_phone();
-                    nomorhp             = response.body().getData().getMobile_phone();
-                    Email               = response.body().getData().getEmail();
-                    sk_un               = response.body().getData().getSkhun();
-                    no_kps              = response.body().getData().getNo_kps();
-                    penerimaankps       = response.body().getData().getPenerima_kps();
-                    Alamat              = response.body().getData().getAddress();
-                    Rt                  = response.body().getData().getRt();
-                    rw                  = response.body().getData().getRw();
-                    Kelurahan           = response.body().getData().getKelurahan();
-                    Kecamatan           = response.body().getData().getKecamatan();
-                    kodepos             = response.body().getData().getPost_code();
-                    statustinggal       = response.body().getData().getJenis_tinggal();
-                    transport           = response.body().getData().getTransportasi();
-                    foto                = response.body().getData().getPicture();
-                    latitudeanak        = Double.parseDouble(response.body().getData().getLatitude());
-                    longitudeanak       = Double.parseDouble(response.body().getData().getLongitude());
+                        if (kelas.equals("4")) {
+                            kelas = "1 SD";
+                        } else if (kelas.equals("5")) {
+                            kelas = "2 SD";
+                        } else if (kelas.equals("6")) {
+                            kelas = "3 SD";
+                        } else if (kelas.equals("7")) {
+                            kelas = "4 SD";
+                        } else if (kelas.equals("8")) {
+                            kelas = "5 SD";
+                        } else if (kelas.equals("9")) {
+                            kelas = "6 SD";
+                        } else if (kelas.equals("10")) {
+                            kelas = "1 SMP";
+                        } else if (kelas.equals("11")) {
+                            kelas = "2 SMP";
+                        } else if (kelas.equals("12")) {
+                            kelas = "3 SMP";
+                        } else if (kelas.equals("13")) {
+                            kelas = "1 SMA";
+                        } else if (kelas.equals("14")) {
+                            kelas = "2 SMA";
+                        } else if (kelas.equals("15")) {
+                            kelas = "3 SMA";
+                        }
 
-                    if (kelas.equals("4")){
-                        kelas = "1 SD";
-                    }else if (kelas.equals("5")){
-                        kelas = "2 SD";
-                    }else if (kelas.equals("6")){
-                        kelas = "3 SD";
-                    }else if (kelas.equals("7")){
-                        kelas = "4 SD";
-                    }else if (kelas.equals("8")){
-                        kelas = "5 SD";
-                    }else if (kelas.equals("9")){
-                        kelas = "6 SD";
-                    }else if (kelas.equals("10")){
-                        kelas = "1 SMP";
-                    }else if (kelas.equals("11")){
-                        kelas = "2 SMP";
-                    }else if (kelas.equals("12")){
-                        kelas = "3 SMP";
-                    }else if (kelas.equals("13")){
-                        kelas = "1 SMA";
-                    }else if (kelas.equals("14")){
-                        kelas = "2 SMA";
-                    }else if (kelas.equals("15")){
-                        kelas = "3 SMA";
-                    }
+                        kelas_anak.setText("Sedang bersekolah di " + school_name + " Kelas " + kelas);
+                        jenis_kelamin.setText(jeniskelamin);
+                        nis.setText("Nis : " + Nis);
+                        nisn.setText(Nisn);
+                        tempat_lahir.setText(tempatlahir);
+                        tanggal_lahir.setText(tanggallahir);
+                        rombongan_belajar.setText(rombel);
+                        Agama.setText(agama);
+                        kebutuhan_khusus.setText(kebutuhankhusus);
+                        kewarganegaraan.setText(kewarga_negaraan);
+                        nomor_rumah.setText(nomorrumah);
+                        nomor_hp.setText(nomorhp);
+                        email.setText(Email);
+                        skun.setText(sk_un);
+                        nokps.setText(no_kps);
+                        penerimaan_kps.setText(penerimaankps);
+                        alamat.setText(Alamat);
+                        rt.setText(Rt + "/" + rw);
+                        kelurahan.setText(Kelurahan);
+                        kecamatan.setText(Kecamatan);
+                        kode_pos.setText(kodepos);
+                        status_tinggal.setText(statustinggal);
+                        transportasi.setText(transport);
+                        nama_anak_profile.setText(namalengkap);
+                        nik.setText("Nik : " + Nik);
+                        String imagefiles = Base_anak + foto;
+                        int[] androidColors = getContext().getResources().getIntArray(R.array.androidcolors);
+                        int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
+                        String random = String.valueOf(randomAndroidColor);
 
-                    kelas_anak.setText("Sedang bersekolah di "+school_name+" Kelas "+kelas);
-                    jenis_kelamin.setText(jeniskelamin);
-                    nis.setText("Nis : "+Nis);
-                    nisn.setText(Nisn);
-                    tempat_lahir.setText(tempatlahir);
-                    tanggal_lahir.setText(tanggallahir);
-                    rombongan_belajar.setText(rombel);
-                    Agama.setText(agama);
-                    kebutuhan_khusus.setText(kebutuhankhusus);
-                    kewarganegaraan.setText(kewarga_negaraan);
-                    nomor_rumah.setText(nomorrumah);
-                    nomor_hp.setText(nomorhp);
-                    email.setText(Email);
-                    skun.setText(sk_un);
-                    nokps.setText(no_kps);
-                    penerimaan_kps.setText(penerimaankps);
-                    alamat.setText(Alamat);
-                    rt.setText(Rt + "/" + rw);
-                    kelurahan.setText(Kelurahan);
-                    kecamatan.setText(Kecamatan);
-                    kode_pos.setText(kodepos);
-                    status_tinggal.setText(statustinggal);
-                    transportasi.setText(transport);
-                    nama_anak_profile.setText(namalengkap);
-                    nik.setText("Nik : "+Nik);
-                    String imagefiles = Base_anak + foto;
-                    int[] androidColors = getContext().getResources().getIntArray(R.array.androidcolors);
-                    int randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
-                    String random  = String.valueOf(randomAndroidColor);
+                        final LatLng latLng = new LatLng(latitudeanak, longitudeanak);
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+                        final MarkerOptions markerOptions = new MarkerOptions()
+                                .position(latLng)
+                                .title("Location")
+                                .icon(bitmapDescriptorFromVector(ProfilAnak.this, R.drawable.ic_map));
 
-                    final LatLng latLng = new LatLng(latitudeanak, longitudeanak);
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-                    final MarkerOptions markerOptions = new MarkerOptions()
-                            .position(latLng)
-                            .title("Location")
-                            .icon(bitmapDescriptorFromVector(ProfilAnak.this, R.drawable.ic_map));
-
-                    //move map camera
-                    mapAnak.addMarker(markerOptions);
-                    mapAnak.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mapAnak.animateCamera(CameraUpdateFactory.zoomTo(17));
+                        //move map camera
+                        mapAnak.addMarker(markerOptions);
+                        mapAnak.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mapAnak.animateCamera(CameraUpdateFactory.zoomTo(17));
 
 
-                    if (foto.equals("")){
-                        Glide.with(ProfilAnak.this).load("https://ui-avatars.com/api/?name="+namalengkap+"&background=40bfe8&color=fff").into(image_anak);
-                    }
-                    Picasso.get().load(imagefiles).into(image_anak);
+                        if (foto.equals("")) {
+                            Glide.with(ProfilAnak.this).load("https://ui-avatars.com/api/?name=" + namalengkap + "&background=40bfe8&color=fff").into(image_anak);
+                        }
+                        Picasso.get().load(imagefiles).into(image_anak);
 
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                    } else {
+                        if (status == 0 && code.equals("DTS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }

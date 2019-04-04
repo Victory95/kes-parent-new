@@ -55,15 +55,17 @@ public class KalendarDetail extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.CalendarDetail> call, Response<JSONResponse.CalendarDetail> response) {
                 Log.i("onRespone",response.code()+"");
-                JSONResponse.CalendarDetail resource = response.body();
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("DTS_SCS_0001")){
-                    tanggal.setText(response.body().getData().getCalendar_date_ok());
-                    jam.setText(response.body().getData().getTimez());
-                    deskripsi.setText(response.body().getData().getCalendar_desc());
-                    judul.setText(response.body().getData().getCalendar_title());
-                    guru.setText(response.body().getData().getCreated_by());
+                if (response.isSuccessful()) {
+                    JSONResponse.CalendarDetail resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        tanggal.setText(response.body().getData().getCalendar_date_ok());
+                        jam.setText(response.body().getData().getTimez());
+                        deskripsi.setText(response.body().getData().getCalendar_desc());
+                        judul.setText(response.body().getData().getCalendar_title());
+                        guru.setText(response.body().getData().getCreated_by());
+                    }
                 }
             }
 

@@ -13,11 +13,13 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permisson.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" /> <!-- <uses-permission android:name="android.permission.READ_SMS" /> &lt;!&ndash; GCM requires a Google account to use push notifications. &ndash;&gt; -->
+    <!--<uses-permission android:name="android.permission.RECEIVE_SMS" /> &lt;!&ndash; <uses-permission android:name="android.permission.READ_SMS" /> &lt;!&ndash; GCM requires a Google account to use push notifications. &ndash;&gt; &ndash;&gt;-->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- Keeps the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Prevents other applications from registering and receiving the application's messages. -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -31,8 +33,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Activity.kalendartest" />
-
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -60,6 +60,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

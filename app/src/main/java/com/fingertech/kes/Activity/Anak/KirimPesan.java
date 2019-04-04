@@ -93,54 +93,52 @@ public class KirimPesan extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ListMapel> call, Response<JSONResponse.ListMapel> response) {
                 Log.d("onResponse",response.code()+"");
-                JSONResponse.ListMapel resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.ListMapel resource = response.body();
 
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("KLC_SCS_0001")){
-                    dataMapelList = response.body().getData();
-                    List<String> listMapel = new ArrayList<>();
-                    listMapel.add("Pilih mata pelajaran");
-                    for (int m = 0;m < dataMapelList.size();m++){
-                        listMapel.add(dataMapelList.get(m).getCources_name());
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("KLC_SCS_0001")) {
+                        dataMapelList = response.body().getData();
+                        List<String> listMapel = new ArrayList<>();
+                        listMapel.add("Pilih mata pelajaran");
+                        for (int m = 0; m < dataMapelList.size(); m++) {
+                            listMapel.add(dataMapelList.get(m).getCources_name());
+                        }
+
+                        final ArrayAdapter<String> adapterMapel = new ArrayAdapter<String>(
+                                KirimPesan.this, R.layout.spinner_full, listMapel) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+                            }
+                        };
+                        adapterMapel.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_mapel.setAdapter(adapterMapel);
+                        sp_mapel.setOnItemSelectedListener((parent, view, position, id) -> {
+                            cources_id = dataMapelList.get(position - 1).getCourcesid();
+                        });
                     }
-
-                    final ArrayAdapter<String> adapterMapel = new ArrayAdapter<String>(
-                            KirimPesan.this,R.layout.spinner_full,listMapel){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
-                            }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
-                        }
-                    };
-                    adapterMapel.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_mapel.setAdapter(adapterMapel);
-                    sp_mapel.setOnItemSelectedListener((parent, view, position, id) -> {
-                        cources_id = dataMapelList.get(position-1).getCourcesid();
-                    });
                 }
             }
 
@@ -156,54 +154,52 @@ public class KirimPesan extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ListTeacher> call, Response<JSONResponse.ListTeacher> response) {
                 Log.d("onResponse",response.code()+"");
-                JSONResponse.ListTeacher resource = response.body();
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("DTS_SCS_0001")){
-                    dataGuruList = response.body().getData();
-                    List<String> listGuru = new ArrayList<>();
-                    listGuru.add("Pilih guru");
-                    for (int m = 0;m < dataGuruList.size();m++){
-                        listGuru.add(dataGuruList.get(m).getFullname());
+                if (response.isSuccessful()) {
+                    JSONResponse.ListTeacher resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        dataGuruList = response.body().getData();
+                        List<String> listGuru = new ArrayList<>();
+                        listGuru.add("Pilih guru");
+                        for (int m = 0; m < dataGuruList.size(); m++) {
+                            listGuru.add(dataGuruList.get(m).getFullname());
+                        }
+
+                        final ArrayAdapter<String> adapterMapel = new ArrayAdapter<String>(
+                                KirimPesan.this, R.layout.spinner_full, listGuru) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+                            }
+                        };
+                        adapterMapel.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_guru.setAdapter(adapterMapel);
+                        sp_guru.setOnItemSelectedListener((parent, view, position, id) -> {
+                            teacher_id = dataGuruList.get(position - 1).getTeacher_id();
+                        });
+
                     }
-
-                    final ArrayAdapter<String> adapterMapel = new ArrayAdapter<String>(
-                            KirimPesan.this,R.layout.spinner_full,listGuru){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
-                            }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
-                        }
-                    };
-                    adapterMapel.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_guru.setAdapter(adapterMapel);
-                    sp_guru.setOnItemSelectedListener((parent, view, position, id) -> {
-                        teacher_id  = dataGuruList.get(position-1).getTeacher_id();
-                    });
-
                 }
             }
 
@@ -223,20 +219,20 @@ public class KirimPesan extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ClassroomDetail> call, final Response<JSONResponse.ClassroomDetail> response) {
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+
+                    JSONResponse.ClassroomDetail resource = response.body();
+
+                    status = resource.status;
+                    code = resource.code;
 
 
-                JSONResponse.ClassroomDetail resource = response.body();
-
-                status = resource.status;
-                code    = resource.code;
-
-
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    walikelas    = response.body().getData().getHomeroom_teacher();
-                    namakelas    = response.body().getData().getClassroom_name();
-                    tv_kelas.setText(namakelas);
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        walikelas = response.body().getData().getHomeroom_teacher();
+                        namakelas = response.body().getData().getClassroom_name();
+                        tv_kelas.setText(namakelas);
+                    }
                 }
-
             }
 
             @Override
@@ -262,11 +258,13 @@ public class KirimPesan extends AppCompatActivity {
                 public void onResponse(Call<JSONResponse.KirimPesan> call, Response<JSONResponse.KirimPesan> response) {
                     Log.d("onResponse",response.code()+"");
                     hideDialog();
-                    JSONResponse.KirimPesan resource = response.body();
-                    status = resource.status;
-                    code   = resource.code;
-                    if (status == 1&& code.equals("DTS_SCS_0001")){
-                        finish();
+                    if (response.isSuccessful()) {
+                        JSONResponse.KirimPesan resource = response.body();
+                        status = resource.status;
+                        code = resource.code;
+                        if (status == 1 && code.equals("DTS_SCS_0001")) {
+                            finish();
+                        }
                     }
                 }
                 @Override

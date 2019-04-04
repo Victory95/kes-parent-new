@@ -230,18 +230,17 @@ public class JadwalUjian extends AppCompatActivity {
         call.enqueue(new Callback<JSONResponse.CheckSemester>() {
             @Override
             public void onResponse(Call<JSONResponse.CheckSemester> call, final Response<JSONResponse.CheckSemester> response) {
-
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.CheckSemester resource = response.body();
 
-                JSONResponse.CheckSemester resource = response.body();
-
-                status = resource.status;
-                code    = resource.code;
-                semester_id = response.body().getData();
-                dapat_semester();
-                Jadwal_ujian();
-//                Jadwal_ujian_terbaru();
-                dapat_mapel();
+                    status = resource.status;
+                    code = resource.code;
+                    semester_id = response.body().getData();
+                    dapat_semester();
+                    Jadwal_ujian();
+                    dapat_mapel();
+                }
             }
 
             @Override
@@ -263,29 +262,31 @@ public class JadwalUjian extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.ListSemester> call, final Response<JSONResponse.ListSemester> response) {
                 Log.i("KES", response.code() + "");
 
-                JSONResponse.ListSemester resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.ListSemester resource = response.body();
 
-                status = resource.status;
-                code = resource.code;
+                    status = resource.status;
+                    code = resource.code;
 
-                String tahun_mulai,tahun_akhir;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    for (int i = 0;i < response.body().getData().size();i++){
-                        if (response.body().getData().get(i).getSemester_id().equals(semester_id)){
-                            semester    = response.body().getData().get(i).getSemester_name();
-                            start_date  = response.body().getData().get(i).getStart_date();
-                            end_date    = response.body().getData().get(i).getEnd_date();
+                    String tahun_mulai, tahun_akhir;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            if (response.body().getData().get(i).getSemester_id().equals(semester_id)) {
+                                semester = response.body().getData().get(i).getSemester_name();
+                                start_date = response.body().getData().get(i).getStart_date();
+                                end_date = response.body().getData().get(i).getEnd_date();
+                            }
+                            if (response.body().getData().get(i).getSemester_name().equals("Ganjil")) {
+                                start_year = converTahun(response.body().getData().get(i).getStart_date());
+                            } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
+                                start_end = converTahun(response.body().getData().get(i).getEnd_date());
+                            }
+                            tv_semester.setText("Semester " + semester + " (" + start_year + "/" + start_end + ")");
                         }
-                        if (response.body().getData().get(i).getSemester_name().equals("Ganjil")){
-                            start_year  = converTahun(response.body().getData().get(i).getStart_date());
-                        } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
-                            start_end   = converTahun(response.body().getData().get(i).getEnd_date());
-                        }
-                        tv_semester.setText("Semester "+semester+" ("+start_year+"/"+start_end+")");
+
+                        dataSemesters = response.body().getData();
+
                     }
-
-                    dataSemesters = response.body().getData();
-
                 }
             }
 
@@ -304,12 +305,13 @@ public class JadwalUjian extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse.ListMapel> call, Response<JSONResponse.ListMapel> response) {
                 Log.d("onResponse",response.code()+"");
-                JSONResponse.ListMapel resource = response.body();
-
-                status  = resource.status;
-                code    = resource.code;
-                if (status == 1 && code.equals("KLC_SCS_0001")){
-                    dataMapelList = response.body().getData();
+                if (response.isSuccessful()) {
+                    JSONResponse.ListMapel resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("KLC_SCS_0001")) {
+                        dataMapelList = response.body().getData();
+                    }
                 }
             }
 
@@ -406,41 +408,41 @@ public class JadwalUjian extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
                 Log.i("KES", response.code() + "");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.JadwalUjian resource = response.body();
 
-                JSONResponse.JadwalUjian resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code    = resource.code;
-
-                ItemUjian itemUjian= null;
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        jam         = response.body().getData().get(i).getExam_time_ok();
-                        tanggal     = response.body().getData().get(i).getExam_date_ok();
-                        mapel       = response.body().getData().get(i).getCources_name();
-                        type        = response.body().getData().get(i).getType_name();
-                        deskripsi   = response.body().getData().get(i).getExam_desc();
-                        nilai       = response.body().getData().get(i).getScore_value();
-                        itemUjian = new ItemUjian();
-                        itemUjian.setJam(jam);
-                        itemUjian.setTanggal(tanggal);
-                        itemUjian.setMapel(mapel);
-                        itemUjian.setType_id(type);
-                        itemUjian.setDeskripsi(deskripsi);
-                        itemUjian.setNilai(nilai);
-                        itemUjianList.add(itemUjian);
-                    }
-                    no_ujian.setVisibility(View.GONE);
-                    ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
+                    ItemUjian itemUjian = null;
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            jam = response.body().getData().get(i).getExam_time_ok();
+                            tanggal = response.body().getData().get(i).getExam_date_ok();
+                            mapel = response.body().getData().get(i).getCources_name();
+                            type = response.body().getData().get(i).getType_name();
+                            deskripsi = response.body().getData().get(i).getExam_desc();
+                            nilai = response.body().getData().get(i).getScore_value();
+                            itemUjian = new ItemUjian();
+                            itemUjian.setJam(jam);
+                            itemUjian.setTanggal(tanggal);
+                            itemUjian.setMapel(mapel);
+                            itemUjian.setType_id(type);
+                            itemUjian.setDeskripsi(deskripsi);
+                            itemUjian.setNilai(nilai);
+                            itemUjianList.add(itemUjian);
+                        }
+                        no_ujian.setVisibility(View.GONE);
+                        ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
 //                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
-                    rv_ujian.setLayoutManager(new VegaLayoutManager());
-                    rv_ujian.setAdapter(ujianAdapter);
-                }
-                else {
-                    hideKeyboard(JadwalUjian.this);
-                    et_kata_kunci.clearFocus();
-                    no_ujian.setVisibility(View.VISIBLE);
-                    rv_ujian.setVisibility(View.GONE);
+                        rv_ujian.setLayoutManager(new VegaLayoutManager());
+                        rv_ujian.setAdapter(ujianAdapter);
+                    } else {
+                        hideKeyboard(JadwalUjian.this);
+                        et_kata_kunci.clearFocus();
+                        no_ujian.setVisibility(View.VISIBLE);
+                        rv_ujian.setVisibility(View.GONE);
+                    }
                 }
 
             }

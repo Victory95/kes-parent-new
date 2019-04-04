@@ -768,264 +768,258 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.DetailStudent resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.DetailStudent resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                    String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        tingkatan_kelas = response.body().data.getEdulevel_id();
+                        nama_lengkap = response.body().data.getFullname();
+                        nis = response.body().data.getMember_code();
+                        nisn = response.body().data.getNisn();
+                        nik = response.body().data.getNik();
+                        rombel = response.body().data.getRombel();
+                        jenis_kelamin = response.body().data.getGender();
+                        tempat_lahir = response.body().data.getBirth_place();
+                        tanggal_lahir = response.body().data.getBirth_date();
+                        religion = response.body().data.getReligion();
+                        kebutuhan_khusus = response.body().data.getSpecial_needs();
+                        kewarganegaraan = response.body().data.getCitizen_status();
+                        teleponrumah = response.body().data.getHome_phone();
+                        handphone = response.body().data.getMobile_phone();
+                        email = response.body().data.getEmail();
+                        skun = response.body().data.getSkhun();
+                        penerimaan_kps = response.body().data.getPenerima_kps();
+                        nomor_kps = response.body().data.getNo_kps();
+                        studentdetailId = response.body().getData().getStudentdetailid();
+                        dusun = response.body().getData().getDusun();
+                        rt = response.body().data.getRt();
+                        rw = response.body().data.getRw();
+                        kelurahan = response.body().data.getKelurahan();
+                        kecamatan = response.body().data.getKecamatan();
+                        kodepos = response.body().data.getPost_code();
+                        jenis_tinggal = response.body().data.getJenis_tinggal();
+                        transportasi = response.body().data.getTransportasi();
+                        alamat = response.body().data.getAddress();
+                        CurrentLatitude = Double.parseDouble(response.body().data.getLatitude());
+                        CurrentLongitude = Double.parseDouble(response.body().data.getLongitude());
+                        classroom_id = response.body().getData().getClassroom_id();
+                        picture = response.body().getData().getPicture();
 
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    tingkatan_kelas     = response.body().data.getEdulevel_id();
-                    nama_lengkap        = response.body().data.getFullname();
-                    nis                 = response.body().data.getMember_code();
-                    nisn                = response.body().data.getNisn();
-                    nik                 = response.body().data.getNik();
-                    rombel              = response.body().data.getRombel();
-                    jenis_kelamin       = response.body().data.getGender();
-                    tempat_lahir        = response.body().data.getBirth_place();
-                    tanggal_lahir       = response.body().data.getBirth_date();
-                    religion            = response.body().data.getReligion();
-                    kebutuhan_khusus    = response.body().data.getSpecial_needs();
-                    kewarganegaraan     = response.body().data.getCitizen_status();
-                    teleponrumah        = response.body().data.getHome_phone();
-                    handphone           = response.body().data.getMobile_phone();
-                    email               = response.body().data.getEmail();
-                    skun                = response.body().data.getSkhun();
-                    penerimaan_kps      = response.body().data.getPenerima_kps();
-                    nomor_kps           = response.body().data.getNo_kps();
-                    studentdetailId     = response.body().getData().getStudentdetailid();
-                    dusun               = response.body().getData().getDusun();
-                    rt                  = response.body().data.getRt();
-                    rw                  = response.body().data.getRw();
-                    kelurahan           = response.body().data.getKelurahan();
-                    kecamatan           = response.body().data.getKecamatan();
-                    kodepos             = response.body().data.getPost_code();
-                    jenis_tinggal       = response.body().data.getJenis_tinggal();
-                    transportasi        = response.body().data.getTransportasi();
-                    alamat              = response.body().data.getAddress();
-                    CurrentLatitude     = Double.parseDouble(response.body().data.getLatitude());
-                    CurrentLongitude    = Double.parseDouble(response.body().data.getLongitude());
-                    classroom_id        = response.body().getData().getClassroom_id();
-                    picture             = response.body().getData().getPicture();
+                        et_rt.setText(rt);
+                        et_rw.setText(rw);
+                        et_kelurahan.setText(kelurahan);
+                        et_kecamatan.setText(kecamatan);
+                        et_kodepos.setText(kodepos);
+                        et_jenis_tinggal.setText(jenis_tinggal);
+                        et_trasnportasi.setText(transportasi);
+                        et_alamat.setText(alamat);
+                        et_dusun.setText(dusun);
 
-                    et_rt.setText(rt);
-                    et_rw.setText(rw);
-                    et_kelurahan.setText(kelurahan);
-                    et_kecamatan.setText(kecamatan);
-                    et_kodepos.setText(kodepos);
-                    et_jenis_tinggal.setText(jenis_tinggal);
-                    et_trasnportasi.setText(transportasi);
-                    et_alamat.setText(alamat);
-                    et_dusun.setText(dusun);
+                        et_teleponrumah.setText(teleponrumah);
+                        et_handphone.setText(handphone);
+                        et_email.setText(email);
+                        et_skun.setText(skun);
+                        et_nomorkps.setText(nomor_kps);
 
-                    et_teleponrumah.setText(teleponrumah);
-                    et_handphone.setText(handphone);
-                    et_email.setText(email);
-                    et_skun.setText(skun);
-                    et_nomorkps.setText(nomor_kps);
+                        et_nama_lengkap.setText(nama_lengkap);
+                        et_nis.setText(nis);
+                        et_nisn.setText(nisn);
+                        et_nik.setText(nik);
+                        et_rombel.setText(rombel);
+                        et_tempat_lahir.setText(tempat_lahir);
+                        et_tanggal.setText(tanggal_lahir);
+                        et_kebutuhan_khusus.setText(kebutuhan_khusus);
 
-                    et_nama_lengkap.setText(nama_lengkap);
-                    et_nis.setText(nis);
-                    et_nisn.setText(nisn);
-                    et_nik.setText(nik);
-                    et_rombel.setText(rombel);
-                    et_tempat_lahir.setText(tempat_lahir);
-                    et_tanggal.setText(tanggal_lahir);
-                    et_kebutuhan_khusus.setText(kebutuhan_khusus);
-
-                    if(tingkatan_kelas.equals("4")){
-                        kelas = "SD 1";
-                    }else if(tingkatan_kelas.equals("5")){
-                        kelas = "SD 2";
-                    }else if(tingkatan_kelas.equals("6")){
-                        kelas = "SD 3";
-                    }else if(tingkatan_kelas.equals("7")){
-                        kelas = "SD 4";
-                    }else if(tingkatan_kelas.equals("8")){
-                        kelas = "SD 5";
-                    }else if(tingkatan_kelas.equals("9")){
-                        kelas = "SD 6";
-                    }else if(tingkatan_kelas.equals("10")){
-                        kelas = "SMP 1";
-                    }else if(tingkatan_kelas.equals("11")){
-                        kelas = "SMP 2";
-                    }else if(tingkatan_kelas.equals("12")){
-                        kelas = "SMP 3";
-                    }else if(tingkatan_kelas.equals("13")){
-                        kelas = "SMA/SMK 1";
-                    }else if(tingkatan_kelas.equals("14")){
-                        kelas = "SMA/SMK 2";
-                    }else if(tingkatan_kelas.equals("15")){
-                        kelas = "SMA/SMK 3";
-                    }
-
-                    final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
-                            EditProfileAnak.this,R.layout.spinner_full,kps){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                        if (tingkatan_kelas.equals("4")) {
+                            kelas = "SD 1";
+                        } else if (tingkatan_kelas.equals("5")) {
+                            kelas = "SD 2";
+                        } else if (tingkatan_kelas.equals("6")) {
+                            kelas = "SD 3";
+                        } else if (tingkatan_kelas.equals("7")) {
+                            kelas = "SD 4";
+                        } else if (tingkatan_kelas.equals("8")) {
+                            kelas = "SD 5";
+                        } else if (tingkatan_kelas.equals("9")) {
+                            kelas = "SD 6";
+                        } else if (tingkatan_kelas.equals("10")) {
+                            kelas = "SMP 1";
+                        } else if (tingkatan_kelas.equals("11")) {
+                            kelas = "SMP 2";
+                        } else if (tingkatan_kelas.equals("12")) {
+                            kelas = "SMP 3";
+                        } else if (tingkatan_kelas.equals("13")) {
+                            kelas = "SMA/SMK 1";
+                        } else if (tingkatan_kelas.equals("14")) {
+                            kelas = "SMA/SMK 2";
+                        } else if (tingkatan_kelas.equals("15")) {
+                            kelas = "SMA/SMK 3";
                         }
 
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
+                        final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
+                                EditProfileAnak.this, R.layout.spinner_full, kps) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
                             }
-                            else {
-                                tv.setTextColor(Color.BLACK);
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
                             }
-                            return view;
-                        }
-                    };
+                        };
 
-                    int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
-                    ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_kps.setAdapter(ArrayAdapters);
-                    sp_kps.setSelection(spinnerPositions);
+                        int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
+                        ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_kps.setAdapter(ArrayAdapters);
+                        sp_kps.setSelection(spinnerPositions);
 
-                    sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
-                        if (position > 0) {
-                            if (position == 1){
-                                penerimaan_kps = "Ya";
-                                til_nokps.setVisibility(View.VISIBLE);
-                                et_nomorkps.setVisibility(View.VISIBLE);
-                            }else if (position == 2){
-                                penerimaan_kps = "Tidak";
-                                til_nokps.setVisibility(View.GONE);
-                                et_nomorkps.setVisibility(View.GONE);
-                                et_nomorkps.setText("-");
+                        sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
+                            if (position > 0) {
+                                if (position == 1) {
+                                    penerimaan_kps = "Ya";
+                                    til_nokps.setVisibility(View.VISIBLE);
+                                    et_nomorkps.setVisibility(View.VISIBLE);
+                                } else if (position == 2) {
+                                    penerimaan_kps = "Tidak";
+                                    til_nokps.setVisibility(View.GONE);
+                                    et_nomorkps.setVisibility(View.GONE);
+                                    et_nomorkps.setText("-");
+                                }
                             }
-                        }
-                    });
+                        });
 
-                    if (penerimaan_kps.equals("Ya")){
-                        til_nokps.setVisibility(View.VISIBLE);
-                        et_nomorkps.setVisibility(View.VISIBLE);
-                    }else if (penerimaan_kps.equals("Tidak")) {
-                        til_nokps.setVisibility(View.GONE);
-                        et_nomorkps.setVisibility(View.GONE);
-                        et_nomorkps.setText("-");
-                    }
-                    final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
-                            EditProfileAnak.this,R.layout.spinner_full,penghasil){
-                        @Override
-                        public boolean isEnabled(int position){
-                            return position != 0;
+                        if (penerimaan_kps.equals("Ya")) {
+                            til_nokps.setVisibility(View.VISIBLE);
+                            et_nomorkps.setVisibility(View.VISIBLE);
+                        } else if (penerimaan_kps.equals("Tidak")) {
+                            til_nokps.setVisibility(View.GONE);
+                            et_nomorkps.setVisibility(View.GONE);
+                            et_nomorkps.setText("-");
                         }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
+                        final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                                EditProfileAnak.this, R.layout.spinner_full, penghasil) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                return position != 0;
                             }
-                            else {
-                                tv.setTextColor(Color.BLACK);
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
                             }
-                            return view;
-                        }
-                    };
+                        };
 
-                    int spinnerPosition = ArrayAdapter.getPosition(kelas);
-                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_tingkatan.setAdapter(ArrayAdapter);
-                    sp_tingkatan.setSelection(spinnerPosition);
-                    sp_tingkatan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(Spinner parent, View view, int position, long id) {
-                            kelas = penghasil.get(position);
-                        }
-                    });
-
-                    kelas = sp_tingkatan.getSelectedItem().toString();
-
-                    if (kelas.equals("SD 1")){
-                        levelkelas = "4";
-                    }else if (kelas.equals("SD 2")){
-                        levelkelas = "5";
-                    }else if (kelas.equals("SD 3")){
-                        levelkelas = "6";
-                    }else if (kelas.equals("SD 4")){
-                        levelkelas = "7";
-                    }else if (kelas.equals("SD 5")){
-                        levelkelas = "8";
-                    }else if (kelas.equals("SD 6")){
-                        levelkelas = "9";
-                    }else if (kelas.equals("SMP 1")){
-                        levelkelas = "10";
-                    }else if (kelas.equals("SMP 2")){
-                        levelkelas = "11";
-                    }else if (kelas.equals("SMP 3")){
-                        levelkelas = "12";
-                    }else if (kelas.equals("SMA/SMK 1")){
-                        levelkelas = "13";
-                    }else if (kelas.equals("SMA/SMK 2")){
-                        levelkelas = "14";
-                    }else if (kelas.equals("SMA/SMK 3")){
-                        levelkelas = "15";
-                    }
-                    final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> agamaadapter = new ArrayAdapter<String>(
-                            EditProfileAnak.this,R.layout.spinner_full,agama){
-                        @Override
-                        public boolean isEnabled(int position){
-                            return position != 0;
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
+                        int spinnerPosition = ArrayAdapter.getPosition(kelas);
+                        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_tingkatan.setAdapter(ArrayAdapter);
+                        sp_tingkatan.setSelection(spinnerPosition);
+                        sp_tingkatan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(Spinner parent, View view, int position, long id) {
+                                kelas = penghasil.get(position);
                             }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
+                        });
 
+                        kelas = sp_tingkatan.getSelectedItem().toString();
+
+                        if (kelas.equals("SD 1")) {
+                            levelkelas = "4";
+                        } else if (kelas.equals("SD 2")) {
+                            levelkelas = "5";
+                        } else if (kelas.equals("SD 3")) {
+                            levelkelas = "6";
+                        } else if (kelas.equals("SD 4")) {
+                            levelkelas = "7";
+                        } else if (kelas.equals("SD 5")) {
+                            levelkelas = "8";
+                        } else if (kelas.equals("SD 6")) {
+                            levelkelas = "9";
+                        } else if (kelas.equals("SMP 1")) {
+                            levelkelas = "10";
+                        } else if (kelas.equals("SMP 2")) {
+                            levelkelas = "11";
+                        } else if (kelas.equals("SMP 3")) {
+                            levelkelas = "12";
+                        } else if (kelas.equals("SMA/SMK 1")) {
+                            levelkelas = "13";
+                        } else if (kelas.equals("SMA/SMK 2")) {
+                            levelkelas = "14";
+                        } else if (kelas.equals("SMA/SMK 3")) {
+                            levelkelas = "15";
                         }
-                    };
+                        final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> agamaadapter = new ArrayAdapter<String>(
+                                EditProfileAnak.this, R.layout.spinner_full, agama) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                return position != 0;
+                            }
 
-                    int spinneragama = agamaadapter.getPosition(religion);
-                    agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_agama.setAdapter(agamaadapter);
-                    sp_agama.setSelection(spinneragama);
-                    sp_agama.setEnabled(false);
-                    if (jenis_kelamin.equals("Pria")){
-                        rb_laki.setChecked(true);
-                        rb_wanita.setChecked(false);
-                    }else if(jenis_kelamin.equals("Wanita")){
-                        rb_wanita.setChecked(true);
-                        rb_laki.setChecked(false);
-                    }
-                    rb_laki.setEnabled(false);
-                    rb_wanita.setEnabled(false);
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+
+                            }
+                        };
+
+                        int spinneragama = agamaadapter.getPosition(religion);
+                        agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_agama.setAdapter(agamaadapter);
+                        sp_agama.setSelection(spinneragama);
+                        sp_agama.setEnabled(false);
+                        if (jenis_kelamin.equals("Pria")) {
+                            rb_laki.setChecked(true);
+                            rb_wanita.setChecked(false);
+                        } else if (jenis_kelamin.equals("Wanita")) {
+                            rb_wanita.setChecked(true);
+                            rb_laki.setChecked(false);
+                        }
+                        rb_laki.setEnabled(false);
+                        rb_wanita.setEnabled(false);
 //                    rb_laki.setOnClickListener(new View.OnClickListener() {
 //                        @Override
 //                        public void onClick(View v) {
@@ -1038,48 +1032,49 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 //                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
 //                        }
 //                    });
-                    if (kewarganegaraan.equals("WNI")){
-                        rb_wni.setChecked(true);
-                        rb_wna.setChecked(false);
-                    }else if (kewarganegaraan.equals("WNA")){
-                        rb_wna.setChecked(true);
-                        rb_wni.setChecked(false);
-                    }
-                    rb_wni.setEnabled(false);
-                    rb_wna.setEnabled(false);
-                    rb_wni.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            kewarganegaraan = getResources().getString(R.string.rb_wni);
-                            et_negara_asal.setVisibility(View.GONE);
+                        if (kewarganegaraan.equals("WNI")) {
+                            rb_wni.setChecked(true);
+                            rb_wna.setChecked(false);
+                        } else if (kewarganegaraan.equals("WNA")) {
+                            rb_wna.setChecked(true);
+                            rb_wni.setChecked(false);
                         }
-                    });
+                        rb_wni.setEnabled(false);
+                        rb_wna.setEnabled(false);
+                        rb_wni.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                kewarganegaraan = getResources().getString(R.string.rb_wni);
+                                et_negara_asal.setVisibility(View.GONE);
+                            }
+                        });
 
-                    rb_wna.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            et_negara_asal.setVisibility(View.VISIBLE);
-                            kewarganegaraan = et_negara_asal.getSelectedItem().toString();
+                        rb_wna.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                et_negara_asal.setVisibility(View.VISIBLE);
+                                kewarganegaraan = et_negara_asal.getSelectedItem().toString();
+                            }
+                        });
+
+                        //Place current location marker
+                        final LatLng latLng = new LatLng(CurrentLatitude, CurrentLongitude);
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title("Current Position");
+                        markerOptions.icon(bitmapDescriptorFromVector(EditProfileAnak.this, R.drawable.ic_map));
+
+                        //move map camera
+                        Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        CurrLocationMarker = Mmap.addMarker(markerOptions);
+
+                    } else {
+                        if (status == 0 && code.equals("DTS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-                    });
-
-                    //Place current location marker
-                    final LatLng latLng = new LatLng(CurrentLatitude, CurrentLongitude);
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Current Position");
-                    markerOptions.icon(bitmapDescriptorFromVector(EditProfileAnak.this, R.drawable.ic_map));
-
-                    //move map camera
-                    Mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    Mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    CurrLocationMarker = Mmap.addMarker(markerOptions);
-
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
                     }
                 }
             }

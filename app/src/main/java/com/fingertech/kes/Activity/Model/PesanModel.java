@@ -1,7 +1,23 @@
 package com.fingertech.kes.Activity.Model;
 
 public class PesanModel {
-    private String tanggal,jam,dari,pesan,mapel,kelas,title,status;
+    private String tanggal,jam,dari,pesan,mapel,kelas,title,status,message_id,parent_message_id;
+
+    public String getMessage_id() {
+        return message_id;
+    }
+
+    public void setMessage_id(String message_id) {
+        this.message_id = message_id;
+    }
+
+    public String getParent_message_id() {
+        return parent_message_id;
+    }
+
+    public void setParent_message_id(String parent_message_id) {
+        this.parent_message_id = parent_message_id;
+    }
 
     public String getTanggal() {
         return tanggal;
