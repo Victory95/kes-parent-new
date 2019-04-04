@@ -560,7 +560,7 @@ public class ProfileParent extends AppCompatActivity {
                     if (picture.equals("")){
                         Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profil);
                     }
-                    Picasso.get().load(imagefile).into(image_profil);
+                    Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
                     last_login.setText(lastlogin);
                     appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 

@@ -214,6 +214,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
         materialSearchView.setVoiceSearch(true);
         materialSearchView.setCursorDrawable(R.drawable.color_cursor_white);
+        
 
         materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override

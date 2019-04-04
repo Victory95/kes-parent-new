@@ -37,7 +37,7 @@
     <PreferenceCategory android:title="About">
 
         <Preference
-            android:summary="1.0.10"
+            android:summary="1.0.18"
             android:title="Versi" />
 
         <!-- preference opens url in browser -->

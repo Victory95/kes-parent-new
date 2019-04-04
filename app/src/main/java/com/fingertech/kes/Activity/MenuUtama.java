@@ -597,6 +597,8 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
+            Intent intent = new Intent(MenuUtama.this, AksesAnak.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -861,7 +863,7 @@ public class MenuUtama extends AppCompatActivity
                         if (picture.equals("")) {
                             Glide.with(MenuUtama.this).load("https://ui-avatars.com/api/?name=" + nama + "&background=40bfe8&color=fff").into(image_profile);
                         }
-                        Picasso.get().load(imagefile).into(image_profile);
+                        Glide.with(MenuUtama.this).load(imagefile).into(image_profile);
                         if (member.equals("3")) {
                             if (count.equals("0")) {
                                 recycleview_ln.setVisibility(View.VISIBLE);

@@ -105,39 +105,6 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
         nada();
         sendnotification(title,body);
-//        if (remotemsg.getData().get("title") != null && remotemsg.getData().get("body") !=null){
-//            String title       = remotemsg.getData().get("title");
-//            String body        = remotemsg.getData().get("body");
-//
-//            Log.d("Title",remotemsg.getData()+"");
-//
-//            try {
-//                reader = new JSONObject(remotemsg.getData().get("data"));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                fullname = reader.getString("fullname");
-//                in      = reader.getString("type");
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            Log.d("fullname",fullname+"/"+in);
-//
-//            nada();
-//            sendnotification(title,body);
-//        }else {
-//            sharedpreferences = getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = sharedpreferences.edit();
-//            editor.putBoolean(Masuk.session_status, false);
-//            editor.putString(TAG_EMAIL, null);
-//            editor.putString(TAG_MEMBER_ID, null);
-//            editor.putString(TAG_FULLNAME, null);
-//            editor.putString(TAG_MEMBER_TYPE, null);
-//            editor.putString(TAG_TOKEN, null);
-//            editor.apply();
-//
-//        }
     }
 
     private void nada() {
