@@ -400,7 +400,6 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             buildGoogleApiClient();
             mapF.setMyLocationEnabled(true);
         }
-
         mapF.getUiSettings().setMyLocationButtonEnabled(false);
         mapF.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override

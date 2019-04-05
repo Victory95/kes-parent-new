@@ -262,7 +262,6 @@ public class KalenderKelas extends AppCompatActivity {
                         kalendar.setVisibility(View.GONE);
                         if (response.body().getData() != null) {
                             calendarList = response.body().getData();
-
                             if (calendarModelList != null) {
                                 calendarModelList.clear();
                                 for (JSONResponse.DataCalendar calendar : calendarList) {

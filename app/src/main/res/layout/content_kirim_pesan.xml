@@ -20,106 +20,41 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:text="@string/tv_sekolah"
-                    android:gravity="center"/>
-
+                android:orientation="vertical">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/tab_semester">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:paddingStart="10dp"
-                        android:id="@+id/sekolah_pesan"
-                        tools:ignore="RtlSymmetry" />
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:text="@string/tv_kelas"
-                    android:gravity="center"/>
+                        android:layout_weight="2"
+                        android:text="@string/tv_sekolah"
+                        android:gravity="center"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/tab_semester">
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/black"
-                        android:paddingStart="10dp"
-                        android:id="@+id/kelas_pesan"
-                        tools:ignore="RtlSymmetry" />
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/tab_semester">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:paddingStart="10dp"
+                            android:id="@+id/sekolah_pesan"
+                            tools:ignore="RtlSymmetry" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:text="@string/tv_guru"
-                    android:gravity="center"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/tab_semester">
-
-                    <com.rey.material.widget.Spinner
-                        style="@style/Material.Widget.Spinner"
-                        android:id="@+id/sp_guru"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:paddingStart="10dp"
-                        android:background="@android:color/transparent"
-                        android:spinnerMode="dropdown"
-                        app:rd_style="@style/Material.Drawable.Ripple.Wave"
-                        app:spn_arrowAnimClockwise="true"
-                        app:spn_dividerColor="@color/colorPrimary"
-                        app:spn_dividerHeight="1dp"
-                        app:spn_arrowSwitchMode="true"
-                        app:spn_arrowAnimDuration="300"
-                        app:spn_arrowColor="@color/colorPrimary"
-                        tools:ignore="RtlSymmetry" />
-            </LinearLayout>
-            </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -129,8 +64,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:text="@string/tv_mata_pelajaran"
+                        android:text="@string/tv_kelas"
                         android:gravity="center"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/tab_semester">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:paddingStart="10dp"
+                            android:id="@+id/kelas_pesan"
+                            tools:ignore="RtlSymmetry" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="@string/tv_guru"
+                        android:gravity="center"/>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -139,7 +102,7 @@
 
                         <com.rey.material.widget.Spinner
                             style="@style/Material.Widget.Spinner"
-                            android:id="@+id/sp_mapel"
+                            android:id="@+id/sp_guru"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -155,35 +118,72 @@
                             app:spn_arrowAnimDuration="300"
                             app:spn_arrowColor="@color/colorPrimary"
                             tools:ignore="RtlSymmetry" />
-                    </LinearLayout>
                 </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_pesan"
-            android:paddingStart="20dp"
-            android:layout_marginTop="10dp"
-            tools:ignore="RtlSymmetry" />
-        </LinearLayout>
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="8dp"
-            android:layout_marginTop="10dp">
-            <EditText
+                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2"
+                            android:text="@string/tv_mata_pelajaran"
+                            android:gravity="center"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/tab_semester">
+
+                            <com.rey.material.widget.Spinner
+                                style="@style/Material.Widget.Spinner"
+                                android:id="@+id/sp_mapel"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:paddingStart="10dp"
+                                android:background="@android:color/transparent"
+                                android:spinnerMode="dropdown"
+                                app:rd_style="@style/Material.Drawable.Ripple.Wave"
+                                app:spn_arrowAnimClockwise="true"
+                                app:spn_dividerColor="@color/colorPrimary"
+                                app:spn_dividerHeight="1dp"
+                                app:spn_arrowSwitchMode="true"
+                                app:spn_arrowAnimDuration="300"
+                                app:spn_arrowColor="@color/colorPrimary"
+                                tools:ignore="RtlSymmetry" />
+                        </LinearLayout>
+                    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_pesan"
+                android:paddingStart="20dp"
+                android:layout_marginTop="10dp"
+                tools:ignore="RtlSymmetry" />
+            </LinearLayout>
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="10dp"
-                android:gravity="start"
-                android:textSize="13sp"
-                android:id="@+id/et_pesan"
-                android:background="@drawable/tab_semester"
-                android:theme="@style/TextLabelView"
-                tools:ignore="Autofill,LabelFor,TextFields" />
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+                app:cardCornerRadius="8dp"
+                android:layout_marginTop="10dp">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="start"
+                    android:textSize="13sp"
+                    android:id="@+id/et_pesan"
+                    android:background="@drawable/tab_semester"
+                    android:theme="@style/TextLabelView"
+                    tools:ignore="Autofill,LabelFor,TextFields" />
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </LinearLayout>

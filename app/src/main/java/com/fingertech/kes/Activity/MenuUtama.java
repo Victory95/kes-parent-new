@@ -1,6 +1,7 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -49,6 +51,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +77,7 @@ import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
 import com.fingertech.kes.Activity.Berita.DetailBerita;
 import com.fingertech.kes.Activity.Berita.FullBerita;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.Fragment.MenuDuaFragment;
 import com.fingertech.kes.Activity.Fragment.MenuSatuFragment;
 
@@ -238,6 +242,8 @@ public class MenuUtama extends AppCompatActivity
     String news_title,news_id,news_body,news_date,news_image;
     String base_url_news;
     TextView no_berita,view_more;
+    ScrollView scrollView;
+    ImageView transparantImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,7 +275,7 @@ public class MenuUtama extends AppCompatActivity
         no_berita           = findViewById(R.id.no_berita);
         mApi                = UtilsApi.getAPIService();
         view_more           = findViewById(R.id.view_more);
-
+        scrollView          = findViewById(R.id.scroll_view);
 
         setSupportActionBar(toolbar);
 
@@ -330,8 +336,16 @@ public class MenuUtama extends AppCompatActivity
         });
 
         mapWrapperLayout.init(mapG, getPixelsFromDp(this, 39 + 20));
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
+        MySupportMapFragment mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
+
+        if(mapFragment != null)
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
 
         //show error dialog if Google Play Services not available
         if (!isGooglePlayServicesAvailable()) {
@@ -521,7 +535,7 @@ public class MenuUtama extends AppCompatActivity
         final MenuItem menuItem = menu.findItem(R.id.action_cart);
         actionView = MenuItemCompat.getActionView(menuItem);
 
-        countmenu = (TextView) actionView.findViewById(R.id.cart_badge);
+        countmenu = actionView.findViewById(R.id.cart_badge);
 
         actionView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -697,7 +711,7 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void dapat_pesan(){
-        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization,parent_id,date_from.toString(),date_to.toString());
+        Call<JSONResponse.PesanAnak> call = mApiInterface.kes_message_inbox_get(authorization,parent_id, date_from, date_to);
         call.enqueue(new Callback<JSONResponse.PesanAnak>() {
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
@@ -747,7 +761,6 @@ public class MenuUtama extends AppCompatActivity
 
 
     }
-
 
     public void get_children(){
         progressBar();
@@ -1017,11 +1030,7 @@ public class MenuUtama extends AppCompatActivity
     protected boolean isLocationEnabled(){
         String le = Context.LOCATION_SERVICE;
        LocationManager locationManager = (LocationManager) getSystemService(le);
-        if(!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            return false;
-        } else {
-            return true;
-        }
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     private void setting_lokasi(){
@@ -1255,11 +1264,8 @@ public class MenuUtama extends AppCompatActivity
 //                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                     final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
                     layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-
                     snappyRecyclerView.addOnScrollListener(new CenterScrollListener());
                     snappyRecyclerView.setHasFixedSize(true);
-
-
                     snappyRecyclerView.setLayoutManager(layoutManager);
                     itemSekolahAdapter = new ItemSekolahAdapter(itemList);
                     itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {

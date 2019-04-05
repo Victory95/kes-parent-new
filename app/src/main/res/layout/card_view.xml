@@ -15,26 +15,26 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:text="@string/tv_test"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
-    <TextView
-        android:id="@+id/Akre"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:text="@string/tv_test" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/Akre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/tv_test" />
 
-    <TextView
-        android:id="@+id/jarak_sekolah"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:text="@string/tv_test" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/jarak_sekolah"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="@string/tv_test" />
+    </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -39,6 +39,7 @@ import com.fingertech.kes.Activity.Adapter.UjianAdapter;
 import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ItemUjian;
+import com.fingertech.kes.Activity.Model.UjianModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -47,10 +48,12 @@ import com.stone.vega.library.VegaLayoutManager;
 
 import java.lang.reflect.Field;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import retrofit2.Call;
@@ -66,7 +69,7 @@ public class JadwalUjian extends AppCompatActivity {
     Auth mApiInterface;
     String authorization,memberid,school_code,classroom_id;
     RecyclerView rv_ujian,rv_teratas;
-    LinearLayout recyclerin;
+    RecyclerView rv_ujian_sekarang;
     Toolbar toolbar;
     ProgressDialog dialog;
     int status;
@@ -92,7 +95,13 @@ public class JadwalUjian extends AppCompatActivity {
     View view;
     String mata_pelajaran,type_pelajaran;
     SharedPreferences sharedPreferences;
-
+    List<UjianModel> ujianModelList = new ArrayList<>();
+    UjianModel ujianModel;
+    private SimpleDateFormat dateFormat     = new SimpleDateFormat("MM-yyyy",new Locale("in","ID"));
+    private DateFormat times_format         = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
+    String bulan_sekarang,jam_db,tanggal_db;
+    Date month_now,month_db;
+    TextView tv_hint;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,9 +113,8 @@ public class JadwalUjian extends AppCompatActivity {
         tv_semester     = findViewById(R.id.tv_semester);
         tv_filter       = findViewById(R.id.tv_filter);
         et_kata_kunci   = findViewById(R.id.et_kata_kunci);
-        recyclerin      = findViewById(R.id.recycler_menu_teratas);
-        rv_teratas      = findViewById(R.id.recycle_teratas);
-//        ll_slide        = findViewById(R.id.slide_down);
+        tv_hint         = findViewById(R.id.hint_ujian);
+        rv_ujian_sekarang = findViewById(R.id.recycleview_ujian_bulan);
 
         sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
         authorization       = sharedPreferences.getString("authorization",null);
@@ -120,8 +128,8 @@ public class JadwalUjian extends AppCompatActivity {
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());
+        bulan_sekarang  = dateFormat.format(Calendar.getInstance().getTime());
         Check_Semester();
-//        Jadwal_ujian_terbaru();
         et_kata_kunci.clearFocus();
 
         et_kata_kunci.addTextChangedListener(new TextWatcher() {
@@ -213,9 +221,13 @@ public class JadwalUjian extends AppCompatActivity {
         btn_down.setOnClickListener(v -> mBottomSheetDialog.dismiss());
         tv_slide.setOnClickListener(v -> mBottomSheetDialog.dismiss());
         tv_reset.setOnClickListener(v -> {
-//
-
-
+            if (ujianModelList!=null){
+                ujianModelList.clear();
+            }
+            if (itemUjianList!=null){
+                itemUjianList.clear();
+            }
+            Jadwal_ujian();
             mBottomSheetDialog.dismiss();
         });
         btn_cari.setOnClickListener(v -> {
@@ -325,7 +337,55 @@ public class JadwalUjian extends AppCompatActivity {
     String converDate(String tanggal){
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MM-yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTanggal(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String converttanggal(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",new Locale("in","ID"));
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("in","ID"));
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertBulan(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String converJam(String tanggal){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("HH:mm:ss",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("HH:mm",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
             return e;
@@ -347,63 +407,11 @@ public class JadwalUjian extends AppCompatActivity {
         }
     }
 
-//    private void Jadwal_ujian_terbaru(){
-//
-//        Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
-//
-//        call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
-//
-//            @Override
-//            public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
-//                Log.i("KES", response.code() + "");
-//                hideDialog();
-//
-//                JSONResponse.JadwalUjian resource = response.body();
-//
-//                status = resource.status;
-//                code    = resource.code;
-//
-//                ItemUjian itemUjian= null;
-//                if (status == 1 && code.equals("DTS_SCS_0001")) {
-//                    for (int i = 0; i < response.body().getData().size(); i++) {
-//                        waktu            = response.body().getData().get(i).getExam_time_ok();
-//                        tanggal_teratas  = response.body().getData().get(i).getExam_date_ok();
-//                        judul            = response.body().getData().get(i).getCources_name();
-//                        des              = response.body().getData().get(i).getType_name();
-//                        bulan            = response.body().getData().get(i).getExam_date_ok();
-//                        itemUjian = new ItemUjian();
-//                        itemUjian.setJam(waktu);
-//                        itemUjian.setTanggal(tanggal_teratas);
-//                        itemUjian.setMapel(judul);
-//                        itemUjian.setType_id(type);
-//                        itemUjian.setDeskripsi(des);
-//                        itemUjianList.add(itemUjian);
-//                    }
-//                    LinearLayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
-//                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//                    rv_teratas.setLayoutManager(layoutManager);
-//                    rv_teratas.setAdapter(ujianAdapterTeratas);
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<JSONResponse.JadwalUjian> call, Throwable t) {
-//                Log.d("onFailure", t.toString());
-//                hideDialog();
-//            }
-//
-//        });
-//    }
-
     private void Jadwal_ujian(){
         progressBar();
         showDialog();
         Call<JSONResponse.JadwalUjian> call = mApiInterface.kes_exam_schedule_get(authorization.toString(),school_code.toString().toLowerCase(),memberid.toString(),classroom_id.toString(),semester_id.toString());
-
         call.enqueue(new Callback<JSONResponse.JadwalUjian>() {
-
             @Override
             public void onResponse(Call<JSONResponse.JadwalUjian> call, final Response<JSONResponse.JadwalUjian> response) {
                 Log.i("KES", response.code() + "");
@@ -417,26 +425,70 @@ public class JadwalUjian extends AppCompatActivity {
                     ItemUjian itemUjian = null;
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
-                            jam = response.body().getData().get(i).getExam_time_ok();
-                            tanggal = response.body().getData().get(i).getExam_date_ok();
-                            mapel = response.body().getData().get(i).getCources_name();
-                            type = response.body().getData().get(i).getType_name();
-                            deskripsi = response.body().getData().get(i).getExam_desc();
-                            nilai = response.body().getData().get(i).getScore_value();
-                            itemUjian = new ItemUjian();
-                            itemUjian.setJam(jam);
-                            itemUjian.setTanggal(tanggal);
-                            itemUjian.setMapel(mapel);
-                            itemUjian.setType_id(type);
-                            itemUjian.setDeskripsi(deskripsi);
-                            itemUjian.setNilai(nilai);
-                            itemUjianList.add(itemUjian);
+                            jam         = response.body().getData().get(i).getExam_time_ok();
+                            tanggal     = response.body().getData().get(i).getExam_date();
+                            mapel       = response.body().getData().get(i).getCources_name();
+                            type        = response.body().getData().get(i).getType_name();
+                            deskripsi   = response.body().getData().get(i).getExam_desc();
+                            nilai       = response.body().getData().get(i).getScore_value();
+                            tanggal_db  = converDate(response.body().getData().get(i).getExam_date());
+                            jam_db      = converJam(response.body().getData().get(i).getExam_time());
+                            try {
+                                month_now   = times_format.parse(bulan_sekarang);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Long bulan_now = month_now.getTime();
+
+                            try {
+                                month_db    = times_format.parse(tanggal_db);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            Long bulan_db   = month_db.getTime();
+                            if (bulan_db.equals(bulan_now)){
+                                ujianModel  = new UjianModel();
+                                ujianModel.setDeskripsi(deskripsi);
+                                ujianModel.setNilai(nilai);
+                                ujianModel.setJam(jam_db);
+                                ujianModel.setMapel(mapel);
+                                ujianModel.setWaktu(converttanggal(tanggal)+" "+jam_db);
+                                ujianModel.setBulan(convertBulan(tanggal));
+                                ujianModel.setTanggal(convertTanggal(tanggal));
+                                ujianModel.setType_id(type);
+                                ujianModelList.add(ujianModel);
+                            }else {
+                                itemUjian = new ItemUjian();
+                                itemUjian.setJam(jam);
+                                itemUjian.setTanggal(converttanggal(tanggal));
+                                itemUjian.setMapel(mapel);
+                                itemUjian.setType_id(type);
+                                itemUjian.setDeskripsi(deskripsi);
+                                itemUjian.setNilai(nilai);
+                                itemUjianList.add(itemUjian);
+                            }
                         }
                         no_ujian.setVisibility(View.GONE);
                         ujianAdapter = new UjianAdapter(itemUjianList, JadwalUjian.this);
-//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                        rv_ujian.setOnFlingListener(null);
                         rv_ujian.setLayoutManager(new VegaLayoutManager());
                         rv_ujian.setAdapter(ujianAdapter);
+
+                        if (ujianModelList.size() == 0) {
+                            rv_ujian_sekarang.setVisibility(View.GONE);
+                            tv_hint.setVisibility(View.VISIBLE);
+                        }else {
+                            rv_ujian_sekarang.setVisibility(View.VISIBLE);
+                            tv_hint.setVisibility(View.GONE);
+                            ujianAdapterTeratas = new UjianAdapterTeratas(ujianModelList, JadwalUjian.this);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(JadwalUjian.this);
+                            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                            rv_ujian_sekarang.setOnFlingListener(null);
+                            rv_ujian_sekarang.setLayoutManager(layoutManager);
+                            rv_ujian_sekarang.setAdapter(ujianAdapterTeratas);
+                        }
+
                     } else {
                         hideKeyboard(JadwalUjian.this);
                         et_kata_kunci.clearFocus();
@@ -519,6 +571,7 @@ public class JadwalUjian extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
 
 }
 

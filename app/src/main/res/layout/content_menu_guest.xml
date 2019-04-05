@@ -12,6 +12,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:id="@+id/scroll_view"
         tools:ignore="UselessParent">
 
         <LinearLayout
@@ -72,30 +74,7 @@
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
-            <!--<Button-->
-                <!--android:id="@+id/cari_sekolah"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginStart="5dp"-->
-                <!--android:background="#46bfee"-->
-                <!--android:text="@string/btn_sekolah_terdekat"-->
-                <!--android:textColor="#fff"-->
-                <!--android:layout_weight="1"-->
-                <!--android:padding="10dp"-->
-                <!--android:textAlignment="textStart" />-->
-
-            <!--<Button-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="50dp"-->
-                <!--android:layout_marginRight="5dp"-->
-                <!--android:layout_weight="7"-->
-                <!--android:id="@+id/cari_sekolah2"-->
-                <!--android:background="@drawable/ic_arrow_black"-->
-                <!--/>-->
-
             </LinearLayout>
-
-
 
         <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -112,7 +91,7 @@
                 android:id="@+id/map_relative_layout">
                 <fragment
                     android:id="@+id/mapGuest"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:name="com.fingertech.kes.Activity.CustomView.MySupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="200dp" />
 

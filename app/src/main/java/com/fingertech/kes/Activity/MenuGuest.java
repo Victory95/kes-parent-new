@@ -37,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.NewsAdapter;
 import com.fingertech.kes.Activity.Berita.DetailBerita;
 import com.fingertech.kes.Activity.Berita.FullBerita;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.Maps.FullMap;
 import com.fingertech.kes.Activity.Maps.MapWrapperLayout;
 import com.fingertech.kes.Activity.Maps.OnInfoWindowElemTouchListener;
@@ -162,6 +164,7 @@ public class MenuGuest extends AppCompatActivity
     String news_title,news_id,news_body,news_date,news_image;
     String base_url_news;
     TextView no_berita,view_more;
+    ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,6 +175,7 @@ public class MenuGuest extends AppCompatActivity
         no_berita           = findViewById(R.id.no_berita);
         mApi                = UtilsApi.getAPIService();
         view_more           = findViewById(R.id.view_more);
+        scrollView          = findViewById(R.id.scroll_view);
         setSupportActionBar(toolbar);
 
 
@@ -197,8 +201,16 @@ public class MenuGuest extends AppCompatActivity
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
+        MySupportMapFragment mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapGuest);
         mapFragment.getMapAsync(this);
+
+        if(mapFragment != null)
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
 
         findViewById(R.id.squareFab).setOnClickListener(new View.OnClickListener() {
             @Override
