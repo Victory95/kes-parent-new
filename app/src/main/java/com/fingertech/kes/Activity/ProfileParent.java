@@ -62,6 +62,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -108,6 +109,8 @@ public class ProfileParent extends AppCompatActivity {
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
+
+    private final String sampled="SampleCropImage";
 
     private String mediaPath;
 
@@ -333,10 +336,8 @@ public class ProfileParent extends AppCompatActivity {
                 if (items[item].equals("Take Photo")) {
                     captureImage();
                 } else if (items[item].equals("Choose from Library")) {
-                    intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
+                    startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT)
+                            .setType("image/*"),SELECT_FILE);
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -360,13 +361,48 @@ public class ProfileParent extends AppCompatActivity {
                     File files = FileUtils.getFile(ProfileParent.this, fileUri);
                     uploadImage(files);
                 }
-            } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-                uri = data.getData();
-                Glide.with(ProfileParent.this).load(uri).into(image_profil);
-                File file = FileUtils.getFile(ProfileParent.this, uri);
-                uploadImage(file);
-            }
+            } else if (requestCode == SELECT_FILE && resultCode==RESULT_OK) {
+               Uri image = data.getData();
+               if (image!=null){
+                   startcrop(image);
+               }
+
+            }else if (requestCode== UCrop.REQUEST_CROP && resultCode==RESULT_OK){
+               Uri imageresult = UCrop.getOutput(data);
+               image_profil.setImageURI(imageresult);
+               File files = FileUtils.getFile(ProfileParent.this, imageresult);
+               uploadImage(files);
+
+           }
         }
+    }
+
+    private void startcrop(@NonNull Uri uri){
+        String destinationfile= sampled;
+        destinationfile +=".jpg";
+
+        UCrop uCrop = UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),destinationfile)));
+
+        uCrop.withAspectRatio(1,1);
+        uCrop.withMaxResultSize(450,450);
+
+        uCrop.withOptions(getcrop());
+        uCrop.start(ProfileParent.this);
+
+    }
+
+    private UCrop.Options getcrop(){
+        UCrop.Options options=new UCrop.Options();
+
+        options.setCompressionQuality(70);
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(true);
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+
+        options.setToolbarTitle("KES");
+
+        return options;
     }
 
     private void uploadImage(File file) {
