@@ -18,8 +18,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Prevents other applications from registering and receiving the application's messages. -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <!--<uses-permission android:name="android.permission.READ_CALENDAR" />-->
+    <!--<uses-permission android:name="android.permission.WRITE_CALENDAR" />-->
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
@@ -36,6 +36,8 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <service
+            android:name=".Service.MyService"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
@@ -411,7 +413,10 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

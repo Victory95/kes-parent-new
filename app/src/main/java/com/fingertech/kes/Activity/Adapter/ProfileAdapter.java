@@ -2,6 +2,8 @@ package com.fingertech.kes.Activity.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
@@ -126,6 +128,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                 holder.circleView.setLayoutParams(params);
                 holder.namaanak.setLayoutParams(paramsanak);
                 holder.linearLayout.setGravity(Gravity.CENTER);
+                setUnlocked(holder.imageView);
                 if (profileModel.getPicture().equals(base_url)){
                     holder.namaprofile.setText(profileModel.getNama());
                     if (position == 0){
@@ -149,6 +152,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         LinearLayout.LayoutParams.WRAP_CONTENT
 
                 );
+                setUnlocked(holder.imageView);
                 holder.circle.setVisibility(View.VISIBLE);
                 paramsanak.setMargins(0,10,0,5);
                 holder.circleView.setLayoutParams(params);
@@ -177,7 +181,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         LinearLayout.LayoutParams.WRAP_CONTENT
 
                 );
-
+                setUnlocked(holder.imageView);
                 holder.circle.setVisibility(View.VISIBLE);
                 paramsanak.setMargins(0,10,0,5);
                 holder.circleView.setLayoutParams(params);
@@ -210,6 +214,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         LinearLayout.LayoutParams.WRAP_CONTENT
 
                 );
+                setLocked(holder.imageView);
                 paramsanak.setMargins(0, 10, 0, 5);
                 holder.circle.setVisibility(View.GONE);
                 holder.circleView.setLayoutParams(params);
@@ -237,7 +242,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         200,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
-
+                setLocked(holder.imageView);
                 paramsanak.setMargins(0,10,0,5);
                 holder.circle.setVisibility(View.GONE);
                 holder.circleView.setLayoutParams(params);
@@ -266,6 +271,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
                         LinearLayout.LayoutParams.WRAP_CONTENT
 
                 );
+                setLocked(holder.imageView);
                 paramsanak.setMargins(0, 10, 0, 5);
                 holder.circle.setVisibility(View.GONE);
                 holder.circleView.setLayoutParams(params);
@@ -326,6 +332,19 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyHolder
     public void selectRow(int index){
         row_index=index;
         notifyDataSetChanged();
+    }
+    public static void  setLocked(ImageView v)
+    {
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);  //0 means grayscale
+        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(matrix);
+        v.setColorFilter(cf);
+        v.setImageAlpha(225);   // 128 = 0.5
+    }
 
+    public static void  setUnlocked(ImageView v)
+    {
+        v.setColorFilter(null);
+        v.setImageAlpha(255);
     }
 }

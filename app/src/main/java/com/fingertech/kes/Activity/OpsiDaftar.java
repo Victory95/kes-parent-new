@@ -304,64 +304,71 @@ public class OpsiDaftar extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 hideDialog();
                 Log.d("TAG",response.code()+"");
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    token = resource.token;
 
-                JSONResponse resource = response.body();
-                status = resource.status;
-                code = resource.code;
-                token = resource.token;
+                    String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
+                    String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
+                    String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
+                    String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0003);
+                    String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0007);
+                    String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
+                    String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
+                    String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
 
-                String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
-                String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
-                String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
-                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0003);
-                String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0007);
-                String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
-                String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
-                String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
-
-                if (status == 1 && code.equals("RS_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(JWTUtils.decoded(token));
-                        //// save session
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putBoolean(session_status, true);
-                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_TOKEN, token);
-                        editor.commit();
-                        /// call session
+                    if (status == 1 && code.equals("RS_SCS_0001")) {
                         Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
-                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        intent.putExtra(TAG_MEMBER_TYPE, "6");
-                        intent.putExtra(TAG_TOKEN, token);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if(status == 0 && code.equals("RS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0003")){
-                        login_sosmed_post();
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(JWTUtils.decoded(token));
+                            //// save session
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putBoolean(session_status, true);
+                            editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                            editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            editor.putString(TAG_MEMBER_TYPE, "6");
+                            editor.putString(TAG_TOKEN, token);
+                            editor.commit();
+                            /// call session
+                            Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, "6");
+                            intent.putExtra(TAG_TOKEN, token);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (status == 0 && code.equals("RS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0007")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0003")) {
+                            login_sosmed_post();
 //                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0005")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0006")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -382,47 +389,50 @@ public class OpsiDaftar extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
-                JSONResponse resource = response.body();
-                status = resource.status;
-                code = resource.code;
-                token = resource.token;
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    token = resource.token;
 
-                String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
-                String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
-                String LS_ERR_0002 = getResources().getString(R.string.LS_ERR_0002);
+                    String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
+                    String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
+                    String LS_ERR_0002 = getResources().getString(R.string.LS_ERR_0002);
 
-                if (status == 1 && code.equals("LS_SCS_0001")) {
-                    JSONObject jsonObject = null;
-                    Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                    try {
-                        jsonObject = new JSONObject(JWTUtils.decoded(token));
-                        //// save session
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putBoolean(session_status, true);
-                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_TOKEN, token);
-                        editor.commit();
-                        /// call session
+                    if (status == 1 && code.equals("LS_SCS_0001")) {
+                        JSONObject jsonObject = null;
                         Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
-                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        intent.putExtra(TAG_MEMBER_TYPE, "6");
-                        intent.putExtra(TAG_TOKEN, token);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if(status == 0 && code.equals("LS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), LS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LS_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), LS_ERR_0002, Toast.LENGTH_LONG).show();
+                        try {
+                            jsonObject = new JSONObject(JWTUtils.decoded(token));
+                            //// save session
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putBoolean(session_status, true);
+                            editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                            editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            editor.putString(TAG_MEMBER_TYPE, "6");
+                            editor.putString(TAG_TOKEN, token);
+                            editor.commit();
+                            /// call session
+                            Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, "6");
+                            intent.putExtra(TAG_TOKEN, token);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (status == 0 && code.equals("LS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), LS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LS_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), LS_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }

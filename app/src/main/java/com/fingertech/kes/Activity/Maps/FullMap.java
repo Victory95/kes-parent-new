@@ -529,284 +529,283 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
                 Log.i("KES", response.code() + "");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.Nearby_School resource = response.body();
 
-                JSONResponse.Nearby_School resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
+                    String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
+                    String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
+                    String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
+                    String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
+                    String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
-                String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
-                String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
-                String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
-                String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
+                    ItemSekolah Item = null;
 
-                ItemSekolah Item = null;
+                    if (status == 1 && code.equals("NR_SCS_0001")) {
+                        ItemList = new ArrayList<ItemSekolah>();
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            //Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
+                            lat = response.body().getData().get(i).getLatitude();
+                            lng = response.body().getData().get(i).getLongitude();
+                            placeName = response.body().getData().get(i).getSchool_name();
+                            vicinity = response.body().getData().get(i).getSchool_address();
+                            akreditasi = response.body().getData().get(i).getAkreditasi();
+                            Jarak = response.body().getData().get(i).getDistance();
+                            schooldetailid = response.body().getData().get(i).getSchooldetailid();
 
-                if (status == 1 && code.equals("NR_SCS_0001")) {
-                    ItemList = new ArrayList<ItemSekolah>();
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        //Toast.makeText(getApplicationContext(), NR_SCS_0001, Toast.LENGTH_LONG).show();
-                        lat            = response.body().getData().get(i).getLatitude();
-                        lng            = response.body().getData().get(i).getLongitude();
-                        placeName      = response.body().getData().get(i).getSchool_name();
-                        vicinity       = response.body().getData().get(i).getSchool_address();
-                        akreditasi     = response.body().getData().get(i).getAkreditasi();
-                        Jarak          = response.body().getData().get(i).getDistance();
-                        schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                            final LatLng latLng = new LatLng(lat, lng);
 
-                        final LatLng latLng = new LatLng(lat, lng);
+                            if (response.body().getData().get(i).getJenjang_pendidikan().equals("SD")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sd));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sd));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mapF.addMarker(markerOptions);
 
-                            // Adding Marker to the Camera.
-                            m = mapF.addMarker(markerOptions);
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mapF.addMarker(markerOptions);
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Adding Marker to the Camera.
-                            m = mapF.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mapF.addMarker(markerOptions);
+                            } else {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Adding Marker to the Camera.
-                            m= mapF.addMarker(markerOptions);
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma));
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mapF.addMarker(markerOptions);
+                            }
+
+                            InfoWindowData info = new InfoWindowData();
+                            info.setNama(placeName);
+                            info.setAlamat(vicinity);
+                            info.setSchooldetailid(schooldetailid);
+                            info.setAkreditasi(akreditasi);
+                            info.setJarak(Jarak);
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(FullMap.this);
+                            mapF.setInfoWindowAdapter(customInfoWindowAdapter);
+                            m.setTag(info);
+
+                            Item = new ItemSekolah();
+                            Item.setName(placeName);
+                            Item.setAkreditas(akreditasi);
+                            Item.setJarak(Jarak);
+                            Item.setLat(lat);
+                            Item.setLng(lng);
+                            ItemList.add(Item);
                         }
-                        else {
-                            MarkerOptions markerOptions = new MarkerOptions();
-
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma));
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m= mapF.addMarker(markerOptions);
-                        }
-
-                        InfoWindowData info = new InfoWindowData();
-                        info.setNama(placeName);
-                        info.setAlamat(vicinity);
-                        info.setSchooldetailid(schooldetailid);
-                        info.setAkreditasi(akreditasi);
-                        info.setJarak(Jarak);
-                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(FullMap.this);
-                        mapF.setInfoWindowAdapter(customInfoWindowAdapter);
-                        m.setTag(info);
-
-                        Item = new ItemSekolah();
-                        Item.setName(placeName);
-                        Item.setAkreditas(akreditasi);
-                        Item.setJarak(Jarak);
-                        Item.setLat(lat);
-                        Item.setLng(lng);
-                        ItemList.add(Item);
-                    }
-                    // Create the recyclerview.
-                    snappyrecyclerView = findViewById(R.id.recycler_view2);
-                    // Create the grid layout manager with 2 columns.
+                        // Create the recyclerview.
+                        snappyrecyclerView = findViewById(R.id.recycler_view2);
+                        // Create the grid layout manager with 2 columns.
 //                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(FullMap.this);
 //                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 //                    snappyrecyclerView.setLayoutManager(new SnappyLinearLayoutManager(FullMap.this));
-                    final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
-                    layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+                        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+                        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
-                    snappyrecyclerView.addOnScrollListener(new CenterScrollListener());
-                    snappyrecyclerView.setHasFixedSize(true);
-
-
-                    //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
-                    // Set layout manager.
-                    snappyrecyclerView.setLayoutManager(layoutManager);
-
-                    // Create car recycler view data adapter with car item list.
-                    cUstomRecyclerViewDataAdapter = new ItemSekolahAdapter(ItemList);
-
-                    cUstomRecyclerViewDataAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            progressBar();
-                            showDialog();
-
-                            final LatLng latLng = new LatLng(currentLatitudef,currentLongitudef);
-                            latitudef = response.body().getData().get(position).getLatitude();
-                            longitudef = response.body().getData().get(position).getLongitude();
-                            final LatLng StartlatLng = new LatLng(latitudef, longitudef);
-                            GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
-                            String $key = getResources().getString(R.string.google_maps_key);
-
-                            GoogleDirection.withServerKey($key)
-                                    .from(latLng)
-                                    .to(StartlatLng)
-                                    .transportMode(TransportMode.DRIVING)
-                                    .execute(new DirectionCallback() {
-                                        @Override
-                                        public void onDirectionSuccess(Direction direction, String rawBody) {
-                                            hideDialog();
-                                            Log.d("GoogleDirection", "Response Direction Status: " + direction.toString()+"\n"+rawBody);
-
-                                            if(direction.isOK()) {
-                                                Route route = direction.getRouteList().get(0);
-                                                ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
-                                                lines = mapF.addPolyline(DirectionConverter.createPolyline(FullMap.this, directionPositionList, 5, Color.RED));
-                                                setCameraWithCoordinationBounds(direction.getRouteList().get(0));
+                        snappyrecyclerView.addOnScrollListener(new CenterScrollListener());
+                        snappyrecyclerView.setHasFixedSize(true);
 
 
-                                            } else {
-                                                // Do something
+                        //getSnapHelper().attachToRecyclerView(snappyRecyclerView);
+                        // Set layout manager.
+                        snappyrecyclerView.setLayoutManager(layoutManager);
+
+                        // Create car recycler view data adapter with car item list.
+                        cUstomRecyclerViewDataAdapter = new ItemSekolahAdapter(ItemList);
+
+                        cUstomRecyclerViewDataAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                progressBar();
+                                showDialog();
+
+                                final LatLng latLng = new LatLng(currentLatitudef, currentLongitudef);
+                                latitudef = response.body().getData().get(position).getLatitude();
+                                longitudef = response.body().getData().get(position).getLongitude();
+                                final LatLng StartlatLng = new LatLng(latitudef, longitudef);
+                                GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
+                                String $key = getResources().getString(R.string.google_maps_key);
+
+                                GoogleDirection.withServerKey($key)
+                                        .from(latLng)
+                                        .to(StartlatLng)
+                                        .transportMode(TransportMode.DRIVING)
+                                        .execute(new DirectionCallback() {
+                                            @Override
+                                            public void onDirectionSuccess(Direction direction, String rawBody) {
+                                                hideDialog();
+                                                Log.d("GoogleDirection", "Response Direction Status: " + direction.toString() + "\n" + rawBody);
+
+                                                if (direction.isOK()) {
+                                                    Route route = direction.getRouteList().get(0);
+                                                    ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
+                                                    lines = mapF.addPolyline(DirectionConverter.createPolyline(FullMap.this, directionPositionList, 5, Color.RED));
+                                                    setCameraWithCoordinationBounds(direction.getRouteList().get(0));
+
+
+                                                } else {
+                                                    // Do something
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onDirectionFailure(Throwable t) {
-                                            // Do something
-                                            hideDialog();
-                                            Log.e("GoogleDirection", "Response Direction Status: " + t.getMessage()+"\n"+t.getCause());
-                                        }
-                                    });
-                            if(lines != null){
-                                lines.remove();
+                                            @Override
+                                            public void onDirectionFailure(Throwable t) {
+                                                // Do something
+                                                hideDialog();
+                                                Log.e("GoogleDirection", "Response Direction Status: " + t.getMessage() + "\n" + t.getCause());
+                                            }
+                                        });
+                                if (lines != null) {
+                                    lines.remove();
+                                }
                             }
+
+                        });
+
+                        snappyrecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
+                                int scrollOffset = recyclerView.computeHorizontalScrollOffset();
+                                int currentItem = 0;
+                                float itemWidth = horizontalScrollRange * 1.0f / ItemList.size();
+                                itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
+                                if (scrollOffset != 0) {
+                                    currentItem = Math.round(scrollOffset / itemWidth);
+                                }
+                                currentItem = (currentItem < 0) ? 0 : currentItem;
+                                currentItem = (currentItem >= ItemList.size()) ? ItemList.size() - 1 : currentItem;
+                                if (lines != null) {
+                                    lines.remove();
+                                }
+                                currentItem = layoutManager.getCenterItemPosition();
+                                if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
+                                    latitudef = response.body().getData().get(currentItem).getLatitude();
+                                    longitudef = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitudef, longitudef);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sd60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapF.addMarker(markerOptions);
+                                    Lat = latLng;
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")) {
+                                    latitudef = response.body().getData().get(currentItem).getLatitude();
+                                    longitudef = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitudef, longitudef);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapF.addMarker(markerOptions);
+                                    Lat = latLng;
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")) {
+                                    latitudef = response.body().getData().get(currentItem).getLatitude();
+                                    longitudef = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitudef, longitudef);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapF.addMarker(markerOptions);
+                                    Lat = latLng;
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")) {
+                                    latitudef = response.body().getData().get(currentItem).getLatitude();
+                                    longitudef = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitudef, longitudef);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapF.addMarker(markerOptions);
+                                    Lat = latLng;
+                                }
+
+                                if (currentItem == 0) {
+                                    final LatLng lati = new LatLng(currentLatitudef, currentLongitudef);
+                                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lati.latitude, lati.longitude)).zoom(13).build();
+                                    mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                    mapF.animateCamera(CameraUpdateFactory.zoomTo(14));
+                                    m.setVisible(false);
+                                } else {
+                                    mapF.moveCamera(CameraUpdateFactory.newLatLng(Lat));
+                                    mapF.animateCamera(CameraUpdateFactory.zoomTo(16));
+                                    m.setVisible(true);
+                                }
+                            }
+                        });
+                        // Set data adapter.
+                        snappyrecyclerView.setAdapter(cUstomRecyclerViewDataAdapter);
+
+
+                    } else {
+                        if (status == 0 && code.equals("NR_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-
-                    });
-
-                    snappyrecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
-                            int scrollOffset = recyclerView.computeHorizontalScrollOffset();
-                            int currentItem = 0;
-                            float itemWidth = horizontalScrollRange * 1.0f / ItemList.size();
-                            itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
-                            if (scrollOffset != 0) {
-                                currentItem = Math.round(scrollOffset / itemWidth);
-                            }
-                            currentItem = (currentItem < 0) ? 0 : currentItem;
-                            currentItem = (currentItem >= ItemList.size()) ? ItemList.size() - 1 : currentItem;
-                            if (lines != null) {
-                                lines.remove();
-                            }
-                            currentItem = layoutManager.getCenterItemPosition();
-                            if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
-                                latitudef = response.body().getData().get(currentItem).getLatitude();
-                                longitudef = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitudef, longitudef);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sd60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapF.addMarker(markerOptions);
-                                Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")) {
-                                latitudef = response.body().getData().get(currentItem).getLatitude();
-                                longitudef = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitudef, longitudef);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapF.addMarker(markerOptions);
-                                Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")) {
-                                latitudef = response.body().getData().get(currentItem).getLatitude();
-                                longitudef = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitudef, longitudef);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_sma60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapF.addMarker(markerOptions);
-                                Lat = latLng;
-                            } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")) {
-                                latitudef = response.body().getData().get(currentItem).getLatitude();
-                                longitudef = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitudef, longitudef);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(FullMap.this, R.drawable.ic_smp60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapF.addMarker(markerOptions);
-                                Lat = latLng;
-                            }
-
-                            if (currentItem == 0) {
-                                final LatLng lati= new LatLng(currentLatitudef,currentLongitudef);
-                                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(lati.latitude, lati.longitude)).zoom(13).build();
-                                mapF.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                mapF.animateCamera(CameraUpdateFactory.zoomTo(14));
-                                m.setVisible(false);
-                            } else {
-                                mapF.moveCamera(CameraUpdateFactory.newLatLng(Lat));
-                                mapF.animateCamera(CameraUpdateFactory.zoomTo(16));
-                                m.setVisible(true);
-                            }
+                        if (status == 0 && code.equals("NR_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
                         }
-                    });
-                    // Set data adapter.
-                    snappyrecyclerView.setAdapter(cUstomRecyclerViewDataAdapter);
-
-
-                } else{
-                    if (status == 0 && code.equals("NR_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0002")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0003")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0004")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        if (status == 0 && code.equals("NR_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -836,37 +835,37 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onResponse(Call<JSONResponse.Provinsi> call, final Response<JSONResponse.Provinsi> response) {
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.Provinsi resource = response.body();
 
-                JSONResponse.Provinsi resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
+                    String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
+                    String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
 
-                String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
-                String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
-
-                ItemSekolah Item = null;
-                List<String> provinsi = null;
-                if (status == 1) {
-                    arrayList = response.body().getData();
-                    List<String> listSpinner = new ArrayList<String>();
-                    for (int i = 0; i < arrayList.size(); i++){
-                        String provID = arrayList.get(i).getProvinsiid();
-                        listSpinner.add(arrayList.get(i).getNamaProvinsi());
-                    }
+                    ItemSekolah Item = null;
+                    List<String> provinsi = null;
+                    if (status == 1) {
+                        arrayList = response.body().getData();
+                        List<String> listSpinner = new ArrayList<String>();
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            String provID = arrayList.get(i).getProvinsiid();
+                            listSpinner.add(arrayList.get(i).getNamaProvinsi());
+                        }
                         //String myString = "DKI JAKARTA";
-                        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(FullMap.this,R.layout.spinner_full,listSpinner);
+                        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(FullMap.this, R.layout.spinner_full, listSpinner);
                         //int spinnerPosition = spinnerArrayAdapter.getPosition(myString);
                         spinnerArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
                         et_provinsi.setAdapter(spinnerArrayAdapter);
                         //et_provinsi.setSelection(spinnerPosition);
 
-                } else{
-                    if (status == 0) {
-                        Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                    } else {
+                        if (status == 0) {
+                            Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -892,35 +891,35 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
                 public void onResponse(Call<JSONResponse.School_Provinsi> call, final Response<JSONResponse.School_Provinsi> response) {
                     Log.i("KES", response.code() + "");
                     hideDialog();
+                    if (response.isSuccessful()) {
+                        JSONResponse.School_Provinsi resource = response.body();
 
-                    JSONResponse.School_Provinsi resource = response.body();
-
-                    status = resource.status;
-                    code = resource.code;
-
-
-                    String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
-                    String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
+                        status = resource.status;
+                        code = resource.code;
 
 
-                    if (status == 1 && code.equals("SOP_SCS_0001")) {
-                        for (int i = 0; i < response.body().getData().size(); i++) {
-                            double lat = response.body().getData().get(i).getLatitude();
-                            double lng = response.body().getData().get(i).getLongitude();
-                            String nama = response.body().getData().get(i).getSchoolName();
-                            String akreditas = response.body().getData().get(i).getAkreditasi();
-                            String Alamat = response.body().getData().get(i).getSchoolAddress();
-                            String schooldetailid = response.body().getData().get(i).getSchooldetailid();
-                            mClusterManager.addItem(new ClusterItemSekolah(lat, lng, nama, akreditas, Alamat, schooldetailid));
+                        String SOP_SCS_0001 = getResources().getString(R.string.SOP_SCS_0001);
+                        String SOP_ERR_0001 = getResources().getString(R.string.SOP_ERR_0001);
 
-                        }
 
-                    } else {
-                        if (status == 0 && code.equals("SOP_ERR_0001")) {
-                            Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                        if (status == 1 && code.equals("SOP_SCS_0001")) {
+                            for (int i = 0; i < response.body().getData().size(); i++) {
+                                double lat = response.body().getData().get(i).getLatitude();
+                                double lng = response.body().getData().get(i).getLongitude();
+                                String nama = response.body().getData().get(i).getSchoolName();
+                                String akreditas = response.body().getData().get(i).getAkreditasi();
+                                String Alamat = response.body().getData().get(i).getSchoolAddress();
+                                String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                                mClusterManager.addItem(new ClusterItemSekolah(lat, lng, nama, akreditas, Alamat, schooldetailid));
+
+                            }
+
+                        } else {
+                            if (status == 0 && code.equals("SOP_ERR_0001")) {
+                                Toast.makeText(getApplicationContext(), SOP_ERR_0001, Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
-
                 }
 
                 @Override

@@ -2,6 +2,7 @@ package com.fingertech.kes.Service;
 
 
 import android.annotation.TargetApi;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -25,6 +26,11 @@ public class DBHelper extends SQLiteOpenHelper{
     private static final String db_name ="school";
     private static final int db_version=2;
     public static final String TABLE_SQLite = "sqlite";
+    private static final String TABLE_NAME = "myTable";
+    private static final String UID="_id";     // Column I (Primary Key)
+    private static final String NAME = "Name";// Table Name
+    private static final String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+
+            " ("+UID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+NAME+" VARCHAR(255));";
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
@@ -358,6 +364,10 @@ public class DBHelper extends SQLiteOpenHelper{
 
         db.execSQL(BookmarkTabel.createTable());
         db.execSQL(sql);
+        String position = "create table kodetable( _id integer primary key, position varchar not null);";
+        db.execSQL(position);
+        position = "INSERT INTO kodetable(position) VALUES ('0')";
+        db.execSQL(position);
     }
 
     // dijalankan apabila ingin mengupgrade database
@@ -365,6 +375,30 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + Data.TABLE);
         onCreate(db);
+    }
+    public String getData()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] columns = {DBHelper.UID,"position"};
+        Cursor cursor =db.query("kodetable",columns,null,null,null,null,null);
+        StringBuffer buffer= new StringBuffer();
+        while (cursor.moveToNext())
+        {
+            int cid =cursor.getInt(cursor.getColumnIndex(DBHelper.UID));
+            String name =cursor.getString(cursor.getColumnIndex("position"));
+            buffer.append(name);
+        }
+        return buffer.toString();
+    }
+
+    public int updateName(String oldName , String newName)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("position",newName);
+        String[] whereArgs= {oldName};
+        int count =db.update("kodetable",contentValues, "position"+" = ?",whereArgs );
+        return count;
     }
 
     // Select All Data
@@ -375,7 +409,7 @@ public class DBHelper extends SQLiteOpenHelper{
             SQLiteDatabase db;
             db = this.getReadableDatabase(); // Read Data
 
-            String selectQuery = "SELECT  * FROM country ORDER BY negara ASC" ;
+            String selectQuery = "SELECT  * FROM kodetable" ;
             Cursor cursor = db.rawQuery(selectQuery, null);
 
             return cursor;
@@ -403,6 +437,30 @@ public class DBHelper extends SQLiteOpenHelper{
         // closing connection
         cursor.close();
         db.close();
+
+        // returning lables
+        return labels;
+    }
+
+    public List<String> getposisi(){
+        List<String> labels = new ArrayList<String>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM kodetable";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                labels.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        // closing connection
+//        cursor.close();
+//        db.close();
 
         // returning lables
         return labels;

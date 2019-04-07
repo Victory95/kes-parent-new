@@ -172,7 +172,6 @@ public class AbsensiAnak extends AppCompatActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(absensiAdapter);
         dapat_absen();
-
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
@@ -335,7 +334,6 @@ public class AbsensiAnak extends AppCompatActivity{
                     code = resource.code;
                     if (status == 1 && code.equals("CSCH_SCS_0001")) {
                         jadwalDataList = response.body().getData().getClass_schedule();
-
                         for (int i = 0; i < response.body().getData().getClass_schedule().size(); i++) {
                             scheduleClassItemList   = response.body().getData().getClass_schedule().get(i).getScheduleClass();
                             days_name               = response.body().getData().getClass_schedule().get(i).getDayName();

@@ -3,9 +3,11 @@ package com.fingertech.kes.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -15,12 +17,16 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,12 +76,14 @@ import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
 import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Model.NewsModel;
+import com.fingertech.kes.Activity.Setting.Setting_Activity;
 import com.fingertech.kes.Activity.Setting.SettingsActivity;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Rest.UtilsApi;
+import com.fingertech.kes.Service.MyService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -165,6 +173,11 @@ public class MenuGuest extends AppCompatActivity
     String base_url_news;
     TextView no_berita,view_more;
     ScrollView scrollView;
+    String kode_gps;
+    private BroadcastReceiver statusReceiver;
+    private IntentFilter mIntent;
+    ConnectivityManager conMgr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -249,6 +262,90 @@ public class MenuGuest extends AppCompatActivity
         base_url_news = "http://www.kes.co.id/schoolm/assets/images/news/mm_";
         Daftar_Berita();
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            kode_gps    = intent.getStringExtra("kode_gps");  //get the type of message from MyGcmListenerService 1 - lock or 0 -Unlock
+            if (kode_gps!=null) {
+                if (kode_gps.equals("false")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MenuGuest.this);
+                    builder.setTitle("Gps Tidak Aktif")
+                            .setMessage("Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda")
+                            .setPositiveButton(R.string.yes,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        setting_lokasi();
+        LocalBroadcastManager.getInstance(MenuGuest.this).registerReceiver(broadcastReceiver, new IntentFilter("NOW"));
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        checkInternetCon();
+        setting_lokasi();
+        startService(new Intent(getBaseContext(), MyService.class));
+    }
+    public void checkInternetCon(){
+        conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        {
+            if (conMgr.getActiveNetworkInfo() != null
+                    && conMgr.getActiveNetworkInfo().isAvailable()
+                    && conMgr.getActiveNetworkInfo().isConnected()) {
+            } else {
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_internet_con), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if(mIntent != null) {
+            unregisterReceiver(statusReceiver);
+            mIntent = null;
+        }
+        super.onPause();
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        stopService(new Intent(getBaseContext(), MyService.class));
+    }
+    protected boolean isLocationEnabled(){
+        String le = Context.LOCATION_SERVICE;
+        LocationManager locationManager = (LocationManager) getSystemService(le);
+        return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+    private void setting_lokasi(){
+        isLocationEnabled();
+        if(!isLocationEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MenuGuest.this);
+            builder.setTitle(R.string.network_not_enabled)
+                    .setMessage(R.string.open_location_settings)
+                    .setPositiveButton(R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                }
+                            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
 
     private boolean isGooglePlayServicesAvailable() {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
@@ -348,7 +445,7 @@ public class MenuGuest extends AppCompatActivity
             Intent intent = new Intent(MenuGuest.this, TentangKami.class);
             startActivity(intent);
         } else if (id == R.id.nav_Pengaturan) {
-            Intent intent = new Intent(MenuGuest.this, SettingsActivity.class);
+            Intent intent = new Intent(MenuGuest.this, Setting_Activity.class);
             startActivity(intent);
         }
 

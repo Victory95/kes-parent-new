@@ -283,24 +283,23 @@ public class JadiParent extends AppCompatActivity {
             public void onResponse(retrofit2.Call<JSONResponse> call, final Response<JSONResponse> response) {
                 hideDialog();
                 Log.i("KES", response.code() + "");
-
-                JSONResponse resource = response.body();
-
-                status = resource.status;
-                code   = resource.code;
-
-                if (status == 1 && code.equals("SWP_SCS_0001")) {
-                    FancyToast.makeText(JadiParent.this,"Berhasil menjadi Orangtua",FancyToast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
-                    Intent intent = new Intent(JadiParent.this, MenuUtama.class);
-                    startActivity(intent);
-                    finish();
-                } else{
-                    if (status == 0 && code.equals("SWP_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), "Email tidak boleh kosong", Toast.LENGTH_LONG).show();
-                    }else if (status == 0 & code.equals("SWP_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), "Nama tidak boleh kosong", Toast.LENGTH_LONG).show();
-                    }else if (status == 0 & code.equals("SWP_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), "Nomor HP tidak boleh kosong", Toast.LENGTH_LONG).show();
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    if (status == 1 && code.equals("SWP_SCS_0001")) {
+                        FancyToast.makeText(JadiParent.this, "Berhasil menjadi Orangtua", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
+                        Intent intent = new Intent(JadiParent.this, MenuUtama.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        if (status == 0 && code.equals("SWP_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), "Email tidak boleh kosong", Toast.LENGTH_LONG).show();
+                        } else if (status == 0 & code.equals("SWP_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), "Nama tidak boleh kosong", Toast.LENGTH_LONG).show();
+                        } else if (status == 0 & code.equals("SWP_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), "Nomor HP tidak boleh kosong", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
 

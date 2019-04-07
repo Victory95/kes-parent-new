@@ -4,12 +4,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,6 +31,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -99,6 +103,8 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Rest.UtilsApi;
+import com.fingertech.kes.Service.DBHelper;
+import com.fingertech.kes.Service.MyService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -120,9 +126,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.pepperonas.materialdialog.MaterialDialog;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
@@ -142,6 +150,9 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.fingertech.kes.Service.App.getContext;
 
 
 public class MenuUtama extends AppCompatActivity
@@ -244,6 +255,12 @@ public class MenuUtama extends AppCompatActivity
     TextView no_berita,view_more;
     ScrollView scrollView;
     ImageView transparantImage;
+    String kode_gps;
+    private BroadcastReceiver statusReceiver;
+    private IntentFilter mIntent;
+    int posisi;
+    DBHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -304,6 +321,7 @@ public class MenuUtama extends AppCompatActivity
         school_name   = sharedpreferences.getString(TAG_NAMA_SEKOLAH,null);
         school_code   = sharedpreferences.getString(TAG_SCHOOL_CODE,null);
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,null);
+
         Base_url      = "http://kes.co.id/assets/images/profile/mm_";
         Base_anak     = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
         base_url_news = "http://www.kes.co.id/schoolm/assets/images/news/mm_";
@@ -461,10 +479,59 @@ public class MenuUtama extends AppCompatActivity
 
     }
 
+    public void dapat_posisi(){
+        posisi= Integer.parseInt(db.getData());
+    }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            kode_gps    = intent.getStringExtra("kode_gps");  //get the type of message from MyGcmListenerService 1 - lock or 0 -Unlock
+            if (kode_gps!=null) {
+                if (kode_gps.equals("false")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MenuUtama.this);
+                    builder.setTitle("Gps Tidak Aktif")
+                            .setMessage("Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda")
+                            .setPositiveButton(R.string.yes,
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                        }
+                                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+        }
+    };
+
     @Override
     protected void onResume(){
         super.onResume();
         setting_lokasi();
+        LocalBroadcastManager.getInstance(MenuUtama.this).registerReceiver(broadcastReceiver, new IntentFilter("NOW"));
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        db = new DBHelper(getApplicationContext());
+        dapat_posisi();
+        startService(new Intent(getBaseContext(), MyService.class));
+    }
+
+    @Override
+    protected void onPause() {
+        if(mIntent != null) {
+            unregisterReceiver(statusReceiver);
+            mIntent = null;
+        }
+        super.onPause();
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        stopService(new Intent(getBaseContext(), MyService.class));
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -717,20 +784,21 @@ public class MenuUtama extends AppCompatActivity
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
                 Log.d("onRespone",response.code()+"");
                 hideDialog();
-                JSONResponse.PesanAnak resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.PesanAnak resource = response.body();
 
-                status  = resource.status;
-                code    = resource.code;
+                    status = resource.status;
+                    code = resource.code;
 
 
-                if (status == 1 & code.equals("DTS_SCS_0001")) {
-                    pesanModelList = new ArrayList<PesanModel>();
+                    if (status == 1 & code.equals("DTS_SCS_0001")) {
+                        pesanModelList = new ArrayList<PesanModel>();
 //                    for (int i = 0; i < response.body().getData().size(); i++) {
                         statusku = response.body().getData().get(0).getRead_status();
                         String myString = statusku;
                         int foo = Integer.parseInt(myString);
-                        if (countmenu!=null) {
-                            if (mCartItemCount==foo) {
+                        if (countmenu != null) {
+                            if (mCartItemCount == foo) {
                                 if (countmenu.getVisibility() != View.GONE) {
                                     countmenu.setVisibility(View.GONE);
                                 } else {
@@ -747,13 +815,15 @@ public class MenuUtama extends AppCompatActivity
                         pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
 //
 //                    }
+                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
 
             @Override
             public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
                 Log.i("onFailure",t.toString());
-
                 hideDialog();
             }
         });
@@ -805,12 +875,12 @@ public class MenuUtama extends AppCompatActivity
                             }
                             profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
-                            profileAdapter.selectRow(0);
-                            student_id = response.body().getData().get(0).getStudent_id();
-                            school_code = response.body().getData().get(0).getSchool_code();
-                            classroom_id = response.body().getData().get(0).getClassroom_id();
-                            school_name = response.body().getData().get(0).getSchool_name();
-                            nama_anak = response.body().getData().get(0).getChildren_name();
+                            profileAdapter.selectRow(posisi);
+                            student_id = response.body().getData().get(posisi).getStudent_id();
+                            school_code = response.body().getData().get(posisi).getSchool_code();
+                            classroom_id = response.body().getData().get(posisi).getClassroom_id();
+                            school_name = response.body().getData().get(posisi).getSchool_name();
+                            nama_anak = response.body().getData().get(posisi).getChildren_name();
                             send_data();
                             send_data2();
                             dapat_pesan();
@@ -828,6 +898,7 @@ public class MenuUtama extends AppCompatActivity
                                 classroom_id = profileModels.get(position).getClassroom_id();
                                 school_name = profileModels.get(position).getSchool_name();
                                 nama_anak = profileModels.get(position).getNama();
+                                db.updateName(String.valueOf(posisi),String.valueOf(position));
                                 send_data();
                                 send_data2();
                                 dapat_pesan();
@@ -838,6 +909,8 @@ public class MenuUtama extends AppCompatActivity
                             Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
                         }
                     }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override
@@ -862,9 +935,7 @@ public class MenuUtama extends AppCompatActivity
                 hideDialog();
                 if (response.isSuccessful()) {
                     JSONResponse.GetProfile resource = response.body();
-
                     status = resource.status;
-
                     if (status == 1) {
                         String picture = response.body().getData().getPicture();
                         String nama = response.body().getData().getFullname();
@@ -896,7 +967,8 @@ public class MenuUtama extends AppCompatActivity
                             actionView.setVisibility(View.GONE);
                         }
                     }
-
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
 
@@ -1065,7 +1137,6 @@ public class MenuUtama extends AppCompatActivity
             //Place current location marker
             final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
-
             final MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);
             markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_map));
@@ -1150,286 +1221,283 @@ public class MenuUtama extends AppCompatActivity
 
 
     public void dapat_map(){
-
         Call<JSONResponse.Nearby_School> call = mApiInterface.nearby_radius_post(currentLatitude,currentLongitude,PROXIMITY_RADIUS);
-
         call.enqueue(new Callback<JSONResponse.Nearby_School>() {
-
             @Override
             public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
                 Log.i("mapResponse", response.code() + "");
 
-                JSONResponse.Nearby_School resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.Nearby_School resource = response.body();
 
-                status = resource.status;
-                code = resource.code;
+                    status = resource.status;
+                    code = resource.code;
 
-                String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
-                String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
-                String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
-                String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
-                String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
+                    String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
+                    String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
+                    String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
+                    String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
+                    String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                ItemSekolah Item = null;
+                    ItemSekolah Item = null;
 
-                if (status == 1 && code.equals("NR_SCS_0001")) {
-                    itemList = new ArrayList<ItemSekolah>();
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        double lat     = response.body().getData().get(i).getLatitude();
-                        double lng     = response.body().getData().get(i).getLongitude();
-                        placeName      = response.body().getData().get(i).getSchool_name();
-                        vicinity       = response.body().getData().get(i).getSchool_address();
-                        akreditasi     = response.body().getData().get(i).getAkreditasi();
-                        schooldetailid = response.body().getData().get(i).getSchooldetailid();
-                        final double Jarak          = response.body().getData().get(i).getDistance();
+                    if (status == 1 && code.equals("NR_SCS_0001")) {
+                        itemList = new ArrayList<ItemSekolah>();
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            double lat = response.body().getData().get(i).getLatitude();
+                            double lng = response.body().getData().get(i).getLongitude();
+                            placeName = response.body().getData().get(i).getSchool_name();
+                            vicinity = response.body().getData().get(i).getSchool_address();
+                            akreditasi = response.body().getData().get(i).getAkreditasi();
+                            schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                            final double Jarak = response.body().getData().get(i).getDistance();
 
-                        LatLng latLng = new LatLng(lat, lng);
-                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                            LatLng latLng = new LatLng(lat, lng);
+                            if (response.body().getData().get(i).getJenjang_pendidikan().equals("SD")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sd));
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sd));
 
-                            // Remove Marker
+                                // Remove Marker
 
-                            // Adding Marker to the Camera.
-                            m = mapG.addMarker(markerOptions);
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
 
-                            // Remove Marker
+                                // Remove Marker
 
-                            // Adding Marker to the Camera.
-                            m = mapG.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp));
 
-                            // Remove Marker
+                                // Remove Marker
 
-                            // Adding Marker to the Camera.
-                            m= mapG.addMarker(markerOptions);
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            } else {
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sma));
+
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mapG.addMarker(markerOptions);
+                            }
+
+                            InfoWindowData info = new InfoWindowData();
+                            info.setNama(placeName);
+                            info.setAlamat(vicinity);
+                            info.setAkreditasi(akreditasi);
+                            info.setJarak(Jarak);
+                            info.setSchooldetailid(schooldetailid);
+
+                            CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuUtama.this);
+                            mapG.setInfoWindowAdapter(customInfoWindow);
+
+                            m.setTag(info);
+                            // m.showInfoWindow();
+
+                            Item = new ItemSekolah();
+                            Item.setName(placeName);
+                            Item.setAkreditas(akreditasi);
+                            Item.setJarak(Jarak);
+                            Item.setLat(lat);
+                            Item.setLng(lng);
+                            itemList.add(Item);
                         }
-                        else {
-                            MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sma));
-
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m= mapG.addMarker(markerOptions);
-                        }
-
-                        InfoWindowData info = new InfoWindowData();
-                        info.setNama(placeName);
-                        info.setAlamat(vicinity);
-                        info.setAkreditasi(akreditasi);
-                        info.setJarak(Jarak);
-                        info.setSchooldetailid(schooldetailid);
-
-                        CustomInfoWindowAdapter customInfoWindow = new CustomInfoWindowAdapter(MenuUtama.this);
-                        mapG.setInfoWindowAdapter(customInfoWindow);
-
-                        m.setTag(info);
-                        // m.showInfoWindow();
-
-                        Item = new ItemSekolah();
-                        Item.setName(placeName);
-                        Item.setAkreditas(akreditasi);
-                        Item.setJarak(Jarak);
-                        Item.setLat(lat);
-                        Item.setLng(lng);
-                        itemList.add(Item);
-                    }
-
-                    // Create the recyclerview.
-                    snappyRecyclerView = findViewById(R.id.recycler_view);
+                        // Create the recyclerview.
+                        snappyRecyclerView = findViewById(R.id.recycler_view);
 //                    final SnappyLinearLayoutManager layoutManager = new SnappyLinearLayoutManager(MenuUtama.this);
 //                    layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-                    final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
-                    layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
-                    snappyRecyclerView.addOnScrollListener(new CenterScrollListener());
-                    snappyRecyclerView.setHasFixedSize(true);
-                    snappyRecyclerView.setLayoutManager(layoutManager);
-                    itemSekolahAdapter = new ItemSekolahAdapter(itemList);
-                    itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
+                        final CarouselLayoutManager layoutManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+                        layoutManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
+                        snappyRecyclerView.addOnScrollListener(new CenterScrollListener());
+                        snappyRecyclerView.setHasFixedSize(true);
+                        snappyRecyclerView.setLayoutManager(layoutManager);
+                        itemSekolahAdapter = new ItemSekolahAdapter(itemList);
+                        itemSekolahAdapter.setOnItemClickListener(new ItemSekolahAdapter.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
 
-                            LatLng latLng = new LatLng(currentLatitude,currentLongitude);
-                            latitude = response.body().getData().get(position).getLatitude();
-                            longitude = response.body().getData().get(position).getLongitude();
-                            final LatLng StartlatLng = new LatLng(latitude, longitude);
-                            GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
-                            String $key = getResources().getString(R.string.google_maps_key);
+                                LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+                                latitude = response.body().getData().get(position).getLatitude();
+                                longitude = response.body().getData().get(position).getLongitude();
+                                final LatLng StartlatLng = new LatLng(latitude, longitude);
+                                GoogleDirectionConfiguration.getInstance().setLogEnabled(true);
+                                String $key = getResources().getString(R.string.google_maps_key);
 
-                            GoogleDirection.withServerKey($key)
-                                    .from(latLng)
-                                    .to(StartlatLng)
-                                    .transportMode(TransportMode.DRIVING)
-                                    .transitMode(TransitMode.BUS)
-                                    .unit(Unit.METRIC)
-                                    .execute(new DirectionCallback() {
-                                        @Override
-                                        public void onDirectionSuccess(Direction direction, String rawBody) {
+                                GoogleDirection.withServerKey($key)
+                                        .from(latLng)
+                                        .to(StartlatLng)
+                                        .transportMode(TransportMode.DRIVING)
+                                        .transitMode(TransitMode.BUS)
+                                        .unit(Unit.METRIC)
+                                        .execute(new DirectionCallback() {
+                                            @Override
+                                            public void onDirectionSuccess(Direction direction, String rawBody) {
 
-                                            Log.d("GoogleDirection", "Response Direction Status: " + direction.toString()+"\n"+rawBody);
+                                                Log.d("GoogleDirection", "Response Direction Status: " + direction.toString() + "\n" + rawBody);
 
-                                            if(direction.isOK()) {
-                                                // Do something
-                                                Route route = direction.getRouteList().get(0);
-                                                Leg leg = route.getLegList().get(0);
-                                                ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-                                                PolylineOptions polylineOptions = DirectionConverter.createPolyline(getApplication(), directionPositionList, 4, Color.BLUE);
-                                                line = mapG.addPolyline(polylineOptions);
-                                                setCameraWithCoordinationBounds(direction.getRouteList().get(0));
+                                                if (direction.isOK()) {
+                                                    // Do something
+                                                    Route route = direction.getRouteList().get(0);
+                                                    Leg leg = route.getLegList().get(0);
+                                                    ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
+                                                    PolylineOptions polylineOptions = DirectionConverter.createPolyline(getApplication(), directionPositionList, 4, Color.BLUE);
+                                                    line = mapG.addPolyline(polylineOptions);
+                                                    setCameraWithCoordinationBounds(direction.getRouteList().get(0));
 
-                                            } else {
-                                                // Do something
+                                                } else {
+                                                    // Do something
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onDirectionFailure(Throwable t) {
-                                            // Do something
-                                            Log.e("GoogleDirection", "Response Direction Status: " + t.getMessage()+"\n"+t.getCause());
-                                        }
-                                    });
-                            if(line != null){
-                                line.remove();
+                                            @Override
+                                            public void onDirectionFailure(Throwable t) {
+                                                // Do something
+                                                Log.e("GoogleDirection", "Response Direction Status: " + t.getMessage() + "\n" + t.getCause());
+                                            }
+                                        });
+                                if (line != null) {
+                                    line.remove();
+                                }
                             }
+
+                        });
+
+                        snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
+                                int scrollOffset = recyclerView.computeHorizontalScrollOffset();
+                                int currentItem = 0;
+                                float itemWidth = horizontalScrollRange * 1.0f / itemList.size();
+                                itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
+                                if (scrollOffset != 0) {
+                                    currentItem = Math.round(scrollOffset / itemWidth);
+                                }
+                                currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
+                                if (line != null) {
+                                    line.remove();
+                                }
+                                currentItem = layoutManager.getCenterItemPosition();
+
+                                if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
+                                    latitude = response.body().getData().get(currentItem).getLatitude();
+                                    longitude = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitude, longitude);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sd60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapG.addMarker(markerOptions);
+                                    mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
+
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")) {
+                                    latitude = response.body().getData().get(currentItem).getLatitude();
+                                    longitude = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitude, longitude);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapG.addMarker(markerOptions);
+                                    mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                                    mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")) {
+                                    latitude = response.body().getData().get(currentItem).getLatitude();
+                                    longitude = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitude, longitude);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sma60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapG.addMarker(markerOptions);
+                                    mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
+                                } else if (response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")) {
+                                    latitude = response.body().getData().get(currentItem).getLatitude();
+                                    longitude = response.body().getData().get(currentItem).getLongitude();
+                                    final LatLng latLng = new LatLng(latitude, longitude);
+                                    final MarkerOptions markerOptions = new MarkerOptions();
+                                    // Position of Marker on Map
+                                    markerOptions.position(latLng);
+                                    // Adding colour to the marker
+                                    markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp60));
+                                    // Remove Marker
+                                    if (m != null) {
+                                        m.remove();
+                                    }
+                                    // Adding Marker to the Camera.
+                                    m = mapG.addMarker(markerOptions);
+                                    mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
+                                }
+                            }
+                        });
+                        // Set data adapter.
+                        snappyRecyclerView.setAdapter(itemSekolahAdapter);
+
+                    } else {
+                        if (status == 0 && code.equals("NR_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-
-                    });
-
-                    snappyRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-                            int horizontalScrollRange = recyclerView.computeHorizontalScrollRange();
-                            int scrollOffset = recyclerView.computeHorizontalScrollOffset();
-                            int currentItem = 0;
-                            float itemWidth = horizontalScrollRange * 1.0f / itemList.size();
-                            itemWidth = (itemWidth == 0) ? 1.0f : itemWidth;
-                            if (scrollOffset != 0) {
-                                currentItem = Math.round(scrollOffset / itemWidth);
-                            }
-                            currentItem = (currentItem >= itemList.size()) ? itemList.size() - 1 : currentItem;
-                            if(line != null){
-                                line.remove();
-                            }
-                            currentItem  = layoutManager.getCenterItemPosition();
-
-                            if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SD")) {
-                                latitude = response.body().getData().get(currentItem).getLatitude();
-                                longitude = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitude, longitude);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sd60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapG.addMarker(markerOptions);
-                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-
-                            }
-                            else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMP")){
-                                latitude = response.body().getData().get(currentItem).getLatitude();
-                                longitude = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitude, longitude);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapG.addMarker(markerOptions);
-                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SMA")){
-                                latitude = response.body().getData().get(currentItem).getLatitude();
-                                longitude = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitude, longitude);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_sma60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapG.addMarker(markerOptions);
-                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }else if(response.body().getData().get(currentItem).getJenjang_pendidikan().equals("SPK SMP")){
-                                latitude = response.body().getData().get(currentItem).getLatitude();
-                                longitude = response.body().getData().get(currentItem).getLongitude();
-                                final LatLng latLng = new LatLng(latitude, longitude);
-                                final MarkerOptions markerOptions = new MarkerOptions();
-                                // Position of Marker on Map
-                                markerOptions.position(latLng);
-                                // Adding colour to the marker
-                                markerOptions.icon(bitmapDescriptorFromVector(MenuUtama.this, R.drawable.ic_smp60));
-                                // Remove Marker
-                                if (m != null) {
-                                    m.remove();
-                                }
-                                // Adding Marker to the Camera.
-                                m = mapG.addMarker(markerOptions);
-                                mapG.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                mapG.animateCamera(CameraUpdateFactory.zoomTo(16));
-                            }
+                        if (status == 0 && code.equals("NR_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
                         }
-                    });
+                        if (status == 0 && code.equals("NR_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                    // Set data adapter.
-                    snappyRecyclerView.setAdapter(itemSekolahAdapter);
-
-
-                } else{
-                    if (status == 0 && code.equals("NR_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0002")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0003")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0004")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
-                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
-
             }
 
             @Override

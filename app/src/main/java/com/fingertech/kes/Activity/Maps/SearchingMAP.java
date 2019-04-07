@@ -571,105 +571,104 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
                 hideDialog();
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.Nearby_School resource = response.body();
 
-                JSONResponse.Nearby_School resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
+                    String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
+                    String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
+                    String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
+                    String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
+                    String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
-                String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
-                String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
-                String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
-                String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
+                    ItemSekolah Item = null;
 
-                ItemSekolah Item = null;
+                    if (status == 1 && code.equals("NR_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            double lat = response.body().getData().get(i).getLatitude();
+                            double lng = response.body().getData().get(i).getLongitude();
+                            final String placeName = response.body().getData().get(i).getSchool_name();
+                            final String vicinity = response.body().getData().get(i).getSchool_address();
+                            final String akreditasi = response.body().getData().get(i).getAkreditasi();
+                            final double Jarak = response.body().getData().get(i).getDistance();
+                            final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
 
-                if (status == 1 && code.equals("NR_SCS_0001")) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
-                        double lat                  = response.body().getData().get(i).getLatitude();
-                        double lng                  = response.body().getData().get(i).getLongitude();
-                        final String placeName      = response.body().getData().get(i).getSchool_name();
-                        final String vicinity       = response.body().getData().get(i).getSchool_address();
-                        final String akreditasi     = response.body().getData().get(i).getAkreditasi();
-                        final double Jarak          = response.body().getData().get(i).getDistance();
-                        final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                            LatLng latLng = new LatLng(lat, lng);
+                            if (response.body().getData().get(i).getJenjang_pendidikan().equals("SD")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                        LatLng latLng = new LatLng(lat, lng);
-                        if(response.body().getData().get(i).getJenjang_pendidikan().equals("SD")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
 
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            } else if (response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
-                        }else if(response.body().getData().get(i).getJenjang_pendidikan().equals("SPK SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                                // Remove Marker
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                            // Remove Marker
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            } else {
+                                MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Adding Marker to the Camera.
-                            m= mmap.addMarker(markerOptions);
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            }
+
+                            InfoWindowData info = new InfoWindowData();
+                            info.setNama(placeName);
+                            info.setAlamat(vicinity);
+                            info.setSchooldetailid(schooldetailid);
+                            info.setAkreditasi(akreditasi);
+                            info.setJarak(Jarak);
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
+                            mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                            m.setTag(info);
                         }
-                        else {
-                            MarkerOptions markerOptions = new MarkerOptions();
 
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m= mmap.addMarker(markerOptions);
+                    } else {
+                        if (status == 0 && code.equals("NR_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-
-                        InfoWindowData info = new InfoWindowData();
-                        info.setNama(placeName);
-                        info.setAlamat(vicinity);
-                        info.setSchooldetailid(schooldetailid);
-                        info.setAkreditasi(akreditasi);
-                        info.setJarak(Jarak);
-                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
-                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                        m.setTag(info);
-                    }
-
-                } else{
-                    if (status == 0 && code.equals("NR_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0002")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0003")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0004")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        if (status == 0 && code.equals("NR_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
             }
 
             @Override
@@ -688,98 +687,98 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onResponse(Call<JSONResponse.School> call, final Response<JSONResponse.School> response) {
                 Log.d("TAG",response.code()+"");
+                if (response.isSuccessful()) {
+                    JSONResponse.School resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.School resource = response.body();
-                status = resource.status;
-                code = resource.code;
-
-                if (status == 1 && code.equals("SS_SCS_0001")) {
-                    arraylist = response.body().getData();
-                    searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
-                    recyclerView.setAdapter(searchMapAdapter);
-                    searchMapAdapter.notifyDataSetChanged();
-                    searchMapAdapter.getFilter(key).filter(key);
+                    if (status == 1 && code.equals("SS_SCS_0001")) {
+                        arraylist = response.body().getData();
+                        searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
+                        recyclerView.setAdapter(searchMapAdapter);
+                        searchMapAdapter.notifyDataSetChanged();
+                        searchMapAdapter.getFilter(key).filter(key);
 //                    searchMapAdapter.setFilter(arraylist,key);
-                    searchMapAdapter.setOnItemClickListener((view, position) -> {
-                        if (mmap!=null){
-                            mmap.clear();
+                        searchMapAdapter.setOnItemClickListener((view, position) -> {
+                            if (mmap != null) {
+                                mmap.clear();
+                            }
+
+                            materialSearchView.clearFocus();
+                            latitudeF = response.body().getData().get(position).getLatitude();
+                            longitudeF = response.body().getData().get(position).getLongitude();
+                            schooldetailid = response.body().getData().get(position).getSchooldetailid();
+                            placeName = response.body().getData().get(position).getSchool_name();
+                            vicinity = response.body().getData().get(position).getSchool_address();
+                            akreditasi = response.body().getData().get(position).getAkreditasi();
+                            final LatLng latLng = new LatLng(latitudeF, longitudeF);
+                            hideKeyboard(SearchingMAP.this);
+                            if (response.body().getData().get(position).getJenjang_pendidikan().equals("SD")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
+
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+
+                            } else if (response.body().getData().get(position).getJenjang_pendidikan().equals("SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            } else if (response.body().getData().get(position).getJenjang_pendidikan().equals("SPK SMP")) {
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            } else {
+                                MarkerOptions markerOptions = new MarkerOptions();
+
+                                // Position of Marker on Map
+                                markerOptions.position(latLng);
+                                // Adding colour to the marker
+                                markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                                // Remove Marker
+
+                                // Adding Marker to the Camera.
+                                m = mmap.addMarker(markerOptions);
+                            }
+                            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+                            mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+
+                            InfoWindowData info = new InfoWindowData();
+                            info.setNama(placeName);
+                            info.setAlamat(vicinity);
+                            info.setSchooldetailid(schooldetailid);
+                            info.setAkreditasi(akreditasi);
+                            info.setJarak(distance(currentLatitude, currentLongitude, latitudeF, longitudeF));
+                            CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
+                            mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                            m.setTag(info);
+                            tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
+                            discreteSlider.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        if (status == 0 && code.equals("SS_ERR_0001")) {
                         }
-
-                        materialSearchView.clearFocus();
-                        latitudeF        = response.body().getData().get(position).getLatitude();
-                        longitudeF       = response.body().getData().get(position).getLongitude();
-                        schooldetailid   = response.body().getData().get(position).getSchooldetailid();
-                        placeName        = response.body().getData().get(position).getSchool_name();
-                        vicinity         = response.body().getData().get(position).getSchool_address();
-                        akreditasi       = response.body().getData().get(position).getAkreditasi();
-                        final LatLng latLng = new LatLng(latitudeF, longitudeF);
-                        hideKeyboard(SearchingMAP.this);
-                        if(response.body().getData().get(position).getJenjang_pendidikan().equals("SD")){
-                            MarkerOptions markerOptions = new MarkerOptions();
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
-
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
-
-                        }else if(response.body().getData().get(position).getJenjang_pendidikan().equals("SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
-
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
-                        }else if(response.body().getData().get(position).getJenjang_pendidikan().equals("SPK SMP")){
-                            MarkerOptions markerOptions = new MarkerOptions();
-
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
-                        }
-                        else {
-                            MarkerOptions markerOptions = new MarkerOptions();
-
-                            // Position of Marker on Map
-                            markerOptions.position(latLng);
-                            // Adding colour to the marker
-                            markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                            // Remove Marker
-
-                            // Adding Marker to the Camera.
-                            m = mmap.addMarker(markerOptions);
-                        }
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
-                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-
-                        InfoWindowData info = new InfoWindowData();
-                        info.setNama(placeName);
-                        info.setAlamat(vicinity);
-                        info.setSchooldetailid(schooldetailid);
-                        info.setAkreditasi(akreditasi);
-                        info.setJarak(distance(currentLatitude,currentLongitude,latitudeF,longitudeF));
-                        CustomInfoWindowAdapter customInfoWindowAdapter = new CustomInfoWindowAdapter(SearchingMAP.this);
-                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                        m.setTag(info);
-                        tickMarkLabelsRelativeLayout.setVisibility(View.VISIBLE);
-                        discreteSlider.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                    });
-
-                } else {
-                    if(status == 0 && code.equals("SS_ERR_0001")){
                     }
                 }
             }
@@ -1000,92 +999,92 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
             public void onResponse(Call<JSONResponse.Nearby_School> call, final Response<JSONResponse.Nearby_School> response) {
                 hideDialog();
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.Nearby_School resource = response.body();
 
-                JSONResponse.Nearby_School resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                status = resource.status;
-                code = resource.code;
+                    String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
+                    String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
+                    String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
+                    String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
+                    String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
 
-                String NR_SCS_0001 = getResources().getString(R.string.NR_SCS_0001);
-                String NR_ERR_0001 = getResources().getString(R.string.NR_ERR_0001);
-                String NR_ERR_0002 = getResources().getString(R.string.NR_ERR_0002);
-                String NR_ERR_0003 = getResources().getString(R.string.NR_ERR_0003);
-                String NR_ERR_0004 = getResources().getString(R.string.NR_ERR_0004);
+                    ItemSekolah Item = null;
 
-                ItemSekolah Item = null;
+                    if (status == 1 && code.equals("NR_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
 
-                if (status == 1 && code.equals("NR_SCS_0001")) {
-                    for (int i = 0; i < response.body().getData().size(); i++) {
+                            double lat = response.body().getData().get(i).getLatitude();
+                            double lng = response.body().getData().get(i).getLongitude();
+                            final String placeName = response.body().getData().get(i).getSchool_name();
+                            final String vicinity = response.body().getData().get(i).getSchool_address();
+                            final String akreditasi = response.body().getData().get(i).getAkreditasi();
+                            final double Jarak = response.body().getData().get(i).getDistance();
+                            final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
 
-                        double lat = response.body().getData().get(i).getLatitude();
-                        double lng = response.body().getData().get(i).getLongitude();
-                        final String placeName = response.body().getData().get(i).getSchool_name();
-                        final String vicinity = response.body().getData().get(i).getSchool_address();
-                        final String akreditasi = response.body().getData().get(i).getAkreditasi();
-                        final double Jarak = response.body().getData().get(i).getDistance();
-                        final String schooldetailid = response.body().getData().get(i).getSchooldetailid();
+                            LatLng latLng = new LatLng(lat, lng);
 
-                        LatLng latLng = new LatLng(lat, lng);
+                            final LatLng latLngs = new LatLng(currentLatitude, currentLongitude);
+                            //Place current location marker
 
-                        final LatLng latLngs = new LatLng(currentLatitude, currentLongitude);
-                        //Place current location marker
+                            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLngs.latitude, latLngs.longitude)).zoom(16).build();
 
-                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLngs.latitude, latLngs.longitude)).zoom(16).build();
+                            final MarkerOptions markerOptionss = new MarkerOptions();
+                            markerOptionss.position(latLngs);
+                            markerOptionss.title("Lokasi Anda");
+                            markerOptionss.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_map));
+                            mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                            mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                            mcurrLocationMarker = mmap.addMarker(markerOptionss);
 
-                        final MarkerOptions markerOptionss = new MarkerOptions();
-                        markerOptionss.position(latLngs);
-                        markerOptionss.title("Lokasi Anda");
-                        markerOptionss.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_map));
-                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                        mcurrLocationMarker = mmap.addMarker(markerOptionss);
-
-                        switch (pilihan) {
-                            case "SD":
-                                if (response.body().getData().get(i).getJenjang_pendidikan().equals("SD")) {
-                                    MarkerOptions markerOptions = new MarkerOptions();
-                                    // Position of Marker on Map
-                                    markerOptions.position(latLng);
-                                    // Adding colour to the marker
-                                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
-                                    // Adding Marker to the Camera.
-                                    m = mmap.addMarker(markerOptions);
-                                }
-                                break;
-                            case "SMP":
-                                if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")) {
-                                    MarkerOptions markerOptions = new MarkerOptions();
-                                    // Position of Marker on Map
-                                    markerOptions.position(latLng);
-                                    // Adding colour to the marker
-                                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                                    // Adding Marker to the Camera.
-                                    m = mmap.addMarker(markerOptions);
-                                }
-                                break;
-                            case "SMA":
-                                if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMA")) {
-                                    MarkerOptions markerOptions = new MarkerOptions();
-                                    // Position of Marker on Map
-                                    markerOptions.position(latLng);
-                                    // Adding colour to the marker
-                                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                                    // Adding Marker to the Camera.
-                                    m = mmap.addMarker(markerOptions);
-                                }
-                                break;
-                            case "SMK":
-                                if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMK")) {
-                                    MarkerOptions markerOptions = new MarkerOptions();
-                                    // Position of Marker on Map
-                                    markerOptions.position(latLng);
-                                    // Adding colour to the marker
-                                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                                    // Adding Marker to the Camera.
-                                    m = mmap.addMarker(markerOptions);
-                                }
-                                break;
-                        }
+                            switch (pilihan) {
+                                case "SD":
+                                    if (response.body().getData().get(i).getJenjang_pendidikan().equals("SD")) {
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        // Position of Marker on Map
+                                        markerOptions.position(latLng);
+                                        // Adding colour to the marker
+                                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
+                                        // Adding Marker to the Camera.
+                                        m = mmap.addMarker(markerOptions);
+                                    }
+                                    break;
+                                case "SMP":
+                                    if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMP")) {
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        // Position of Marker on Map
+                                        markerOptions.position(latLng);
+                                        // Adding colour to the marker
+                                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                                        // Adding Marker to the Camera.
+                                        m = mmap.addMarker(markerOptions);
+                                    }
+                                    break;
+                                case "SMA":
+                                    if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMA")) {
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        // Position of Marker on Map
+                                        markerOptions.position(latLng);
+                                        // Adding colour to the marker
+                                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                                        // Adding Marker to the Camera.
+                                        m = mmap.addMarker(markerOptions);
+                                    }
+                                    break;
+                                case "SMK":
+                                    if (response.body().getData().get(i).getJenjang_pendidikan().equals("SMK")) {
+                                        MarkerOptions markerOptions = new MarkerOptions();
+                                        // Position of Marker on Map
+                                        markerOptions.position(latLng);
+                                        // Adding colour to the marker
+                                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                                        // Adding Marker to the Camera.
+                                        m = mmap.addMarker(markerOptions);
+                                    }
+                                    break;
+                            }
                             InfoWindowData info = new InfoWindowData();
                             info.setNama(placeName);
                             info.setAlamat(vicinity);
@@ -1096,20 +1095,21 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                             mmap.setInfoWindowAdapter(customInfoWindowAdapter);
                             m.setTag(info);
 
-                    }
+                        }
 
-                } else{
-                    if (status == 0 && code.equals("NR_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0002")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0003")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
-                    }
-                    if (status == 0 && code.equals("NR_ERR_0004")) {
-                        Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                    } else {
+                        if (status == 0 && code.equals("NR_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("NR_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), NR_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
 

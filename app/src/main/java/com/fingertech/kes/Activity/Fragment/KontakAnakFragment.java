@@ -34,6 +34,7 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.rey.material.widget.Spinner;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -254,103 +255,103 @@ public class KontakAnakFragment extends Fragment {
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
 
-                JSONResponse.DetailStudent resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    JSONResponse.DetailStudent resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+                    String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                    String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                    int tingkat  = Integer.parseInt(response.body().data.getEdulevel_id());
-                    teleponrumah    = response.body().data.getHome_phone();
-                    handphone       = response.body().data.getMobile_phone();
-                    email           = response.body().data.getEmail();
-                    skun            = response.body().data.getSkhun();
-                    penerimaan_kps  = response.body().data.getPenerima_kps();
-                    nomor_kps       = response.body().data.getNo_kps();
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        int tingkat = Integer.parseInt(response.body().data.getEdulevel_id());
+                        teleponrumah = response.body().data.getHome_phone();
+                        handphone = response.body().data.getMobile_phone();
+                        email = response.body().data.getEmail();
+                        skun = response.body().data.getSkhun();
+                        penerimaan_kps = response.body().data.getPenerima_kps();
+                        nomor_kps = response.body().data.getNo_kps();
 
-                    et_teleponrumah.setText(teleponrumah);
-                    et_handphone.setText(handphone);
-                    et_email.setText(email);
-                    et_skun.setText(skun);
-                    if (tingkat < 10){
-                        et_skun.setText("-");
-                        til_skun.setVisibility(View.GONE);
-                        et_skun.setVisibility(View.GONE);
-                    }else {
-                        til_skun.setVisibility(View.VISIBLE);
-                        et_skun.setVisibility(View.VISIBLE);
-                    }
-                    final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
-                            getActivity(),R.layout.spinner_text,kps){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
+                        et_teleponrumah.setText(teleponrumah);
+                        et_handphone.setText(handphone);
+                        et_email.setText(email);
+                        et_skun.setText(skun);
+                        if (tingkat < 10) {
+                            et_skun.setText("-");
+                            til_skun.setVisibility(View.GONE);
+                            et_skun.setVisibility(View.GONE);
+                        } else {
+                            til_skun.setVisibility(View.VISIBLE);
+                            et_skun.setVisibility(View.VISIBLE);
                         }
+                        final List<String> kps = new ArrayList<>(Arrays.asList(listkps));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> ArrayAdapters = new ArrayAdapter<String>(
+                                getActivity(), R.layout.spinner_text, kps) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
 
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
                             }
-                            else {
-                                tv.setTextColor(Color.BLACK);
+                        };
+
+                        int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
+                        ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_kps.setAdapter(ArrayAdapters);
+                        sp_kps.setSelection(spinnerPositions);
+
+                        sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
+                            if (position > 0) {
+                                if (position == 1) {
+                                    penerimaan_kps = "Ya";
+                                    til_nokps.setVisibility(View.VISIBLE);
+                                    et_nomorkps.setVisibility(View.VISIBLE);
+                                } else if (position == 2) {
+                                    penerimaan_kps = "Tidak";
+                                    til_nokps.setVisibility(View.GONE);
+                                    et_nomorkps.setVisibility(View.GONE);
+                                    et_nomorkps.setText("-");
+                                }
                             }
-                            return view;
+                        });
+
+                        if (penerimaan_kps.equals("Ya")) {
+                            til_nokps.setVisibility(View.VISIBLE);
+                            et_nomorkps.setVisibility(View.VISIBLE);
+                        } else if (penerimaan_kps.equals("Tidak")) {
+                            til_nokps.setVisibility(View.GONE);
+                            et_nomorkps.setVisibility(View.GONE);
+                            et_nomorkps.setText("-");
                         }
-                    };
+                        et_nomorkps.setText(nomor_kps);
 
-                    int spinnerPositions = ArrayAdapters.getPosition(penerimaan_kps);
-                    ArrayAdapters.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_kps.setAdapter(ArrayAdapters);
-                    sp_kps.setSelection(spinnerPositions);
-
-                    sp_kps.setOnItemSelectedListener((parent, view, position, id) -> {
-                        if (position > 0) {
-                            if (position == 1){
-                                penerimaan_kps = "Ya";
-                                til_nokps.setVisibility(View.VISIBLE);
-                                et_nomorkps.setVisibility(View.VISIBLE);
-                            }else if (position == 2){
-                                penerimaan_kps = "Tidak";
-                                til_nokps.setVisibility(View.GONE);
-                                et_nomorkps.setVisibility(View.GONE);
-                                et_nomorkps.setText("-");
-                            }
+                    } else {
+                        if (status == 0 && code.equals("DTS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-                    });
-
-                    if (penerimaan_kps.equals("Ya")){
-                        til_nokps.setVisibility(View.VISIBLE);
-                        et_nomorkps.setVisibility(View.VISIBLE);
-                    }else if (penerimaan_kps.equals("Tidak")) {
-                        til_nokps.setVisibility(View.GONE);
-                        et_nomorkps.setVisibility(View.GONE);
-                        et_nomorkps.setText("-");
                     }
-                    et_nomorkps.setText(nomor_kps);
-
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override

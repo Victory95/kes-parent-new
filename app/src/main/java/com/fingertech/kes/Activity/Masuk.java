@@ -78,6 +78,7 @@ import java.util.Date;
 import com.facebook.ProfileTracker;
 import com.facebook.AccessTokenTracker;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -352,100 +353,109 @@ public class Masuk extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 hideDialog();
-//                Log.e("TAG", "response 33: "+new Gson().toJson(response.body()) );
                 Log.d("TAG",response.code()+"");
-                JSONResponse resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                String LP_SCS_0001 = getResources().getString(R.string.LP_SCS_0001);
-                String LP_ERR_0001 = getResources().getString(R.string.LP_ERR_0001);
-                String LP_ERR_0002 = getResources().getString(R.string.LP_ERR_0002);
-                String LP_ERR_0003 = getResources().getString(R.string.LP_ERR_0003);
-                String LP_ERR_0004 = getResources().getString(R.string.LP_ERR_0004);
-                String LP_ERR_0005 = getResources().getString(R.string.LP_ERR_0005);
-                String LP_ERR_0006 = getResources().getString(R.string.LP_ERR_0006);
-                String LP_ERR_0007 = getResources().getString(R.string.LP_ERR_0007);
+                    String LP_SCS_0001 = getResources().getString(R.string.LP_SCS_0001);
+                    String LP_ERR_0001 = getResources().getString(R.string.LP_ERR_0001);
+                    String LP_ERR_0002 = getResources().getString(R.string.LP_ERR_0002);
+                    String LP_ERR_0003 = getResources().getString(R.string.LP_ERR_0003);
+                    String LP_ERR_0004 = getResources().getString(R.string.LP_ERR_0004);
+                    String LP_ERR_0005 = getResources().getString(R.string.LP_ERR_0005);
+                    String LP_ERR_0006 = getResources().getString(R.string.LP_ERR_0006);
+                    String LP_ERR_0007 = getResources().getString(R.string.LP_ERR_0007);
 
-                if (status == 1 && code.equals("LP_SCS_0001")){
-                    JSONResponse.Login_Data data = resource.login_data;
-                    JSONObject jsonObject = null;
-                    try {
-                        token = data.token;
-                        parent_nik = data.parent_nik;
-                        count_student = data.count_children;
-                        jsonObject = new JSONObject(JWTUtils.decoded(token));
-                        /// save session
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putBoolean(session_status, true);
-                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                        editor.putString(TAG_PARENT_NIK, parent_nik);
-                        editor.putString(TAG_COUNT,count_student);
-                        editor.putString(TAG_TOKEN, token);
-                        editor.putString(TAG_LASTLOGIN, last_login);
-                        editor.commit();
-                        /// call session
-                        if(jsonObject.get("member_type").toString().equals("6")){
-                            Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Masuk.this, MenuUtama.class);
-                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                            intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                            intent.putExtra(TAG_TOKEN, token);
-                            intent.putExtra(TAG_LASTLOGIN,last_login);
-                            finish();
-                            startActivity(intent);
-                        }else{
-                            Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
-                            if(count_student.equals("0")) {
-                                Intent intent = new Intent(Masuk.this, AnakAkses.class);
-                                intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                                intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                                intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                                intent.putExtra(TAG_PARENT_NIK, parent_nik);
-                                intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                                intent.putExtra(TAG_LASTLOGIN, last_login);
-                                intent.putExtra(TAG_COUNT, count_student);
-                                intent.putExtra(TAG_TOKEN, token);
-                                finish();
-                                startActivity(intent);
-                            }else {
+                    if (status == 1 && code.equals("LP_SCS_0001")) {
+                        JSONResponse.Login_Data data = resource.login_data;
+                        JSONObject jsonObject = null;
+                        try {
+                            token = data.token;
+                            parent_nik = data.parent_nik;
+                            count_student = data.count_children;
+                            jsonObject = new JSONObject(JWTUtils.decoded(token));
+                            /// save session
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putBoolean(session_status, true);
+                            editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                            editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            editor.putString(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                            editor.putString(TAG_PARENT_NIK, parent_nik);
+                            editor.putString(TAG_COUNT, count_student);
+                            editor.putString(TAG_TOKEN, token);
+                            editor.putString(TAG_LASTLOGIN, last_login);
+                            editor.commit();
+                            /// call session
+                            if (jsonObject.get("member_type").toString().equals("6")) {
+                                Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(Masuk.this, MenuUtama.class);
                                 intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
                                 intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
                                 intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                                intent.putExtra(TAG_PARENT_NIK, parent_nik);
                                 intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
-                                intent.putExtra(TAG_LASTLOGIN, last_login);
-                                intent.putExtra(TAG_COUNT, count_student);
                                 intent.putExtra(TAG_TOKEN, token);
+                                intent.putExtra(TAG_LASTLOGIN, last_login);
                                 finish();
                                 startActivity(intent);
+                            } else {
+                                Toast.makeText(getApplicationContext(), LP_SCS_0001, Toast.LENGTH_LONG).show();
+                                if (count_student.equals("0")) {
+                                    Intent intent = new Intent(Masuk.this, AnakAkses.class);
+                                    intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                                    intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                                    intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                                    intent.putExtra(TAG_PARENT_NIK, parent_nik);
+                                    intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                                    intent.putExtra(TAG_LASTLOGIN, last_login);
+                                    intent.putExtra(TAG_COUNT, count_student);
+                                    intent.putExtra(TAG_TOKEN, token);
+                                    finish();
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(Masuk.this, MenuUtama.class);
+                                    intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                                    intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                                    intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                                    intent.putExtra(TAG_PARENT_NIK, parent_nik);
+                                    intent.putExtra(TAG_MEMBER_TYPE, (String) jsonObject.get("member_type"));
+                                    intent.putExtra(TAG_LASTLOGIN, last_login);
+                                    intent.putExtra(TAG_COUNT, count_student);
+                                    intent.putExtra(TAG_TOKEN, token);
+                                    finish();
+                                    startActivity(intent);
+                                }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } else {
+                        if (status == 0 && code.equals("LP_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0005")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0005, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0006")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LP_ERR_0007")) {
+                            Toast.makeText(getApplicationContext(), LP_ERR_0007, Toast.LENGTH_LONG).show();
+                        }
                     }
-                } else {
-                    if(status == 0 && code.equals("LP_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0006, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LP_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), LP_ERR_0007, Toast.LENGTH_LONG).show();
-                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override
@@ -577,68 +587,77 @@ public class Masuk extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 hideDialog();
                 Log.d("TAG",response.code()+"");
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
 
-                JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
+                    token = resource.token;
 
-                status = resource.status;
-                code = resource.code;
-                token = resource.token;
+                    String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
+                    String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
+                    String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
+                    String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0003);
+                    String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0007);
+                    String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
+                    String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
+                    String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
 
-                String RS_SCS_0001 = getResources().getString(R.string.RS_SCS_0001);
-                String RS_ERR_0001 = getResources().getString(R.string.RS_ERR_0001);
-                String RS_ERR_0002 = getResources().getString(R.string.RS_ERR_0002);
-                String RS_ERR_0007 = getResources().getString(R.string.RS_ERR_0003);
-                String RS_ERR_0003 = getResources().getString(R.string.RS_ERR_0007);
-                String RS_ERR_0004 = getResources().getString(R.string.RS_ERR_0004);
-                String RS_ERR_0005 = getResources().getString(R.string.RS_ERR_0005);
-                String RS_ERR_0006 = getResources().getString(R.string.RS_ERR_0006);
-
-                if (status == 1 && code.equals("RS_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(JWTUtils.decoded(token));
-                        //// save session
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putBoolean(session_status, true);
-                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        editor.putString(TAG_MEMBER_TYPE, "6");
-                        editor.putString(TAG_PHOTO,image_google);
-                        editor.putString(TAG_TOKEN, token);
-                        editor.commit();
-                        /// call session
+                    if (status == 1 && code.equals("RS_SCS_0001")) {
                         Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
-                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        intent.putExtra(TAG_MEMBER_TYPE, "6");
-                        intent.putExtra(TAG_TOKEN, token);
-                        intent.putExtra(TAG_PHOTO,image_google);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    if(status == 0 && code.equals("RS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0003")){
-                        login_sosmed_post();
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(JWTUtils.decoded(token));
+                            //// save session
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putBoolean(session_status, true);
+                            editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                            editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            editor.putString(TAG_MEMBER_TYPE, "6");
+                            editor.putString(TAG_PHOTO, image_google);
+                            editor.putString(TAG_TOKEN, token);
+                            editor.commit();
+                            /// call session
+                            Toast.makeText(getApplicationContext(), RS_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, "6");
+                            intent.putExtra(TAG_TOKEN, token);
+                            intent.putExtra(TAG_PHOTO, image_google);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (status == 0 && code.equals("RS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0007")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0007, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0003")) {
+                            login_sosmed_post();
 //                        Toast.makeText(getApplicationContext(), RS_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RS_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0005")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0005, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RS_ERR_0006")) {
+                            Toast.makeText(getApplicationContext(), RS_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
                     }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override
@@ -659,54 +678,57 @@ public class Masuk extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
-                JSONResponse resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 //                token = resource.token;
+                    String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
+                    String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
+                    String LS_ERR_0002 = getResources().getString(R.string.LS_ERR_0002);
 
-
-                String LS_SCS_0001 = getResources().getString(R.string.LS_SCS_0001);
-                String LS_ERR_0001 = getResources().getString(R.string.LS_ERR_0001);
-                String LS_ERR_0002 = getResources().getString(R.string.LS_ERR_0002);
-
-                if (status == 1 && code.equals("LS_SCS_0001")) {
-                    JSONObject jsonObject = null;
-                    JSONResponse.Login_Data login_data = response.body().login_data;
-                    token = login_data.token;
-                    Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                    try {
-
-                        jsonObject = new JSONObject(JWTUtils.decoded(token));
-                        //// save session
-                        SharedPreferences.Editor editor = sharedpreferences.edit();
-                        editor.putBoolean(session_status, true);
-                        editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
-                        editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        editor.putString(TAG_MEMBER_TYPE, "6");
-//                        editor.putString(TAG_PHOTO,image_google);
-                        editor.putString(TAG_TOKEN, token);
-                        editor.commit();
-                        /// call session
+                    if (status == 1 && code.equals("LS_SCS_0001")) {
+                        JSONObject jsonObject = null;
+                        JSONResponse.Login_Data login_data = response.body().login_data;
+                        token = login_data.token;
                         Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
-                        intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
-                        intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
-                        intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
-                        intent.putExtra(TAG_MEMBER_TYPE, "6");
+                        try {
+
+                            jsonObject = new JSONObject(JWTUtils.decoded(token));
+                            //// save session
+                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                            editor.putBoolean(session_status, true);
+                            editor.putString(TAG_EMAIL, (String) jsonObject.get("email"));
+                            editor.putString(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            editor.putString(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            editor.putString(TAG_MEMBER_TYPE, "6");
+//                        editor.putString(TAG_PHOTO,image_google);
+                            editor.putString(TAG_TOKEN, token);
+                            editor.commit();
+                            /// call session
+                            Toast.makeText(getApplicationContext(), LS_SCS_0001, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getApplicationContext(), MenuUtama.class);
+                            intent.putExtra(TAG_EMAIL, (String) jsonObject.get("email"));
+                            intent.putExtra(TAG_MEMBER_ID, (String) jsonObject.get("member_id"));
+                            intent.putExtra(TAG_FULLNAME, (String) jsonObject.get("fullname"));
+                            intent.putExtra(TAG_MEMBER_TYPE, "6");
 //                        intent.putExtra(TAG_PHOTO,image_google);
-                        intent.putExtra(TAG_TOKEN, token);
-                        startActivity(intent);
-                        finish();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                            intent.putExtra(TAG_TOKEN, token);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        if (status == 0 && code.equals("LS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), LS_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("LS_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), LS_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
                     }
-                } else {
-                    if(status == 0 && code.equals("LS_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), LS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("LS_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), LS_ERR_0002, Toast.LENGTH_LONG).show();
-                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override

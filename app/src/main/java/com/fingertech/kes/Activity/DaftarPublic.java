@@ -248,50 +248,58 @@ public class DaftarPublic extends AppCompatActivity {
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 hideDialog();
                 Log.d("TAG",response.code()+"");
+                if (response.isSuccessful()) {
+                    JSONResponse resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String RP_SCS_0001 = getResources().getString(R.string.RP_SCS_0001);
+                    String RP_ERR_0001 = getResources().getString(R.string.RP_ERR_0001);
+                    String RP_ERR_0002 = getResources().getString(R.string.RP_ERR_0002);
+                    String RP_ERR_0003 = getResources().getString(R.string.RP_ERR_0003);
+                    String RP_ERR_0004 = getResources().getString(R.string.RP_ERR_0004);
+                    String RP_ERR_0005 = getResources().getString(R.string.RP_ERR_0005);
+                    String RP_ERR_0006 = getResources().getString(R.string.RP_ERR_0006);
+                    String RP_ERR_0007 = getResources().getString(R.string.RP_ERR_0007);
+                    String RP_ERR_0008 = getResources().getString(R.string.RP_ERR_0008);
 
-                String RP_SCS_0001 = getResources().getString(R.string.RP_SCS_0001);
-                String RP_ERR_0001 = getResources().getString(R.string.RP_ERR_0001);
-                String RP_ERR_0002 = getResources().getString(R.string.RP_ERR_0002);
-                String RP_ERR_0003 = getResources().getString(R.string.RP_ERR_0003);
-                String RP_ERR_0004 = getResources().getString(R.string.RP_ERR_0004);
-                String RP_ERR_0005 = getResources().getString(R.string.RP_ERR_0005);
-                String RP_ERR_0006 = getResources().getString(R.string.RP_ERR_0006);
-                String RP_ERR_0007 = getResources().getString(R.string.RP_ERR_0007);
-                String RP_ERR_0008 = getResources().getString(R.string.RP_ERR_0008);
-
-                if (status == 1 && code.equals("RP_SCS_0001")) {
-                    Toast.makeText(getApplicationContext(), RP_SCS_0001, Toast.LENGTH_LONG).show();
-                    et_fullname.setText("");
-                    et_email.setText("");
-                    et_mobile_phone.setText("");
-                    et_password.setText("");
-                    et_ulangi_password.setText("");
-                    if(cb_ketentuan.isChecked()){
-                        cb_ketentuan.toggle();
-                    }
-                    Intent intent = new Intent(DaftarPublic.this, OpsiMasuk.class);
-                    startActivity(intent);
-                } else {
-                    if(status == 0 && code.equals("RP_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0003, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0004")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0004, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0005")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0005, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0006")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0006, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0007")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0007, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("RP_ERR_0008")){
-                        Toast.makeText(getApplicationContext(), RP_ERR_0008, Toast.LENGTH_LONG).show();
+                    if (status == 1 && code.equals("RP_SCS_0001")) {
+                        Toast.makeText(getApplicationContext(), RP_SCS_0001, Toast.LENGTH_LONG).show();
+                        et_fullname.setText("");
+                        et_email.setText("");
+                        et_mobile_phone.setText("");
+                        et_password.setText("");
+                        et_ulangi_password.setText("");
+                        if (cb_ketentuan.isChecked()) {
+                            cb_ketentuan.toggle();
+                        }
+                        Intent intent = new Intent(DaftarPublic.this, OpsiMasuk.class);
+                        startActivity(intent);
+                    } else {
+                        if (status == 0 && code.equals("RP_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0004")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0004, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0005")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0005, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0006")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0006, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0007")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0007, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("RP_ERR_0008")) {
+                            Toast.makeText(getApplicationContext(), RP_ERR_0008, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }

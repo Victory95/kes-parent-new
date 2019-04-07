@@ -62,6 +62,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -164,7 +165,7 @@ public class ProfileParent extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     ProgressDialog dialog;
-    Uri uri;
+    Uri uri,fileuri;
     String tanggal_lahir;
     CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -351,21 +352,33 @@ public class ProfileParent extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
            if (requestCode == CAMERA_PIC_REQUEST){
                 if (Build.VERSION.SDK_INT > 21) {
-
                     Glide.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
                     File files = new File(mCurrentPhotoPath);
+//                    UCrop.of(Uri.parse(mCurrentPhotoPath),Uri.fromFile(new File(getCacheDir(), ".png")))
+//                            .withAspectRatio(16, 16)
+//                            .withMaxResultSize(500, 500)
+//                            .start(this);
                     uploadImage(files);
                 }else{
                     Glide.with(ProfileParent.this).load(fileUri).into(image_profil);
                     File files = FileUtils.getFile(ProfileParent.this, fileUri);
                     uploadImage(files);
                 }
-            } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-                uri = data.getData();
-                Glide.with(ProfileParent.this).load(uri).into(image_profil);
-                File file = FileUtils.getFile(ProfileParent.this, uri);
-                uploadImage(file);
-            }
+           } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
+               uri = data.getData();
+               Glide.with(ProfileParent.this).load(uri).into(image_profil);
+               File file = FileUtils.getFile(ProfileParent.this, uri);
+               uploadImage(file);
+//               UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), ".png")))
+//                       .withAspectRatio(16, 16)
+//                       .withMaxResultSize(500, 500)
+//                       .start(this);
+           }else if (requestCode == UCrop.REQUEST_CROP){
+               final Uri resultUri = UCrop.getOutput(data);
+                Glide.with(ProfileParent.this).load(resultUri).into(image_profil);
+               File file = FileUtils.getFile(ProfileParent.this, resultUri);
+               uploadImage(file);
+           }
         }
     }
 
@@ -521,76 +534,73 @@ public class ProfileParent extends AppCompatActivity {
     public void get_profile(){
         final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization, parent_id);
-
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
-
             @Override
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
                 Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.GetProfile resource = response.body();
 
-                JSONResponse.GetProfile resource = response.body();
+                    status = resource.status;
 
-                status = resource.status;
+                    if (status == 1) {
+                        picture = response.body().getData().getPicture();
+                        nama = response.body().getData().getFullname();
+                        email = response.body().getData().getEmail();
+                        nohp = response.body().getData().getNumber_Phone();
+                        jeniskelamin = response.body().getData().getGender();
+                        agama = response.body().getData().getReligion();
+                        member_type = response.body().getData().getMember_Type();
+                        terakhirlogin = response.body().getData().getLast_Login();
+                        tanggal_lahir = response.body().getData().getBirth_Date();
 
-                if (status == 1) {
-                    picture = response.body().getData().getPicture();
-                    nama    = response.body().getData().getFullname();
-                    email   = response.body().getData().getEmail();
-                    nohp    = response.body().getData().getNumber_Phone();
-                    jeniskelamin    = response.body().getData().getGender();
-                    agama           = response.body().getData().getReligion();
-                    member_type     = response.body().getData().getMember_Type();
-                    terakhirlogin   = response.body().getData().getLast_Login();
-                    tanggal_lahir   = response.body().getData().getBirth_Date();
-
-                    email_profile.setText(email);
-                    no_profile.setText(nohp);
-                    jenis_kelamin_profile.setText(jeniskelamin);
-                    tv_agama.setText(agama);
-                    if(member_type.equals("3")){
-                        member.setText("Sebagai Orangtua");
-                        jadi_parent.setVisibility(View.INVISIBLE);
-                    }else{
-                        member.setText("Sebagai User Biasa");
-                        jadi_parent.setVisibility(View.VISIBLE);
-                    }
-                    tanggallahir.setText(convertDate(tanggal_lahir));
-
-                    String imagefile = Base_url + picture;
-                    if (picture.equals("")){
-                        Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profil);
-                    }
-                    Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
-                    last_login.setText(lastlogin);
-                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
-                        boolean isShow = true;
-                        int scrollRange = -1;
-
-                        @Override
-                        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                            if (scrollRange == -1) {
-                                scrollRange = appBarLayout.getTotalScrollRange();
-                            }
-                            if (scrollRange + verticalOffset == 0) {
-                                collapsingToolbarLayout.setTitle(nama);
-                                cv_profile.setVisibility(View.GONE);
-                                isShow = true;
-                            } else if(isShow) {
-                                collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
-                                cv_profile.setVisibility(View.VISIBLE);
-                                getSupportActionBar().setTitle(nama);
-                                isShow = false;
-                            }
+                        email_profile.setText(email);
+                        no_profile.setText(nohp);
+                        jenis_kelamin_profile.setText(jeniskelamin);
+                        tv_agama.setText(agama);
+                        if (member_type.equals("3")) {
+                            member.setText("Sebagai Orangtua");
+                            jadi_parent.setVisibility(View.INVISIBLE);
+                        } else {
+                            member.setText("Sebagai User Biasa");
+                            jadi_parent.setVisibility(View.VISIBLE);
                         }
-                    });
-                } else{
-                    if (status == 0) {
-                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                        tanggallahir.setText(convertDate(tanggal_lahir));
+
+                        String imagefile = Base_url + picture;
+                        if (picture.equals("")) {
+                            Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name=" + nama + "&background=40bfe8&color=fff").into(image_profil);
+                        }
+                        Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
+                        last_login.setText(lastlogin);
+                        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+                            boolean isShow = true;
+                            int scrollRange = -1;
+
+                            @Override
+                            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                                if (scrollRange == -1) {
+                                    scrollRange = appBarLayout.getTotalScrollRange();
+                                }
+                                if (scrollRange + verticalOffset == 0) {
+                                    collapsingToolbarLayout.setTitle(nama);
+                                    cv_profile.setVisibility(View.GONE);
+                                    isShow = true;
+                                } else if (isShow) {
+                                    collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
+                                    cv_profile.setVisibility(View.VISIBLE);
+                                    getSupportActionBar().setTitle(nama);
+                                    isShow = false;
+                                }
+                            }
+                        });
+                    } else {
+                        if (status == 0) {
+                            Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
-
             }
 
             @Override

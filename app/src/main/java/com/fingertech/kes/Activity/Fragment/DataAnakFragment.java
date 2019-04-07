@@ -40,6 +40,7 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Service.DBHelper;
 import com.rey.material.widget.Spinner;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -318,209 +319,205 @@ public class DataAnakFragment extends Fragment {
             public void onResponse(Call<JSONResponse.DetailStudent> call, Response<JSONResponse.DetailStudent> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.DetailStudent resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.DetailStudent resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
+                    String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
-                String DTS_SCS_0001 = getResources().getString(R.string.DTS_SCS_0001);
-                String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        tingkatan_kelas = response.body().data.getEdulevel_id();
+                        nama_lengkap = response.body().data.getFullname();
+                        nis = response.body().data.getMember_code();
+                        nisn = response.body().data.getNisn();
+                        nik = response.body().data.getNik();
+                        rombel = response.body().data.getRombel();
+                        jenis_kelamin = response.body().data.getGender();
+                        tempat_lahir = response.body().data.getBirth_place();
+                        tanggal_lahir = response.body().data.getBirth_date();
+                        religion = response.body().data.getReligion();
+                        kebutuhan_khusus = response.body().data.getSpecial_needs();
+                        kewarganegaraan = response.body().data.getCitizen_status();
 
-                if (status == 1 && code.equals("DTS_SCS_0001")) {
-                tingkatan_kelas     = response.body().data.getEdulevel_id();
-                nama_lengkap        = response.body().data.getFullname();
-                nis                 = response.body().data.getMember_code();
-                nisn                = response.body().data.getNisn();
-                nik                 = response.body().data.getNik();
-                rombel              = response.body().data.getRombel();
-                jenis_kelamin       = response.body().data.getGender();
-                tempat_lahir        = response.body().data.getBirth_place();
-                tanggal_lahir       = response.body().data.getBirth_date();
-                religion            = response.body().data.getReligion();
-                kebutuhan_khusus    = response.body().data.getSpecial_needs();
-                kewarganegaraan     = response.body().data.getCitizen_status();
+                        et_nama_lengkap.setText(nama_lengkap);
+                        et_nis.setText(nis);
+                        et_nisn.setText(nisn);
+                        et_nik.setText(nik);
+                        et_rombel.setText(rombel);
+                        et_tempat_lahir.setText(tempat_lahir);
+                        et_tanggal.setText(tanggal_lahir);
+                        et_kebutuhan_khusus.setText(kebutuhan_khusus);
 
-                et_nama_lengkap.setText(nama_lengkap);
-                et_nis.setText(nis);
-                et_nisn.setText(nisn);
-                et_nik.setText(nik);
-                et_rombel.setText(rombel);
-                et_tempat_lahir.setText(tempat_lahir);
-                et_tanggal.setText(tanggal_lahir);
-                et_kebutuhan_khusus.setText(kebutuhan_khusus);
-
-                    if(tingkatan_kelas.equals("4")){
-                        kelas = "SD 1";
-                    }else if(tingkatan_kelas.equals("5")){
-                        kelas = "SD 2";
-                    }else if(tingkatan_kelas.equals("6")){
-                        kelas = "SD 3";
-                    }else if(tingkatan_kelas.equals("7")){
-                        kelas = "SD 4";
-                    }else if(tingkatan_kelas.equals("8")){
-                        kelas = "SD 5";
-                    }else if(tingkatan_kelas.equals("9")){
-                        kelas = "SD 6";
-                    }else if(tingkatan_kelas.equals("10")){
-                        kelas = "SMP 1";
-                    }else if(tingkatan_kelas.equals("11")){
-                        kelas = "SMP 2";
-                    }else if(tingkatan_kelas.equals("12")){
-                        kelas = "SMP 3";
-                    }else if(tingkatan_kelas.equals("13")){
-                        kelas = "SMA/SMK 1";
-                    }else if(tingkatan_kelas.equals("14")){
-                        kelas = "SMA/SMK 2";
-                    }else if(tingkatan_kelas.equals("15")){
-                        kelas = "SMA/SMK 3";
-                    }
-                    final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
-                            getActivity(),R.layout.spinner_text,penghasil){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
-                                return false;
+                        if (tingkatan_kelas.equals("4")) {
+                            kelas = "SD 1";
+                        } else if (tingkatan_kelas.equals("5")) {
+                            kelas = "SD 2";
+                        } else if (tingkatan_kelas.equals("6")) {
+                            kelas = "SD 3";
+                        } else if (tingkatan_kelas.equals("7")) {
+                            kelas = "SD 4";
+                        } else if (tingkatan_kelas.equals("8")) {
+                            kelas = "SD 5";
+                        } else if (tingkatan_kelas.equals("9")) {
+                            kelas = "SD 6";
+                        } else if (tingkatan_kelas.equals("10")) {
+                            kelas = "SMP 1";
+                        } else if (tingkatan_kelas.equals("11")) {
+                            kelas = "SMP 2";
+                        } else if (tingkatan_kelas.equals("12")) {
+                            kelas = "SMP 3";
+                        } else if (tingkatan_kelas.equals("13")) {
+                            kelas = "SMA/SMK 1";
+                        } else if (tingkatan_kelas.equals("14")) {
+                            kelas = "SMA/SMK 2";
+                        } else if (tingkatan_kelas.equals("15")) {
+                            kelas = "SMA/SMK 3";
+                        }
+                        final List<String> penghasil = new ArrayList<>(Arrays.asList(listSekolah));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                                getActivity(), R.layout.spinner_text, penghasil) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+                                    return false;
+                                } else {
+                                    return true;
+                                }
                             }
-                            else
-                            {
-                                return true;
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
                             }
+                        };
+
+                        int spinnerPosition = ArrayAdapter.getPosition(kelas);
+                        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_tingkatan.setAdapter(ArrayAdapter);
+                        sp_tingkatan.setSelection(spinnerPosition);
+                        sp_tingkatan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(Spinner parent, View view, int position, long id) {
+                                kelas = penghasil.get(position);
+
+                            }
+                        });
+
+                        kelas = sp_tingkatan.getSelectedItem().toString();
+
+                        if (kelas.toString().equals("SD 1")) {
+                            levelkelas = "4";
+                        } else if (kelas.toString().equals("SD 2")) {
+                            levelkelas = "5";
+                        } else if (kelas.toString().equals("SD 3")) {
+                            levelkelas = "6";
+                        } else if (kelas.toString().equals("SD 4")) {
+                            levelkelas = "7";
+                        } else if (kelas.toString().equals("SD 5")) {
+                            levelkelas = "8";
+                        } else if (kelas.toString().equals("SD 6")) {
+                            levelkelas = "9";
+                        } else if (kelas.toString().equals("SMP 1")) {
+                            levelkelas = "10";
+                        } else if (kelas.toString().equals("SMP 2")) {
+                            levelkelas = "11";
+                        } else if (kelas.toString().equals("SMP 3")) {
+                            levelkelas = "12";
+                        } else if (kelas.toString().equals("SMA/SMK 1")) {
+                            levelkelas = "13";
+                        } else if (kelas.toString().equals("SMA/SMK 2")) {
+                            levelkelas = "14";
+                        } else if (kelas.toString().equals("SMA/SMK 3")) {
+                            levelkelas = "15";
+                        }
+                        final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> agamaadapter = new ArrayAdapter<String>(
+                                getActivity(), R.layout.spinner_text, agama) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                if (position == 0) {
+                                    // Disable the first item from Spinner
+                                    // First item will be use for hint
+
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            }
+
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+
+                            }
+                        };
+                        int spinneragama = agamaadapter.getPosition(religion);
+                        agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        sp_agama.setAdapter(agamaadapter);
+                        sp_agama.setSelection(spinneragama);
+
+                        if (jenis_kelamin.equals("Pria")) {
+                            rb_laki.setChecked(true);
+                            rb_wanita.setChecked(false);
+                        } else if (jenis_kelamin.equals("Wanita")) {
+                            rb_wanita.setChecked(true);
+                            rb_laki.setChecked(false);
+                        }
+                        rb_laki.setOnClickListener(v ->
+                                jenis_kelamin = getResources().getString(R.string.rb_laki));
+                        rb_wanita.setOnClickListener(v ->
+                                jenis_kelamin = getResources().getString(R.string.rb_wanita));
+
+                        if (kewarganegaraan.equals("WNI")) {
+                            rb_wni.setChecked(true);
+                            rb_wna.setChecked(false);
+                        } else if (kewarganegaraan.equals("WNA")) {
+                            rb_wna.setChecked(true);
+                            rb_wni.setChecked(false);
                         }
 
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
-                            }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
+                        rb_wni.setOnClickListener(v -> {
+                            kewarganegaraan = getResources().getString(R.string.rb_wni);
+                            et_negara_asal.setVisibility(View.GONE);
+                        });
+
+                        rb_wna.setOnClickListener(v -> {
+                            et_negara_asal.setVisibility(View.VISIBLE);
+                            kewarganegaraan = et_negara_asal.getSelectedItem().toString();
+                        });
+
+                    } else {
+                        if (status == 0 && code.equals("DTS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
                         }
-                    };
-
-                    int spinnerPosition = ArrayAdapter.getPosition(kelas);
-                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_tingkatan.setAdapter(ArrayAdapter);
-                    sp_tingkatan.setSelection(spinnerPosition);
-                    sp_tingkatan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(Spinner parent, View view, int position, long id) {
-                            kelas = penghasil.get(position);
-
-                        }
-                    });
-
-                    kelas = sp_tingkatan.getSelectedItem().toString();
-
-                    if (kelas.toString().equals("SD 1")){
-                        levelkelas = "4";
-                    }else if (kelas.toString().equals("SD 2")){
-                        levelkelas = "5";
-                    }else if (kelas.toString().equals("SD 3")){
-                        levelkelas = "6";
-                    }else if (kelas.toString().equals("SD 4")){
-                        levelkelas = "7";
-                    }else if (kelas.toString().equals("SD 5")){
-                        levelkelas = "8";
-                    }else if (kelas.toString().equals("SD 6")){
-                        levelkelas = "9";
-                    }else if (kelas.toString().equals("SMP 1")){
-                        levelkelas = "10";
-                    }else if (kelas.toString().equals("SMP 2")){
-                        levelkelas = "11";
-                    }else if (kelas.toString().equals("SMP 3")){
-                        levelkelas = "12";
-                    }else if (kelas.toString().equals("SMA/SMK 1")){
-                        levelkelas = "13";
-                    }else if (kelas.toString().equals("SMA/SMK 2")){
-                        levelkelas = "14";
-                    }else if (kelas.toString().equals("SMA/SMK 3")){
-                        levelkelas = "15";
                     }
-                    final List<String> agama = new ArrayList<>(Arrays.asList(listAgama));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> agamaadapter = new ArrayAdapter<String>(
-                            getActivity(),R.layout.spinner_text,agama){
-                        @Override
-                        public boolean isEnabled(int position){
-                            if(position == 0)
-                            {
-                                // Disable the first item from Spinner
-                                // First item will be use for hint
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
 
-                                return false;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
-                            }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
-
-                        }
-                    };
-                    int spinneragama = agamaadapter.getPosition(religion);
-                    agamaadapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    sp_agama.setAdapter(agamaadapter);
-                    sp_agama.setSelection(spinneragama);
-
-                    if (jenis_kelamin.equals("Pria")){
-                        rb_laki.setChecked(true);
-                        rb_wanita.setChecked(false);
-                    }else if(jenis_kelamin.equals("Wanita")){
-                        rb_wanita.setChecked(true);
-                        rb_laki.setChecked(false);
-                    }
-                    rb_laki.setOnClickListener(v ->
-                            jenis_kelamin = getResources().getString(R.string.rb_laki));
-                    rb_wanita.setOnClickListener(v ->
-                            jenis_kelamin = getResources().getString(R.string.rb_wanita));
-
-                    if (kewarganegaraan.equals("WNI")){
-                        rb_wni.setChecked(true);
-                        rb_wna.setChecked(false);
-                    }else if (kewarganegaraan.equals("WNA")){
-                        rb_wna.setChecked(true);
-                        rb_wni.setChecked(false);
-                    }
-
-                    rb_wni.setOnClickListener(v -> {
-                        kewarganegaraan = getResources().getString(R.string.rb_wni);
-                        et_negara_asal.setVisibility(View.GONE);
-                    });
-
-                    rb_wna.setOnClickListener(v -> {
-                        et_negara_asal.setVisibility(View.VISIBLE);
-                        kewarganegaraan = et_negara_asal.getSelectedItem().toString();
-                    });
-
-                } else {
-                    if(status == 0 && code.equals("DTS_ERR_0001")) {
-                        Toast.makeText(getApplicationContext(), DTS_ERR_0001, Toast.LENGTH_LONG).show();
-                    }
                 }
             }
             @Override

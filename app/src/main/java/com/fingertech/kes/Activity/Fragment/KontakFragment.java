@@ -60,6 +60,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.IOException;
 import java.util.List;
@@ -494,43 +495,48 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.Data_parent_student resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.Data_parent_student resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
+                    String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
+                    String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
+                    String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
 
-                String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
-                String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
-                String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
-                String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
+                    if (status == 1 && code.equals("DPG_SCS_0001")) {
+                        nomorrumah = response.body().data.getParent_home_phone();
+                        nomorponsel = response.body().data.getParent_phone();
+                        latitude_parent = Double.parseDouble(response.body().data.getParent_latitude());
+                        longitude_parent = Double.parseDouble(response.body().data.getParent_longitude());
+                        Nomorrumah.setText(nomorrumah);
+                        Nomorponsel.setText(nomorponsel);
+                        final LatLng latLng = new LatLng(latitude_parent, longitude_parent);
+                        CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
 
-                if (status == 1 && code.equals("DPG_SCS_0001")) {
-                    nomorrumah              = response.body().data.getParent_home_phone();
-                    nomorponsel             = response.body().data.getParent_phone();
-                    latitude_parent         = Double.parseDouble(response.body().data.getParent_latitude());
-                    longitude_parent        = Double.parseDouble(response.body().data.getParent_longitude());
-                    Nomorrumah.setText(nomorrumah);
-                    Nomorponsel.setText(nomorponsel);
-                    final LatLng latLng = new LatLng(latitude_parent, longitude_parent);
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(16).build();
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title("Lokasi Rumah");
+                        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
+                        mcurrLocationMarker = mmap.addMarker(markerOptions);
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Lokasi Rumah");
-                    markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_map));
-                    mcurrLocationMarker =mmap.addMarker(markerOptions);
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-                } else {
-                    if(status == 0 && code.equals("DPG_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("DPG_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("DPG_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
+                    } else {
+                        if (status == 0 && code.equals("DPG_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("DPG_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("DPG_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
                     }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override

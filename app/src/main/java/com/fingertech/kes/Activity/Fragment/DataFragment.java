@@ -49,6 +49,7 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Service.DBHelper;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
 import org.json.JSONObject;
 
@@ -426,98 +427,102 @@ public class DataFragment extends Fragment  {
             public void onResponse(Call<JSONResponse.Data_parent_student> call, Response<JSONResponse.Data_parent_student> response) {
                 Log.d("TAG",response.code()+"");
                 hideDialog();
+                if (response.isSuccessful()) {
+                    JSONResponse.Data_parent_student resource = response.body();
+                    status = resource.status;
+                    code = resource.code;
 
-                JSONResponse.Data_parent_student resource = response.body();
-                status = resource.status;
-                code = resource.code;
+                    String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
+                    String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
+                    String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
+                    String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
 
-                String DPG_SCS_0001 = getResources().getString(R.string.DPG_SCS_0001);
-                String DPG_ERR_0001 = getResources().getString(R.string.DPG_ERR_0001);
-                String DPG_ERR_0002 = getResources().getString(R.string.DPG_ERR_0002);
-                String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
+                    if (status == 1 && code.equals("DPG_SCS_0001")) {
+                        namaparent = response.body().data.getParent_name();
+                        Email = response.body().data.getParent_email();
+                        nik_parent = response.body().data.getParent_nik();
+                        hubungan = response.body().data.getParent_type();
+                        tempatlahir = response.body().data.getParent_birth_place();
+                        tanggallahir = response.body().data.getParent_birth_date();
+                        kewarganegaraan = response.body().data.getType_warga();
 
-                if (status == 1 && code.equals("DPG_SCS_0001")) {
-                    namaparent              = response.body().data.getParent_name();
-                    Email                   = response.body().data.getParent_email();
-                    nik_parent              = response.body().data.getParent_nik();
-                    hubungan                = response.body().data.getParent_type();
-                    tempatlahir             = response.body().data.getParent_birth_place();
-                    tanggallahir            = response.body().data.getParent_birth_date();
-                    kewarganegaraan         = response.body().data.getType_warga();
+                        et_namadepan.setText(namaparent);
+                        et_Nik.setText(nik_parent);
+                        et_Email.setText(Email);
+                        et_tempat_lahir.setText(tempatlahir);
+                        et_tanggal_lahir.setText(tanggallahir);
 
-                    et_namadepan.setText(namaparent);
-                    et_Nik.setText(nik_parent);
-                    et_Email.setText(Email);
-                    et_tempat_lahir.setText(tempatlahir);
-                    et_tanggal_lahir.setText(tanggallahir);
-
-                    final List<String> penghasil = new ArrayList<>(Arrays.asList(listSpinner));
-                    // Initializing an ArrayAdapter
-                    final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
-                            getActivity(),R.layout.spinner_text,penghasil){
-                        @Override
-                        public boolean isEnabled(int position){
-                            return position != 0;
-                        }
-
-                        @Override
-                        public View getDropDownView(int position, View convertView,
-                                                    ViewGroup parent) {
-                            View view = super.getDropDownView(position, convertView, parent);
-                            TextView tv = (TextView) view;
-                            if(position == 0){
-                                // Set the hint text color gray
-                                tv.setTextColor(Color.GRAY);
+                        final List<String> penghasil = new ArrayList<>(Arrays.asList(listSpinner));
+                        // Initializing an ArrayAdapter
+                        final ArrayAdapter<String> ArrayAdapter = new ArrayAdapter<String>(
+                                getActivity(), R.layout.spinner_text, penghasil) {
+                            @Override
+                            public boolean isEnabled(int position) {
+                                return position != 0;
                             }
-                            else {
-                                tv.setTextColor(Color.BLACK);
-                            }
-                            return view;
-                        }
-                    };
 
-                    int spinnerPosition = ArrayAdapter.getPosition(hubungan);
-                    ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
-                    et_hubungan.setAdapter(ArrayAdapter);
-                    et_hubungan.setSelection(spinnerPosition);
-                    et_hubungan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(Spinner parent, View view, int position, long id) {
-                            if (position > 0) {
-                                parent_type = penghasil.get(position);
+                            @Override
+                            public View getDropDownView(int position, View convertView,
+                                                        ViewGroup parent) {
+                                View view = super.getDropDownView(position, convertView, parent);
+                                TextView tv = (TextView) view;
+                                if (position == 0) {
+                                    // Set the hint text color gray
+                                    tv.setTextColor(Color.GRAY);
+                                } else {
+                                    tv.setTextColor(Color.BLACK);
+                                }
+                                return view;
+                            }
+                        };
+
+                        int spinnerPosition = ArrayAdapter.getPosition(hubungan);
+                        ArrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+                        et_hubungan.setAdapter(ArrayAdapter);
+                        et_hubungan.setSelection(spinnerPosition);
+                        et_hubungan.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(Spinner parent, View view, int position, long id) {
+                                if (position > 0) {
+                                    parent_type = penghasil.get(position);
 //                            Toast.makeText(getApplicationContext(), parent_type, Toast.LENGTH_LONG).show();
+                                }
                             }
+                        });
+
+                        parent_type = et_hubungan.getSelectedItem().toString();
+
+                        if (kewarganegaraan.equals("WNI")) {
+                            rb_wni.setChecked(true);
+                            rb_wna.setChecked(false);
+                        } else if (kewarganegaraan.equals("WNA")) {
+                            rb_wna.setChecked(true);
+                            rb_wni.setChecked(false);
                         }
-                    });
+                        rb_wni.setOnClickListener(v -> {
+                            kewarganegaraan = getResources().getString(R.string.rb_wni);
+                            et_negaraasal.setVisibility(View.GONE);
+                        });
 
-                    parent_type = et_hubungan.getSelectedItem().toString();
+                        rb_wna.setOnClickListener(v -> {
+                            et_negaraasal.setVisibility(View.VISIBLE);
+                            kewarganegaraan = et_negaraasal.getSelectedItem().toString();
+                        });
 
-                    if (kewarganegaraan.equals("WNI")){
-                        rb_wni.setChecked(true);
-                        rb_wna.setChecked(false);
-                    }else if (kewarganegaraan.equals("WNA")){
-                        rb_wna.setChecked(true);
-                        rb_wni.setChecked(false);
+
+                    } else {
+                        if (status == 0 && code.equals("DPG_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("DPG_ERR_0002")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
+                        }
+                        if (status == 0 && code.equals("DPG_ERR_0003")) {
+                            Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
+                        }
                     }
-                    rb_wni.setOnClickListener(v -> {
-                        kewarganegaraan = getResources().getString(R.string.rb_wni);
-                        et_negaraasal.setVisibility(View.GONE);
-                    });
-
-                    rb_wna.setOnClickListener(v -> {
-                        et_negaraasal.setVisibility(View.VISIBLE);
-                        kewarganegaraan = et_negaraasal.getSelectedItem().toString();
-                    });
-
-
-                } else {
-                    if(status == 0 && code.equals("DPG_ERR_0001")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0001, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("DPG_ERR_0002")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0002, Toast.LENGTH_LONG).show();
-                    }if(status == 0 && code.equals("DPG_ERR_0003")){
-                        Toast.makeText(getApplicationContext(), DPG_ERR_0003, Toast.LENGTH_LONG).show();
-                    }
+                }else if (response.code() == 500){
+                    FancyToast.makeText(getApplicationContext(),"Sedang perbaikan",Toast.LENGTH_LONG,FancyToast.INFO,false).show();
                 }
             }
             @Override

@@ -208,6 +208,7 @@ public class JadwalUjian extends AppCompatActivity {
 
             }
         });
+
         final List<String> listtype = new ArrayList<>(Arrays.asList(tipe));
         final  ArrayAdapter<String> adapterTipe = new ArrayAdapter<String>(JadwalUjian.this,R.layout.spinner_full,listtype);
         adapterTipe.setDropDownViewResource(R.layout.simple_spinner_dropdown);

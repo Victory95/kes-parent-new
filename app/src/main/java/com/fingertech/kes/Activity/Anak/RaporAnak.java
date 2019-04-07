@@ -563,6 +563,7 @@ public class RaporAnak extends AppCompatActivity {
                             no_rapor.setVisibility(View.GONE);
                             snappyRecycleView.setVisibility(View.VISIBLE);
                             cardView.setVisibility(View.VISIBLE);
+                            indefinitePagerIndicator.setVisibility(View.VISIBLE);
                             raporAdapter = new RaporAdapter(raportModelList);
                             snappyRecycleView.setOnFlingListener(null);
                             indefinitePagerIndicator.attachToRecyclerView(snappyRecycleView);
