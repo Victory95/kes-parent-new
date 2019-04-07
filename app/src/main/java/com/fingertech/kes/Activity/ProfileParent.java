@@ -110,6 +110,8 @@ public class ProfileParent extends AppCompatActivity {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
 
+    private final String sampled="SampleCropImage";
+
     private String mediaPath;
 
     private Button btnCapturePicture;
@@ -165,7 +167,7 @@ public class ProfileParent extends AppCompatActivity {
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
     ProgressDialog dialog;
-    Uri uri,fileuri;
+    Uri uri;
     String tanggal_lahir;
     CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -334,10 +336,8 @@ public class ProfileParent extends AppCompatActivity {
                 if (items[item].equals("Take Photo")) {
                     captureImage();
                 } else if (items[item].equals("Choose from Library")) {
-                    intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_FILE);
+                    startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT)
+                            .setType("image/*"),SELECT_FILE);
                 } else if (items[item].equals("Cancel")) {
                     dialog.dismiss();
                 }
@@ -352,34 +352,57 @@ public class ProfileParent extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
            if (requestCode == CAMERA_PIC_REQUEST){
                 if (Build.VERSION.SDK_INT > 21) {
+
                     Glide.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
                     File files = new File(mCurrentPhotoPath);
-//                    UCrop.of(Uri.parse(mCurrentPhotoPath),Uri.fromFile(new File(getCacheDir(), ".png")))
-//                            .withAspectRatio(16, 16)
-//                            .withMaxResultSize(500, 500)
-//                            .start(this);
                     uploadImage(files);
                 }else{
                     Glide.with(ProfileParent.this).load(fileUri).into(image_profil);
                     File files = FileUtils.getFile(ProfileParent.this, fileUri);
                     uploadImage(files);
                 }
-           } else if (requestCode == SELECT_FILE && data != null && data.getData() != null) {
-               uri = data.getData();
-               Glide.with(ProfileParent.this).load(uri).into(image_profil);
-               File file = FileUtils.getFile(ProfileParent.this, uri);
-               uploadImage(file);
-//               UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), ".png")))
-//                       .withAspectRatio(16, 16)
-//                       .withMaxResultSize(500, 500)
-//                       .start(this);
-           }else if (requestCode == UCrop.REQUEST_CROP){
-               final Uri resultUri = UCrop.getOutput(data);
-                Glide.with(ProfileParent.this).load(resultUri).into(image_profil);
-               File file = FileUtils.getFile(ProfileParent.this, resultUri);
-               uploadImage(file);
+            } else if (requestCode == SELECT_FILE && resultCode==RESULT_OK) {
+               Uri image = data.getData();
+               if (image!=null){
+                   startcrop(image);
+               }
+
+            }else if (requestCode== UCrop.REQUEST_CROP && resultCode==RESULT_OK){
+               Uri imageresult = UCrop.getOutput(data);
+               image_profil.setImageURI(imageresult);
+               File files = FileUtils.getFile(ProfileParent.this, imageresult);
+               uploadImage(files);
+
            }
         }
+    }
+
+    private void startcrop(@NonNull Uri uri){
+        String destinationfile= sampled;
+        destinationfile +=".jpg";
+
+        UCrop uCrop = UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),destinationfile)));
+
+        uCrop.withAspectRatio(1,1);
+        uCrop.withMaxResultSize(450,450);
+
+        uCrop.withOptions(getcrop());
+        uCrop.start(ProfileParent.this);
+
+    }
+
+    private UCrop.Options getcrop(){
+        UCrop.Options options=new UCrop.Options();
+
+        options.setCompressionQuality(70);
+        options.setHideBottomControls(false);
+        options.setFreeStyleCropEnabled(true);
+        options.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        options.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+
+        options.setToolbarTitle("KES");
+
+        return options;
     }
 
     private void uploadImage(File file) {
@@ -534,73 +557,76 @@ public class ProfileParent extends AppCompatActivity {
     public void get_profile(){
         final String Base_url = "http://kes.co.id/assets/images/profile/mm_";
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization, parent_id);
+
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
+
             @Override
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
                 Log.i("KES", response.code() + "");
-                if (response.isSuccessful()) {
-                    JSONResponse.GetProfile resource = response.body();
 
-                    status = resource.status;
+                JSONResponse.GetProfile resource = response.body();
 
-                    if (status == 1) {
-                        picture = response.body().getData().getPicture();
-                        nama = response.body().getData().getFullname();
-                        email = response.body().getData().getEmail();
-                        nohp = response.body().getData().getNumber_Phone();
-                        jeniskelamin = response.body().getData().getGender();
-                        agama = response.body().getData().getReligion();
-                        member_type = response.body().getData().getMember_Type();
-                        terakhirlogin = response.body().getData().getLast_Login();
-                        tanggal_lahir = response.body().getData().getBirth_Date();
+                status = resource.status;
 
-                        email_profile.setText(email);
-                        no_profile.setText(nohp);
-                        jenis_kelamin_profile.setText(jeniskelamin);
-                        tv_agama.setText(agama);
-                        if (member_type.equals("3")) {
-                            member.setText("Sebagai Orangtua");
-                            jadi_parent.setVisibility(View.INVISIBLE);
-                        } else {
-                            member.setText("Sebagai User Biasa");
-                            jadi_parent.setVisibility(View.VISIBLE);
-                        }
-                        tanggallahir.setText(convertDate(tanggal_lahir));
+                if (status == 1) {
+                    picture = response.body().getData().getPicture();
+                    nama    = response.body().getData().getFullname();
+                    email   = response.body().getData().getEmail();
+                    nohp    = response.body().getData().getNumber_Phone();
+                    jeniskelamin    = response.body().getData().getGender();
+                    agama           = response.body().getData().getReligion();
+                    member_type     = response.body().getData().getMember_Type();
+                    terakhirlogin   = response.body().getData().getLast_Login();
+                    tanggal_lahir   = response.body().getData().getBirth_Date();
 
-                        String imagefile = Base_url + picture;
-                        if (picture.equals("")) {
-                            Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name=" + nama + "&background=40bfe8&color=fff").into(image_profil);
-                        }
-                        Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
-                        last_login.setText(lastlogin);
-                        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+                    email_profile.setText(email);
+                    no_profile.setText(nohp);
+                    jenis_kelamin_profile.setText(jeniskelamin);
+                    tv_agama.setText(agama);
+                    if(member_type.equals("3")){
+                        member.setText("Sebagai Orangtua");
+                        jadi_parent.setVisibility(View.INVISIBLE);
+                    }else{
+                        member.setText("Sebagai User Biasa");
+                        jadi_parent.setVisibility(View.VISIBLE);
+                    }
+                    tanggallahir.setText(convertDate(tanggal_lahir));
 
-                            boolean isShow = true;
-                            int scrollRange = -1;
+                    String imagefile = Base_url + picture;
+                    if (picture.equals("")){
+                        Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profil);
+                    }
+                    Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
+                    last_login.setText(lastlogin);
+                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
 
-                            @Override
-                            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                                if (scrollRange == -1) {
-                                    scrollRange = appBarLayout.getTotalScrollRange();
-                                }
-                                if (scrollRange + verticalOffset == 0) {
-                                    collapsingToolbarLayout.setTitle(nama);
-                                    cv_profile.setVisibility(View.GONE);
-                                    isShow = true;
-                                } else if (isShow) {
-                                    collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
-                                    cv_profile.setVisibility(View.VISIBLE);
-                                    getSupportActionBar().setTitle(nama);
-                                    isShow = false;
-                                }
+                        boolean isShow = true;
+                        int scrollRange = -1;
+
+                        @Override
+                        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                            if (scrollRange == -1) {
+                                scrollRange = appBarLayout.getTotalScrollRange();
                             }
-                        });
-                    } else {
-                        if (status == 0) {
-                            Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                            if (scrollRange + verticalOffset == 0) {
+                                collapsingToolbarLayout.setTitle(nama);
+                                cv_profile.setVisibility(View.GONE);
+                                isShow = true;
+                            } else if(isShow) {
+                                collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
+                                cv_profile.setVisibility(View.VISIBLE);
+                                getSupportActionBar().setTitle(nama);
+                                isShow = false;
+                            }
                         }
+                    });
+                } else{
+                    if (status == 0) {
+                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
                     }
                 }
+
+
             }
 
             @Override
