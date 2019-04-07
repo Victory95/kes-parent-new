@@ -16,6 +16,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/scroll_view"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -213,7 +214,7 @@
 
                 <fragment
                     android:id="@+id/mapKerja"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:name="com.fingertech.kes.Activity.CustomView.MySupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="230dp" />
                 <TextView
@@ -237,6 +238,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <Button

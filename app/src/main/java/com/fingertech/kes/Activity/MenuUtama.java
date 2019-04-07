@@ -260,7 +260,7 @@ public class MenuUtama extends AppCompatActivity
     private IntentFilter mIntent;
     int posisi;
     DBHelper db;
-
+    AlertDialog alert;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -476,7 +476,6 @@ public class MenuUtama extends AppCompatActivity
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
         setting_lokasi();
-
     }
 
     public void dapat_posisi(){
@@ -486,6 +485,9 @@ public class MenuUtama extends AppCompatActivity
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            double latitudes    = intent.getDoubleExtra("latitude",0.0);
+            double longitudes   = intent.getDoubleExtra("longitude",0.0);
             kode_gps    = intent.getStringExtra("kode_gps");  //get the type of message from MyGcmListenerService 1 - lock or 0 -Unlock
             if (kode_gps!=null) {
                 if (kode_gps.equals("false")) {
@@ -498,8 +500,10 @@ public class MenuUtama extends AppCompatActivity
                                             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                                         }
                                     });
-                    AlertDialog alert = builder.create();
+                     alert = builder.create();
                     alert.show();
+                }else if (kode_gps.equals("true")){
+                    alert.dismiss();
                 }
             }
         }
@@ -527,6 +531,7 @@ public class MenuUtama extends AppCompatActivity
             mIntent = null;
         }
         super.onPause();
+        stopService(new Intent(getBaseContext(), MyService.class));
     }
     @Override
     protected void onDestroy(){
@@ -1136,6 +1141,7 @@ public class MenuUtama extends AppCompatActivity
             }
             //Place current location marker
             final LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            Log.e("lokasiSekarang",latLng.latitude+"/"+latLng.longitude);
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(latLng.latitude, latLng.longitude)).zoom(13).build();
             final MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);

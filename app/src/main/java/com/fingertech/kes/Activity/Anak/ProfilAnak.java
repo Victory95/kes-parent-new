@@ -18,6 +18,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,10 +33,12 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.DaftarParent;
 import com.fingertech.kes.Activity.Maps.TentangKami;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -89,6 +92,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
     SwipeRefreshLayout swipeRefreshLayout;
     SharedPreferences sharedPreferences,sharedPreferences2;
+    NestedScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +130,7 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
         Agama           = findViewById(R.id.agama);
         kebutuhan_khusus= findViewById(R.id.kebutuhan_khusus);
         rombongan_belajar   = findViewById(R.id.rombel);
+        scrollView          = findViewById(R.id.scroll_view);
         tv_line_boundaryLeft   = findViewById(R.id.tv_line_boundaryLeft);
         tv_line_boundaryRight  = findViewById(R.id.tv_line_boundaryRight);
         image_anak      = findViewById(R.id.image_profil_anak);
@@ -189,13 +194,10 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
                 cv_kontak.setBackground(ContextCompat.getDrawable(ProfilAnak.this, R.drawable.rectangle_line_blue));
                 cv_kontak.setTextColor(getResources().getColor(R.color.default_background));
                 tv_line_boundaryLeft.setTextColor(getResources().getColor(R.color.colorPrimary));
-
                 ////// deactive
                 cv_data.setBackgroundColor(Color.TRANSPARENT);
                 cv_data.setTextColor(getResources().getColor(R.color.colorPrimary));
-
                 tv_line_boundaryRight.setTextColor(getResources().getColor(R.color.default_background));
-
                 cv_alamat.setBackgroundColor(Color.TRANSPARENT);
                 cv_alamat.setTextColor(getResources().getColor(R.color.colorPrimary));
                 show_data.setVisibility(View.GONE);
@@ -238,7 +240,6 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
             data_student_get();
         }else {
             Toast.makeText(getApplicationContext(),authorization+"/"+school_code+"/"+student_id+"/"+parent_nik,Toast.LENGTH_LONG).show();
-//            Toast.makeText(getApplicationContext(),"Harap refresh kembali",Toast.LENGTH_LONG).show();
         }
 
         setSupportActionBar(toolbar);
@@ -253,8 +254,16 @@ public class ProfilAnak extends AppCompatActivity implements OnMapReadyCallback 
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAnak);
-        mapFragment.getMapAsync(this);
+        MySupportMapFragment mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapAnak);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
 
         collapsingToolbarLayout = findViewById(R.id.collapse_profile_anak);
         appBarLayout = findViewById(R.id.appbar_profile_anak);

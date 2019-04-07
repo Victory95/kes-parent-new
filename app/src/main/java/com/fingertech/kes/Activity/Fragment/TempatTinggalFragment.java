@@ -22,6 +22,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.AnakMain;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -155,14 +157,13 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
     String telepon_rumah,handphone,skun,penerimaan_kps,nokps,dusun;
     String studentdetailId,classroom_id,picture;
     double latitude_anak,longitude_anak;
+    NestedScrollView scrollView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tempat_tinggal, container, false);
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.mapTinggal);
-        mapFragment.getMapAsync(this);
+
         namatempat          = view.findViewById(R.id.nama_rumah);
         alamattempattinggal = view.findViewById(R.id.alamat_rumah_anak);
         arrom               = view.findViewById(R.id.arrom);
@@ -188,7 +189,19 @@ public class TempatTinggalFragment extends Fragment  implements OnMapReadyCallba
         til_rt              = view.findViewById(R.id.til_rt);
         til_rw              = view.findViewById(R.id.til_rw);
         til_transportasi    = view.findViewById(R.id.til_transportasi);
+        scrollView          = view.findViewById(R.id.scroll_view);
         fragmentAdapter     = new AnakMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+
+        MySupportMapFragment mapFragment = (MySupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapTinggal);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
 
         mApiInterface = ApiClient.getClient().create(Auth.class);
         sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);

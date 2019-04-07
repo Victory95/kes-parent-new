@@ -23,6 +23,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.AnakMain;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.KodeAksesAnak;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -177,36 +179,44 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
     private ParentMain.FragmentAdapter fragmentAdapter;
     TextInputLayout til_nama_perusahaan,til_jabatan;
     TextView til_pendidikan,til_penghasilan,til_alamatkerja;
-
+    NestedScrollView scrollView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pekerjaan, container, false);
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.mapKerja);
-        mapFragment.getMapAsync(this);
-        arro = view.findViewById(R.id.arrow);
-        Jabatan = view.findViewById(R.id.et_jabatan);
-        Namaperusahaan = view.findViewById(R.id.et_nama_perusahaan);
-        namakerja = view.findViewById(R.id.nama_kerja);
-        et_pekerjaan = view.findViewById(R.id.sp_pekerjaan);
-        et_penghasilan = view.findViewById(R.id.sp_penghasilan);
-        alamatkerja = view.findViewById(R.id.alamat_kerja);
-        parentMain = (ParentMain) getActivity();
-        indicator = view.findViewById(R.id.indicators);
-        back = view.findViewById(R.id.btn_kembali);
-        next = view.findViewById(R.id.btn_berikut);
-        fragmentAdapter = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
-        ParentPager = parentMain.findViewById(R.id.PagerParent);
+
+        arro                = view.findViewById(R.id.arrow);
+        Jabatan             = view.findViewById(R.id.et_jabatan);
+        Namaperusahaan      = view.findViewById(R.id.et_nama_perusahaan);
+        namakerja           = view.findViewById(R.id.nama_kerja);
+        et_pekerjaan        = view.findViewById(R.id.sp_pekerjaan);
+        et_penghasilan      = view.findViewById(R.id.sp_penghasilan);
+        alamatkerja         = view.findViewById(R.id.alamat_kerja);
+        parentMain          = (ParentMain) getActivity();
+        indicator           = view.findViewById(R.id.indicators);
+        back                = view.findViewById(R.id.btn_kembali);
+        next                = view.findViewById(R.id.btn_berikut);
+        fragmentAdapter     = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
+        ParentPager         = parentMain.findViewById(R.id.PagerParent);
         til_nama_perusahaan = view.findViewById(R.id.til_nama_perusahaan);
-        til_jabatan = view.findViewById(R.id.til_jabatan);
-        til_pendidikan = view.findViewById(R.id.til_pendidikan);
-        til_penghasilan = view.findViewById(R.id.til_penghasilan);
-        til_alamatkerja = view.findViewById(R.id.til_alamat_kerja);
+        til_jabatan         = view.findViewById(R.id.til_jabatan);
+        til_pendidikan      = view.findViewById(R.id.til_pendidikan);
+        til_penghasilan     = view.findViewById(R.id.til_penghasilan);
+        til_alamatkerja     = view.findViewById(R.id.til_alamat_kerja);
+        scrollView          = view.findViewById(R.id.scroll_view);
 
-
+        MySupportMapFragment mapFragment = (MySupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKerja);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

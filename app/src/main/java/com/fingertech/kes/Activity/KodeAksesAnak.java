@@ -670,12 +670,11 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 status = resource.status;
                 if (status == 1){
                     Log.d("TAG",response.message()+"");
-                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onFailure(Call<JSONResponse.DeleteCode> call, Throwable t) {
-
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });

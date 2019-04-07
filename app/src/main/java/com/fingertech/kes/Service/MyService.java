@@ -15,7 +15,6 @@ public class MyService extends Service {
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
     private static final float LOCATION_DISTANCE = 10f;
-
     private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
 
@@ -27,6 +26,11 @@ public class MyService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             Log.e(TAG, "onLocationChanged: " + location.getLatitude()+"/"+location.getLongitude());
+            Intent in = new Intent();
+            in.putExtra("latitude",location.getLatitude());
+            in.putExtra("longitude",location.getLongitude());
+            in.setAction("NOW");
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(in);
             mLastLocation.set(location);
         }
         @Override

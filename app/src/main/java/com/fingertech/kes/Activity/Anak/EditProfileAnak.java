@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -40,6 +41,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.DialogFactorykps;
@@ -161,14 +163,13 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     private TextView tv_line_boundaryLeft, tv_line_boundaryRight;
     CardView btn_search,btn_simpan;
     TextView hint_kps;
+    NestedScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile_anak);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapTinggal);
-        mapFragment.getMapAsync(this);
+
         namatempat          = findViewById(R.id.nama_rumah);
         alamattempattinggal = findViewById(R.id.alamat_rumah_anak);
         arrom               = findViewById(R.id.arrom);
@@ -206,6 +207,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         btn_simpan          = findViewById(R.id.btn_simpan);
         til_nokps           = findViewById(R.id.til_kps);
         hint_kps            = findViewById(R.id.kps_hint);
+        scrollView          = findViewById(R.id.scroll_view);
         cv_data         = findViewById(R.id.btn_data);
         cv_kontak       = findViewById(R.id.btn_kontak);
         cv_alamat       = findViewById(R.id.btn_alamat);
@@ -217,6 +219,16 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         mApiInterface       = ApiClient.getClient().create(Auth.class);
         Calendar calendar = Calendar.getInstance();
 
+        MySupportMapFragment mapFragment = (MySupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapTinggal);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
         authorization = getIntent().getStringExtra("authorization");
         school_code   = getIntent().getStringExtra("school_code");
         student_id    = getIntent().getStringExtra("student_id");

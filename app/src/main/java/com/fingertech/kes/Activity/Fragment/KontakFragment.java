@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Anak.EditProfileAnak;
+import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
 import com.fingertech.kes.Activity.Maps.full_maps;
 import com.fingertech.kes.Activity.Masuk;
 import com.fingertech.kes.Activity.ParentMain;
@@ -160,12 +162,11 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
+    NestedScrollView scrollView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_kontak, container, false);
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKontak);
-        mapFragment.getMapAsync(this);
         namaalamat          = view.findViewById(R.id.nama_alamat);
         arros               = view.findViewById(R.id.arroW);
         alamatrumah         = view.findViewById(R.id.alamat_rumah);
@@ -175,6 +176,7 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
         indicator           = view.findViewById(R.id.indicators);
         back                = view.findViewById(R.id.btn_kembali);
         next                = view.findViewById(R.id.btn_berikut);
+        scrollView          = view.findViewById(R.id.scroll_view);
         fragmentAdapter     = new ParentMain.FragmentAdapter(getActivity().getSupportFragmentManager());
         ParentPager         = parentMain.findViewById(R.id.PagerParent);
         til_nomor_rumah     = view.findViewById(R.id.til_nomor_rumah);
@@ -192,6 +194,16 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
                 ParentPager.setCurrentItem(getItem(-1),true);
             }
         });
+        MySupportMapFragment mapFragment = (MySupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapKontak);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+            mapFragment.setListener(new MySupportMapFragment.OnTouchListener() {
+                @Override
+                public void onTouch() {
+                    scrollView.requestDisallowInterceptTouchEvent(true);
+                }
+            });
+        }
         setUiPageViewController();
         for (int i = 0; i < mDotCount; i++) {
             mDots[i].setBackgroundResource(R.drawable.nonselected_item);
