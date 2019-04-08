@@ -105,6 +105,9 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.fingertech.kes.Rest.UtilsApi;
 import com.fingertech.kes.Service.DBHelper;
 import com.fingertech.kes.Service.MyService;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -261,10 +264,10 @@ public class MenuUtama extends AppCompatActivity
     int posisi;
     DBHelper db;
     AlertDialog alert;
+    SpinKitView spinKitView,spinKitViews;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.menu_utama);
         toolbar             = findViewById(R.id.toolbar);
         ParentPager         = findViewById(R.id.PagerUtama);
@@ -293,7 +296,8 @@ public class MenuUtama extends AppCompatActivity
         mApi                = UtilsApi.getAPIService();
         view_more           = findViewById(R.id.view_more);
         scrollView          = findViewById(R.id.scroll_view);
-
+        spinKitView         = findViewById(R.id.spin_kit);
+        spinKitViews        = findViewById(R.id.spin_kits);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -788,7 +792,6 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onResponse(Call<JSONResponse.PesanAnak> call, final Response<JSONResponse.PesanAnak> response) {
                 Log.d("onRespone",response.code()+"");
-                hideDialog();
                 if (response.isSuccessful()) {
                     JSONResponse.PesanAnak resource = response.body();
 
@@ -829,7 +832,6 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onFailure(Call<JSONResponse.PesanAnak> call, Throwable t) {
                 Log.i("onFailure",t.toString());
-                hideDialog();
             }
         });
 
@@ -837,15 +839,26 @@ public class MenuUtama extends AppCompatActivity
 
     }
 
+    private void show_dialog(){
+        Sprite sprite = new Wave();
+        spinKitView.setIndeterminateDrawable(sprite);
+        spinKitView.setVisibility(View.VISIBLE);
+    }
+    private void hide_dialog(){
+        spinKitView.setVisibility(View.GONE);
+    }
+
     public void get_children(){
-        progressBar();
-        showDialog();
+//        progressBar();
+//        showDialog();
+        show_dialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
             public void onResponse(Call<JSONResponse.ListChildren> call, Response<JSONResponse.ListChildren> response) {
                 Log.d("TAG children",response.code()+"");
-                hideDialog();
+//                hideDialog();
+                hide_dialog();
                 if (response.isSuccessful()) {
                     JSONResponse.ListChildren resource = response.body();
                     status = resource.status;
@@ -921,23 +934,24 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
                 Log.d("onFailure",t.toString());
-                hideDialog();
+//                hideDialog();
+                hide_dialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     public void get_profile(){
-        progressBar();
-        showDialog();
+        Sprite sprites = new Wave();
+        spinKitViews.setIndeterminateDrawable(sprites);
+        spinKitViews.setVisibility(View.VISIBLE);
         retrofit2.Call<JSONResponse.GetProfile> call = mApiInterface.kes_profile_get(authorization, parent_id);
-
         call.enqueue(new Callback<JSONResponse.GetProfile>() {
-
             @Override
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
                 Log.i("profile", response.code() + "");
-                hideDialog();
+//                hideDialog();
+                spinKitViews.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     JSONResponse.GetProfile resource = response.body();
                     status = resource.status;
@@ -980,9 +994,9 @@ public class MenuUtama extends AppCompatActivity
             @Override
             public void onFailure(retrofit2.Call<JSONResponse.GetProfile> call, Throwable t) {
                 Log.d("onFailure", t.toString());
-                hideDialog();
+                spinKitViews.setVisibility(View.GONE);
+//                hideDialog();
             }
-
         });
 
     }
@@ -1527,22 +1541,22 @@ public class MenuUtama extends AppCompatActivity
         return (int)(dp * scale + 0.5f);
     }
 
-    private void showDialog() {
-        if (!dialog.isShowing())
-            dialog.show();
-        dialog.setContentView(R.layout.progressbar);
-    }
-    private void hideDialog() {
-        if (dialog.isShowing())
-            dialog.dismiss();
-        dialog.setContentView(R.layout.progressbar);
-    }
-    public void progressBar(){
-        dialog = new ProgressDialog(MenuUtama.this);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setIndeterminate(true);
-        dialog.setCancelable(false);
-    }
+//    private void showDialog() {
+//        if (!dialog.isShowing())
+//            dialog.show();
+//        dialog.setContentView(R.layout.progressbar);
+//    }
+//    private void hideDialog() {
+//        if (dialog.isShowing())
+//            dialog.dismiss();
+//        dialog.setContentView(R.layout.progressbar);
+//    }
+//    public void progressBar(){
+//        dialog = new ProgressDialog(MenuUtama.this);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//        dialog.setIndeterminate(true);
+//        dialog.setCancelable(false);
+//    }
 
     private void Daftar_Berita(){
         mApi.latest_news_get()

@@ -148,5 +148,7 @@ dependencies {
     implementation 'com.yarolegovich:lovely-dialog:1.1.0'
     implementation 'com.ryanjeffreybrooks:indefinitepagerindicator:1.0.10'
     implementation 'com.github.yalantis:ucrop:2.2.2'
+    implementation 'com.github.ybq:Android-SpinKit:1.2.0'
+
 }
 apply plugin: 'com.google.gms.google-services'
