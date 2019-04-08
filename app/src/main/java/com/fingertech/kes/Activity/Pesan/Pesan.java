@@ -144,9 +144,9 @@ public class Pesan extends Fragment {
                                 jam         = response.getData().get(i).getDatez();
                                 tanggalku   = response.getData().get(i).getMessage_date();
                                 kirim       = response.getData().get(i).getSender_name();
-                                pesanku     =response.getData().get(i).getMessage_cont();
-                                titleku     =response.getData().get(i).getMessage_title();
-                                statusku    =response.getData().get(i).getRead_status();
+                                pesanku     = response.getData().get(i).getMessage_cont();
+                                titleku     = response.getData().get(i).getMessage_title();
+                                statusku    = response.getData().get(i).getRead_status();
                                 pesanModel  = new PesanModel();
                                 pesanModel.setTanggal(tanggalku);
                                 pesanModel.setJam(jam);
@@ -175,24 +175,25 @@ public class Pesan extends Fragment {
                     @Override
                     public void onComplete() {
                         hideDialog();
-                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-                        pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
-                                intent.putExtra("fullname",fullname);
-                                intent.putExtra("authorization",authorization);
-                                intent.putExtra("school_code",school_code);
-                                intent.putExtra("parent_id",parent_id);
-                                intent.putExtra("message_id",pesanModelList.get(position).getMessage_id());
-                                intent.putExtra("parent_message_id",pesanModelList.get(position).getParent_message_id());
-                                startActivityForResult(intent,1);
-                            }
-                        });
-//                    setUserVisibleHint(isVisible());
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(pesanGuruAdapter);
+                        if (pesanModelList!=null) {
+                            pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+                            pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
+                                    intent.putExtra("fullname", fullname);
+                                    intent.putExtra("authorization", authorization);
+                                    intent.putExtra("school_code", school_code);
+                                    intent.putExtra("parent_id", parent_id);
+                                    intent.putExtra("message_id", pesanModelList.get(position).getMessage_id());
+                                    intent.putExtra("parent_message_id", pesanModelList.get(position).getParent_message_id());
+                                    startActivityForResult(intent, 1);
+                                }
+                            });
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                            recyclerView.setLayoutManager(layoutManager);
+                            recyclerView.setAdapter(pesanGuruAdapter);
+                        }
                     }
                 });
     }
