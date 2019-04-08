@@ -305,7 +305,6 @@ public class DetailSekolah extends AppCompatActivity {
             }
         });
 
-
     }
 
 

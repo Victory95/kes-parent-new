@@ -9,7 +9,15 @@ public class JadwalSabtu {
     public String cources_name;
     public String jam_mulai;
     public String jam_selesai;
+    public String cources_color;
 
+    public String getCources_color() {
+        return cources_color;
+    }
+
+    public void setCources_color(String cources_color) {
+        this.cources_color = cources_color;
+    }
 
     public String getJam_mulai() {
         return jam_mulai;

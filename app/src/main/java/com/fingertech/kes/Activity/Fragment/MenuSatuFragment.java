@@ -19,6 +19,7 @@ import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.RaporAnak;
+import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 

@@ -65,7 +65,7 @@ public class Pesan extends Fragment {
     RecyclerView recyclerView;
     int status;
     String code,date_from,date_to,statusku;
-    List<PesanModel> pesanModelList;
+    List<PesanModel> pesanModelList  = new ArrayList<PesanModel>();
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String kirim,pesanku,titleku,tanggalku,jam;
@@ -140,7 +140,6 @@ public class Pesan extends Fragment {
                         code    = response.code;
                         if (status == 1 & code.equals("DTS_SCS_0001")){
                             hideKeyboard(getActivity());
-                            pesanModelList  = new ArrayList<PesanModel>();
                             for (int i = 0; i < response.getData().size();i++){
                                 jam         = response.getData().get(i).getDatez();
                                 tanggalku   = response.getData().get(i).getMessage_date();
@@ -148,8 +147,6 @@ public class Pesan extends Fragment {
                                 pesanku     =response.getData().get(i).getMessage_cont();
                                 titleku     =response.getData().get(i).getMessage_title();
                                 statusku    =response.getData().get(i).getRead_status();
-
-
                                 pesanModel  = new PesanModel();
                                 pesanModel.setTanggal(tanggalku);
                                 pesanModel.setJam(jam);
@@ -160,9 +157,7 @@ public class Pesan extends Fragment {
                                 pesanModel.setMessage_id(response.getData().get(i).getMessageid());
                                 pesanModel.setParent_message_id(response.getData().get(i).getParent_message_id());
                                 pesanModelList.add(pesanModel);
-
                             }
-
                         }
                         else if (status == 0 & code.equals("DTS_ERR_0001")){
                             hideKeyboard(getActivity());

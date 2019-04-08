@@ -47,9 +47,7 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
 
     @Override
     public PesanGuruAdapter.MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_pesan, parent, false);
-
         PesanGuruAdapter.MyHolder myHolder = new PesanGuruAdapter.MyHolder(itemView,onItemClickListener);
         return myHolder;
     }
@@ -101,11 +99,9 @@ public class PesanGuruAdapter extends RecyclerView.Adapter<PesanGuruAdapter.MyHo
         }
         holder.pesan.setText(viewItem.getPesan());
         Glide.with(getContext()).load("https://ui-avatars.com/api/?name=" + viewItem.getDari()+"&background=1de9b6&color=fff&font-size=0.40&length=1").into(holder.imageView);
-
         holder.pengirim.setText(viewItem.getDari());
         holder.pesan.setText(viewItem.getPesan());
         holder.title.setText(viewItem.getTitle());
-
     }
 
     @Override
