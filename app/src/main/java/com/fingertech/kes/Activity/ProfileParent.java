@@ -350,16 +350,20 @@ public class ProfileParent extends AppCompatActivity {
         Log.e("onActivityResult", "requestCode " + requestCode + ", resultCode " + resultCode);
 
         if (resultCode == Activity.RESULT_OK) {
-           if (requestCode == CAMERA_PIC_REQUEST){
+           if (requestCode == CAMERA_PIC_REQUEST && resultCode==RESULT_OK){
                 if (Build.VERSION.SDK_INT > 21) {
-
                     Glide.with(ProfileParent.this).load(mCurrentPhotoPath).into(image_profil);
                     File files = new File(mCurrentPhotoPath);
-                    uploadImage(files);
-                }else{
-                    Glide.with(ProfileParent.this).load(fileUri).into(image_profil);
-                    File files = FileUtils.getFile(ProfileParent.this, fileUri);
-                    uploadImage(files);
+                    Uri imageUri = Uri.fromFile(files);
+                    if (imageUri!=null){
+                        startcrop(imageUri);
+                    }
+                    else if (requestCode==UCrop.REQUEST_CROP&&resultCode==RESULT_OK){
+                        Uri image=UCrop.getOutput(data);
+                        image_profil.setImageURI(image);
+                        File file = FileUtils.getFile(ProfileParent.this, image);
+                        uploadImage(file);
+                    }
                 }
             } else if (requestCode == SELECT_FILE && resultCode==RESULT_OK) {
                Uri image = data.getData();
@@ -376,6 +380,9 @@ public class ProfileParent extends AppCompatActivity {
            }
         }
     }
+
+
+
 
     private void startcrop(@NonNull Uri uri){
         String destinationfile= sampled;
@@ -485,6 +492,10 @@ public class ProfileParent extends AppCompatActivity {
 
             // The following strings calls the camera app and wait for his file in return.
             startActivityForResult(callCameraApplicationIntent, CAMERA_PIC_REQUEST);
+
+
+
+
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 

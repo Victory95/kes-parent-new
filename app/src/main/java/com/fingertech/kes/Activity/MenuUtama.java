@@ -851,7 +851,7 @@ public class MenuUtama extends AppCompatActivity
     public void get_children(){
 //        progressBar();
 //        showDialog();
-        show_dialog();
+//        show_dialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
@@ -870,6 +870,10 @@ public class MenuUtama extends AppCompatActivity
                     ProfileModel profileModel = null;
                     if (status == 1 && code.equals("LCH_SCS_0001")) {
                         recyclerView.setVisibility(View.VISIBLE);
+                        recycleview_ln.setVisibility(View.VISIBLE);
+                        viewpager.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        actionView.setVisibility(View.VISIBLE);
                         if (response.body().getData() != null) {
                             profileModels = new ArrayList<ProfileModel>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
@@ -935,7 +939,7 @@ public class MenuUtama extends AppCompatActivity
             public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
                 Log.d("onFailure",t.toString());
 //                hideDialog();
-                hide_dialog();
+//                hide_dialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -969,16 +973,13 @@ public class MenuUtama extends AppCompatActivity
                         Glide.with(MenuUtama.this).load(imagefile).into(image_profile);
                         if (member.equals("3")) {
                             if (count.equals("0")) {
+                                show_dialog();
                                 recycleview_ln.setVisibility(View.VISIBLE);
                                 viewpager.setVisibility(View.GONE);
                                 actionView.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
                             } else {
                                 get_children();
-                                recycleview_ln.setVisibility(View.VISIBLE);
-                                viewpager.setVisibility(View.VISIBLE);
-                                recyclerView.setVisibility(View.VISIBLE);
-                                actionView.setVisibility(View.VISIBLE);
                             }
                         } else {
                             recycleview_ln.setVisibility(View.GONE);
