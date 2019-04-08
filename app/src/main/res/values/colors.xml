@@ -10,7 +10,8 @@
     <color name="default_textColor">#808080</color>
     <color name="default_textHint">#afafaf</color>
     <color name="default_background">#fafafa</color>
-
+    <color name="grisale">#57606f</color>
+    <color name="bay_wharf">#747d8c</color>
     <color name="textColor_Grey">#cacaca</color>
     <color name="background_Grey_ios">#ededed</color>
 

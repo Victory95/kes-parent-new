@@ -19,6 +19,7 @@ import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.RaporAnak;
+import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -77,7 +78,7 @@ public class MenuSatuFragment extends Fragment{
             editor.putString("classroom_id",classroom_id);
             editor.putString("student_id",student_id);
             editor.apply();
-            Intent intent = new Intent(getContext(), JadwalUjian.class);
+            Intent intent = new Intent(getContext(), UjianJadwal.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("student_id", student_id);

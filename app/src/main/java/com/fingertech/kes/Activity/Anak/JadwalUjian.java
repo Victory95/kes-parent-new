@@ -141,7 +141,6 @@ public class JadwalUjian extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 ujianAdapter.getFilter().filter(s);
             }
 

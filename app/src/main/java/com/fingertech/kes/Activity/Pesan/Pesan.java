@@ -65,7 +65,7 @@ public class Pesan extends Fragment {
     RecyclerView recyclerView;
     int status;
     String code,date_from,date_to,statusku;
-    List<PesanModel> pesanModelList;
+    List<PesanModel> pesanModelList  = new ArrayList<PesanModel>();
     PesanGuruAdapter pesanGuruAdapter;
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String kirim,pesanku,titleku,tanggalku,jam;
@@ -141,16 +141,13 @@ public class Pesan extends Fragment {
                         code    = response.code;
                         if (status == 1 & code.equals("DTS_SCS_0001")){
                             hideKeyboard(getActivity());
-                            pesanModelList  = new ArrayList<PesanModel>();
                             for (int i = 0; i < response.getData().size();i++){
                                 jam         = response.getData().get(i).getDatez();
                                 tanggalku   = response.getData().get(i).getMessage_date();
                                 kirim       = response.getData().get(i).getSender_name();
-                                pesanku     =response.getData().get(i).getMessage_cont();
-                                titleku     =response.getData().get(i).getMessage_title();
-                                statusku    =response.getData().get(i).getRead_status();
-
-
+                                pesanku     = response.getData().get(i).getMessage_cont();
+                                titleku     = response.getData().get(i).getMessage_title();
+                                statusku    = response.getData().get(i).getRead_status();
                                 pesanModel  = new PesanModel();
                                 pesanModel.setTanggal(tanggalku);
                                 pesanModel.setJam(jam);
@@ -161,9 +158,7 @@ public class Pesan extends Fragment {
                                 pesanModel.setMessage_id(response.getData().get(i).getMessageid());
                                 pesanModel.setParent_message_id(response.getData().get(i).getParent_message_id());
                                 pesanModelList.add(pesanModel);
-
                             }
-
                         }
                         else if (status == 0 & code.equals("DTS_ERR_0001")){
                             hideKeyboard(getActivity());
@@ -181,24 +176,25 @@ public class Pesan extends Fragment {
                     @Override
                     public void onComplete() {
                         hideDialog();
-                        pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
-                        pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(View view, int position) {
-                                Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
-                                intent.putExtra("fullname",fullname);
-                                intent.putExtra("authorization",authorization);
-                                intent.putExtra("school_code",school_code);
-                                intent.putExtra("parent_id",parent_id);
-                                intent.putExtra("message_id",pesanModelList.get(position).getMessage_id());
-                                intent.putExtra("parent_message_id",pesanModelList.get(position).getParent_message_id());
-                                startActivityForResult(intent,1);
-                            }
-                        });
-//                    setUserVisibleHint(isVisible());
-                        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(pesanGuruAdapter);
+                        if (pesanModelList!=null) {
+                            pesanGuruAdapter = new PesanGuruAdapter(pesanModelList);
+                            pesanGuruAdapter.setOnItemClickListener(new PesanGuruAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    Intent intent = new Intent(getActivity(), Detail_Pesan_Guru.class);
+                                    intent.putExtra("fullname", fullname);
+                                    intent.putExtra("authorization", authorization);
+                                    intent.putExtra("school_code", school_code);
+                                    intent.putExtra("parent_id", parent_id);
+                                    intent.putExtra("message_id", pesanModelList.get(position).getMessage_id());
+                                    intent.putExtra("parent_message_id", pesanModelList.get(position).getParent_message_id());
+                                    startActivityForResult(intent, 1);
+                                }
+                            });
+                            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                            recyclerView.setLayoutManager(layoutManager);
+                            recyclerView.setAdapter(pesanGuruAdapter);
+                        }
                     }
                 });
     }

@@ -34,6 +34,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -79,6 +80,7 @@ import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.NewsAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
+import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.Berita.DetailBerita;
 import com.fingertech.kes.Activity.Berita.FullBerita;
 import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
@@ -256,7 +258,7 @@ public class MenuUtama extends AppCompatActivity
     String news_title,news_id,news_body,news_date,news_image;
     String base_url_news;
     TextView no_berita,view_more;
-    ScrollView scrollView;
+    NestedScrollView scrollView;
     ImageView transparantImage;
     String kode_gps;
     private BroadcastReceiver statusReceiver;
@@ -454,7 +456,7 @@ public class MenuUtama extends AppCompatActivity
                 case 1:
                     send_data2();
                     break;
-            }
+                }
             }
 
             @Override
@@ -687,7 +689,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, AksesAnak.class);
+            Intent intent = new Intent(MenuUtama.this, UjianJadwal.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {

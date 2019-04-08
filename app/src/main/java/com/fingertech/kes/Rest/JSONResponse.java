@@ -4254,6 +4254,17 @@ public class JSONResponse{
         @SerializedName("timez_finish")
         private String timezFinish;
 
+        @SerializedName("cources_colour")
+        private String cources_colour;
+
+        public String getCources_colour() {
+            return cources_colour;
+        }
+
+        public void setCources_colour(String cources_colour) {
+            this.cources_colour = cources_colour;
+        }
+
         public void setTimezOk(String timezOk){
             this.timezOk = timezOk;
         }
