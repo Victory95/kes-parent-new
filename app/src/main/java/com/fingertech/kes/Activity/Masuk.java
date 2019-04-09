@@ -75,6 +75,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
 import com.facebook.ProfileTracker;
 import com.facebook.AccessTokenTracker;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -230,7 +232,7 @@ public class Masuk extends AppCompatActivity {
             finish();
         });
 
-        DateFormat df = new SimpleDateFormat("EEEEEE, dd MMM yyyy, HH:mm");
+        DateFormat df = new SimpleDateFormat("EEEEEE, dd MMMM yyyy, HH:mm",new Locale("in","ID"));
         last_login = df.format(Calendar.getInstance().getTime());
 
         FirebaseInstanceId.getInstance().getInstanceId()

@@ -279,12 +279,12 @@
         </activity>
         <activity
             android:name=".Activity.ChangePassword"
-            android:label="Change Password"
+            android:label="Ubah Kata Sandi"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.EditProfile"
-            android:label="Update Profile"
+            android:label="Edit Profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -417,11 +417,15 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <activity android:name=".Activity.Anak.UjianJadwal"
+        <activity
+            android:name=".Activity.Anak.UjianJadwal"
             android:label="Jadwal Ujian"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Anak.RaportAnak"
+            android:label="Raport Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />

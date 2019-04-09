@@ -189,7 +189,7 @@
     <string name="informasi_mengenai_alamat_tempat_tinggal_anak_anda">Informasi mengenai alamat tempat tinggal anak anda</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="fcm_message">FCM Message</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Pengaturan</string>
 
     <!-- Strings related to Settings -->
 
@@ -286,14 +286,14 @@
     <string name="tv_test">test</string>
     <string name="et_kata_sandi_lama">Kata Sandi Lama</string>
     <string name="et_kata_sandi_baru">Kata Sandi Baru</string>
-    <string name="btn_change_password">Ganti Kata Sandi</string>
+    <string name="btn_change_password">Ubah Kata Sandi</string>
     <string name="tv_guru">Guru</string>
     <string name="tv_member_id">Memberid</string>
     <string name="tv_email">Email</string>
     <string name="tv_fullname">Fullname</string>
     <string name="tv_member_type">Member Type</string>
     <string name="tv_token">Token</string>
-    <string name="btn_logout">Logout</string>
+    <string name="btn_logout">Keluar</string>
     <string name="btn_sekolah_terdekat">Sekolah Di sekitarmu</string>
     <string name="tv_tambah_anak">Tambah anak</string>
     <string name="et_dari">Dari</string>
@@ -328,12 +328,12 @@
     <string name="tv_user_biasa">User Biasa</string>
     <string name="tv_jadikan_orang_tua">Jadikan Orang Tua</string>
     <string name="btn_edit_profile">Edit Profile</string>
-    <string name="tv_terakhir_login">Terakhir Login</string>
+    <string name="tv_terakhir_login">Terakhir Masuk</string>
     <string name="tv_ubah_kata_sandi">Ubah Kata Sandi</string>
     <string name="tv_negara_asal">Negara Asal</string>
     <string name="tv_lihat_detail">Lihat Detail</string>
     <string name="tv_titik">.....</string>
-    <string name="btn_update_profile">Update Profile</string>
+    <string name="btn_update_profile">Simpan</string>
     <string name="tv_simpan">Simpan</string>
     <string name="et_nis">Nomor Induk Siswa (NIS)</string>
     <string name="et_rt">RT</string>
@@ -487,7 +487,7 @@
     <string name="TV_about_Tentang">We are a team of like-minded people, specialized in development of Android App Development creating new trends across the app space. Glad to Help in anyway!</string>
     <string name="Tv_versi">Versi</string>
     <string name="tv_term_condition"><![CDATA[Term & Condition]]></string>
-    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_title_ringtone">Nada dering</string>
     <string name="pref_ringtone_silent">silent</string>
     <string name="key_notifications_new_message_ringtone">key_notifications_new_message_ringtone</string>
     <string name="summary_choose_ringtone">Pilih Nada Pemberitahuan</string>
@@ -497,7 +497,7 @@
     <string name="Tittle_term"><![CDATA[Term&condition]]></string>
     <string name="Tv_english">english</string>
     <string name="Key_SW_Language">Key_SW_Language</string>
-    <string name="title_activity_setting_">Setting</string>
+    <string name="title_activity_setting_">Pengaturan</string>
     <string name="hint_absen">Libur</string>
     <string name="tv_nilai">Nilai</string>
     <string name="Deafult_web_id">860440761767-i7hvmq1jojg2csshkjiaqepcbbbkc0t8.apps.googleusercontent.com</string>

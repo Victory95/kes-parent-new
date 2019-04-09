@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -80,6 +81,7 @@ import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.NewsAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
+import com.fingertech.kes.Activity.Anak.RaportAnak;
 import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.Berita.DetailBerita;
 import com.fingertech.kes.Activity.Berita.FullBerita;
@@ -144,6 +146,8 @@ import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -689,7 +693,7 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, UjianJadwal.class);
+            Intent intent = new Intent(MenuUtama.this, RaportAnak.class);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
@@ -853,7 +857,7 @@ public class MenuUtama extends AppCompatActivity
     public void get_children(){
 //        progressBar();
 //        showDialog();
-//        show_dialog();
+        show_dialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
             @Override
@@ -879,12 +883,12 @@ public class MenuUtama extends AppCompatActivity
                         if (response.body().getData() != null) {
                             profileModels = new ArrayList<ProfileModel>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
-                                student_id = response.body().getData().get(i).getStudent_id();
-                                school_code = response.body().getData().get(i).getSchool_code();
-                                nama_anak = response.body().getData().get(i).getChildren_name();
-                                classroom_id = response.body().getData().get(i).getClassroom_id();
-                                school_name = response.body().getData().get(i).getSchool_name();
-                                foto = response.body().getData().get(i).getPicture();
+                                student_id      = response.body().getData().get(i).getStudent_id();
+                                school_code     = response.body().getData().get(i).getSchool_code();
+                                nama_anak       = response.body().getData().get(i).getChildren_name();
+                                classroom_id    = response.body().getData().get(i).getClassroom_id();
+                                school_name     = response.body().getData().get(i).getSchool_name();
+                                foto            = response.body().getData().get(i).getPicture();
                                 String imagefiles = Base_anak + foto;
                                 profileModel = new ProfileModel();
                                 profileModel.setWidth(width);
@@ -899,15 +903,20 @@ public class MenuUtama extends AppCompatActivity
                             }
                             profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
+                            if (posisi > response.body().getData().size()){
+                                db.updateName(String.valueOf(posisi),String.valueOf(0));
+                                posisi = 0;
+                            }
                             profileAdapter.selectRow(posisi);
-                            student_id = response.body().getData().get(posisi).getStudent_id();
-                            school_code = response.body().getData().get(posisi).getSchool_code();
-                            classroom_id = response.body().getData().get(posisi).getClassroom_id();
-                            school_name = response.body().getData().get(posisi).getSchool_name();
-                            nama_anak = response.body().getData().get(posisi).getChildren_name();
+                            student_id      = response.body().getData().get(posisi).getStudent_id();
+                            school_code     = response.body().getData().get(posisi).getSchool_code();
+                            classroom_id    = response.body().getData().get(posisi).getClassroom_id();
+                            school_name     = response.body().getData().get(posisi).getSchool_name();
+                            nama_anak       = response.body().getData().get(posisi).getChildren_name();
                             send_data();
                             send_data2();
                             dapat_pesan();
+
                             LinearLayoutManager layoutManager = new LinearLayoutManager(MenuUtama.this);
                             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
                             recyclerView.setLayoutManager(layoutManager);
@@ -917,15 +926,23 @@ public class MenuUtama extends AppCompatActivity
                             profileAdapter.setOnItemClickListener((view, position) -> {
                                 profileAdapter.notifyDataSetChanged();
                                 profileAdapter.selectRow(position);
-                                student_id = profileModels.get(position).getStudent_id();
-                                school_code = profileModels.get(position).getSchool_code();
-                                classroom_id = profileModels.get(position).getClassroom_id();
-                                school_name = profileModels.get(position).getSchool_name();
-                                nama_anak = profileModels.get(position).getNama();
+                                student_id      = profileModels.get(position).getStudent_id();
+                                school_code     = profileModels.get(position).getSchool_code();
+                                classroom_id    = profileModels.get(position).getClassroom_id();
+                                school_name     = profileModels.get(position).getSchool_name();
+                                nama_anak       = profileModels.get(position).getNama();
                                 db.updateName(String.valueOf(posisi),String.valueOf(position));
                                 send_data();
                                 send_data2();
                                 dapat_pesan();
+                                spinKitViews.setVisibility(View.VISIBLE);
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        spinKitViews.setVisibility(View.GONE);
+                                    }
+                                }, 1500);
                             });
                         }
                     } else {
@@ -941,7 +958,7 @@ public class MenuUtama extends AppCompatActivity
             public void onFailure(Call<JSONResponse.ListChildren> call, Throwable t) {
                 Log.d("onFailure",t.toString());
 //                hideDialog();
-//                hide_dialog();
+                hide_dialog();
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
             }
         });
@@ -975,7 +992,6 @@ public class MenuUtama extends AppCompatActivity
                         Glide.with(MenuUtama.this).load(imagefile).into(image_profile);
                         if (member.equals("3")) {
                             if (count.equals("0")) {
-                                show_dialog();
                                 recycleview_ln.setVisibility(View.VISIBLE);
                                 viewpager.setVisibility(View.GONE);
                                 actionView.setVisibility(View.GONE);
