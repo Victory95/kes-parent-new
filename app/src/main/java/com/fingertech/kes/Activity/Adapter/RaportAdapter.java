@@ -19,16 +19,20 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
     private List<RaporModel> viewItemList;
 
     public int row_index = 0;
+    private OnItemClickListener onItemClickListener;
+
     public RaportAdapter(List<RaporModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
-
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_raport, parent, false);
 
-        MyHolder myHolder = new MyHolder(itemView);
+        MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
     }
 
@@ -46,7 +50,6 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
         }else {
             holder.linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
-        // Set car item title.
     }
 
     @Override
@@ -54,21 +57,28 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
         return viewItemList.size();
     }
 
-    class MyHolder extends RecyclerView.ViewHolder{
+    class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name, kkm, tv_nilai, rr_kelas;
         LinearLayout linearLayout;
-
-        public MyHolder(View itemView) {
+        OnItemClickListener onItemClickListener;
+        public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
             name            = itemView.findViewById(R.id.tv_mapel);
             kkm             = itemView.findViewById(R.id.tv_kkm);
             rr_kelas        = itemView.findViewById(R.id.rr_kelas);
             tv_nilai        = itemView.findViewById(R.id.tv_nilai);
             linearLayout    = itemView.findViewById(R.id.ll_raport);
-//            itemView.setOnClickListener(this);
-//            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+            this.onItemClickListener = onItemClickListener;
         }
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(v, getAdapterPosition());
+        }
+    }
 
+    public interface OnItemClickListener {
 
+        void onItemClick(View view, int position);
     }
 }

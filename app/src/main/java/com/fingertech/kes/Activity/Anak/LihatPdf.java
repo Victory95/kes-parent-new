@@ -31,6 +31,7 @@ public class LihatPdf extends AppCompatActivity {
     PDFView pdfView;
     Toolbar toolbar;
 
+    String filename;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,12 +39,12 @@ public class LihatPdf extends AppCompatActivity {
         pdfView     = findViewById(R.id.pdfView);
 
         toolbar     = findViewById(R.id.toolbar_pdf);
-
+        filename    = getIntent().getStringExtra("file");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
-        File file = new File(Environment.getExternalStorageDirectory() + "/KES Documents/" + "Nilai Rapor.pdf");  // -> filename = maven.pdf
+        File file = new File(Environment.getExternalStorageDirectory() + "/KES Documents/" + filename);  // -> filename = maven.pdf
         pdfView.fromFile(file)
                 .pages(0, 2, 1, 3, 3, 3) // all pages are displayed by default
                 .enableSwipe(true) // allows to block changing pages using swipe

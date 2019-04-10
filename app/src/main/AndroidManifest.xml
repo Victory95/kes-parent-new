@@ -322,11 +322,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.RaporAnak"
-            android:label="Rapor Anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.KalendarDetail"
             android:label="Kalender Detail"
             android:screenOrientation="portrait"
@@ -334,11 +329,6 @@
         <activity
             android:name=".Activity.Anak.EditProfileAnak"
             android:label="Edit Data Anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activity.Anak.JadwalUjian"
-            android:label="Jadwal Ujian"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -422,8 +412,13 @@
             android:label="Jadwal Ujian"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.RaportAnak"
+        <activity
+            android:name=".Activity.Anak.RaportAnak"
             android:label="Raport Anak"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Anak.DetailRaport"
+            android:label="Detail Raport"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
 

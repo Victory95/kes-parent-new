@@ -140,7 +140,8 @@ public class  SettingsActivity extends  PreferenceFragment{
                     // update the changed gallery name to summary filed
                     preference.setSummary(stringValue);
                 }
-            } else {
+            }
+            else {
                 preference.setSummary(stringValue);
             }
             return true;
