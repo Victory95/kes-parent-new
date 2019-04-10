@@ -58,7 +58,7 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView name, kkm, tv_nilai, rr_kelas;
+        TextView name, kkm, tv_nilai,rr_kelas,rr_angkatan;
         LinearLayout linearLayout;
         OnItemClickListener onItemClickListener;
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
@@ -67,6 +67,7 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
             kkm             = itemView.findViewById(R.id.tv_kkm);
             rr_kelas        = itemView.findViewById(R.id.rr_kelas);
             tv_nilai        = itemView.findViewById(R.id.tv_nilai);
+            rr_angkatan     = itemView.findViewById(R.id.rr_angkatan);
             linearLayout    = itemView.findViewById(R.id.ll_raport);
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;
