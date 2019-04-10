@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Anak.UjianJadwal"
-    android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_ujian"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+    tools:context=".Activity.Anak.UjianJadwal">
+
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay" />
 
-    <LinearLayout
+        >
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/Base.Theme.AppCompat.Light"
+
+
+            />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="#ffff"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabTextColor="#ffff" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.kekstudio.dachshundtablayout.DachshundTabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            app:tabBackground="@color/colorPrimary"
-            app:ddAnimatedIndicator="lineMove"
-            app:ddIndicatorColor="@color/white"
-            app:tabSelectedTextColor="@color/white"
-            app:tabTextColor="@color/bay_wharf"
-            android:layout_height="45dp"/>
+    </android.support.v4.view.ViewPager>
 
-        <android.support.v4.view.ViewPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/view_pager">
-        </android.support.v4.view.ViewPager>
-    </LinearLayout>
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

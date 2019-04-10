@@ -410,7 +410,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Berita.DetailBerita"
-            android:label=""
+            android:label="Detail Berita"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -419,9 +419,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <activity android:name=".Activity.Anak.UjianJadwal"
-            android:label="Jadwal Ujian"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:label="Jadwal ujian"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
