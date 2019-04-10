@@ -492,5 +492,11 @@ public interface Auth {
     @GET("news/detail_news")
     Observable<JSONResponse.DetailBerita> detail_news_get(@Query("news") String news);
 
+    @GET("students/kes_lesson_review")
+    Call<JSONResponse.LessonReview> kes_lesson_review_get(@Header("Authorization") String authorization,
+                                                        @Query("school_code") String school_code,
+                                                        @Query("student_id") String student_id,
+                                                        @Query("classroom_id") String classroom_id,
+                                                        @Query("cources_id") String cources_id);
 
 }

@@ -313,7 +313,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.KalenderKelas"
-            android:label="Kalendar Kelas"
+            android:label="Kalender Kelas"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -417,11 +417,15 @@
             android:label="Raport Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.DetailRaport"
+        <activity
+            android:name=".Activity.Anak.DetailRaport"
             android:label="Detail Raport"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Anak.LessonReview"
+            android:label="Riwayat Belajar"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>
