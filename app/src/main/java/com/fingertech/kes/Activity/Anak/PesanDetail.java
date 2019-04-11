@@ -1,9 +1,9 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +42,7 @@ public class PesanDetail extends AppCompatActivity {
     String authorization,school_code,student_id,classroom_id,message_id,nama_anak,read_status;
     int status;
     String code;
-    TextView tv_subject,tv_pengirim,tv_kelas,tv_pesan,tv_mapel,tv_jam,tv_anak,tv_read_status;
+    TextView tv_subject,tv_pengirim,tv_kelas,tv_pesan,tv_mapel,tv_jam,tv_anak;
     String subject,pengirim,kelas,pesan,mapel,jam;
     Toolbar toolbar;
     SharedPreferences sharedPreferences;
@@ -53,12 +54,12 @@ public class PesanDetail extends AppCompatActivity {
 
     private DateFormat times_format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     String tanggals;
-
+    ImageView ic_show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pesan_detail_dua);
+        setContentView(R.layout.pesan_detail);
         toolbar         = findViewById(R.id.toolbar_pesan_detail);
         tv_subject      = findViewById(R.id.subject);
         tv_pengirim     = findViewById(R.id.pengirim_pesan);
@@ -66,7 +67,7 @@ public class PesanDetail extends AppCompatActivity {
         tv_anak         = findViewById(R.id.anak_pesan);
         tv_jam          = findViewById(R.id.jam);
         tv_pesan        = findViewById(R.id.pesan);
-        tv_read_status  = findViewById(R.id.read_status);
+        ic_show         = findViewById(R.id.ic_show);
         tv_mapel        = findViewById(R.id.mapel_pesan);
         imageView       = findViewById(R.id.image_pesan);
 
@@ -87,6 +88,7 @@ public class PesanDetail extends AppCompatActivity {
         pesan_detail();
     }
 
+    @SuppressLint("SetTextI18n")
     private void pesan_detail(){
         Call<JSONResponse.PesanDetail> call = mApiInterface.kes_message_anak_detail_get(authorization,school_code.toLowerCase(),student_id,classroom_id,message_id);
         call.enqueue(new Callback<JSONResponse.PesanDetail>() {
@@ -107,15 +109,10 @@ public class PesanDetail extends AppCompatActivity {
                         tanggals = response.body().getData().getDataMessage().getMessage_date();
                         read_status = response.body().getData().getDataMessage().getRead_status();
                         if (read_status.equals("1")) {
-                            tv_read_status.setText("Sudah dibaca anak anda");
-                            tv_read_status.setBackgroundColor(Color.parseColor("#14e715"));
-                            tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                            ic_show.setBackground(getResources().getDrawable(R.drawable.ic_view));
                         } else {
-                            tv_read_status.setText("Belum dibaca anak anda");
-                            tv_read_status.setBackgroundColor(Color.parseColor("#ff0000"));
-                            tv_read_status.setTextColor(Color.parseColor("#ffffff"));
+                            ic_show.setBackground(getResources().getDrawable(R.drawable.ic_hide));
                         }
-
 
                         if (subject.equals("")) {
                             tv_subject.setText("( Tidak ada Subject )");

@@ -118,6 +118,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -693,8 +694,6 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, RaportAnak.class);
-            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -903,7 +902,7 @@ public class MenuUtama extends AppCompatActivity
                             }
                             profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
-                            if (posisi > response.body().getData().size()){
+                            if (posisi > response.body().getData().size()-1){
                                 db.updateName(String.valueOf(posisi),String.valueOf(0));
                                 posisi = 0;
                             }
@@ -1236,6 +1235,18 @@ public class MenuUtama extends AppCompatActivity
                 }else {
                     Log.d("Lokasi","Lokasi Anda");
                 }
+            }
+        });
+        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int zoom = (int)mapG.getCameraPosition().zoom;
+                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new
+                        LatLng(marker.getPosition().latitude + (double)90/Math.pow(2, zoom),
+                        marker.getPosition().longitude), zoom);
+                mapG.animateCamera(cu,500,null);
+                marker.showInfoWindow();
+                return true;
             }
         });
     }
@@ -1654,6 +1665,7 @@ public class MenuUtama extends AppCompatActivity
             }
         }
     }
+
 
 
 }

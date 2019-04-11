@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
+import com.fingertech.kes.Activity.Anak.KirimPesan;
 import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.PesanDetail;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -71,11 +73,12 @@ public class Pesan extends Fragment {
     String kirim,pesanku,titleku,tanggalku,jam;
     SwipeRefreshLayout swipeRefreshLayout;
     PesanModel pesanModel;
+    FloatingActionButton fab;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_pesan, container, false);
+        View v = inflater.inflate(R.layout.appbar_pesan, container, false);
 
         tanggal         = v.findViewById(R.id.tanggal_pesan);
         pengirim        = v.findViewById(R.id.Tvpengirim);
@@ -84,6 +87,7 @@ public class Pesan extends Fragment {
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         recyclerView    = v.findViewById(R.id.rv_chat);
         swipeRefreshLayout  = v.findViewById(R.id.pullToRefresh);
+        fab             = v.findViewById(R.id.fab);
         mApi            = UtilsApi.getAPIService();
 
         sharedPreferences   = this.getActivity().getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
@@ -96,11 +100,33 @@ public class Pesan extends Fragment {
         fullname            = sharedPreferences.getString("fullname",null);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH,-4);
+        calendar.add(Calendar.MONTH,-2);
         date_from   =  dateFormatForMonth.format(calendar.getTime());
         date_to     =  dateFormatForMonth.format(Calendar.getInstance().getTime());
         dapatPesan();
         refresh();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("member_id",parent_id);
+                editor.putString("school_code",school_code.toLowerCase());
+                editor.putString("authorization",authorization);
+                editor.putString("classroom_id",classroom_id);
+                editor.putString("school_name",school_name);
+                editor.putString("student_id",student_id);
+                editor.apply();
+                Intent intent = new Intent(getContext(), KirimPesan.class);
+                intent.putExtra("authorization", authorization);
+                intent.putExtra("school_code", school_code.toLowerCase());
+                intent.putExtra("member_id", parent_id);
+                intent.putExtra("classroom_id", classroom_id);
+                intent.putExtra("school_name",school_name);
+                intent.putExtra("student_id", student_id);
+                startActivity(intent);
+            }
+        });
 
         return v;
     }

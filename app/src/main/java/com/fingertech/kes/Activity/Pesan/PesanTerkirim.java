@@ -5,16 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,8 +22,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fingertech.kes.Activity.Adapter.Adapter_Pesan_Terkirim;
-import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
+import com.fingertech.kes.Activity.Adapter.PesanTerkirimAdapter;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Controller.Auth;
@@ -56,7 +52,7 @@ public class PesanTerkirim extends Fragment {
     ProgressDialog dialog;
     String kirim,pesanku,titleku,tanggalku;
     PesanModel pesanModel;
-    Adapter_Pesan_Terkirim adapter_pesan_terkirim;
+    PesanTerkirimAdapter _pesan_terkirimAdapter;
     List<PesanModel> pesanModelList;
 
     @Nullable
@@ -127,8 +123,8 @@ public class PesanTerkirim extends Fragment {
                         pesanModel.setTitle(titleku);
                         pesanModelList.add(pesanModel);
                     }
-                    adapter_pesan_terkirim = new Adapter_Pesan_Terkirim(pesanModelList);
-                    adapter_pesan_terkirim.setOnItemClickListener(new Adapter_Pesan_Terkirim.OnItemClickListener() {
+                    _pesan_terkirimAdapter = new PesanTerkirimAdapter(pesanModelList);
+                    _pesan_terkirimAdapter.setOnItemClickListener(new PesanTerkirimAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
                             Intent intent = new Intent(getActivity(), PesanTerkirim.class);
@@ -143,7 +139,7 @@ public class PesanTerkirim extends Fragment {
                     });
                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
                     recyclerView.setLayoutManager(layoutManager);
-                    recyclerView.setAdapter(adapter_pesan_terkirim);
+                    recyclerView.setAdapter(_pesan_terkirimAdapter);
 
                 }
                 else if (status == 0 & code.equals("DTS_ERR_0001")){

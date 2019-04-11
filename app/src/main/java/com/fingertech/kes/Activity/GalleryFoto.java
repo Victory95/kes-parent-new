@@ -1,4 +1,4 @@
-package com.fingertech.kes;
+package com.fingertech.kes.Activity;
 
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.fingertech.kes.Activity.Adapter.FotoAdapter;
 import com.fingertech.kes.Activity.Model.FotoModel;
 import com.fingertech.kes.Controller.Auth;
+import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.shashank.sony.fancytoastlib.FancyToast;

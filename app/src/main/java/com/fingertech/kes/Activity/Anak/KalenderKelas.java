@@ -1,20 +1,13 @@
 package com.fingertech.kes.Activity.Anak;
 
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.net.Uri;
-import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
@@ -43,13 +35,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,13 +50,11 @@ public class KalenderKelas extends AppCompatActivity {
 
 
     CompactCalendarView compactCalendarView;
-    private SimpleDateFormat dateFormat     = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+    private SimpleDateFormat dateFormat     = new SimpleDateFormat("MMMM - yyyy", new Locale("in","ID"));
     private SimpleDateFormat bulanFormat    = new SimpleDateFormat("MM", Locale.getDefault());
     private SimpleDateFormat tahunFormat    = new SimpleDateFormat("yyyy", Locale.getDefault());
     private SimpleDateFormat formattanggal  = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
-    private Calendar currentCalender = Calendar.getInstance(Locale.getDefault());
-    private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
     TextView month_calender;
     ImageView left_month,right_month;
     Auth mApiInterface;
@@ -111,9 +100,12 @@ public class KalenderKelas extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
+        compactCalendarView.setLocale(TimeZone.getDefault(), new Locale("in","ID"));
+        compactCalendarView.setShouldDrawDaysHeader(true);
+
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
-        month_calender.setText(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+        month_calender.setText(dateFormat.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         calendar_month = bulanFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
         if(calendar_month.substring(0,1).equals("0"))
         {

@@ -31,10 +31,10 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         View view = ((Activity)context).getLayoutInflater()
                 .inflate(R.layout.custom_snippet, null);
 
-        TextView tvSch = (TextView) view.findViewById(R.id.nama_sekolah_snippet);
+        TextView tvSch = (TextView) view.findViewById(R.id.nama_school);
 
         // Getting reference to the TextView to set longitude
-        TextView tvAkr = (TextView) view.findViewById(R.id.Alamat);
+        TextView tvAkr = (TextView) view.findViewById(R.id.alamat_school);
 
         ImageView img = view.findViewById(R.id.imageS);
 

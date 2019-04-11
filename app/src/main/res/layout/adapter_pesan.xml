@@ -40,7 +40,7 @@
                     android:layout_gravity="center"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    app:srcCompat="@drawable/ic_kes"
+                    app:srcCompat="@drawable/ic_face"
                     tools:ignore="ContentDescription" />
 
             </com.github.florent37.shapeofview.shapes.CircleView>

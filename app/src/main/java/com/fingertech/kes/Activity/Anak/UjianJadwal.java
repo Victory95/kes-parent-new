@@ -30,7 +30,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
-import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
 import com.fingertech.kes.Activity.Fragment.UjianFragment.UasFragment;
 import com.fingertech.kes.Activity.Fragment.UjianFragment.UnFragment;
 import com.fingertech.kes.Activity.Fragment.UjianFragment.UtsFragment;

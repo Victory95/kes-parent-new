@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +49,7 @@ import com.fingertech.kes.Activity.Adapter.SearchMapAdapter;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.SquareFloatButton;
-import com.fingertech.kes.Activity.Search.FilterActivity;
+import com.fingertech.kes.Activity.Search.BookmarkMap;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.Controller.Auth;
@@ -200,7 +198,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         discreteSlider.setVisibility(View.VISIBLE);
 
         bookmark.setOnClickListener(v -> {
-            Intent mIntent = new Intent(SearchingMAP.this,FilterActivity.class);
+            Intent mIntent = new Intent(SearchingMAP.this, BookmarkMap.class);
             startActivityForResult(mIntent,1);
         });
         setSupportActionBar(ToolBarAtas2);
@@ -681,8 +679,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void search_school_post(final String key){
-
-        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key);
+        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toLowerCase());
         postCall.enqueue(new Callback<JSONResponse.School>() {
             @Override
             public void onResponse(Call<JSONResponse.School> call, final Response<JSONResponse.School> response) {
@@ -697,8 +694,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
                         recyclerView.setAdapter(searchMapAdapter);
                         searchMapAdapter.notifyDataSetChanged();
-                        searchMapAdapter.getFilter(key).filter(key);
-//                    searchMapAdapter.setFilter(arraylist,key);
+                        searchMapAdapter.getFilter(key.toLowerCase()).filter(key.toLowerCase());
                         searchMapAdapter.setOnItemClickListener((view, position) -> {
                             if (mmap != null) {
                                 mmap.clear();

@@ -8150,7 +8150,6 @@ public class JSONResponse{
             this.status = status;
         }
     }
-
     public class Data_Last_News{
         @SerializedName("newsid")
         public String newsid;
@@ -8219,5 +8218,236 @@ public class JSONResponse{
         }
 
 
+    }
+
+    /// lesson review
+    public class LessonReview{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public DataLesson data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public DataLesson getData() {
+            return data;
+        }
+
+        public void setData(DataLesson data) {
+            this.data = data;
+        }
+    }
+    public class DataLesson{
+        @SerializedName("classroom_name")
+        public String classroom_name;
+        @SerializedName("cources_name")
+        public String cources_name;
+
+        @SerializedName("materi")
+        public List<ListLesson> data;
+
+        public String getClassroom_name() {
+            return classroom_name;
+        }
+
+        public void setClassroom_name(String classroom_name) {
+            this.classroom_name = classroom_name;
+        }
+
+        public String getCources_name() {
+            return cources_name;
+        }
+
+        public void setCources_name(String cources_name) {
+            this.cources_name = cources_name;
+        }
+
+        public List<ListLesson> getData() {
+            return data;
+        }
+
+        public void setData(List<ListLesson> data) {
+            this.data = data;
+        }
+    }
+    public class ListLesson{
+        @SerializedName("reviewid")
+        public String reviewid;
+        @SerializedName("cources_id")
+        public String cources_id;
+        @SerializedName("review_date")
+        public String review_date;
+        @SerializedName("review_status")
+        public String review_status;
+        @SerializedName("datez")
+        public String datez;
+        @SerializedName("member_id")
+        public String member_id;
+        @SerializedName("classroom_id")
+        public String classroom_id;
+        @SerializedName("edulevel_id")
+        public String edulevel_id;
+        @SerializedName("review_desc")
+        public String review_desc;
+        @SerializedName("review_title")
+        public String review_title;
+        @SerializedName("review_materi")
+        public String review_materi;
+        @SerializedName("review_file")
+        public String review_file;
+        @SerializedName("courcesreligion_id")
+        public String courcesreligion_id;
+        @SerializedName("member_code")
+        public String member_code;
+        @SerializedName("fullname")
+        public String fullname;
+        @SerializedName("review_date_ok")
+        public String review_date_ok;
+
+        public String getReviewid() {
+            return reviewid;
+        }
+
+        public void setReviewid(String reviewid) {
+            this.reviewid = reviewid;
+        }
+
+        public String getCources_id() {
+            return cources_id;
+        }
+
+        public void setCources_id(String cources_id) {
+            this.cources_id = cources_id;
+        }
+
+        public String getReview_date() {
+            return review_date;
+        }
+
+        public void setReview_date(String review_date) {
+            this.review_date = review_date;
+        }
+
+        public String getReview_status() {
+            return review_status;
+        }
+
+        public void setReview_status(String review_status) {
+            this.review_status = review_status;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getReview_desc() {
+            return review_desc;
+        }
+
+        public void setReview_desc(String review_desc) {
+            this.review_desc = review_desc;
+        }
+
+        public String getReview_title() {
+            return review_title;
+        }
+
+        public void setReview_title(String review_title) {
+            this.review_title = review_title;
+        }
+
+        public String getReview_materi() {
+            return review_materi;
+        }
+
+        public void setReview_materi(String review_materi) {
+            this.review_materi = review_materi;
+        }
+
+        public String getReview_file() {
+            return review_file;
+        }
+
+        public void setReview_file(String review_file) {
+            this.review_file = review_file;
+        }
+
+        public String getCourcesreligion_id() {
+            return courcesreligion_id;
+        }
+
+        public void setCourcesreligion_id(String courcesreligion_id) {
+            this.courcesreligion_id = courcesreligion_id;
+        }
+
+        public String getMember_code() {
+            return member_code;
+        }
+
+        public void setMember_code(String member_code) {
+            this.member_code = member_code;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
+        }
+
+        public String getReview_date_ok() {
+            return review_date_ok;
+        }
+
+        public void setReview_date_ok(String review_date_ok) {
+            this.review_date_ok = review_date_ok;
+        }
     }
 }
