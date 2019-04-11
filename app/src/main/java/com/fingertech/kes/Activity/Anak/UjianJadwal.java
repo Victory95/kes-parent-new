@@ -67,8 +67,6 @@ public class UjianJadwal extends AppCompatActivity {
         mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
         setTitle("Jadwal Ujian");
         mToolbar.setTitleTextColor(Color.WHITE);
-
-
         setupviewpager(mViewpager);
         mTablayout.setupWithViewPager(mViewpager);
 

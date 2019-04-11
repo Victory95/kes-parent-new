@@ -23,34 +23,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SEMESTER GENAP"
+                tools:text="SEMESTER GENAP"
+                android:id="@+id/tv_semesters"
                 android:textColor="@color/colorPrimary"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
-                >
-                <LinearLayout
+                android:gravity="center">
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="9 Juli 2018"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" - "
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1 Januari 2019"
-                        />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    tools:text="9 Juli 2018"
+                    android:id="@+id/tv_tanggal"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -59,6 +45,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             tools:ignore="UselessParent">
+            <com.github.ybq.android.spinkit.SpinKitView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/spin_kits"
+                style="@style/SpinKitView.Wave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                app:SpinKit_Color="@color/colorPrimary" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
