@@ -180,18 +180,13 @@
                 android:value="com.fingertech.kes.Activity.Masuk" />
         </activity>
         <activity
-            android:name=".Activity.AksesAnak"
-            android:label="@string/label_akses_anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".Activity.RecommendSchool"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.fingertech.kes.Activity.AksesAnak" />
+                android:value="com.fingertech.kes.Activity.Search.AnakAkses" />
         </activity>
         <activity
             android:name=".Activity.Maps.full_maps"
@@ -229,7 +224,7 @@
                 android:value="com.fingertech.kes.Activity.MenuGuest" />
         </activity>
         <activity
-            android:name=".Activity.Search.FilterActivity"
+            android:name=".Activity.Search.BookmarkMap"
             android:label="Bookmark"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -317,11 +312,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.Anak.TugasAnak"
-            android:label="Tugas Anak"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.Anak.KalendarDetail"
             android:label="Kalender Detail"
             android:screenOrientation="portrait"
@@ -337,7 +327,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".GalleryFoto"
+            android:name=".Activity.GalleryFoto"
             android:label="Gallery"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

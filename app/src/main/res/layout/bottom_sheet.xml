@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
-    tools:context=".Activity.Search.FilterActivity">
+    tools:context=".Activity.Search.BookmarkMap">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/filter"/>
+        <include layout="@layout/bookmark_map"/>
     </RelativeLayout>
 
     <RelativeLayout

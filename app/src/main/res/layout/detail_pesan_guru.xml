@@ -49,7 +49,7 @@
                     android:layout_gravity="center"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"
-                    android:src="@drawable/ic_kes"
+                    android:src="@drawable/ic_face"
                     />
 
             </com.github.florent37.shapeofview.shapes.CircleView>

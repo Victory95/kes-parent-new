@@ -1,13 +1,11 @@
 package com.fingertech.kes.Activity.Search;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +19,12 @@ import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.BookmarkTabel;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FilterActivity extends AppCompatActivity {
+public class BookmarkMap extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -47,13 +44,13 @@ public class FilterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.filter);
+        setContentView(R.layout.bookmark_map);
 
         recyclerView           = findViewById(R.id.recycleBookmark);
         delete                 = recyclerView.findViewById(R.id.BookMark);
         layoutManager          = new LinearLayoutManager(this);
         ToolBarAtas2           = findViewById(R.id.toolbar_back);
-        bookmarkAdapter        = new BookmarkAdapter(itemList,FilterActivity.this);
+        bookmarkAdapter        = new BookmarkAdapter(itemList, BookmarkMap.this);
         hint_bookmark          = findViewById(R.id.hint_bookmark);
         materialSearchView      = findViewById(R.id.search_view);
 
@@ -112,7 +109,7 @@ public class FilterActivity extends AppCompatActivity {
                String jenjang = row.get(position).get(Data.KEY_JENJANG);
                String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
 
-               Intent intent = new Intent(FilterActivity.this, SearchingMAP.class);
+               Intent intent = new Intent(BookmarkMap.this, SearchingMAP.class);
                intent.putExtra("latitude", latitude);
                intent.putExtra("longitude", longitude);
                intent.putExtra("jenjang", jenjang);

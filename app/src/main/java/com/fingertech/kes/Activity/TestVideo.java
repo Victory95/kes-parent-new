@@ -15,7 +15,7 @@ public class TestVideo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_video);
         videoView = findViewById(R.id.videoview11);
         MediaController mediaController = new MediaController(this); //Creating the media controller
         mediaController.setAnchorView(videoView);
