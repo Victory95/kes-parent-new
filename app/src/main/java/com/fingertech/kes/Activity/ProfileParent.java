@@ -324,21 +324,21 @@ public class ProfileParent extends AppCompatActivity {
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
+        final CharSequence[] items = {"Ambil foto", "Pilih file",
+                "Batal"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ProfileParent.this);
-        builder.setTitle("Add Photo!");
+        builder.setTitle("Tambah foto!");
         builder.setIcon(R.drawable.ic_kamera);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals("Ambil foto")) {
                     captureImage();
-                } else if (items[item].equals("Choose from Library")) {
+                } else if (items[item].equals("Pilih file")) {
                     startActivityForResult(new Intent().setAction(Intent.ACTION_GET_CONTENT)
                             .setType("image/*"),SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals("Batal")) {
                     dialog.dismiss();
                 }
             }

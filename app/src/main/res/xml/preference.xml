@@ -6,8 +6,7 @@
 
     <PreferenceCategory
         android:key="Nada"
-        android:title="Ringtone"
-
+        android:title="Nada dering"
         >
         <SwitchPreference
             android:key="SW_Notifikasi"
@@ -20,7 +19,7 @@
             />
         <RingtonePreference
             android:key="Ringtone"
-            android:title="Ringtone"
+            android:title="Nada dering"
             android:summary="Pilih Nada Pemberitahuan"
             android:ringtoneType="notification"
             android:dependency="SW_Notifikasi"
@@ -34,9 +33,10 @@
             android:title="Getar" />
 
     </PreferenceCategory>
-    <PreferenceCategory android:title="About">
+    <PreferenceCategory android:title="Tentang">
 
         <Preference
+            android:key="versi"
             android:summary="1.0.20"
             android:title="Versi" />
 
@@ -48,12 +48,12 @@
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_faq" />
         </Preference>
-        <Preference android:title="TERM AND CONDITIONS">
+        <Preference android:title="Syarat dan Ketentuan">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_term" />
         </Preference>
-        <Preference android:title="Privacy policy">
+        <Preference android:title="Kebijakan Privasi">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/url_term" />

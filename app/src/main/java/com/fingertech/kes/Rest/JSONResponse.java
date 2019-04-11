@@ -1,5 +1,6 @@
 package com.fingertech.kes.Rest;
 
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -4687,19 +4688,30 @@ public class JSONResponse{
         private String courcesSpec;
 
         @SerializedName("class_average_score")
-        private double classAverageScore;
+        private String classAverageScore;
 
         @SerializedName("cources_type")
         private String courcesType;
 
         @SerializedName("final_score")
-        private double finalScore;
+        private String finalScore;
 
         @SerializedName("cources_code")
         private String courcesCode;
 
         @SerializedName("cources_name")
         private String courcesName;
+
+        @SerializedName("cources_kkm")
+        private String cources_kkm;
+
+        public String getCources_kkm() {
+            return cources_kkm;
+        }
+
+        public void setCources_kkm(String cources_kkm) {
+            this.cources_kkm = cources_kkm;
+        }
 
         @SerializedName("lastupdate")
         private String lastupdate;
@@ -4771,11 +4783,11 @@ public class JSONResponse{
             return courcesSpec;
         }
 
-        public void setClassAverageScore(double classAverageScore){
+        public void setClassAverageScore(String classAverageScore){
             this.classAverageScore = classAverageScore;
         }
 
-        public double getClassAverageScore(){
+        public String getClassAverageScore(){
             return classAverageScore;
         }
 
@@ -4787,11 +4799,11 @@ public class JSONResponse{
             return courcesType;
         }
 
-        public void setFinalScore(double finalScore){
+        public void setFinalScore(String finalScore){
             this.finalScore = finalScore;
         }
 
-        public double getFinalScore(){
+        public String getFinalScore(){
             return finalScore;
         }
 

@@ -14,7 +14,9 @@
     <color name="bay_wharf">#747d8c</color>
     <color name="textColor_Grey">#cacaca</color>
     <color name="background_Grey_ios">#ededed</color>
-
+    <color name="bluerapor">#075677</color>
+    <color name="sixty_percent_transparency_bluerapor">#99075678</color>
+    <color name="blues">#5E97D0</color>
     <color name="white">#ffffff</color>
     <color name="colorGrey_level1">#f4f4f4</color>
     <color name="colorGrey_level2">#e4e4e4</color>
@@ -30,6 +32,7 @@
     <color name="ten_percent_transparency_white">#1Affffff</color>
     <color name="twenty_percent_transparency_white">#33ffffff</color>
     <color name="thirty_percent_transparency_white">#4Dffffff</color>
+    <color name="fourty_eight_transparency_white">#7AFFFFFF</color>
     <color name="fifty_percent_transparency_white">#80ffffff</color>
     <color name="sixty_percent_transparency_white">#99ffffff</color>
     <color name="seventy_percent_transparency_white">#B3ffffff</color>
@@ -37,6 +40,7 @@
     <color name="ninty_percent_transparency_white">#E6ffffff</color>
     <color name="ninty_five_percent_transparency_white">#F2ffffff</color>
 
+    <color name="sixty_percent_transparency_green">#99158F26</color>
     <color name="fifty_percent_transparency_primary">#8003A9F4</color>
     <color name="fifty_percent_transparency_darker_primary_dark">#80028bca</color>
     <color name="backgroundcolor">#fcfcfc</color>
@@ -74,6 +78,7 @@
     <color name="splash_top">#1E5649</color>
     <color name="splash_bottom">#222222</color>
 
+    <color name="backgroundRapor">#F4F8F4</color>
 
     <color name="mint_color">#1abd9c</color>
     <color name="ForestGreenDarkColor">#2C4F33</color>
