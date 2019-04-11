@@ -242,8 +242,8 @@ public class UtsFragment extends Fragment {
                             start_end   = converTahun(response.body().getData().get(i).getEnd_date());
                         }
                         tv_semester.setText("Semester "+semester+"");
-                        start.setText(converttanggalawal(start_date));
-                        akhir.setText(converttanggalakhir(end_date));
+                        start.setText(start_date);
+                        akhir.setText(end_date);
 
                     }
 
