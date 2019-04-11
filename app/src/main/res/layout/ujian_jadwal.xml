@@ -29,11 +29,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorColor="#ffff"
+            android:background="@color/ic_logo_background"
+            app:tabIndicatorColor="@color/colorPrimary"
             app:tabMaxWidth="0dp"
             app:tabMode="fixed"
-            app:tabTextColor="#ffff" />
+            app:tabTextColor="@color/black_70" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

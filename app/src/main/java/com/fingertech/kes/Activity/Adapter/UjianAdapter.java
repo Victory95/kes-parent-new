@@ -26,9 +26,7 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    String searchString = "";
-    String mapel ="";
-    String type = "";
+
 
     public UjianAdapter(List<ItemUjian> viewItemList,Context context) {
         this.viewItemList = viewItemList;
@@ -55,11 +53,11 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
         // Get car item dto in list.
         ItemUjian viewItem = viewItemList.get(position);
         // Set car item title.
-        holder.tanggal.setText(viewItem.getTanggal());;
-        holder.jam.setText(viewItem.getJam());
+        holder.tanggal.setText(viewItem.getTanggal());
+        holder.waktu.setText(viewItem.getJam());
+        holder.bulan.setText(viewItem.getBulan());
         holder.mapel.setText(viewItem.getMapel());
-        holder.type_id.setText(viewItem.getType_id());
-        holder.nilai.setText(viewItem.getNilai());
+
         holder.deskripsi.setText(Html.fromHtml(viewItem.getDeskripsi()));
 
     }
@@ -70,93 +68,17 @@ public class UjianAdapter extends RecyclerView.Adapter<UjianAdapter.MyHolder> {
     }
 
 
-    public Filter getFilter() {
-        this.searchString = searchString;
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-
-                String charString = charSequence.toString();
-
-                if (charString.isEmpty()) {
-
-                    viewItemList = itemUjianList;
-                } else {
-
-                    ArrayList<ItemUjian> filteredList = new ArrayList<>();
-
-                    for (ItemUjian androidVersion : itemUjianList) {
-
-                        if (androidVersion.getMapel().toLowerCase().contains(charString) || androidVersion.getType_id().toLowerCase().contains(charString) ) {
-
-                            filteredList.add(androidVersion);
-                        }
-                    }
-
-                    viewItemList = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = viewItemList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                viewItemList = (ArrayList<ItemUjian>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
-    public Filter getfilter(String searchString) {
-        this.searchString = searchString;
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-
-                String charString = charSequence.toString();
-
-                if (charString.isEmpty() || searchString.isEmpty()) {
-                    viewItemList = itemUjianList;
-                } else {
-
-                    ArrayList<ItemUjian> filteredList = new ArrayList<>();
-
-                    for (ItemUjian androidVersion : itemUjianList) {
-
-                        if (androidVersion.getMapel().toLowerCase().contains(searchString) && androidVersion.getType_id().toLowerCase().contains(charString) ) {
-
-                            filteredList.add(androidVersion);
-                        }
-                    }
-
-                    viewItemList = filteredList;
-                }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = viewItemList;
-                return filterResults;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                viewItemList = (ArrayList<ItemUjian>) filterResults.values;
-                notifyDataSetChanged();
-            }
-        };
-    }
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tanggal, jam,mapel,type_id,nilai,guru,deskripsi;
+        TextView tanggal, waktu,mapel,deskripsi,bulan;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            tanggal     = itemView.findViewById(R.id.tanggal_ujian);
-            jam         = itemView.findViewById(R.id.jam_ujian);
+            tanggal     = itemView.findViewById(R.id.tanggal);
+            waktu        = itemView.findViewById(R.id.waktu);
             mapel       = itemView.findViewById(R.id.mapel_ujian);
-            type_id     = itemView.findViewById(R.id.type_ujian);
-            nilai       = itemView.findViewById(R.id.nilai_ujian);
             deskripsi   = itemView.findViewById(R.id.desc_ujian);
+            bulan =itemView.findViewById(R.id.bulan);
 //            itemView.setOnClickListener(this);
 //            this.onItemClickListener = onItemClickListener;
         }

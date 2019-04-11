@@ -4,6 +4,7 @@ package com.fingertech.kes.Activity.Fragment.UjianFragment;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.ItemUjian;
+import com.fingertech.kes.Activity.Model.UjianModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
@@ -26,6 +29,7 @@ import com.fingertech.kes.Rest.JSONResponse;
 import com.stone.vega.library.VegaLayoutManager;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,11 +57,8 @@ public class UtsFragment extends Fragment {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-yyyy", new Locale("in", "ID"));
     private DateFormat times_format = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
     Auth mApiInterface;
-    String jam, tanggal, type, nilai, mapel, deskripsi, semester_id, start_date, end_date, semester, start_year, start_end;
-    String jam_db, tanggal_db;
-    Date month_now, month_db;
-    UjianModel ujianModel;
-    TextView hint_ujian;
+    String bulan,waktu, tanggal, mapel, deskripsi, semester_id, start_date, end_date, semester, start_year, start_end;
+    TextView hint_ujian,tv_semester,start,akhir;
     List<UjianModel> ujianModelList = new ArrayList<>();
     List<ItemUjian> itemUjianList = new ArrayList<>();
 
@@ -88,17 +89,22 @@ public class UtsFragment extends Fragment {
         mApiInterface = ApiClient.getClient().create(Auth.class);
         recyclerView = view.findViewById(R.id.recycleview_ujian);
         hint_ujian = view.findViewById(R.id.hint_ujian);
+        tv_semester=view.findViewById(R.id.semester);
+        start=view.findViewById(R.id.star);
+        akhir=view.findViewById(R.id.akhir);
+
 
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = df.format(Calendar.getInstance().getTime());
         bulan_sekarang = dateFormat.format(Calendar.getInstance().getTime());
+        ;
 
         Check_Semester();
 
         return view;
-    }
 
+    }
     private void Check_Semester() {
 
         Call<JSONResponse.CheckSemester> call = mApiInterface.kes_check_semester_get(authorization.toString(), school_code.toString().toLowerCase(), classroom_id.toString(), date.toString());
@@ -169,55 +175,26 @@ public class UtsFragment extends Fragment {
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
                             if (response.body().getData().get(i).getType_id().equals("1")) {
-                                jam = response.body().getData().get(i).getExam_time_ok();
+                                waktu = response.body().getData().get(i).getExam_time_ok();
                                 tanggal = response.body().getData().get(i).getExam_date();
                                 mapel = response.body().getData().get(i).getCources_name();
-                                type = response.body().getData().get(i).getType_name();
                                 deskripsi = response.body().getData().get(i).getExam_desc();
-                                nilai = response.body().getData().get(i).getScore_value();
-                                tanggal_db = converDate(response.body().getData().get(i).getExam_date());
-                                jam_db = converJam(response.body().getData().get(i).getExam_time());
-                                try {
-                                    month_now = times_format.parse(bulan_sekarang);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                Long bulan_now = month_now.getTime();
+                                itemUjian = new ItemUjian();
+                                itemUjian.setJam(waktu);
+                                itemUjian.setTanggal(convertTanggal(tanggal));
+                                itemUjian.setMapel(mapel);
+                                itemUjian.setDeskripsi(deskripsi);
+                                itemUjian.setBulan(convertBulan(tanggal));
 
-                                try {
-                                    month_db = times_format.parse(tanggal_db);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-
-                                Long bulan_db = month_db.getTime();
-                                if (bulan_db.equals(bulan_now)) {
-                                    ujianModel = new UjianModel();
-                                    ujianModel.setDeskripsi(deskripsi);
-                                    ujianModel.setNilai(nilai);
-                                    ujianModel.setJam(jam_db);
-                                    ujianModel.setMapel(mapel);
-                                    ujianModel.setWaktu(converttanggal(tanggal) + " " + jam_db);
-                                    ujianModel.setBulan(convertBulan(tanggal));
-                                    ujianModel.setTanggal(convertTanggal(tanggal));
-                                    ujianModel.setType_id(type);
-                                    ujianModelList.add(ujianModel);
-                                } else {
-                                    itemUjian = new ItemUjian();
-                                    itemUjian.setJam(jam);
-                                    itemUjian.setTanggal(converttanggal(tanggal));
-                                    itemUjian.setMapel(mapel);
-                                    itemUjian.setType_id(type);
-                                    itemUjian.setDeskripsi(deskripsi);
-                                    itemUjian.setNilai(nilai);
-                                    itemUjianList.add(itemUjian);
-                                }
+                                itemUjianList.add(itemUjian);
+//                                }
                             }
                             hint_ujian.setVisibility(View.GONE);
                             ujianAdapter = new UjianAdapter(itemUjianList, getActivity());
                             recyclerView.setOnFlingListener(null);
                             recyclerView.setLayoutManager(new VegaLayoutManager());
                             recyclerView.setAdapter(ujianAdapter);
+
                         }
                     }else {
                         hint_ujian.setVisibility(View.VISIBLE);
@@ -237,7 +214,7 @@ public class UtsFragment extends Fragment {
 
     private void dapat_semester() {
 
-        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester_get(authorization.toString(), school_code.toLowerCase(), classroom_id.toString());
+        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester_get(authorization.toString(),school_code.toLowerCase(),classroom_id.toString());
 
         call.enqueue(new Callback<JSONResponse.ListSemester>() {
 
@@ -246,31 +223,30 @@ public class UtsFragment extends Fragment {
             public void onResponse(Call<JSONResponse.ListSemester> call, final Response<JSONResponse.ListSemester> response) {
                 Log.i("KES", response.code() + "");
 
-                if (response.isSuccessful()) {
-                    JSONResponse.ListSemester resource = response.body();
+                JSONResponse.ListSemester resource = response.body();
 
-                    status = resource.status;
-                    code = resource.code;
+                status = resource.status;
+                code = resource.code;
 
-                    String tahun_mulai, tahun_akhir;
-                    if (status == 1 && code.equals("DTS_SCS_0001")) {
-                        for (int i = 0; i < response.body().getData().size(); i++) {
-                            if (response.body().getData().get(i).getSemester_id().equals(semester_id)) {
-                                semester = response.body().getData().get(i).getSemester_name();
-                                start_date = response.body().getData().get(i).getStart_date();
-                                end_date = response.body().getData().get(i).getEnd_date();
-                            }
-                            if (response.body().getData().get(i).getSemester_name().equals("Ganjil")) {
-                                start_year = converTahun(response.body().getData().get(i).getStart_date());
-                            } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
-                                start_end = converTahun(response.body().getData().get(i).getEnd_date());
-                            }
-
+                String tahun_mulai,tahun_akhir;
+                if (status == 1 && code.equals("DTS_SCS_0001")) {
+                    for (int i = 0;i < response.body().getData().size();i++){
+                        if (response.body().getData().get(i).getSemester_id().equals(semester_id)){
+                            semester    = response.body().getData().get(i).getSemester_name();
+                            start_date  = response.body().getData().get(i).getStart_date();
+                            end_date    = response.body().getData().get(i).getEnd_date();
                         }
-
-                        dataSemesters = response.body().getData();
+                        if (response.body().getData().get(i).getSemester_name().equals("Ganjil")){
+                            start_year  = converTahun(response.body().getData().get(i).getStart_date());
+                        } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
+                            start_end   = converTahun(response.body().getData().get(i).getEnd_date());
+                        }
+                        tv_semester.setText("Semester "+semester+" ("+start_year+"/"+start_end+")");
 
                     }
+
+                    dataSemesters = response.body().getData();
+
                 }
             }
 

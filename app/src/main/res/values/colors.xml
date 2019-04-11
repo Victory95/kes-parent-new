@@ -6,6 +6,7 @@
     <color name="birumuda">#4FC3FA</color>
     <!--<color name="colorAccent">#000000</color>-->
     <color name="kes_typ">#8fcece</color>
+    <color name="kes_bulan"> #C41515</color>
     <color name="ic_logo_background">#FFFFFF</color>
     <color name="default_textColor">#808080</color>
     <color name="default_textHint">#afafaf</color>

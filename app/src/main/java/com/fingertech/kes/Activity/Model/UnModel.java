@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity.Model;
 public class UnModel {
     private String jam;
     private String tanggal;
+    private String bulan;
     private String mapel;
     private String type_id;
     private String guru,nilai,deskripsi;
@@ -45,6 +46,14 @@ public class UnModel {
 
     public void setTanggal(String tanggal) {
         this.tanggal = tanggal;
+    }
+
+    public String getBulan() {
+        return bulan;
+    }
+
+    public void setBulan(String bulan) {
+        this.bulan = bulan;
     }
 
     public String getMapel() {
