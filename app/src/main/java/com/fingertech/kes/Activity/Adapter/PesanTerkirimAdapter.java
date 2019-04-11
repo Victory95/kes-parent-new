@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.R;
-import com.github.florent37.shapeofview.shapes.CircleView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +20,7 @@ import java.util.Locale;
 
 import static com.fingertech.kes.Service.App.getContext;
 
-public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_Terkirim.MyHolder> {
+public class PesanTerkirimAdapter extends RecyclerView.Adapter<PesanTerkirimAdapter.MyHolder> {
 
     private List<PesanModel> viewItemList;
     String base_url = "http://www.kes.co.id/schoolc/assets/images/profile/mm_";
@@ -32,7 +31,7 @@ public class Adapter_Pesan_Terkirim extends RecyclerView.Adapter<Adapter_Pesan_T
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public Adapter_Pesan_Terkirim(List<PesanModel> viewItemList) {
+    public PesanTerkirimAdapter(List<PesanModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
 

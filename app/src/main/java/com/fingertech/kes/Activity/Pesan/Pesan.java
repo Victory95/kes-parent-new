@@ -96,7 +96,7 @@ public class Pesan extends Fragment {
         fullname            = sharedPreferences.getString("fullname",null);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH,-4);
+        calendar.add(Calendar.MONTH,-2);
         date_from   =  dateFormatForMonth.format(calendar.getTime());
         date_to     =  dateFormatForMonth.format(Calendar.getInstance().getTime());
         dapatPesan();

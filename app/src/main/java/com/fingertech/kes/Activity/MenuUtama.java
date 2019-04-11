@@ -903,7 +903,7 @@ public class MenuUtama extends AppCompatActivity
                             }
                             profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
-                            if (posisi > response.body().getData().size()){
+                            if (posisi > response.body().getData().size()-1){
                                 db.updateName(String.valueOf(posisi),String.valueOf(0));
                                 posisi = 0;
                             }

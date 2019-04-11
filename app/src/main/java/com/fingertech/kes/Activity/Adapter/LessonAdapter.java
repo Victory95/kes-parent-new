@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,13 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.MyHolder> 
         // Get car item dto in list.
         LessonModel viewItem = viewItemList.get(position);
         holder.tanggal.setText(viewItem.getTanggal());
+        if ((Integer.parseInt(viewItem.getTanggal()) % 2) == 0){
+            holder.tanggal.setTextColor(Color.GREEN);
+        }else if ((Integer.parseInt(viewItem.getTanggal()) % 3) == 0){
+            holder.tanggal.setTextColor(Color.BLUE);
+        }else  if ((Integer.parseInt(viewItem.getTanggal()) % 5) == 0){
+            holder.tanggal.setTextColor(Color.RED);
+        }
         holder.bulan.setText(viewItem.getBulan());
         holder.tahun.setText(viewItem.getTahun());
         holder.guru.setText(viewItem.getGuru());
