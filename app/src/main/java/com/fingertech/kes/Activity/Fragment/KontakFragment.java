@@ -93,13 +93,9 @@ public class KontakFragment extends Fragment implements OnMapReadyCallback,
     private ImageView arros;
     GoogleApiClient mGoogleApiClient;
     EditText Nomorrumah,Nomorponsel;
-    String nomorrumah,nomorponsel,nomorlain,pendidikan,namaperusahaan,jabatan,penghasilan,alamatkerja;
+    String nomorrumah,nomorponsel;
 
-    double currentLatitude;
-    double currentLongitude;
     ProgressDialog dialog;
-
-    String location;
     Auth mApiInterface;
 
     SharedPreferences sharedpreferences;

@@ -52,7 +52,7 @@ public class BookmarkMap extends AppCompatActivity {
         ToolBarAtas2           = findViewById(R.id.toolbar_back);
         bookmarkAdapter        = new BookmarkAdapter(itemList, BookmarkMap.this);
         hint_bookmark          = findViewById(R.id.hint_bookmark);
-        materialSearchView      = findViewById(R.id.search_view);
+        materialSearchView     = findViewById(R.id.search_view);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
@@ -66,7 +66,7 @@ public class BookmarkMap extends AppCompatActivity {
         materialSearchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                bookmarkAdapter.getFilter(query).filter(query);
+                bookmarkAdapter.getFilter(query.toLowerCase()).filter(query.toLowerCase());
                 recyclerView.setVisibility(View.VISIBLE);
                 //Do some magic
                 return false;
@@ -74,7 +74,7 @@ public class BookmarkMap extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                bookmarkAdapter.getFilter(newText).filter(newText);
+                bookmarkAdapter.getFilter(newText.toLowerCase()).filter(newText.toLowerCase());
                 recyclerView.setVisibility(View.VISIBLE);
                 //Do some magic
                 return false;

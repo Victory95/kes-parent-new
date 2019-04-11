@@ -19,8 +19,7 @@
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"
         android:layout_below="@id/toolbar"
-        android:layout_above="@+id/navbottom"
-        >
+        android:layout_above="@+id/navbottom">
     </FrameLayout>
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navbottom"

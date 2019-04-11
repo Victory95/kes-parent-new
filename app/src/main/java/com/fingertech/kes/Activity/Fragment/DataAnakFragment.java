@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -146,6 +147,7 @@ public class DataAnakFragment extends Fragment {
     TextInputLayout til_nama_lengkap,til_nis,til_nisn,til_nik,til_rombel,til_tempat_lahir,til_tanggal_lahir,til_kebutuhan_khusus;
     String email,parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
     String tingkatan_kelas,nama_lengkap,nis,nisn,nik,rombel,jenis_kelamin,tanggal_lahir,tempat_lahir,religion,kebutuhan_khusus,kewarganegaraan;
+    DatePickerDialog datePickerDialog;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -184,10 +186,11 @@ public class DataAnakFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
 
 
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, (datePicker, i, i1, i2) -> {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
+        datePickerDialog = new DatePickerDialog(getActivity(), R.style.DialogTheme, (datePicker, i, i1, i2) -> {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
             //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
             et_tanggal.setText(convertDate(i, i1, i2));
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
 
         et_tanggal.setOnClickListener(view1 -> {
             datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
@@ -329,15 +332,15 @@ public class DataAnakFragment extends Fragment {
 
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
                         tingkatan_kelas = response.body().data.getEdulevel_id();
-                        nama_lengkap = response.body().data.getFullname();
-                        nis = response.body().data.getMember_code();
-                        nisn = response.body().data.getNisn();
-                        nik = response.body().data.getNik();
-                        rombel = response.body().data.getRombel();
-                        jenis_kelamin = response.body().data.getGender();
-                        tempat_lahir = response.body().data.getBirth_place();
-                        tanggal_lahir = response.body().data.getBirth_date();
-                        religion = response.body().data.getReligion();
+                        nama_lengkap    = response.body().data.getFullname();
+                        nis             = response.body().data.getMember_code();
+                        nisn            = response.body().data.getNisn();
+                        nik             = response.body().data.getNik();
+                        rombel          = response.body().data.getRombel();
+                        jenis_kelamin   = response.body().data.getGender();
+                        tempat_lahir    = response.body().data.getBirth_place();
+                        tanggal_lahir   = response.body().data.getBirth_date();
+                        religion        = response.body().data.getReligion();
                         kebutuhan_khusus = response.body().data.getSpecial_needs();
                         kewarganegaraan = response.body().data.getCitizen_status();
 
@@ -349,6 +352,7 @@ public class DataAnakFragment extends Fragment {
                         et_tempat_lahir.setText(tempat_lahir);
                         et_tanggal.setText(tanggal_lahir);
                         et_kebutuhan_khusus.setText(kebutuhan_khusus);
+                        datePickerDialog.updateDate(Integer.parseInt(convertTahun(tanggal_lahir)),Integer.parseInt(convertBulan(tanggal_lahir))-1,Integer.parseInt(convertDate(tanggal_lahir)));
 
                         if (tingkatan_kelas.equals("4")) {
                             kelas = "SD 1";
@@ -756,4 +760,40 @@ public class DataAnakFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragKontakAnak,kontakAnakFragment);
         fragmentTransaction.commit();
     }
+
+
+    String convertDate(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertBulan(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MM",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTahun(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 }

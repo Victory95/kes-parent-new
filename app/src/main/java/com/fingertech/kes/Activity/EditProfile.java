@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -93,7 +94,7 @@ public class EditProfile extends AppCompatActivity {
     Button btn_update;
     EditText et_tanggal;
     ProgressDialog dialog;
-
+    DatePickerDialog mDatePicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,22 +155,21 @@ public class EditProfile extends AppCompatActivity {
         int mMonth = mcurrentDate.get(Calendar.MONTH);
         int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
 
-        final DatePickerDialog mDatePicker;
+
         mDatePicker = new DatePickerDialog(this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 et_tanggal.setText(convertDate(selectedyear, selectedmonth, selectedday));
             }
         }, mYear, mMonth, mDay);
-
+        mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
+        mDatePicker.updateDate(Integer.parseInt(convertTahun(tanggal_lahir)),Integer.parseInt(convertBulan(tanggal_lahir))-1,Integer.parseInt(convertDate(tanggal_lahir)));
 
         et_tanggal.setOnClickListener(view -> {
-//                datePickerDialog.show();//Dialog ditampilkan ketika edittext diclick
             mDatePicker.show();
         });
 
         et_tanggal.setOnFocusChangeListener((view, b) -> {
             if (b) {
-//                    datePickerDialog.show();//Dialog ditampilkan ketika edittext mendapat fokus
                 mDatePicker.show();
             }
         });
@@ -215,7 +215,6 @@ public class EditProfile extends AppCompatActivity {
         rb_wanita.setOnClickListener(v -> gender_profile = getResources().getString(R.string.rb_wanita));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         last_update = df.format(Calendar.getInstance().getTime());
-
         btn_update.setOnClickListener(v -> update_profile());
 
     }
@@ -309,4 +308,38 @@ public class EditProfile extends AppCompatActivity {
         return true;
     }
 
+
+    String convertDate(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertBulan(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MM",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTahun(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 }

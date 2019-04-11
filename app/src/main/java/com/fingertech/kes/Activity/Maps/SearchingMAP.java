@@ -679,8 +679,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void search_school_post(final String key){
-
-        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key);
+        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toLowerCase());
         postCall.enqueue(new Callback<JSONResponse.School>() {
             @Override
             public void onResponse(Call<JSONResponse.School> call, final Response<JSONResponse.School> response) {
@@ -695,8 +694,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
                         recyclerView.setAdapter(searchMapAdapter);
                         searchMapAdapter.notifyDataSetChanged();
-                        searchMapAdapter.getFilter(key).filter(key);
-//                    searchMapAdapter.setFilter(arraylist,key);
+                        searchMapAdapter.getFilter(key.toLowerCase()).filter(key.toLowerCase());
                         searchMapAdapter.setOnItemClickListener((view, position) -> {
                             if (mmap != null) {
                                 mmap.clear();

@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -29,7 +28,6 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +60,6 @@ public class AbsensiAnak extends AppCompatActivity{
 
     private SimpleDateFormat dateFormat     = new SimpleDateFormat("MMMM - yyyy",new Locale("in","ID"));
     private SimpleDateFormat bulanFormat    = new SimpleDateFormat("MM", Locale.getDefault());
-    private SimpleDateFormat monthFormat    = new SimpleDateFormat("MMMM",new Locale("in","ID"));
     private SimpleDateFormat tahunFormat    = new SimpleDateFormat("yyyy", Locale.getDefault());
     private SimpleDateFormat tanggalFormat  = new SimpleDateFormat("dd",Locale.getDefault());
     private SimpleDateFormat hariFormat     = new SimpleDateFormat("EEEE",new Locale("in","ID"));
@@ -71,7 +68,7 @@ public class AbsensiAnak extends AppCompatActivity{
     ImageView left_month,right_month;
     int status;
     String code;
-    String authorization,school_code,student_id,classroom_id,calendar_year;
+    String authorization,school_code,student_id,classroom_id;
     RecyclerView recyclerView;
     String tanggals;
     private List<AbsensiModel> absensiModels;
@@ -89,10 +86,7 @@ public class AbsensiAnak extends AppCompatActivity{
     ProgressDialog dialog;
     SharedPreferences sharedPreferences;
     String days_name;
-    String  daysid, day_type,month, day_status;
-    SlidingUpPanelLayout slidingUpPanelLayout;
-    Button btn_pilih;
-    LinearLayout drag;
+    String  daysid, day_type, day_status;
     ImageView arrow;
     TextView no_absen;
     RelativeLayout datePickerButton;
@@ -104,7 +98,7 @@ public class AbsensiAnak extends AppCompatActivity{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Absensi Anak");
+        setTitle("Presensi Anak");
 
         appBarLayout = findViewById(R.id.app_bar_layout);
 
@@ -139,7 +133,6 @@ public class AbsensiAnak extends AppCompatActivity{
         datePickerButton.setOnClickListener(v -> {
             float rotation = isExpanded ? 0 : 180;
             ViewCompat.animate(arrow).rotation(rotation).start();
-
             isExpanded = !isExpanded;
             appBarLayout.setExpanded(isExpanded, true);
         });
@@ -159,7 +152,6 @@ public class AbsensiAnak extends AppCompatActivity{
         {
             bulan = bulan.substring(1);
         }
-//        name.setText("Rekap presensi bulan "+monthFormat.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         hari    = hariFormat.format(Calendar.getInstance().getTime());
         tahun   = tahunFormat.format(compactCalendarView.getFirstDayOfCurrentMonth());
         absensiModels = new ArrayList<>();

@@ -1,9 +1,9 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +59,7 @@ public class PesanDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pesan_detail_dua);
+        setContentView(R.layout.pesan_detail);
         toolbar         = findViewById(R.id.toolbar_pesan_detail);
         tv_subject      = findViewById(R.id.subject);
         tv_pengirim     = findViewById(R.id.pengirim_pesan);
@@ -88,6 +88,7 @@ public class PesanDetail extends AppCompatActivity {
         pesan_detail();
     }
 
+    @SuppressLint("SetTextI18n")
     private void pesan_detail(){
         Call<JSONResponse.PesanDetail> call = mApiInterface.kes_message_anak_detail_get(authorization,school_code.toLowerCase(),student_id,classroom_id,message_id);
         call.enqueue(new Callback<JSONResponse.PesanDetail>() {

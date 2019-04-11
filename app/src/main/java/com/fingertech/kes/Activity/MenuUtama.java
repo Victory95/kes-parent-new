@@ -118,6 +118,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -693,8 +694,6 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, RaportAnak.class);
-            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -1238,6 +1237,18 @@ public class MenuUtama extends AppCompatActivity
                 }
             }
         });
+        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int zoom = (int)mapG.getCameraPosition().zoom;
+                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new
+                        LatLng(marker.getPosition().latitude + (double)90/Math.pow(2, zoom),
+                        marker.getPosition().longitude), zoom);
+                mapG.animateCamera(cu,500,null);
+                marker.showInfoWindow();
+                return true;
+            }
+        });
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -1654,6 +1665,7 @@ public class MenuUtama extends AppCompatActivity
             }
         }
     }
+
 
 
 }
