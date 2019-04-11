@@ -90,8 +90,8 @@ public class UtsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycleview_ujian);
         hint_ujian = view.findViewById(R.id.hint_ujian);
         tv_semester=view.findViewById(R.id.semester);
-        start=view.findViewById(R.id.star);
-        akhir=view.findViewById(R.id.akhir);
+        start=view.findViewById(R.id.startku);
+        akhir=view.findViewById(R.id.akhirku);
 
 
 
@@ -228,7 +228,7 @@ public class UtsFragment extends Fragment {
                 status = resource.status;
                 code = resource.code;
 
-                String tahun_mulai,tahun_akhir;
+
                 if (status == 1 && code.equals("DTS_SCS_0001")) {
                     for (int i = 0;i < response.body().getData().size();i++){
                         if (response.body().getData().get(i).getSemester_id().equals(semester_id)){
@@ -241,7 +241,9 @@ public class UtsFragment extends Fragment {
                         } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
                             start_end   = converTahun(response.body().getData().get(i).getEnd_date());
                         }
-                        tv_semester.setText("Semester "+semester+" ("+start_year+"/"+start_end+")");
+                        tv_semester.setText("Semester "+semester+"");
+                        start.setText(converttanggalawal(start_date));
+                        akhir.setText(converttanggalakhir(end_date));
 
                     }
 
@@ -285,12 +287,24 @@ public class UtsFragment extends Fragment {
         }
     }
 
-    String converttanggal(String tanggal) {
+    String converttanggalawal(String start_date) {
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "ID"));
 
         SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("in", "ID"));
         try {
-            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            String e = newDateFormat.format(calendarDateFormat.parse(start_date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String converttanggalakhir(String end_date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "ID"));
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("in", "ID"));
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(end_date));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();

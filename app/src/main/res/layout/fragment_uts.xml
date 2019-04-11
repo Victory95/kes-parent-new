@@ -40,7 +40,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="9 Juli 2018"
-                        android:id="@+id/start"
+                        android:id="@+id/startku"
                         />
                     <TextView
                         android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1 Januari 2019"
-                        android:id="@+id/akhir"
+                        android:id="@+id/akhirku"
                         />
                 </LinearLayout>
             </LinearLayout>
