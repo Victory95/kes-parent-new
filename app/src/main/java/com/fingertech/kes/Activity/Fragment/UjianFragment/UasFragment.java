@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fingertech.kes.Activity.Adapter.UjianAdapter;
-import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
+//import com.fingertech.kes.Activity.Adapter.UjianAdapterTeratas;
 //import com.fingertech.kes.Activity.Anak.JadwalUjian;
 import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.MenuUtama;
@@ -122,9 +122,9 @@ public class UasFragment extends Fragment {
                 if (response.isSuccessful()) {
                     JSONResponse.CheckSemester resource = response.body();
 
-                    status = resource.status;
-                    code = resource.code;
-                    semester_id = response.body().getData();
+                    status       = resource.status;
+                    code         = resource.code;
+                    semester_id  = response.body().getData();
                     dapat_semester();
                     Jadwal_ujian();
                     dapat_mapel();
@@ -182,10 +182,10 @@ public class UasFragment extends Fragment {
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
                             if (response.body().getData().get(i).getType_id().equals("2")) {
-                                waktu = response.body().getData().get(i).getExam_time_ok();
-                                tanggal = response.body().getData().get(i).getExam_date();
-                                mapel = response.body().getData().get(i).getCources_name();
-                                deskripsi = response.body().getData().get(i).getExam_desc();
+                                waktu       = response.body().getData().get(i).getExam_time_ok();
+                                tanggal     = response.body().getData().get(i).getExam_date();
+                                mapel       = response.body().getData().get(i).getCources_name();
+                                deskripsi   = response.body().getData().get(i).getExam_desc();
 
                                     itemUjian = new ItemUjian();
                                     itemUjian.setJam(waktu);
@@ -241,14 +241,14 @@ public class UasFragment extends Fragment {
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
                         for (int i = 0; i < response.body().getData().size(); i++) {
                             if (response.body().getData().get(i).getSemester_id().equals(semester_id)) {
-                                semester = response.body().getData().get(i).getSemester_name();
-                                start_date = response.body().getData().get(i).getStart_date();
-                                end_date = response.body().getData().get(i).getEnd_date();
+                                semester        = response.body().getData().get(i).getSemester_name();
+                                start_date      = response.body().getData().get(i).getStart_date();
+                                end_date        = response.body().getData().get(i).getEnd_date();
                             }
                             if (response.body().getData().get(i).getSemester_name().equals("Ganjil")) {
-                                start_year = converTahun(response.body().getData().get(i).getStart_date());
+                                start_year  = converTahun(response.body().getData().get(i).getStart_date());
                             } else if (response.body().getData().get(i).getSemester_name().equals("Genap")) {
-                                start_end = converTahun(response.body().getData().get(i).getEnd_date());
+                                start_end   = converTahun(response.body().getData().get(i).getEnd_date());
                             }
 
                         }
