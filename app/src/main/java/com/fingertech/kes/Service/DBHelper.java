@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.fingertech.kes.Activity.Model.Data;
 import com.fingertech.kes.Rest.BookmarkTabel;
+import com.fingertech.kes.Rest.MapsTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,17 +26,9 @@ public class DBHelper extends SQLiteOpenHelper{
 
     private static final String db_name ="school";
     private static final int db_version=2;
-    public static final String TABLE_SQLite = "sqlite";
     private static final String TABLE_NAME = "myTable";
     private static final String UID="_id";     // Column I (Primary Key)
     private static final String NAME = "Name";// Table Name
-    private static final String CREATE_TABLE = "CREATE TABLE "+TABLE_NAME+
-            " ("+UID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+NAME+" VARCHAR(255));";
-
-    public static final String COLUMN_ID = "id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_ADDRESS = "address";
-
     private static final String SELECTED_LANGUAGE = "Locale.Helper.Selected.Language";
 
     public static Context onAttach(Context context) {
@@ -362,12 +355,13 @@ public class DBHelper extends SQLiteOpenHelper{
                 " ('ZM', 'Zambia'), \n" +
                 " ('ZW', 'Zimbabwe');";
 
-        db.execSQL(BookmarkTabel.createTable());
         db.execSQL(sql);
+        db.execSQL(BookmarkTabel.createTable());
         String position = "create table kodetable( _id integer primary key, position varchar not null);";
         db.execSQL(position);
         position = "INSERT INTO kodetable(position) VALUES ('0')";
         db.execSQL(position);
+        db.execSQL(MapsTable.createTable());
     }
 
     // dijalankan apabila ingin mengupgrade database

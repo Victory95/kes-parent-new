@@ -91,9 +91,9 @@ public class BookmarkMap extends AppCompatActivity {
            hint_bookmark.setVisibility(View.GONE);
            recyclerView.setVisibility(View.VISIBLE);
            for (int i = 0; i < row.size(); i++) {
-               String id = row.get(i).get(Data.KEY_CourseId);
-               String poster = row.get(i).get(Data.KEY_Name);
-               String title = row.get(i).get(Data.KEY_ALAMAT);
+               String id        = row.get(i).get(Data.KEY_CourseId);
+               String poster    = row.get(i).get(Data.KEY_Name);
+               String title     = row.get(i).get(Data.KEY_ALAMAT);
                data = new Data();
                data.setId(id);
                data.setName(poster);
@@ -102,12 +102,12 @@ public class BookmarkMap extends AppCompatActivity {
            }
            bookmarkAdapter.notifyDataSetChanged();
            bookmarkAdapter.setOnItemClickListener((view, position) -> {
-               latitude = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
-               longitude = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
-               String poster = row.get(position).get(Data.KEY_Name);
-               String title = row.get(position).get(Data.KEY_ALAMAT);
-               String jenjang = row.get(position).get(Data.KEY_JENJANG);
-               String schoolid = row.get(position).get(Data.KEY_SCHOOLDETAIL);
+               latitude         = Double.parseDouble(row.get(position).get(Data.KEY_LATITUDE));
+               longitude        = Double.parseDouble(row.get(position).get(Data.KEY_LONGITUDE));
+               String poster    = row.get(position).get(Data.KEY_Name);
+               String title     = row.get(position).get(Data.KEY_ALAMAT);
+               String jenjang   = row.get(position).get(Data.KEY_JENJANG);
+               String schoolid  = row.get(position).get(Data.KEY_SCHOOLDETAIL);
 
                Intent intent = new Intent(BookmarkMap.this, SearchingMAP.class);
                intent.putExtra("latitude", latitude);

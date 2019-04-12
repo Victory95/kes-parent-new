@@ -44,13 +44,13 @@ public class TentangKami extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tentang_kami);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_tentang);
-        alamat_tentang        = (TextView)findViewById(R.id.alamat_tentang);
-        office1               = (TextView)findViewById(R.id.office1);
-        office2               = (TextView)findViewById(R.id.office2);
-        mobile                  = (TextView)findViewById(R.id.Mobile);
-        web                     = (TextView)findViewById(R.id.web);
-        email                   = (TextView)findViewById(R.id.Email);
+        final Toolbar toolbar = findViewById(R.id.toolbar_tentang);
+        alamat_tentang        = findViewById(R.id.alamat_tentang);
+        office1               = findViewById(R.id.office1);
+        office2               = findViewById(R.id.office2);
+        mobile                  = findViewById(R.id.Mobile);
+        web                     = findViewById(R.id.web);
+        email                   = findViewById(R.id.Email);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

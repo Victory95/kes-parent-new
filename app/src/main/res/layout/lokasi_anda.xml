@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.Search.LokasiAnda">
 
     <android.support.v7.widget.Toolbar
@@ -19,53 +20,60 @@
         android:orientation="vertical"
         android:id="@+id/p"
         android:layout_below="@id/toolbar_dua">
-        <LinearLayout
+
+        <com.arlib.floatingsearchview.FloatingSearchView
+            android:id="@+id/floating_search_view"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            app:floatingSearch_hintTextColor="@color/default_textHint"
+            app:floatingSearch_searchBarMarginLeft="20dp"
+            app:floatingSearch_searchBarMarginRight="20dp"
+            app:floatingSearch_dimBackground="@android:color/transparent"
+            app:floatingSearch_searchHint="Cari Lokasi"
+            app:floatingSearch_suggestionsListAnimDuration="250"
+            app:floatingSearch_showSearchKey="true"
+            app:floatingSearch_dismissFocusOnItemSelection="true"
+            app:floatingSearch_leftActionMode="showSearch"
+            app:floatingSearch_showVoiceInput="true"
+            app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:text="@string/tv_pilih_map"
             android:layout_marginTop="20dp"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="viewEnd"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:id="@+id/searc"
-            android:background="@drawable/rectangle_line5">
-            <ImageView
-                android:layout_width="35dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_location"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                tools:ignore="ContentDescription" />
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:id="@+id/pilih_lokasi"
-                android:layout_marginStart="10dp"
-                android:background="#e2e2e2"
-                android:layout_gravity="center"
-                android:hint="@string/hint_cari_lokasi"
-                android:layout_weight="5"/>
-        </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_pilih_map"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/colorPrimary"
-        android:textAlignment="viewEnd"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/pilihmap"/>
+            android:id="@+id/pilihmap"/>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:orientation="vertical"
         android:layout_below="@id/p">
-
-    </android.support.v7.widget.RecyclerView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:id="@+id/listmaps"
+            android:visibility="gone">
+        </ListView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/riwayat"
+            android:text="Riwayat pencarian"
+            android:layout_margin="10dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/rv_maps"
+            android:layout_marginRight="10dp">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 </RelativeLayout>
