@@ -23,6 +23,7 @@
             android:summary="Pilih Nada Pemberitahuan"
             android:ringtoneType="notification"
             android:dependency="SW_Notifikasi"
+            android:defaultValue="content://settings/system/notification_sound"
             />
 
 

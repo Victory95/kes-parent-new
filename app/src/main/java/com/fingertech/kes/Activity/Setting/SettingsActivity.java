@@ -49,6 +49,9 @@ public class  SettingsActivity extends  PreferenceFragment{
                         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
                         v.vibrate(400);
+                    }else {
+                        Vibrator v=(Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+                        v.vibrate(0);
                     }
                     return true;
                 }
@@ -59,18 +62,33 @@ public class  SettingsActivity extends  PreferenceFragment{
             RingtoneSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    String stringValue = newValue.toString();
+
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     String path = preferences.getString("Ringtone", "");
                     boolean checked = (boolean) newValue;
                     Ringtone ringtone = RingtoneManager.getRingtone(
                             preference.getContext(), Uri.parse(path));
-                    if (!path.isEmpty()){
-                        if (checked) {
+
+                    if (checked) {
+                        Log.d("On","oke");
+
+////                        ringtone.play();
+                        if (!path.isEmpty()){
+
                             ringtone.play();
                         }
-                    }else if(path.isEmpty()){
-                        ringtone.stop();
+                    }else {
+                        Log.d("On","off");
+
+                        String off = preferences.getString("Ringtone", null);
+                        Ringtone ringtoneoff= RingtoneManager.getRingtone(preference.getContext(),Uri.parse(off));
+                        if (!off.isEmpty()){
+                            ringtoneoff.stop();
+                        }else {
+                            ringtoneoff.stop();
+                        }
+
+
                     }
 
                     return true;
