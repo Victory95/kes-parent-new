@@ -31,6 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
+        <activity android:name=".Activity.NextProject.TestKalender"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"

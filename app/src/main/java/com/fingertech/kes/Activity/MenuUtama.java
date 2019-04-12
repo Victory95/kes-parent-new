@@ -92,6 +92,7 @@ import com.fingertech.kes.Activity.Model.NewsModel;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
+import com.fingertech.kes.Activity.NextProject.TestKalender;
 import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
@@ -679,6 +680,8 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
+            Intent intent = new Intent(MenuUtama.this, TestKalender.class);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
