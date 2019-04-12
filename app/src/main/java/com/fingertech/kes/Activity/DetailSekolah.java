@@ -324,8 +324,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                     if (status == 1 && code.equals("DS_SCS_0001")) {
                         JSONResponse.SchoolDetail source = resource.getSchool();
-                        schoolDetail = source.statusKes;
-
+                        schoolDetail        = response.body().getSchool().getStatusKes();
                         NPSN                = response.body().school.getData().getNpsn();
                         school_id           = response.body().getSchool().getData().getSchool_Id();
                         school_code         = response.body().getSchool().getData().getSchool_code();
@@ -444,6 +443,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                         dapat_picture();
                         if (schoolDetail == 0) {
+                            setLocked(foto_sekolah);
                             hint_detail.setVisibility(View.VISIBLE);
                             hint_detail.setOnClickListener(v -> {
                                 Intent intent = new Intent(DetailSekolah.this, RecommendSchool.class);
@@ -458,6 +458,7 @@ public class DetailSekolah extends AppCompatActivity {
                                 }
                             });
                         } else if (schoolDetail == 1) {
+                            setUnlocked(foto_sekolah);
                             hint_detail.setVisibility(View.GONE);
                         }
 
@@ -503,7 +504,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                         if (status == 1 && code.equals("DS_SCS_0001")) {
                             JSONResponse.SchoolDetail source = resource.getSchool();
-                            schoolDetail = source.statusKes;
+                            schoolDetail        = response.body().getSchool().getStatusKes();
 
                             NPSN = response.body().school.getData().getNpsn();
                             NamaSekolah = response.body().school.getData().getSchool_name();
@@ -569,6 +570,7 @@ public class DetailSekolah extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.Foto_sekolah> call, Response<JSONResponse.Foto_sekolah> response) {
                 Log.d("DetailSekolah",response.code()+"");
                 JSONResponse.Foto_sekolah resource = response.body();
+
                 status = resource.status;
                 if (status == 1) {
                     if (response.body().getData().size() == 0) {
@@ -582,6 +584,7 @@ public class DetailSekolah extends AppCompatActivity {
                     } else {
                         Picture = response.body().getData().get(0).getPic_url();
                         if (schoolDetail == 0) {
+
                             if (Picture.equals("")) {
                                 setLocked(foto_sekolah);
                                 Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
@@ -592,8 +595,9 @@ public class DetailSekolah extends AppCompatActivity {
                                         .listener(new RequestListener<Drawable>() {
                                             @Override
                                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                foto_sekolah.setBackgroundResource(R.drawable.image_profill);
-                                                return false;
+                                                setLocked(foto_sekolah);
+                                                foto_sekolah.setBackground(getResources().getDrawable(R.drawable.image_profill));
+                                                return true;
                                             }
 
                                             @Override
@@ -602,7 +606,6 @@ public class DetailSekolah extends AppCompatActivity {
                                             }
                                         })
                                         .into(foto_sekolah);
-                                setLocked(foto_sekolah);
                             }
                         } else if (schoolDetail == 1) {
                             if (Picture.equals("")) {
@@ -615,7 +618,7 @@ public class DetailSekolah extends AppCompatActivity {
                                         .listener(new RequestListener<Drawable>() {
                                             @Override
                                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-
+                                                setUnlocked(foto_sekolah);
                                                 Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
                                                 return false;
                                             }
