@@ -412,7 +412,8 @@
             android:label="Detail Raport"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activity.Anak.LessonReview"
+        <activity
+            android:name=".Activity.Anak.LessonReview"
             android:label="Riwayat Belajar"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

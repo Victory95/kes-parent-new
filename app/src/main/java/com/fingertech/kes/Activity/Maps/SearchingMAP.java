@@ -774,6 +774,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
                     } else {
                         if (status == 0 && code.equals("SS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -848,55 +849,66 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 indo.setAlamat(alamat);
                 indo.setSchooldetailid(schoolid);
 
-                if (jenjang.equals("sd") || jenjang.equals("BPK SD")){
+                switch (jenjang) {
+                    case "sd":
+                    case "BPK SD": {
 
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
 
-                }else if(jenjang.equals("smp") || jenjang.equals("BPK SMP")){
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        break;
+                    }
+                    case "smp":
+                    case "BPK SMP": {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
 
-                }else if(jenjang.equals("smk")){
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
-                }else {
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        break;
+                    }
+                    case "smk": {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
+                        break;
+                    }
+                    default: {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
+                        break;
+                    }
                 }
-                hideKeyboard(this);
+
                 recyclerView.setVisibility(View.GONE);
             }
         }else if (requestCode == 2){
