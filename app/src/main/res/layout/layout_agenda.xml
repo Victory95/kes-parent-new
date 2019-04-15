@@ -37,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Biologi"
-                    android:id="@+id/title"
+                    android:id="@+id/titleagenda"
                     android:textSize="18sp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textStyle="bold"
@@ -55,7 +55,7 @@
                     android:text="Hari Buruh International"
                     android:textSize="13sp"
                     android:layout_marginTop="12dp"
-                    android:id="@+id/deskripsi"
+                    android:id="@+id/deskripsiagenda"
 
 
                     />
@@ -67,7 +67,7 @@
 
 
     <TextView
-        android:id="@+id/judulagnda"
+        android:id="@+id/judulagenda"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_gravity="right|end|top"
