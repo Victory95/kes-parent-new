@@ -171,19 +171,22 @@ public class LokasiAnda extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE){
-            if (requestCode == 2){
-                if (resultCode == RESULT_OK) {
-                    String address  = data.getStringExtra("address");
-                    double lati     = data.getDoubleExtra("latitude",0.0);
-                    double longi    = data.getDoubleExtra("longitude",0.0);
-                    Intent intent = new Intent(LokasiAnda.this,SearchingMAP.class);
-                    intent.putExtra("address", address);
-                    intent.putExtra("latitude",lati);
-                    intent.putExtra("longitude", longi);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+        if (requestCode == 2){
+            if (resultCode == RESULT_OK) {
+                String address  = data.getStringExtra("address");
+                String city     = data.getStringExtra("city");
+                double lati     = data.getDoubleExtra("latitude",0.0);
+                double longi    = data.getDoubleExtra("longitude",0.0);
+                dataMaps.setName(address);
+                dataMaps.setLat(lati);
+                dataMaps.setLng(longi);
+                mapsTable.insert(dataMaps);
+                Intent intent = new Intent(LokasiAnda.this,SearchingMAP.class);
+                intent.putExtra("address", city);
+                intent.putExtra("latitude",lati);
+                intent.putExtra("longitude", longi);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         }
     }

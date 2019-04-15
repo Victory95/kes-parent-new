@@ -19,6 +19,7 @@ import com.fingertech.kes.Activity.Anak.PesanAnak;
 import com.fingertech.kes.Activity.Anak.RaportAnak;
 import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.MenuUtama;
+import com.fingertech.kes.Activity.Pesan.PilihPesan;
 import com.fingertech.kes.R;
 
 /**
@@ -139,7 +140,7 @@ public class MenuSatuFragment extends Fragment{
             editor.putString("student_id",student_id);
             editor.putString("student_name",nama_anak);
             editor.apply();
-            Intent intent = new Intent(getContext(), PesanAnak.class);
+            Intent intent = new Intent(getContext(), PilihPesan.class);
             intent.putExtra("authorization", authorization);
             intent.putExtra("school_code", school_code.toLowerCase());
             intent.putExtra("member_id", member_id);

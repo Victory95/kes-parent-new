@@ -692,48 +692,49 @@ public class MenuUtama extends AppCompatActivity
         } else if (id == R.id.nav_Pengaturan) {
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
-        } else if (id==R.id.nav_pesan){
-            if (member.equals("3")){
-                if (count.equals("0")){
-                    actionView.setVisibility(View.GONE);
-                    new LovelyInfoDialog(MenuUtama.this)
-                            .setTopColorRes(R.color.yellow_A400)
-                            .setIcon(R.drawable.ic_info_white)
-                            //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
-                            .setNotShowAgainOptionEnabled(0)
-                            .setNotShowAgainOptionChecked(false)
-                            .setTitle("Warning")
-                            .setMessage("Harap menambah data anak anda terlebih dahulu")
-                            .setConfirmButtonText("Ok")
-                            .show();
-                }else {
-                    SharedPreferences.Editor editor = sharedviewpager.edit();
-                    editor.putString("member_id", parent_id);
-                    editor.putString("school_code", school_code);
-                    editor.putString("authorization", authorization);
-                    editor.putString("fullname",fullname);
-                    editor.commit();
-                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-                    intent.putExtra("authorization",authorization);
-                    intent.putExtra("school_code",school_code);
-                    intent.putExtra("parent_id",parent_id);
-                    intent.putExtra("fullname",fullname);
-                    startActivity(intent);
-                }
-            }else {
-                new LovelyInfoDialog(MenuUtama.this)
-                        .setTopColorRes(R.color.yellow_A400)
-                        .setIcon(R.drawable.ic_info_white)
-                        //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
-                        .setNotShowAgainOptionEnabled(0)
-                        .setNotShowAgainOptionChecked(false)
-                        .setTitle("Warning")
-                        .setMessage("Harap merubah data anda terlebih dahulu menjadi orang tua")
-                        .setConfirmButtonText("Ok")
-                        .show();
-            }
-
         }
+//       else if (id==R.id.nav_pesan){
+//            if (member.equals("3")){
+//                if (count.equals("0")){
+//                    actionView.setVisibility(View.GONE);
+//                    new LovelyInfoDialog(MenuUtama.this)
+//                            .setTopColorRes(R.color.yellow_A400)
+//                            .setIcon(R.drawable.ic_info_white)
+//                            //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+//                            .setNotShowAgainOptionEnabled(0)
+//                            .setNotShowAgainOptionChecked(false)
+//                            .setTitle("Warning")
+//                            .setMessage("Harap menambah data anak anda terlebih dahulu")
+//                            .setConfirmButtonText("Ok")
+//                            .show();
+//                }else {
+//                    SharedPreferences.Editor editor = sharedviewpager.edit();
+//                    editor.putString("member_id", parent_id);
+//                    editor.putString("school_code", school_code);
+//                    editor.putString("authorization", authorization);
+//                    editor.putString("fullname",fullname);
+//                    editor.commit();
+//                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
+//                    intent.putExtra("authorization",authorization);
+//                    intent.putExtra("school_code",school_code);
+//                    intent.putExtra("parent_id",parent_id);
+//                    intent.putExtra("fullname",fullname);
+//                    startActivity(intent);
+//                }
+//            }else {
+//                new LovelyInfoDialog(MenuUtama.this)
+//                        .setTopColorRes(R.color.yellow_A400)
+//                        .setIcon(R.drawable.ic_info_white)
+//                        //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
+//                        .setNotShowAgainOptionEnabled(0)
+//                        .setNotShowAgainOptionChecked(false)
+//                        .setTitle("Warning")
+//                        .setMessage("Harap merubah data anda terlebih dahulu menjadi orang tua")
+//                        .setConfirmButtonText("Ok")
+//                        .show();
+//            }
+//
+//        }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -1018,6 +1019,7 @@ public class MenuUtama extends AppCompatActivity
         editor.putString("school_name", school_name);
         editor.putString("student_id", student_id);
         editor.putString("student_name",nama_anak);
+        editor.putString("fullname",fullname);
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
@@ -1027,6 +1029,7 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name", school_name);
         bundle.putString("student_name",nama_anak);
+        bundle.putString("fullname",fullname);
         Fragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -1558,23 +1561,6 @@ public class MenuUtama extends AppCompatActivity
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int)(dp * scale + 0.5f);
     }
-
-//    private void showDialog() {
-//        if (!dialog.isShowing())
-//            dialog.show();
-//        dialog.setContentView(R.layout.progressbar);
-//    }
-//    private void hideDialog() {
-//        if (dialog.isShowing())
-//            dialog.dismiss();
-//        dialog.setContentView(R.layout.progressbar);
-//    }
-//    public void progressBar(){
-//        dialog = new ProgressDialog(MenuUtama.this);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        dialog.setIndeterminate(true);
-//        dialog.setCancelable(false);
-//    }
 
     private void Daftar_Berita(){
         mApi.latest_news_get()

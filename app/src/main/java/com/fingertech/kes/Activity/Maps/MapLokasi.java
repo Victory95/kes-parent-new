@@ -162,7 +162,8 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
 
                 Pilih.setOnClickListener(v -> {
                     Intent intent = new Intent(MapLokasi.this,LokasiAnda.class);
-                    intent.putExtra("address", city);
+                    intent.putExtra("address", address);
+                    intent.putExtra("city",city);
                     intent.putExtra("latitude",latitude1);
                     intent.putExtra("longitude", longitude1);
                     setResult(RESULT_OK, intent);
@@ -323,7 +324,8 @@ public class MapLokasi extends AppCompatActivity implements OnMapReadyCallback,
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     Intent intent = new Intent(MapLokasi.this,LokasiAnda.class);
-                    intent.putExtra("address", city);
+                    intent.putExtra("address", address);
+                    intent.putExtra("city",city);
                     intent.putExtra("latitude",latitude1);
                     intent.putExtra("longitude", longitude1);
                     setResult(RESULT_OK, intent);

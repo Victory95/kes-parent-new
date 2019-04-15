@@ -31,7 +31,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,ExportedService,GoogleAppIndexingWarning,InnerclassSeparator">
-        <activity android:name=".Activity.NextProject.TestKalender"></activity>
+        <activity android:name=".Activity.NextProject.TestKalender" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -418,6 +418,10 @@
             android:label="Riwayat Belajar"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.Pesan.PilihPesan"
+            android:label="Pesan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Activity.NextProject.Signin" />
         <activity android:name=".Activity.NextProject.TesterOtp" />
     </application>

@@ -1,9 +1,11 @@
 package com.fingertech.kes.Activity.NextProject;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.fingertech.kes.R;
 
@@ -12,7 +14,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
 public class TestKalender extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class TestKalender extends AppCompatActivity {
     HorizontalCalendar horizontalCalendar;
     private SimpleDateFormat formattanggal  = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class TestKalender extends AppCompatActivity {
         /** start before 1 month from now */
         Calendar startDate = Calendar.getInstance();
         startDate.add(Calendar.MONTH, -1);
+        imageView   = findViewById(R.id.image);
 
         horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
                 .range(startDate,endDate)
@@ -61,6 +64,7 @@ public class TestKalender extends AppCompatActivity {
         });
         Log.d("tanggalsekaran",horizontalCalendar.getSelectedDate().getTime()+"");
 
+        imageView.setColorFilter(Color.parseColor("#000000"));
 
     }
 }
