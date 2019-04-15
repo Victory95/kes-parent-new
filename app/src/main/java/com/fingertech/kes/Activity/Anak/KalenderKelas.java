@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import io.supercharge.shimmerlayout.ShimmerLayout;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
