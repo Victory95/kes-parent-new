@@ -400,15 +400,15 @@
     <string name="tv_kepala_sekolah">Kepala Sekolah</string>
     <string name="tv_operator_sekolah">Operator Sekolah</string>
     <string name="tv_total_guru">Total Guru</string>
-    <string name="tv_total_siswa_pria">Total Siswa Pria</string>
-    <string name="tv_total_siswa_wanita">Total Siswa Wanita</string>
+    <string name="tv_total_siswa_pria">Total Siswa Laki-Laki</string>
+    <string name="tv_total_siswa_wanita">Total Siswa Perempuan</string>
     <string name="tv_ruang_kelas">Ruang Kelas</string>
     <string name="tv_laboratorium">Laboratorium</string>
     <string name="tv_perpustakaan">Perpustakaan</string>
     <string name="tv_sanitasi">Sanitasi</string>
     <string name="tv_kalender">Kalender</string>
     <string name="btn_profil_anak">Profil Anak</string>
-    <string name="btn_jadwal">Jadwal Kelas</string>
+    <string name="btn_jadwal">Jadwal Pelajaran</string>
     <string name="btn_jadwal_ujian">Jadwal Ujian</string>
     <string name="btn_absensi_anak">Presensi</string>
     <string name="btn_tugas_anak">Tugas</string>
@@ -503,7 +503,7 @@
     <string name="Deafult_web_id">860440761767-i7hvmq1jojg2csshkjiaqepcbbbkc0t8.apps.googleusercontent.com</string>
     <string name="title_activity_pesan">Settings</string>
     <string name="btn_pesan_anak">Pesan</string>
-    <string name="btn_agenda_anak">Agenda Anak</string>
+    <string name="btn_agenda_anak">Agenda</string>
     <string name="network_not_enabled">Gps Tidak Aktif</string>
     <string name="open_location_settings">Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda</string>
     <string name="yes">Buka Pengaturan Lokasi</string>

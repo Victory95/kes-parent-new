@@ -22,28 +22,6 @@
                 android:shrinkColumns="1"
                 android:stretchColumns="1"
                 >
-                <!-- Row 3 with 2 columns -->
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text="@string/tv_npsn"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/NPSN"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
                 <TableRow
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -108,111 +86,6 @@
                 </TableRow>
 
                 <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text="@string/tv_provinsi"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/provinsi"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
-                        android:padding="20dip"
-                        android:text="@string/tv_kabupaten"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/kabupaten"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text="@string/tv_kecamatan"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/kecamatan"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
-                        android:padding="20dip"
-                        android:text="@string/tv_kelurahan_desa"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/desa"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text="@string/tv_rt_rw"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/rt"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal">
@@ -220,12 +93,12 @@
                     <LinearLayout
                         android:layout_height="match_parent"
                         android:layout_width="match_parent"
+                        android:background="@drawable/tabel_grey"
                         android:layout_weight="1">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@drawable/tabel_border"
                             android:padding="22dip"
                             android:text="@string/tv_alamat"
                             android:textColor="#000000" />
@@ -233,29 +106,8 @@
                     <TextView
                         android:id="@+id/alamat"
                         android:layout_weight="1"
-                        android:background="@drawable/tabel_border"
                         android:padding="20dip"
-                        android:text=""
-                        android:textColor="#000000" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <TextView
-                        android:layout_weight="1"
                         android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
-                        android:text="@string/tv_kode_pos"
-                        android:textColor="#000000" />
-
-                    <TextView
-                        android:id="@+id/kode_pos"
-                        android:layout_weight="1"
-                        android:background="@drawable/tabel_grey"
-                        android:padding="20dip"
                         android:text=""
                         android:textColor="#000000" />
                 </TableRow>

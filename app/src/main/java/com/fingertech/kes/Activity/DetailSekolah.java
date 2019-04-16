@@ -576,10 +576,10 @@ public class DetailSekolah extends AppCompatActivity {
                     if (response.body().getData().size() == 0) {
                         if (schoolDetail == 1){
                             setUnlocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                         }else if (schoolDetail == 0){
                             setLocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                            Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                         }
                     } else {
                         Picture = response.body().getData().get(0).getPic_url();
@@ -587,7 +587,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                             if (Picture.equals("")) {
                                 setLocked(foto_sekolah);
-                                Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                                Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                             } else {
                                 setLocked(foto_sekolah);
                                 Glide.with(DetailSekolah.this)
@@ -596,7 +596,7 @@ public class DetailSekolah extends AppCompatActivity {
                                             @Override
                                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                                 setLocked(foto_sekolah);
-                                                foto_sekolah.setBackground(getResources().getDrawable(R.drawable.image_profill));
+                                                foto_sekolah.setBackground(getResources().getDrawable(R.drawable.ic_sekolah));
                                                 return true;
                                             }
 
@@ -610,7 +610,7 @@ public class DetailSekolah extends AppCompatActivity {
                         } else if (schoolDetail == 1) {
                             if (Picture.equals("")) {
                                 setUnlocked(foto_sekolah);
-                                Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                                Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                             } else {
                                 setUnlocked(foto_sekolah);
                                 Glide.with(DetailSekolah.this)
@@ -619,7 +619,7 @@ public class DetailSekolah extends AppCompatActivity {
                                             @Override
                                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                                                 setUnlocked(foto_sekolah);
-                                                Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
+                                                Picasso.get().load(R.drawable.ic_sekolah).into(foto_sekolah);
                                                 return false;
                                             }
 
@@ -636,10 +636,10 @@ public class DetailSekolah extends AppCompatActivity {
                 }else {
                     if (schoolDetail == 1){
                         setUnlocked(foto_sekolah);
-                        Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                        Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                     }else if (schoolDetail == 0){
                         setLocked(foto_sekolah);
-                        Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                        Glide.with(DetailSekolah.this).load(R.drawable.ic_sekolah).into(foto_sekolah);
                     }
 
                 }

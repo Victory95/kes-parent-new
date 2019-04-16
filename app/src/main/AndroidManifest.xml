@@ -304,7 +304,7 @@
         </activity>
         <activity
             android:name=".Activity.Anak.JadwalPelajaran"
-            android:label="Jadwal Kelas"
+            android:label="Jadwal Pelajaran"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -381,7 +381,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.AgendaAnak"
-            android:label="Agenda Anak"
+            android:label="Agenda"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -405,12 +405,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.RaportAnak"
-            android:label="Raport Anak"
+            android:label="Rapor Anak"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.Anak.DetailRaport"
-            android:label="Detail Raport"
+            android:label="Detail Rapor"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

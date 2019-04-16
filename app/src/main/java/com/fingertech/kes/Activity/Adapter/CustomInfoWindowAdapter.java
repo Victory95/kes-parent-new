@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.fingertech.kes.Activity.CustomView.OnInfoWindowElemTouchListener;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.R;
@@ -27,7 +29,7 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         return null;
     }
 
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    @SuppressLint({"SetTextI18n", "DefaultLocale", "ClickableViewAccessibility"})
     @Override
     public View getInfoContents(Marker marker) {
         View view = ((Activity)context).getLayoutInflater()
@@ -46,7 +48,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         // Getting reference to the TextView to set longitude
         TextView tvLht = view.findViewById(R.id.Lihat);
-
 
         ImageView img = view.findViewById(R.id.imageS);
         InfoWindowData infoWindowData = (InfoWindowData) marker.getTag();
@@ -72,5 +73,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         }
 
         return view;
+
     }
 }

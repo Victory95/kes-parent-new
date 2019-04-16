@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.fingertech.kes.Activity.Anak.KalenderKelas;
 import com.fingertech.kes.Activity.Anak.ProfilAnak;
+import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.R;
 
@@ -27,7 +28,7 @@ public class MenuDuaFragment extends Fragment {
     }
 
     String authorization,parent_nik,school_code,student_id,member_id,classroom_id,school_name,nama_anak;
-    CardView btn_profile, btn_kalendar;
+    CardView btn_profile, btn_jadwal_ujian;
     SharedPreferences sharedPreferences,sharedPreferences2;
 
     public static final String myViewpagerPreferences = "myViewpagerPreferences";
@@ -53,7 +54,7 @@ public class MenuDuaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view       = inflater.inflate(R.layout.fragment_menu_dua, container, false);
         btn_profile     = view.findViewById(R.id.btn_profile);
-        btn_kalendar    = view.findViewById(R.id.btn_kalendar);
+        btn_jadwal_ujian = view.findViewById(R.id.btn_jadwalujian);
 
         btn_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +79,8 @@ public class MenuDuaFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        btn_kalendar.setOnClickListener(new View.OnClickListener() {
+
+        btn_jadwal_ujian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = sharedPreferences2.edit();
@@ -87,7 +89,7 @@ public class MenuDuaFragment extends Fragment {
                 editor.putString("classroom_id",classroom_id);
                 editor.putString("student_id",student_id);
                 editor.apply();
-                Intent intent = new Intent(getContext(), KalenderKelas.class);
+                Intent intent = new Intent(getContext(), UjianJadwal.class);
                 intent.putExtra("authorization", authorization);
                 intent.putExtra("school_code", school_code.toLowerCase());
                 intent.putExtra("student_id", student_id);
