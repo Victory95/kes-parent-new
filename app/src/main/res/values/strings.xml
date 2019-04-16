@@ -412,7 +412,7 @@
     <string name="btn_jadwal_ujian">Jadwal Ujian</string>
     <string name="btn_absensi_anak">Presensi</string>
     <string name="btn_tugas_anak">Tugas</string>
-    <string name="btn_raport_anak">Raport</string>
+    <string name="btn_raport_anak">Rapor</string>
     <string name="info_selamat_datang">Selamat datang</string>
     <string name="tv_info_orangtua">Ini adalah akses pertama anda untuk akses ke orang tua</string>
     <string name="tv_info_2">Pastikan semua data anda isi dan ikuti petunjuknya</string>
@@ -507,7 +507,7 @@
     <string name="network_not_enabled">Gps Tidak Aktif</string>
     <string name="open_location_settings">Harap mengaktifkan lokasi anda untuk melihat sekolah terdekat anda</string>
     <string name="yes">Buka Pengaturan Lokasi</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Batal</string>
     <!--<string name="pref_title_ringtone">Ringtone</string>-->
     <!--<string name="pref_ringtone_silent">Silent</string>-->
     <!--<string name="Tv_bahasa">Pilih_bahasa</string>-->

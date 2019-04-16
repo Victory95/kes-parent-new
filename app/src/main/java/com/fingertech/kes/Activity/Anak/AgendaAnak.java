@@ -104,6 +104,7 @@ public class AgendaAnak extends AppCompatActivity {
                                 agendaModel.setContent(content_agenda);
                                 agendaModelList.add(agendaModel);
                             }
+
                             agendaAdapter = new AgendaAdapter(agendaModelList);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this);
                             rv_agenda.setLayoutManager(layoutManager);
