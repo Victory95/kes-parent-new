@@ -1,7 +1,20 @@
 package com.fingertech.kes.Activity.Model;
 
 public class RaporModel {
-    private String mapel,nilaiakhir,rr_kelas,rr_angkatan;
+    private String mapel;
+    private String nilaiakhir;
+    private String rr_kelas;
+    private String rr_angkatan;
+
+    public String getKkm() {
+        return kkm;
+    }
+
+    public void setKkm(String kkm) {
+        this.kkm = kkm;
+    }
+
+    private String kkm;
 
     public String getMapel() {
         return mapel;

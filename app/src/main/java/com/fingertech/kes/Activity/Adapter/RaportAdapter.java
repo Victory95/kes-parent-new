@@ -42,7 +42,7 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
         // Get car item dto in list.
         RaporModel viewItem = viewItemList.get(position);
         holder.name.setText(viewItem.getMapel());
-        holder.kkm.setText(viewItem.getRr_kelas());
+        holder.kkm.setText(viewItem.getKkm());
         holder.tv_nilai.setText(viewItem.getNilaiakhir());
         holder.rr_kelas.setText(viewItem.getRr_angkatan());
         if ((position % 2) == 0){
@@ -50,6 +50,7 @@ public class RaportAdapter extends RecyclerView.Adapter<RaportAdapter.MyHolder>{
         }else {
             holder.linearLayout.setBackgroundColor(Color.parseColor("#ffffff"));
         }
+        holder.rr_angkatan.setText(viewItem.getRr_angkatan());
     }
 
     @Override

@@ -50,11 +50,11 @@ public class PermissionHelper {
     public boolean checkAndRequestPermissions(){//1. Call this to check permission. (Call this affected loop for check permission until user Approved it)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int permissionCamera = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA);
-            int permissionReadStorage = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE);
-            int permissionWriteStorage = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int permissionLocation     = ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION);
-            int permissionPhone        = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE);
+            int permissionCamera        = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.CAMERA);
+            int permissionReadStorage   = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE);
+            int permissionWriteStorage  = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int permissionLocation      = ContextCompat.checkSelfPermission(mActivity, android.Manifest.permission.ACCESS_FINE_LOCATION);
+            int permissionPhone         = ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_PHONE_STATE);
 
             List<String> listPermissionsNeeded = new ArrayList<>();
 
