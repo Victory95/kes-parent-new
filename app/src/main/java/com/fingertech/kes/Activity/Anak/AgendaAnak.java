@@ -47,7 +47,7 @@ public class AgendaAnak extends AppCompatActivity {
     String color,code,authorization,school_code,student_id,classroom_id,tanggal_agenda,type_agenda,desc_agenda,content_agenda;
     SharedPreferences sharedPreferences;
     ProgressDialog dialog;
-    TextView tv_hint_agenda;
+    TextView tv_hint_agenda,tvsemester,tvtanggalsemester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
