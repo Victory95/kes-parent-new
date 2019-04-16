@@ -1,5 +1,6 @@
 package com.fingertech.kes.Activity.Anak;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //import com.fingertech.kes.Activity.Adapter.AgendaAdapter;
 import com.fingertech.kes.Activity.Adapter.AgendaAdapter;
@@ -28,12 +30,18 @@ import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.pepperonas.materialdialog.MaterialDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AgendaAnak extends AppCompatActivity {
 
@@ -43,8 +51,10 @@ public class AgendaAnak extends AppCompatActivity {
     AgendaAdapter agendaAdapter;
     List<AgendaModel> agendaModelList = new ArrayList<>();
     AgendaModel agendaModel;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-yyyy", new Locale("in", "ID"));
+    private DateFormat times_format = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
     int status;
-    String color,code,authorization,school_code,student_id,classroom_id,tanggal_agenda,type_agenda,desc_agenda,content_agenda;
+    String bulan_sekarang,date,semester,start_date,end_date,semester_id,color,code,authorization,school_code,student_id,classroom_id,tanggal_agenda,type_agenda,desc_agenda,content_agenda;
     SharedPreferences sharedPreferences;
     ProgressDialog dialog;
     TextView tv_hint_agenda,tvsemester,tvtanggalsemester;
@@ -53,10 +63,12 @@ public class AgendaAnak extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agenda_anak);
-        toolbar     = findViewById(R.id.toolbar_agenda);
-        rv_agenda   = findViewById(R.id.rv_agenda);
-        tv_hint_agenda  = findViewById(R.id.hint_agenda);
-        mApiInterface   = ApiClient.getClient().create(Auth.class);
+        tvsemester          = findViewById(R.id.tv_semestersagenda);
+        tvtanggalsemester   = findViewById(R.id.tvtanggalagenda);
+        toolbar             = findViewById(R.id.toolbar_agenda);
+        rv_agenda           = findViewById(R.id.rv_agenda);
+        tv_hint_agenda      = findViewById(R.id.hint_agenda);
+        mApiInterface       = ApiClient.getClient().create(Auth.class);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -67,7 +79,83 @@ public class AgendaAnak extends AppCompatActivity {
         school_code         = sharedPreferences.getString("school_code",null);
         student_id          = sharedPreferences.getString("student_id",null);
         classroom_id        = sharedPreferences.getString("classroom_id",null);
-        dapat_agenda();
+
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        date = df.format(Calendar.getInstance().getTime());
+        bulan_sekarang = dateFormat.format(Calendar.getInstance().getTime());
+
+        Check_Semester();
+    }
+
+
+
+
+    private void Check_Semester() {
+
+        Call<JSONResponse.CheckSemester> call = mApiInterface.kes_check_semester_get(authorization.toString(), school_code.toString().toLowerCase(), classroom_id.toString(), date.toString());
+        call.enqueue(new Callback<JSONResponse.CheckSemester>() {
+            @Override
+            public void onResponse(Call<JSONResponse.CheckSemester> call, final Response<JSONResponse.CheckSemester> response) {
+                Log.i("KES", response.code() + "");
+                if (response.isSuccessful()) {
+                    JSONResponse.CheckSemester resource = response.body();
+
+                    status = resource.status;
+                    code = resource.code;
+                    semester_id = response.body().getData();
+                    dapat_agenda();
+                    dapat_semester();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<JSONResponse.CheckSemester> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+
+            }
+
+        });
+    }
+
+    private void dapat_semester() {
+
+        Call<JSONResponse.ListSemester> call = mApiInterface.kes_list_semester_get(authorization.toString(), school_code.toLowerCase(), classroom_id.toString());
+
+        call.enqueue(new Callback<JSONResponse.ListSemester>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<JSONResponse.ListSemester> call, final Response<JSONResponse.ListSemester> response) {
+                Log.i("KES", response.code() + "");
+
+                if (response.isSuccessful()) {
+                    JSONResponse.ListSemester resource = response.body();
+
+                    status = resource.status;
+                    code = resource.code;
+
+                    if (status == 1 && code.equals("DTS_SCS_0001")) {
+                        for (int i = 0; i < response.body().getData().size(); i++) {
+                            if (response.body().getData().get(i).getSemester_id().equals(semester_id)) {
+                                semester    = response.body().getData().get(i).getSemester_name();
+                                start_date  = response.body().getData().get(i).getStart_date();
+                                end_date    = response.body().getData().get(i).getEnd_date();
+                                tvsemester.setText("Semester "+semester);
+                                tvtanggalsemester.setText(converttanggal(start_date)+" sampai "+converttanggal(end_date));
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONResponse.ListSemester> call, Throwable t) {
+                Log.d("onFailure", t.toString());
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_LONG).show();
+            }
+
+        });
     }
 
     private void dapat_agenda(){
@@ -142,6 +230,46 @@ public class AgendaAnak extends AppCompatActivity {
             }
         });
     }
+
+    String convertTanggal(String tanggal) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd", Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    String converttanggal(String tanggal) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "ID"));
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("in", "ID"));
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    String convertBulan(String tanggal) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     private void showDialog() {
         if (!dialog.isShowing())
             dialog.show();
