@@ -19,7 +19,7 @@ import com.fingertech.kes.R;
 public class IdentitasFragment extends Fragment {
 
     int color;
-    TextView npsn,namasekolah,jenjang,status,alamat;
+    TextView namasekolah,jenjang,status,alamat;
     String Npsn,Namasekolah,Jenjang,Status,Provinsi,KAbupaten,KEcamatan,KElurahan,Rt,Rw,ALamat,Kodepos;
     public IdentitasFragment() {
         // Required empty public constructor
@@ -57,8 +57,6 @@ public class IdentitasFragment extends Fragment {
         status      = (TextView)view.findViewById(R.id.status_sekolah);
         alamat      = (TextView)view.findViewById(R.id.alamat);
 
-
-        npsn.setText(Npsn);
         namasekolah.setText(Namasekolah);
         jenjang.setText(Jenjang);
         status.setText(Status);
