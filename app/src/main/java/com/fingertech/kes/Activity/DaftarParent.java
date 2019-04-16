@@ -76,30 +76,30 @@ public class DaftarParent extends AppCompatActivity {
         setContentView(R.layout.daftar_parent);
         getSupportActionBar().setElevation(0);
 
-        btn_buat_akun          = (Button) findViewById(R.id.btn_buat_akun);
-        btn_ayah               = (Button) findViewById(R.id.btn_ayah);
-        btn_ibu                = (Button) findViewById(R.id.btn_ibu);
-        btn_wali               = (Button) findViewById(R.id.btn_wali);
-        rg_hubungan            = (RadioGroup) findViewById(R.id.rg_hubungan);
-        rb_laki_laki           = (RadioButton) findViewById(R.id.rb_laki_laki);
-        rb_perempuan           = (RadioButton) findViewById(R.id.rb_perempuan);
-        cb_ketentuan           = (CheckBox) findViewById(R.id.cb_ketentuan);
-        et_fullname            = (EditText) findViewById(R.id.et_nama_lengkap);
-        et_nik                 = (EditText) findViewById(R.id.et_nik);
-        et_email               = (EditText) findViewById(R.id.et_email);
-        et_mobile_phone        = (EditText) findViewById(R.id.et_number_phone);
-        et_password            = (EditText) findViewById(R.id.et_kata_sandi);
-        et_ulangi_password     = (EditText) findViewById(R.id.et_ulangi_kata_sandi);
-        til_fullname           = (TextInputLayout) findViewById(R.id.til_nama_lengkap);
-        til_nik                = (TextInputLayout) findViewById(R.id.til_nik);
-        til_email              = (TextInputLayout) findViewById(R.id.til_email);
-        til_mobile_phone       = (TextInputLayout) findViewById(R.id.til_number_phone);
-        til_password           = (TextInputLayout) findViewById(R.id.til_kata_sandi);
-        til_ulangi_password    = (TextInputLayout) findViewById(R.id.til_ulangi_kata_sandi);
-        tv_line_boundaryLeft   = (TextView) findViewById(R.id.tv_line_boundaryLeft);
-        tv_line_boundaryRight  = (TextView) findViewById(R.id.tv_line_boundaryRight);
-        tv_hubungan_validate   = (TextView) findViewById(R.id.tv_hubungan_validate);
-        iv_camera = (ImageView) findViewById(R.id.iv_camera);
+        btn_buat_akun          = findViewById(R.id.btn_buat_akun);
+        btn_ayah               = findViewById(R.id.btn_ayah);
+        btn_ibu                = findViewById(R.id.btn_ibu);
+        btn_wali               = findViewById(R.id.btn_wali);
+        rg_hubungan            = findViewById(R.id.rg_hubungan);
+        rb_laki_laki           = findViewById(R.id.rb_laki_laki);
+        rb_perempuan           = findViewById(R.id.rb_perempuan);
+        cb_ketentuan           = findViewById(R.id.cb_ketentuan);
+        et_fullname            = findViewById(R.id.et_nama_lengkap);
+        et_nik                 = findViewById(R.id.et_nik);
+        et_email               = findViewById(R.id.et_email);
+        et_mobile_phone        = findViewById(R.id.et_number_phone);
+        et_password            = findViewById(R.id.et_kata_sandi);
+        et_ulangi_password     = findViewById(R.id.et_ulangi_kata_sandi);
+        til_fullname           = findViewById(R.id.til_nama_lengkap);
+        til_nik                = findViewById(R.id.til_nik);
+        til_email              = findViewById(R.id.til_email);
+        til_mobile_phone       = findViewById(R.id.til_number_phone);
+        til_password           = findViewById(R.id.til_kata_sandi);
+        til_ulangi_password    = findViewById(R.id.til_ulangi_kata_sandi);
+        tv_line_boundaryLeft   = findViewById(R.id.tv_line_boundaryLeft);
+        tv_line_boundaryRight  = findViewById(R.id.tv_line_boundaryRight);
+        tv_hubungan_validate   = findViewById(R.id.tv_hubungan_validate);
+        iv_camera = findViewById(R.id.iv_camera);
         //// Caps Text in First Alfabet
         et_fullname.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
@@ -385,7 +385,7 @@ public class DaftarParent extends AppCompatActivity {
         progressBar();
         showDialog();
         String device_id = "android_"+deviceid;
-        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_nik.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), hubungan.toString(), jenis_kelamin.toString(), device_id.toString());
+        Call<JSONResponse> postCall = mApiInterface.register_orangtua_post(et_fullname.getText().toString(), et_nik.getText().toString(), et_email.getText().toString(), et_mobile_phone.getText().toString(), et_password.getText().toString(), hubungan, jenis_kelamin, device_id);
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

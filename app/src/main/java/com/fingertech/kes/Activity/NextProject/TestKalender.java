@@ -1,70 +1,55 @@
 package com.fingertech.kes.Activity.NextProject;
 
-import android.content.res.Configuration;
+import android.annotation.SuppressLint;
+
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.andrefrsousa.superbottomsheet.SuperBottomSheetFragment;
 import com.fingertech.kes.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
-import devs.mulham.horizontalcalendar.HorizontalCalendar;
-import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import java.util.Objects;
 
 public class TestKalender extends AppCompatActivity {
 
+    Button button;
 
-    HorizontalCalendar horizontalCalendar;
-    private SimpleDateFormat formattanggal  = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-    ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_kalender);
-
-        String languageToLoad  = "in"; // your language
-        Locale locale = new Locale(languageToLoad);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,
-                getBaseContext().getResources().getDisplayMetrics());
-
-        /** end after 1 month from now */
-        Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.MONTH, 1);
-
-        /** start before 1 month from now */
-        Calendar startDate = Calendar.getInstance();
-        startDate.add(Calendar.MONTH, -1);
-        imageView   = findViewById(R.id.image);
-
-        horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
-                .range(startDate,endDate)
-                .datesNumberOnScreen(5)
-                .configure()
-                    .formatTopText("MMMM")
-                    .formatMiddleText("dd")
-                    .formatBottomText("EEEE")
-                .end()
-                .defaultSelectedDate(Calendar.getInstance())
-                .build();
-
-        horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
+        button  = findViewById(R.id.show);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDateSelected(Calendar date, int position) {
-                Log.d("tanggal",formattanggal.format(date.getTime()));
+            public void onClick(View v) {
+                DemoBottomSheetFragment demoBottomSheetFragment = new DemoBottomSheetFragment();
+                demoBottomSheetFragment.show(getSupportFragmentManager(), "DemoBottomSheetFragment");
             }
         });
-        Log.d("tanggalsekaran",horizontalCalendar.getSelectedDate().getTime()+"");
+    }
 
-        imageView.setColorFilter(Color.parseColor("#000000"));
-
+    @SuppressLint("ValidFragment")
+    public static class DemoBottomSheetFragment extends SuperBottomSheetFragment{
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            super.onCreateView(inflater, container, savedInstanceState);
+            View view = inflater.inflate(R.layout.fragment_anak, container, false);
+            return view;
+        }
+        @SuppressLint("ResourceType")
+        @Override
+        public float getCornerRadius(){
+            return Objects.requireNonNull(getActivity()).getResources().getDimension(R.dimen.radius);
+        }
+        @Override
+        public int getStatusBarColor(){
+            return Color.parseColor("#3cb0d6");
+        }
     }
 }

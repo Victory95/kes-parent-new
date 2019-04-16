@@ -4067,8 +4067,6 @@ public class JSONResponse{
 
     //// dapat jadwal pelajaran
     public class JadwalPelajaran{
-
-
         @SerializedName("code")
         public String code;
 
@@ -4122,9 +4120,9 @@ public class JSONResponse{
         public void setClass_agenda(List<AgendaData> class_agenda) {
             this.class_agenda = class_agenda;
         }
-
         @SerializedName("class_agenda")
         public List<AgendaData> class_agenda;
+
     }
     public class JadwalData{
 
@@ -4183,6 +4181,7 @@ public class JSONResponse{
             return dayStatus;
         }
     }
+
     public class AgendaData{
         @SerializedName("desc")
         private String desc;
@@ -4730,6 +4729,17 @@ public class JSONResponse{
 
         @SerializedName("courcesid")
         private String courcesid;
+
+        public String getClass_average_edu() {
+            return class_average_edu;
+        }
+
+        public void setClass_average_edu(String class_average_edu) {
+            this.class_average_edu = class_average_edu;
+        }
+
+        @SerializedName("class_average_edu")
+        private String class_average_edu;
 
         public void setMemberId(String memberId){
             this.memberId = memberId;

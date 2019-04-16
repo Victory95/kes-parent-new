@@ -86,7 +86,7 @@ public class RaportAnak extends AppCompatActivity {
     ProgressDialog dialog;
     String statusrapor,peringkat,kritik,kelas_sekarang,kelas_naik;
     String authorization,school_code,classroom_id,student_id,semester_id,date;
-    String teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel,nilai_akhir,kkm,rata_rata;
+    String teori,ulangan_harian,praktikum,eskul,ujian_sekolah,ujian_negara,mapel,nilai_akhir,kkm,rata_rata,rr_angkatan;
     RecyclerView rv_rapor;
     Spinner sp_semester;
     SharedPreferences sharedPreferences;
@@ -340,14 +340,16 @@ public class RaportAnak extends AppCompatActivity {
                                 raporModelList.clear();
                                 for (JSONResponse.DetailScoreItem detailScoreItem : detailScoreItemList) {
                                     nilai_akhir = detailScoreItem.getFinalScore();
-                                    kkm = detailScoreItem.getCources_kkm();
-                                    rata_rata = detailScoreItem.getClassAverageScore();
-                                    mapel = detailScoreItem.getCourcesName();
+                                    kkm         = detailScoreItem.getCources_kkm();
+                                    rata_rata   = detailScoreItem.getClassAverageScore();
+                                    mapel       = detailScoreItem.getCourcesName();
+                                    rr_angkatan = detailScoreItem.getClass_average_edu();
                                     raporModel = new RaporModel();
                                     raporModel.setMapel(mapel);
-                                    raporModel.setNilaiakhir(nilai_akhir);
-                                    raporModel.setRr_kelas(kkm);
-                                    raporModel.setRr_angkatan(rata_rata);
+                                    raporModel.setNilaiakhir(convertZero(nilai_akhir));
+                                    raporModel.setKkm(convertZero(kkm));
+                                    raporModel.setRr_kelas(convertZero(rata_rata));
+                                    raporModel.setRr_angkatan(convertZero(rr_angkatan));
                                     raporModelList.add(raporModel);
                                 }
                                 raportAdapter = new RaportAdapter(raporModelList);
@@ -386,6 +388,16 @@ public class RaportAnak extends AppCompatActivity {
             }
         });
     }
+
+    String convertZero(String data) {
+        if (data.equals("0.0")){
+            data = "-";
+        }else if (data.equals("0")){
+            data = "-";
+        }
+        return data;
+    }
+
 
     private void showDialog() {
         if (!dialog.isShowing())
