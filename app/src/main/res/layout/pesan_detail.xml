@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.Anak.PesanDetail"
+    android:background="#D2F0FC"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar

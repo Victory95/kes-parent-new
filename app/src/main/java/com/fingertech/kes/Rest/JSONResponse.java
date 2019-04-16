@@ -4192,6 +4192,18 @@ public class JSONResponse{
         private String date;
         @SerializedName("content")
         private String content;
+        @SerializedName("colour")
+        private String colour;
+
+
+        public String getColour() {
+            return colour;
+        }
+
+        public void setColour(String colour) {
+            this.colour = colour;
+        }
+
 
         public String getContent() {
             return content;

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,6 +48,8 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
         holder.tvjudul.setText(viewItem.getType());
         holder.tv_title.setText(viewItem.getDesc());
         holder.tvdeskripsi.setText(viewItem.getContent());
+        holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
+
 
     }
 
@@ -57,6 +60,7 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tv_title,tvdeskripsi,tvjudul;
+        ImageView pitaku;
         LinearLayout ll_agenda;
         OnItemClickListener onItemClickListener;
 
@@ -65,6 +69,8 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
             tv_title           = itemView.findViewById(R.id.titleagenda);
             tvdeskripsi        = itemView.findViewById(R.id.deskripsiagenda);
             tvjudul            = itemView.findViewById(R.id.judulagenda);
+            pitaku             = itemView.findViewById(R.id.pita);
+
 
             itemView.setOnClickListener(this);
             this.onItemClickListener = onItemClickListener;

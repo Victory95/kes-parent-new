@@ -2,7 +2,7 @@ package com.fingertech.kes.Activity.Model;
 
 public class AgendaModel {
 
-    private String date,type,desc,content;
+    private String date,type,desc,content,colour;
 
     public String getDate() {
         return date;
@@ -34,5 +34,13 @@ public class AgendaModel {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
     }
 }
