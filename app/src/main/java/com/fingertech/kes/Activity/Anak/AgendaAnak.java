@@ -270,6 +270,7 @@ public class AgendaAnak extends AppCompatActivity {
                             }
                             agendaDataTanggal = new AgendaDataTanggal(agendaModeltanggalbaru);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this, LinearLayoutManager.HORIZONTAL, false);
+                            indefinitePagerIndicator.attachToRecyclerView(rvtanggal);
                             rvtanggal.setLayoutManager(layoutManager);
                             rvtanggal.setAdapter(agendaDataTanggal);
                         }
