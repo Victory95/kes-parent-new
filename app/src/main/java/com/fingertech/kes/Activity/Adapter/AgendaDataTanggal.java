@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fingertech.kes.Activity.Model.AgendaModel;
+import com.fingertech.kes.Activity.Model.AgendaTanggalModel;
 import com.fingertech.kes.R;
 
 import java.util.List;
@@ -18,11 +19,11 @@ import java.util.List;
 public class AgendaDataTanggal extends RecyclerView.Adapter<AgendaDataTanggal.MyHolder> {
 
 
-    private List<AgendaModel> viewItemList;
+    private List<AgendaTanggalModel> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public AgendaDataTanggal(List<AgendaModel> viewItemList) {
+    public AgendaDataTanggal(List<AgendaTanggalModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -45,11 +46,12 @@ public class AgendaDataTanggal extends RecyclerView.Adapter<AgendaDataTanggal.My
     @Override
     public void onBindViewHolder(@NonNull AgendaDataTanggal.MyHolder holder, int position) {
 
-        AgendaModel viewItem = viewItemList.get(position);
+        AgendaTanggalModel viewItem = viewItemList.get(position);
 //        holder.tvjudul.setText(viewItem.getType());
 //        holder.tv_title.setText(viewItem.getDesc());
 //        holder.tvdeskripsi.setText(viewItem.getContent());
 //        holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
+        holder.tanggalagenda.setText(viewItem.getDate());
 
 
     }
@@ -61,17 +63,12 @@ public class AgendaDataTanggal extends RecyclerView.Adapter<AgendaDataTanggal.My
     }
 
     class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView tv_title,tvdeskripsi,tvjudul;
-        ImageView pitaku;
-        LinearLayout ll_agenda;
+        TextView tanggalagenda;
         OnItemClickListener onItemClickListener;
 
         public MyHolder(View itemView,OnItemClickListener onItemClickListener) {
             super(itemView);
-            tv_title           = itemView.findViewById(R.id.titleagenda);
-            tvdeskripsi        = itemView.findViewById(R.id.deskripsiagenda);
-            tvjudul            = itemView.findViewById(R.id.judulagenda);
-            pitaku             = itemView.findViewById(R.id.pita);
+          tanggalagenda = itemView.findViewById(R.id.tanggalagendalayout);
 
 
             itemView.setOnClickListener(this);

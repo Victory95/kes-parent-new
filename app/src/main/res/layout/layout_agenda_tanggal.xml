@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="8dp">
         <TextView
-            android:id="@+id/nama_mapel"
+            android:id="@+id/tanggalagendalayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/deepblue"
@@ -29,4 +29,5 @@
         android:layout_gravity="center"
         android:background="@drawable/ic_down_blue"
         tools:ignore="ContentDescription" />
+
 </LinearLayout>

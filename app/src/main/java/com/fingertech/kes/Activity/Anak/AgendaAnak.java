@@ -17,18 +17,24 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 //import com.fingertech.kes.Activity.Adapter.AgendaAdapter;
 import com.fingertech.kes.Activity.Adapter.AgendaAdapter;
+import com.fingertech.kes.Activity.Adapter.AgendaDataTanggal;
+import com.fingertech.kes.Activity.Adapter.RaporAdapter;
+import com.fingertech.kes.Activity.CustomView.CustomLayoutManager;
 import com.fingertech.kes.Activity.MenuUtama;
 import com.fingertech.kes.Activity.Model.AgendaModel;
+import com.fingertech.kes.Activity.Model.AgendaTanggalModel;
 import com.fingertech.kes.Controller.Auth;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.pepperonas.materialdialog.MaterialDialog;
+import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator;
 import com.stone.vega.library.VegaLayoutManager;
 
 import java.text.DateFormat;
@@ -45,17 +51,20 @@ import retrofit2.Response;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class AgendaAnak extends AppCompatActivity {
-
+    IndefinitePagerIndicator indefinitePagerIndicator;
     Toolbar toolbar;
-    RecyclerView rv_agenda;
+    RecyclerView rv_agenda,rvtanggal;
     Auth mApiInterface;
+    AgendaDataTanggal agendaDataTanggal;
     AgendaAdapter agendaAdapter;
     List<AgendaModel> agendaModelList = new ArrayList<>();
+    List<AgendaTanggalModel> agendaModeltanggalbaru = new ArrayList<>();
     AgendaModel agendaModel;
+    AgendaTanggalModel agendaTanggalModel;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MM-yyyy", new Locale("in", "ID"));
     private DateFormat times_format = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
     int status;
-    String bulan_sekarang,date,semester,start_date,end_date,semester_id,color,code,authorization,school_code,student_id,classroom_id,tanggal_agenda,type_agenda,desc_agenda,content_agenda;
+    String tanggalagenda,bulan_sekarang,date,semester,start_date,end_date,semester_id,color,code,authorization,school_code,student_id,classroom_id,tanggal_agenda,type_agenda,desc_agenda,content_agenda;
     SharedPreferences sharedPreferences;
     ProgressDialog dialog;
     TextView tv_hint_agenda,tvsemester,tvtanggalsemester;
@@ -64,12 +73,14 @@ public class AgendaAnak extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.agenda_anak);
-        tvsemester          = findViewById(R.id.tv_semestersagenda);
-        tvtanggalsemester   = findViewById(R.id.tvtanggalagenda);
-        toolbar             = findViewById(R.id.toolbar_agenda);
-        rv_agenda           = findViewById(R.id.rv_agenda);
-        tv_hint_agenda      = findViewById(R.id.hint_agenda);
-        mApiInterface       = ApiClient.getClient().create(Auth.class);
+        indefinitePagerIndicator    = findViewById(R.id.recyclerview_pager_indicator);
+        rvtanggal                   = findViewById(R.id.rv_tanggalrv);
+        tvsemester                  = findViewById(R.id.tv_semestersagenda);
+        tvtanggalsemester           = findViewById(R.id.tvtanggalagenda);
+        toolbar                     = findViewById(R.id.toolbar_agenda);
+        rv_agenda                   = findViewById(R.id.rv_agenda);
+        tv_hint_agenda              = findViewById(R.id.hint_agenda);
+        mApiInterface               = ApiClient.getClient().create(Auth.class);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
@@ -87,6 +98,7 @@ public class AgendaAnak extends AppCompatActivity {
         bulan_sekarang = dateFormat.format(Calendar.getInstance().getTime());
 
         Check_Semester();
+
     }
 
 
@@ -107,6 +119,7 @@ public class AgendaAnak extends AppCompatActivity {
                     semester_id = response.body().getData();
                     dapat_agenda();
                     dapat_semester();
+                    dapattanggal();
                 }
             }
 
@@ -184,7 +197,6 @@ public class AgendaAnak extends AppCompatActivity {
                                 desc_agenda     = response.body().getData().getClass_agenda().get(i).getDesc();
                                 content_agenda  = response.body().getData().getClass_agenda().get(i).getContent();
                                 color           = response.body().getData().getClass_agenda().get(i).getColour();
-                                Log.d("apaaja",color.toString());
                                 agendaModel = new AgendaModel();
                                 agendaModel.setColour(color);
                                 agendaModel.setDate(tanggal_agenda);
@@ -194,7 +206,6 @@ public class AgendaAnak extends AppCompatActivity {
                                 agendaModelList.add(agendaModel);
                             }
                             agendaAdapter = new AgendaAdapter(agendaModelList);
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this);
                             rv_agenda.setLayoutManager(new VegaLayoutManager());
                             rv_agenda.setAdapter(agendaAdapter);
                             agendaAdapter.setOnItemClickListener(new AgendaAdapter.OnItemClickListener() {
@@ -231,6 +242,59 @@ public class AgendaAnak extends AppCompatActivity {
             }
         });
     }
+
+
+    private void dapattanggal(){
+
+        Call<JSONResponse.JadwalPelajaran> call = mApiInterface.kes_class_schedule_get(authorization,school_code.toLowerCase(),student_id,classroom_id);
+        call.enqueue(new Callback<JSONResponse.JadwalPelajaran>() {
+            @Override
+            public void onResponse(@NonNull Call<JSONResponse.JadwalPelajaran> call, @NonNull Response<JSONResponse.JadwalPelajaran> response) {
+                Log.d("sukses",response.code()+"");
+                JSONResponse.JadwalPelajaran resource = response.body();
+                if (resource != null) {
+                    status = resource.status;
+                    code   = resource.code;
+                    if (status == 1 && code.equals("CSCH_SCS_0001")){
+                        if (response.body().getData().getClass_agenda().size() == 0){
+                            tv_hint_agenda.setVisibility(View.VISIBLE);
+                            rvtanggal.setVisibility(View.GONE);
+                        }else {
+                            tv_hint_agenda.setVisibility(View.GONE);
+                            rvtanggal.setVisibility(View.VISIBLE);
+                            for (int i = 0 ; i < response.body().getData().getClass_agenda().size();i++){
+                                tanggalagenda            = response.body().getData().getClass_agenda().get(i).getDate();
+                                agendaTanggalModel       = new AgendaTanggalModel();
+                                agendaTanggalModel.setDate(tanggalagenda);
+                                agendaModeltanggalbaru.add(agendaTanggalModel);
+                            }
+                            agendaDataTanggal = new AgendaDataTanggal(agendaModeltanggalbaru);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this, LinearLayoutManager.HORIZONTAL, false);
+                            rvtanggal.setLayoutManager(layoutManager);
+                            rvtanggal.setAdapter(agendaDataTanggal);
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JSONResponse.JadwalPelajaran> call, @NonNull Throwable t) {
+                Log.d("Gagal response",t.toString());
+
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
 
     String convertTanggal(String tanggal) {
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
