@@ -282,7 +282,7 @@
     <string name="tv_mata_pelajaran">Mata Pelajaran</string>
     <string name="tv_pesan">Pesan</string>
     <string name="tv_balas_pesan">Balas</string>
-    <string name="tv_profile_anak">Profile anak</string>
+    <string name="tv_profile_anak">Profil anak</string>
     <string name="tv_test">test</string>
     <string name="et_kata_sandi_lama">Kata Sandi Lama</string>
     <string name="et_kata_sandi_baru">Kata Sandi Baru</string>
@@ -327,7 +327,7 @@
     <string name="tv_status_member">Status Member</string>
     <string name="tv_user_biasa">User Biasa</string>
     <string name="tv_jadikan_orang_tua">Jadikan Orang Tua</string>
-    <string name="btn_edit_profile">Edit Profile</string>
+    <string name="btn_edit_profile">Edit Profil</string>
     <string name="tv_terakhir_login">Terakhir Masuk</string>
     <string name="tv_ubah_kata_sandi">Ubah Kata Sandi</string>
     <string name="tv_negara_asal">Negara Asal</string>
