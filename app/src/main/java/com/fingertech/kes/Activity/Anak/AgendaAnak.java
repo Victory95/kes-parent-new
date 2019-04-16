@@ -29,6 +29,7 @@ import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
 import com.pepperonas.materialdialog.MaterialDialog;
+import com.stone.vega.library.VegaLayoutManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -194,7 +195,7 @@ public class AgendaAnak extends AppCompatActivity {
                             }
                             agendaAdapter = new AgendaAdapter(agendaModelList);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(AgendaAnak.this);
-                            rv_agenda.setLayoutManager(layoutManager);
+                            rv_agenda.setLayoutManager(new VegaLayoutManager());
                             rv_agenda.setAdapter(agendaAdapter);
                             agendaAdapter.setOnItemClickListener(new AgendaAdapter.OnItemClickListener() {
                                 @Override

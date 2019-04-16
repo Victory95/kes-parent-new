@@ -1,8 +1,8 @@
 package com.fingertech.kes.Activity.Adapter;
+
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +13,16 @@ import android.widget.TextView;
 import com.fingertech.kes.Activity.Model.AgendaModel;
 import com.fingertech.kes.R;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
-public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> {
+public class AgendaDataTanggal extends RecyclerView.Adapter<AgendaDataTanggal.MyHolder> {
+
 
     private List<AgendaModel> viewItemList;
 
     private OnItemClickListener onItemClickListener;
     public int row_index = 0;
-    public AgendaAdapter(List<AgendaModel> viewItemList) {
+    public AgendaDataTanggal(List<AgendaModel> viewItemList) {
         this.viewItemList = viewItemList;
     }
 
@@ -35,23 +34,26 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_agenda, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_agenda_tanggal, parent, false);
 
         return new MyHolder(itemView,onItemClickListener);
+
     }
+
 
 
     @Override
-    public void onBindViewHolder(@NonNull MyHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AgendaDataTanggal.MyHolder holder, int position) {
 
         AgendaModel viewItem = viewItemList.get(position);
-        holder.tvjudul.setText(viewItem.getType());
-        holder.tv_title.setText(viewItem.getDesc());
-        holder.tvdeskripsi.setText(viewItem.getContent());
-        holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
+//        holder.tvjudul.setText(viewItem.getType());
+//        holder.tv_title.setText(viewItem.getDesc());
+//        holder.tvdeskripsi.setText(viewItem.getContent());
+//        holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
 
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -85,5 +87,4 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
 
         void onItemClick(View view, int position);
     }
-
-   }
+}
