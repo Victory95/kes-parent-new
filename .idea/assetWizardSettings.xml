@@ -63,7 +63,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="4fc3fa" />
-                                      <entry key="foregroundImage" value="$USER_HOME$/Downloads/logo kes 1024 putih.png" />
+                                      <entry key="foregroundImage" value="$PROJECT_DIR$/../../logo kes 1024 putih.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -136,8 +136,8 @@
                             <entry key="height" value="45" />
                             <entry key="outputName" value="ic_ulangan_harian" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/ulangan harian.svg" />
-                            <entry key="width" value="105" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/../../ulangan harian(2).svg" />
+                            <entry key="width" value="138" />
                           </map>
                         </option>
                       </PersistentState>

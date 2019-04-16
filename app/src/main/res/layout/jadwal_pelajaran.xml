@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#D2F0FC"
     tools:context=".Activity.Anak.JadwalPelajaran"
     tools:ignore="ContentDescription,RtlSymmetry" >
 
