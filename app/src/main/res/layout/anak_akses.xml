@@ -21,60 +21,41 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_marginTop="50dp"
             android:id="@+id/lay_akses_anak"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/tv_siswa_siswi"
-                android:textColor="@color/ic_logo_background"
-                android:layout_marginLeft="40dp"
-                 />
-
-
+            android:layout_height="match_parent"
+            tools:ignore="ScrollViewSize">
             <RelativeLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/til_search"
-                    android:paddingTop="28dp"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    android:theme="@style/TextLabelWhite"
-                    android:textColorHint="@color/ic_logo_background"
+                android:layout_height="match_parent"
+                tools:ignore="UselessParent">
+                <com.arlib.floatingsearchview.FloatingSearchView
+                    android:id="@+id/floating_search_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="50dp"
+                    app:floatingSearch_hintTextColor="@color/default_textHint"
+                    app:floatingSearch_searchBarMarginLeft="36dp"
+                    app:floatingSearch_searchBarMarginRight="36dp"
+                    app:floatingSearch_dimBackground="@android:color/transparent"
+                    app:floatingSearch_searchHint="Pilih sekolah anda"
+                    app:floatingSearch_suggestionsListAnimDuration="250"
+                    app:floatingSearch_showSearchKey="true"
+                    app:floatingSearch_dismissFocusOnItemSelection="true"
+                    app:floatingSearch_leftActionMode="showSearch"
+                    app:floatingSearch_showVoiceInput="true"
+                    app:floatingSearch_close_search_on_keyboard_dismiss="true"/>
 
-                    <EditText
-                        android:id="@+id/et_search"
-                        android:paddingBottom="6dp"
-                        android:paddingTop="10dp"
-                        android:textSize="16sp"
-                        android:background="@drawable/edt_bg_selector_white"
-                        android:textColor="@color/ic_logo_background"
-                        android:imeOptions="actionSearch"
-                        android:singleLine="true"
-                        android:hint="@string/et_nama_kode_sekolah"
-                        android:theme="@style/TextLabel"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </android.support.design.widget.TextInputLayout>
                 <LinearLayout
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="55dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <TextView
                         android:visibility="gone"
                         android:id="@+id/tv_nama_kode"
@@ -92,14 +73,13 @@
                         android:layout_marginLeft="40dp"
                         android:layout_marginRight="40dp"
                         android:textSize="12sp"
-                        android:textColor="@color/ic_logo_background"
+                        android:textColor="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
@@ -227,7 +207,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_below="@id/til_search"
+                    android:layout_below="@id/floating_search_view"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:visibility="gone"

@@ -5,9 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -18,7 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,6 +108,7 @@ public class JadwalPelajaran extends AppCompatActivity {
     SharedPreferences sharedLesson;
     public static final String my_lesson_preferences = "my_lesson_preferences";
     String cources_id;
+    ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +144,7 @@ public class JadwalPelajaran extends AppCompatActivity {
         hint_kamis      = findViewById(R.id.hint_kamis);
         hint_jumat      = findViewById(R.id.hint_jumat);
         hint_sabtu      = findViewById(R.id.hint_sabtu);
+        scrollView      = findViewById(R.id.scroll_view);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
         sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
@@ -195,6 +202,7 @@ public class JadwalPelajaran extends AppCompatActivity {
             case "Minggu":
                 break;
         }
+
         btn_senin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,6 +385,35 @@ public class JadwalPelajaran extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
+    }
+
+    private void scrollToView(final ScrollView scrollViewParent, final View view) {
+        // Get deepChild Offset
+        Point childOffset = new Point();
+        getDeepChildOffset(scrollViewParent, view.getParent(), view, childOffset);
+        // Scroll to child.
+        scrollViewParent.smoothScrollTo(0, childOffset.y);
+    }
+
+    /**
+     * Used to get deep child offset.
+     * <p/>
+     * 1. We need to scroll to child in scrollview, but the child may not the direct child to scrollview.
+     * 2. So to get correct child position to scroll, we need to iterate through all of its parent views till the main parent.
+     *
+     * @param mainParent        Main Top parent.
+     * @param parent            Parent.
+     * @param child             Child.
+     * @param accumulatedOffset Accumulated Offset.
+     */
+    private void getDeepChildOffset(final ViewGroup mainParent, final ViewParent parent, final View child, final Point accumulatedOffset) {
+        ViewGroup parentGroup = (ViewGroup) parent;
+        accumulatedOffset.x += child.getLeft();
+        accumulatedOffset.y += child.getTop();
+        if (parentGroup.equals(mainParent)) {
+            return;
+        }
+        getDeepChildOffset(mainParent, parentGroup.getParent(), parentGroup, accumulatedOffset);
     }
 
     private void Jadwal_pelajaran(){

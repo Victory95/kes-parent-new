@@ -3,6 +3,7 @@ package com.fingertech.kes.Activity;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -138,6 +139,8 @@ import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -258,6 +261,7 @@ public class MenuUtama extends AppCompatActivity
     DBHelper db;
     AlertDialog alert;
     SpinKitView spinKitView,spinKitViews;
+    List<JSONResponse.DataChildren> dataChildrenList ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -334,7 +338,6 @@ public class MenuUtama extends AppCompatActivity
         get_profile();
         checkInternetCon();
         Daftar_Berita();
-        setting_lokasi();
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -472,20 +475,19 @@ public class MenuUtama extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
-        setting_lokasi();
+
     }
 
     public void dapat_posisi(){
-        posisi= Integer.parseInt(db.getData());
+        if(db.getData()!=null) {
+            posisi = Integer.parseInt(db.getData());
+        }
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            double latitudes    = intent.getDoubleExtra("latitude",0.0);
-            double longitudes   = intent.getDoubleExtra("longitude",0.0);
-            kode_gps    = intent.getStringExtra("kode_gps");  //get the type of message from MyGcmListenerService 1 - lock or 0 -Unlock
+        kode_gps    = intent.getStringExtra("kode_gps");
             if (kode_gps!=null) {
                 if (kode_gps.equals("false")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MenuUtama.this);
@@ -680,8 +682,8 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, TestKalender.class);
-            startActivity(intent);
+//            Intent intent = new Intent(MenuUtama.this, TestKalender.class);
+//            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -801,8 +803,6 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_children(){
-//        progressBar();
-//        showDialog();
         show_dialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
@@ -829,6 +829,12 @@ public class MenuUtama extends AppCompatActivity
                         if (response.body().getData() != null) {
                             profileModels = new ArrayList<ProfileModel>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
+                                Collections.sort(response.body().getData(), new Comparator<JSONResponse.DataChildren>() {
+                                    @Override
+                                    public int compare(JSONResponse.DataChildren o1, JSONResponse.DataChildren o2) {
+                                        return (o2.getBirth_date().compareTo(o1.getBirth_date()));
+                                    }
+                                });
                                 student_id      = response.body().getData().get(i).getStudent_id();
                                 school_code     = response.body().getData().get(i).getSchool_code();
                                 nama_anak       = response.body().getData().get(i).getChildren_name();
@@ -960,7 +966,6 @@ public class MenuUtama extends AppCompatActivity
             public void onFailure(retrofit2.Call<JSONResponse.GetProfile> call, Throwable t) {
                 Log.d("onFailure", t.toString());
                 spinKitViews.setVisibility(View.GONE);
-//                hideDialog();
             }
         });
 

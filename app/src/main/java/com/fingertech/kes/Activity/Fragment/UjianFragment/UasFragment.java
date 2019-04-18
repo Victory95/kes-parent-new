@@ -174,7 +174,8 @@ public class UasFragment extends Fragment {
                                         mapel = response.body().getData().get(i).getCources_name();
                                         deskripsi = response.body().getData().get(i).getExam_desc();
                                         itemUjian = new ItemUjian();
-                                        itemUjian.setJam(waktu);
+                                        itemUjian.setJam(convertjam(waktu));
+                                        itemUjian.setTanggalujian(tanggal);
                                         itemUjian.setTanggal(convertTanggal(tanggal));
                                         itemUjian.setMapel(mapel);
                                         itemUjian.setDeskripsi(deskripsi);
@@ -268,11 +269,24 @@ public class UasFragment extends Fragment {
             return "";
         }
     }
+    String converttanggal(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
-    String converttanggal(String tanggal) {
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", new Locale("in", "ID"));
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("in","ID"));
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tahun));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("in", "ID"));
+
+    String convertBulan(String tanggal) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM", new Locale("in","ID"));
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
             return e;
@@ -281,13 +295,12 @@ public class UasFragment extends Fragment {
             return "";
         }
     }
+    String convertjam(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("hh:mm a",Locale.getDefault());
 
-    String convertBulan(String tanggal) {
-        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("HH:mm",new Locale("in","ID"));
         try {
-            String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            String e = newDateFormat.format(calendarDateFormat.parse(tahun));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();

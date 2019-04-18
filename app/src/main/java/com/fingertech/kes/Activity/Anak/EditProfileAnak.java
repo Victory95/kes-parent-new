@@ -1291,7 +1291,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     public void update_member(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code.toLowerCase(), et_nama_lengkap.getText().toString(), jenis_kelamin, et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(), kewarganegaraan,sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code.toLowerCase(), et_nama_lengkap.getText().toString(), jenis_kelamin, et_tempat_lahir.getText().toString(), converttanggal(et_tanggal.getText().toString()), kewarganegaraan,sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -1369,6 +1369,18 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy",Locale.getDefault());
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String converttanggal(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        try {
+            String e = calendarDateFormat.format(newDateFormat .parse(tahun));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();

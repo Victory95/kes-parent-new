@@ -48,8 +48,11 @@ public class AgendaAdapter extends RecyclerView.Adapter<AgendaAdapter.MyHolder> 
         holder.tvjudul.setText(viewItem.getType());
         holder.tv_title.setText(viewItem.getDesc());
         holder.tvdeskripsi.setText(viewItem.getContent());
-        holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
-
+        if (viewItem.getColour().equals("")){
+            holder.pitaku.setColorFilter(Color.parseColor("#ff9800"));
+        }else {
+            holder.pitaku.setColorFilter(Color.parseColor(viewItem.getColour()));
+        }
 
     }
 

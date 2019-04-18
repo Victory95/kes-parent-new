@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#3cb0d6</color>
     <color name="colorAccent">#18ffff</color>
     <color name="birumuda">#4FC3FA</color>
+    <color name="background_color">#D2F0FC</color>
     <!--<color name="colorAccent">#000000</color>-->
     <color name="kes_typ">#8fcece</color>
     <color name="kes_bulan"> #C41515</color>

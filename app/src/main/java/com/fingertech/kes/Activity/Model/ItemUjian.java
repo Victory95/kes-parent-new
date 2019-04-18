@@ -6,7 +6,19 @@ public class ItemUjian {
     private String tanggal;
     private String mapel;
     private String bulan;
-    private String guru,nilai,deskripsi;
+    private String guru;
+    private String nilai;
+    private String deskripsi;
+
+    public String getTanggalujian() {
+        return tanggalujian;
+    }
+
+    public void setTanggalujian(String tanggalujian) {
+        this.tanggalujian = tanggalujian;
+    }
+
+    private String tanggalujian;
 
     public String getGuru() {
         return guru;

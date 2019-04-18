@@ -189,12 +189,13 @@ public class UtsFragment extends Fragment {
                             for (int i = 0; i < response.body().getData().size(); i++) {
                                 if (contains(response.body().getData())) {
                                     if (response.body().getData().get(i).getType_id().equals("1")) {
-                                        waktu = response.body().getData().get(i).getExam_time_ok();
-                                        tanggal = response.body().getData().get(i).getExam_date();
-                                        mapel = response.body().getData().get(i).getCources_name();
-                                        deskripsi = response.body().getData().get(i).getExam_desc();
+                                        waktu       = response.body().getData().get(i).getExam_time_ok();
+                                        tanggal     = response.body().getData().get(i).getExam_date();
+                                        mapel       = response.body().getData().get(i).getCources_name();
+                                        deskripsi   = response.body().getData().get(i).getExam_desc();
                                         itemUjian = new ItemUjian();
-                                        itemUjian.setJam(waktu);
+                                        itemUjian.setJam(convertjam(waktu));
+                                        itemUjian.setTanggalujian(tanggal);
                                         itemUjian.setTanggal(convertTanggal(tanggal));
                                         itemUjian.setMapel(mapel);
                                         itemUjian.setDeskripsi(deskripsi);
@@ -227,7 +228,6 @@ public class UtsFragment extends Fragment {
             }
         });
     }
-
     boolean contains(List<JSONResponse.DataUjian> list) {
         for (JSONResponse.DataUjian item : list) {
             if (item.getType_id().equals("1")) {
@@ -236,7 +236,6 @@ public class UtsFragment extends Fragment {
         }
         return false;
     }
-
 
     private void dapat_semester() {
 
@@ -291,7 +290,7 @@ public class UtsFragment extends Fragment {
     String converttanggal(String tahun){
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
 
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",new Locale("in","ID"));
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(tahun));
             return e;
@@ -305,9 +304,21 @@ public class UtsFragment extends Fragment {
     String convertBulan(String tanggal) {
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MMMM", new Locale("in","ID"));
         try {
             String e = newDateFormat.format(calendarDateFormat.parse(tanggal));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertjam(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("hh:mm a",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("HH:mm",new Locale("in","ID"));
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(tahun));
             return e;
         } catch (java.text.ParseException e) {
             e.printStackTrace();

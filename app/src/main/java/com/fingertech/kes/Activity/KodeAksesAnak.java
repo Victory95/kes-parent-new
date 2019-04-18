@@ -47,7 +47,7 @@ import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
     private EditText editTextone,editTexttwo,editTextthree,editTextfour,editTextfive,editTextsix;
     private Button btn_submit;
-    private ImageView iv_copy_paste,iv_close,iv_foto_profile;
+    private ImageView iv_close,iv_foto_profile;
     private TextView tv_val_kode_aa,tv_kode_akses_anak_sekolah,tv_kode_akses_anak_nama,mintakode;
     private ProgressDialog dialog;
     String verification_code,parent_id,student_id,student_nik,school_id,parent_nik,childrenname,school_name,email,fullname,member_id,school_code;
@@ -86,7 +86,6 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
         editTextfive    = findViewById(R.id.editTextfive);
         editTextsix     = findViewById(R.id.editTextsix);
         btn_submit      = findViewById(R.id.btn_submit);
-        iv_copy_paste   = findViewById(R.id.iv_copy_paste);
         iv_close        = findViewById(R.id.iv_close);
         iv_foto_profile = findViewById(R.id.iv_foto_profile);
         tv_val_kode_aa  = findViewById(R.id.tv_val_kode_aa);
@@ -322,33 +321,6 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
             editTextfive.setTextColor(Color.WHITE);
             return true;
         });
-
-        iv_copy_paste.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            String pasteData = "";
-            if (!(clipboard.hasPrimaryClip())) {
-            } else if (!(clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN))) {
-            } else {
-                ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                pasteData = item.getText().toString();
-            }
-            String val=pasteData;
-            String[] arr=String.valueOf(val).split("(?<=.)");
-            int[] intArr=new int[6];
-            intArr[0]=Integer.parseInt(arr[0]);
-            intArr[1]=Integer.parseInt(arr[1]);
-            intArr[2]=Integer.parseInt(arr[2]);
-            intArr[3]=Integer.parseInt(arr[3]);
-            intArr[4]=Integer.parseInt(arr[4]);
-            intArr[5]=Integer.parseInt(arr[5]);
-            editTextone.setText(String.valueOf(intArr[0]));
-            editTexttwo.setText(String.valueOf(intArr[1]));
-            editTextthree.setText(String.valueOf(intArr[2]));
-            editTextfour.setText(String.valueOf(intArr[3]));
-            editTextfive.setText(String.valueOf(intArr[4]));
-            editTextsix.setText(String.valueOf(intArr[5]));
-        });
-
         mintakode.setOnClickListener(v -> {
             request_code_acsess_post();
             editTextone.getText().clear();
@@ -387,7 +359,6 @@ public class KodeAksesAnak extends AppCompatActivity implements TextWatcher {
                 editTextone.setSelection(editTextone.getText().length());
                 editTexttwo.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangle_line2));
                 editTexttwo.setTextColor(getResources().getColor(R.color.colorPrimary));
-
                 editTextone.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.rectangel_white));
                 editTextone.setTextColor(Color.WHITE);
                 editTexttwo.requestFocus();

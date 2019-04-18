@@ -584,7 +584,6 @@ public class DetailSekolah extends AppCompatActivity {
                     } else {
                         Picture = response.body().getData().get(0).getPic_url();
                         if (schoolDetail == 0) {
-
                             if (Picture.equals("")) {
                                 setLocked(foto_sekolah);
                                 Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);

@@ -5590,6 +5590,17 @@ public class JSONResponse{
         @SerializedName("school_name")
         public String school_name;
 
+        @SerializedName("birth_date")
+        public String birth_date;
+
+        public String getBirth_date() {
+            return birth_date;
+        }
+
+        public void setBirth_date(String birth_date) {
+            this.birth_date = birth_date;
+        }
+
         public String getSchool_name() {
             return school_name;
         }
@@ -8470,6 +8481,125 @@ public class JSONResponse{
 
         public void setReview_date_ok(String review_date_ok) {
             this.review_date_ok = review_date_ok;
+        }
+    }
+
+    ///Response Agenda
+    public class ListAgenda{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataAgenda> data;
+
+        @SerializedName("last_cources")
+        public List<JadwalData> class_schedule;
+
+        public List<JadwalData> getClass_schedule() {
+            return class_schedule;
+        }
+
+        public void setClass_schedule(List<JadwalData> class_schedule) {
+            this.class_schedule = class_schedule;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataAgenda> getData() {
+            return data;
+        }
+
+        public void setData(List<DataAgenda> data) {
+            this.data = data;
+        }
+    }
+    public class DataAgenda{
+        @SerializedName("agenda_desc")
+        public String agenda_desc;
+        @SerializedName("desc")
+        public String desc;
+        @SerializedName("type")
+        public String type;
+        @SerializedName("date")
+        public String date;
+        @SerializedName("day")
+        public String day;
+        @SerializedName("agenda_color")
+        public String agenda_color;
+        @SerializedName("agenda_time")
+        public String agenda_time;
+
+        public String getAgenda_desc() {
+            return agenda_desc;
+        }
+
+        public void setAgenda_desc(String agenda_desc) {
+            this.agenda_desc = agenda_desc;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getDay() {
+            return day;
+        }
+
+        public void setDay(String day) {
+            this.day = day;
+        }
+
+        public String getAgenda_color() {
+            return agenda_color;
+        }
+
+        public void setAgenda_color(String agenda_color) {
+            this.agenda_color = agenda_color;
+        }
+
+        public String getAgenda_time() {
+            return agenda_time;
+        }
+
+        public void setAgenda_time(String agenda_time) {
+            this.agenda_time = agenda_time;
         }
     }
 }
