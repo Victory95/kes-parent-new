@@ -170,7 +170,10 @@ public class AgendaAnak extends AppCompatActivity {
                 arrow.setImageResource(R.drawable.ic_arrow_down);
             }
         });
-        datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+
+        Calendar calendars = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        datePicker.init(calendars.get(Calendar.YEAR), calendars.get(Calendar.MONTH), calendars.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 tahun           = String.valueOf(year);
