@@ -28,9 +28,9 @@ public class SearchMapAdapter extends RecyclerView.Adapter<SearchMapAdapter.MyHo
     private List<JSONResponse.SData> mArrayList;
     private Context context;
     private OnItemClickListener onItemClickListener;
-    String searchString = "";
-    BookmarkTabel bookmarkTabel = new BookmarkTabel();
-    Data data = new Data();
+    private String searchString = "";
+    private BookmarkTabel bookmarkTabel = new BookmarkTabel();
+    private Data data = new Data();
     private Boolean clicked = false;
 
     public SearchMapAdapter(List<JSONResponse.SData> viewItemList, Context context) {
@@ -46,7 +46,6 @@ public class SearchMapAdapter extends RecyclerView.Adapter<SearchMapAdapter.MyHo
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
-
         MyHolder myHolder = new MyHolder(itemView,onItemClickListener);
         return myHolder;
     }

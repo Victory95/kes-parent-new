@@ -183,15 +183,6 @@
                 android:maxLength="1"/>
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/iv_copy_paste"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="-40dp"
-            android:layout_toEndOf="@id/lay_txt"
-            android:padding="10dp"
-            android:src="@drawable/ic_copy_paste" />
     </RelativeLayout>
 
     <TextView

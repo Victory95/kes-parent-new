@@ -57,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -140,6 +141,8 @@ public class DataFragment extends Fragment  {
         super.onCreate(savedInstanceState);
     }
 
+    DatePickerDialog mDatePicker;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -217,12 +220,13 @@ public class DataFragment extends Fragment  {
         rb_wna.setEnabled(false);
         rb_wni.setEnabled(false);
 
-        final DatePickerDialog mDatePicker;
+
         mDatePicker = new DatePickerDialog(getContext(), R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 et_tanggal_lahir.setText(convertDate(selectedyear, selectedmonth, selectedday));
             }
         }, mYear, mMonth, mDay);
+        mDatePicker.getDatePicker().setMaxDate(new Date().getTime());
 
 
         et_tanggal_lahir.setOnClickListener(new View.OnClickListener() {
@@ -438,12 +442,12 @@ public class DataFragment extends Fragment  {
                     String DPG_ERR_0003 = getResources().getString(R.string.DPG_ERR_0003);
 
                     if (status == 1 && code.equals("DPG_SCS_0001")) {
-                        namaparent = response.body().data.getParent_name();
-                        Email = response.body().data.getParent_email();
-                        nik_parent = response.body().data.getParent_nik();
-                        hubungan = response.body().data.getParent_type();
-                        tempatlahir = response.body().data.getParent_birth_place();
-                        tanggallahir = response.body().data.getParent_birth_date();
+                        namaparent      = response.body().data.getParent_name();
+                        Email           = response.body().data.getParent_email();
+                        nik_parent      = response.body().data.getParent_nik();
+                        hubungan        = response.body().data.getParent_type();
+                        tempatlahir     = response.body().data.getParent_birth_place();
+                        tanggallahir    = response.body().data.getParent_birth_date();
                         kewarganegaraan = response.body().data.getType_warga();
 
                         et_namadepan.setText(namaparent);
@@ -451,6 +455,7 @@ public class DataFragment extends Fragment  {
                         et_Email.setText(Email);
                         et_tempat_lahir.setText(tempatlahir);
                         et_tanggal_lahir.setText(tanggallahir);
+                        mDatePicker.updateDate(Integer.parseInt(convertTahun(tanggallahir)),Integer.parseInt(convertBulan(tanggallahir))-1,Integer.parseInt(convertDate(tanggallahir)));
 
                         final List<String> penghasil = new ArrayList<>(Arrays.asList(listSpinner));
                         // Initializing an ArrayAdapter
@@ -553,5 +558,38 @@ public class DataFragment extends Fragment  {
         }
     }
 
+    String convertDate(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertBulan(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MM",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTahun(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
 }

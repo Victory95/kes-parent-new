@@ -3,10 +3,13 @@ package com.fingertech.kes.Activity.Anak;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -17,7 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -98,6 +104,11 @@ public class JadwalPelajaran extends AppCompatActivity {
     private boolean isExpandedJumat     = false;
     private boolean isExpandedSabtu     = false;
     private boolean isExpandedSenin     = false;
+
+    SharedPreferences sharedLesson;
+    public static final String my_lesson_preferences = "my_lesson_preferences";
+    String cources_id;
+    ScrollView scrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +144,7 @@ public class JadwalPelajaran extends AppCompatActivity {
         hint_kamis      = findViewById(R.id.hint_kamis);
         hint_jumat      = findViewById(R.id.hint_jumat);
         hint_sabtu      = findViewById(R.id.hint_sabtu);
+        scrollView      = findViewById(R.id.scroll_view);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
 
         sharedPreferences   = getSharedPreferences(MenuUtama.my_viewpager_preferences, Context.MODE_PRIVATE);
@@ -140,6 +152,7 @@ public class JadwalPelajaran extends AppCompatActivity {
         school_code         = sharedPreferences.getString("school_code",null);
         memberid            = sharedPreferences.getString("student_id",null);
         classroom_id        = sharedPreferences.getString("classroom_id",null);
+        sharedLesson        = getSharedPreferences(my_lesson_preferences,Context.MODE_PRIVATE);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -189,6 +202,7 @@ public class JadwalPelajaran extends AppCompatActivity {
             case "Minggu":
                 break;
         }
+
         btn_senin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -373,6 +387,35 @@ public class JadwalPelajaran extends AppCompatActivity {
         return true;
     }
 
+    private void scrollToView(final ScrollView scrollViewParent, final View view) {
+        // Get deepChild Offset
+        Point childOffset = new Point();
+        getDeepChildOffset(scrollViewParent, view.getParent(), view, childOffset);
+        // Scroll to child.
+        scrollViewParent.smoothScrollTo(0, childOffset.y);
+    }
+
+    /**
+     * Used to get deep child offset.
+     * <p/>
+     * 1. We need to scroll to child in scrollview, but the child may not the direct child to scrollview.
+     * 2. So to get correct child position to scroll, we need to iterate through all of its parent views till the main parent.
+     *
+     * @param mainParent        Main Top parent.
+     * @param parent            Parent.
+     * @param child             Child.
+     * @param accumulatedOffset Accumulated Offset.
+     */
+    private void getDeepChildOffset(final ViewGroup mainParent, final ViewParent parent, final View child, final Point accumulatedOffset) {
+        ViewGroup parentGroup = (ViewGroup) parent;
+        accumulatedOffset.x += child.getLeft();
+        accumulatedOffset.y += child.getTop();
+        if (parentGroup.equals(mainParent)) {
+            return;
+        }
+        getDeepChildOffset(mainParent, parentGroup.getParent(), parentGroup, accumulatedOffset);
+    }
+
     private void Jadwal_pelajaran(){
         progressBar();
         showDialog();
@@ -411,13 +454,14 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
-
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
                                         jadwalSenin = new JadwalSenin();
                                         jadwalSenin.setDay_name(days_name);
                                         jadwalSenin.setFullname(guru);
                                         jadwalSenin.setCources_name(mapel);
                                         jadwalSenin.setDuration(String.valueOf(lamber));
                                         jadwalSenin.setJam_mulai(jam_mulai);
+                                        jadwalSenin.setCources_id(cources_id);
                                         jadwalSenin.setCources_color(warna_mapel);
                                         jadwalSenin.setJam_selesai(jam_selesai);
                                         itemlist.add(jadwalSenin);
@@ -426,7 +470,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_senin.setLayoutManager(layoutManager);
                                     rv_senin.setAdapter(seninAdapter);
-
+                                    seninAdapter.setOnItemClickListener(new SeninAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemlist.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
                                     break;
                                 }
                                 case "Selasa": {
@@ -438,12 +501,15 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
+
                                         jadwalSelasa = new JadwalSelasa();
                                         jadwalSelasa.setFullname(guru);
                                         jadwalSelasa.setDay_name(days_name);
                                         jadwalSelasa.setCources_name(mapel);
                                         jadwalSelasa.setDuration(String.valueOf(lamber));
                                         jadwalSelasa.setJam_mulai(jam_mulai);
+                                        jadwalSelasa.setCources_id(cources_id);
                                         jadwalSelasa.setCources_color(warna_mapel);
                                         jadwalSelasa.setJam_selesai(jam_selesai);
                                         itemselasa.add(jadwalSelasa);
@@ -452,6 +518,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_selasa.setLayoutManager(layoutManager);
                                     rv_selasa.setAdapter(selasaAdapter);
+                                    selasaAdapter.setOnItemClickListener(new SelasaAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemselasa.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
                                     break;
                                 }
                                 case "Rabu": {
@@ -463,11 +549,14 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
+
                                         jadwalRabu = new JadwalRabu();
                                         jadwalRabu.setFullname(guru);
                                         jadwalRabu.setDay_name(days_name);
                                         jadwalRabu.setCources_name(mapel);
                                         jadwalRabu.setCources_color(warna_mapel);
+                                        jadwalRabu.setCources_id(cources_id);
                                         jadwalRabu.setDuration(String.valueOf(lamber));
                                         jadwalRabu.setJam_mulai(jam_mulai);
                                         jadwalRabu.setJam_selesai(jam_selesai);
@@ -477,6 +566,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_rabu.setLayoutManager(layoutManager);
                                     rv_rabu.setAdapter(rabuAdapter);
+                                    rabuAdapter.setOnItemClickListener(new RabuAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemRabu.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
                                     break;
                                 }
                                 case "Kamis": {
@@ -488,6 +597,8 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
+
                                         jadwalKamis = new JadwalKamis();
                                         jadwalKamis.setFullname(guru);
                                         jadwalKamis.setDay_name(days_name);
@@ -495,6 +606,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         jadwalKamis.setCources_color(warna_mapel);
                                         jadwalKamis.setDuration(String.valueOf(lamber));
                                         jadwalKamis.setJam_mulai(jam_mulai);
+                                        jadwalKamis.setCources_id(cources_id);
                                         jadwalKamis.setJam_selesai(jam_selesai);
                                         itemKamis.add(jadwalKamis);
                                     }
@@ -502,6 +614,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_kamis.setLayoutManager(layoutManager);
                                     rv_kamis.setAdapter(kamisAdapter);
+                                    kamisAdapter.setOnItemClickListener(new KamisAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemKamis.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
 
                                     break;
                                 }
@@ -514,6 +646,8 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
+
                                         jadwalJumat = new JadwalJumat();
                                         jadwalJumat.setFullname(guru);
                                         jadwalJumat.setDay_name(days_name);
@@ -521,6 +655,7 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         jadwalJumat.setCources_color(warna_mapel);
                                         jadwalJumat.setDuration(String.valueOf(lamber));
                                         jadwalJumat.setJam_mulai(jam_mulai);
+                                        jadwalJumat.setCources_id(cources_id);
                                         jadwalJumat.setJam_selesai(jam_selesai);
                                         itemJumat.add(jadwalJumat);
                                     }
@@ -528,6 +663,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_jumat.setLayoutManager(layoutManager);
                                     rv_jumat.setAdapter(jumatAdapter);
+                                    jumatAdapter.setOnItemClickListener(new JumatAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemJumat.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
 
                                     break;
                                 }
@@ -540,11 +695,14 @@ public class JadwalPelajaran extends AppCompatActivity {
                                         lamber      = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getLessonDuration();
                                         guru        = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getTeacherName();
                                         warna_mapel = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCources_colour();
+                                        cources_id  = response.body().getData().getClass_schedule().get(i).getScheduleClass().get(o).getCourcesId();
+
                                         jadwalSabtu = new JadwalSabtu();
                                         jadwalSabtu.setFullname(guru);
                                         jadwalSabtu.setDay_name(days_name);
                                         jadwalSabtu.setCources_color(warna_mapel);
                                         jadwalSabtu.setCources_name(mapel);
+                                        jadwalSabtu.setCources_id(cources_id);
                                         jadwalSabtu.setDuration(String.valueOf(lamber));
                                         jadwalSabtu.setJam_mulai(jam_mulai);
                                         jadwalSabtu.setJam_selesai(jam_selesai);
@@ -554,6 +712,26 @@ public class JadwalPelajaran extends AppCompatActivity {
                                     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(JadwalPelajaran.this);
                                     rv_sabtu.setLayoutManager(layoutManager);
                                     rv_sabtu.setAdapter(sabtuAdapter);
+                                    sabtuAdapter.setOnItemClickListener(new SabtuAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            cources_id  = itemSabtu.get(position).getCources_id();
+                                            SharedPreferences.Editor editor = sharedLesson.edit();
+                                            editor.putString("school_code",school_code);
+                                            editor.putString("authorization",authorization);
+                                            editor.putString("classroom_id",classroom_id);
+                                            editor.putString("student_id",memberid);
+                                            editor.putString("cources_id",cources_id);
+                                            editor.apply();
+                                            Intent intent = new Intent(JadwalPelajaran.this, LessonReview.class);
+                                            intent.putExtra("authorization", authorization);
+                                            intent.putExtra("school_code", school_code.toLowerCase());
+                                            intent.putExtra("student_id", memberid);
+                                            intent.putExtra("classroom_id", classroom_id);
+                                            intent.putExtra("cources_id",cources_id);
+                                            startActivity(intent);
+                                        }
+                                    });
                                     break;
                                 }
                             }

@@ -71,22 +71,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.Spinner;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -137,25 +127,24 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     Spinner sp_tingkatan,sp_agama,sp_kps;
     RadioButton rb_laki,rb_wanita,rb_wni,rb_wna;
     EditText et_nama_lengkap,et_nis,et_nisn,et_nik,et_tempat_lahir,et_rombel,et_kebutuhan_khusus;
-    String email,parent_id,student_nik,school_id,childrenname,school_name,fullname,student_id,member_id,parent_nik,authorization,school_code;
+    String email,childrenname,school_name,student_id,parent_nik,authorization,school_code;
     String tingkatan_kelas,nama_lengkap,nis,nisn,nik,rombel,jenis_kelamin,tanggal_lahir,tempat_lahir,religion,kebutuhan_khusus,kewarganegaraan;
     String rt,rw,kelurahan,kecamatan,kodepos,jenis_tinggal,transportasi,alamat;
     String teleponrumah,handphone,skun,penerimaan_kps,nomor_kps;
-    EditText et_teleponrumah,et_handphone,et_email,et_skun,et_penerimaankps,et_nomorkps;
-    TextInputLayout til_email,til_handphone,til_teleponrumah,til_skun,til_nokps,til_penerimaankps;
-    private EditText et_tanggal;
-    private Spinner et_negara_asal;
-    private Marker CurrLocationMarker;
-    private TextView namatempat,alamattempattinggal;
-    private LocationRequest mlocationRequest;
-    private Location mlastLocation;
-    private GoogleMap Mmap;
-    private ImageView arrom;
+    EditText et_teleponrumah,et_handphone,et_email,et_skun,et_nomorkps;
+    TextInputLayout til_nokps;
+    EditText et_tanggal;
+    Spinner et_negara_asal;
+    Marker CurrLocationMarker;
+    TextView namatempat,alamattempattinggal;
+    LocationRequest mlocationRequest;
+    Location mlastLocation;
+    GoogleMap Mmap;
+    ImageView arrom;
     GoogleApiClient mGoogleApiClient;
     double CurrentLatitude;
     double CurrentLongitude;
-    String Nama_lengkap,Nis,Nisn,Nik,Rombel,Tingkatan,Agama,Negara,Kebutuhankhusus,Tempat_lahir,Tanggal_lahir,Jenis_kelamin;
-    String nokps,dusun;
+    String dusun;
     String studentdetailId,classroom_id,picture;
     EditText et_rt,et_rw,et_kelurahan,et_kecamatan,et_kodepos,et_jenis_tinggal,et_trasnportasi,et_alamat,et_dusun;
     Button cv_data,cv_kontak,cv_alamat;
@@ -164,6 +153,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     CardView btn_search,btn_simpan;
     TextView hint_kps;
     NestedScrollView scrollView;
+    DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,13 +238,15 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.ic_logo_background), PorterDuff.Mode.SRC_ATOP);
 
-        final DatePickerDialog datePickerDialog = new DatePickerDialog(EditProfileAnak.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+
+        datePickerDialog = new DatePickerDialog(EditProfileAnak.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {//i adalah tahun, i1 adalah bulan dan i2 adalah hari
                 //Respon dari dialog, di convert ke format tanggal yang diinginkan lalu setelah itu ditampilkan
                 et_tanggal.setText(convertDate(i, i1, i2));
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
 
         et_tanggal.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -789,38 +781,38 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                     String DTS_ERR_0001 = getResources().getString(R.string.DTS_ERR_0001);
 
                     if (status == 1 && code.equals("DTS_SCS_0001")) {
-                        tingkatan_kelas = response.body().data.getEdulevel_id();
-                        nama_lengkap = response.body().data.getFullname();
-                        nis = response.body().data.getMember_code();
-                        nisn = response.body().data.getNisn();
-                        nik = response.body().data.getNik();
-                        rombel = response.body().data.getRombel();
-                        jenis_kelamin = response.body().data.getGender();
-                        tempat_lahir = response.body().data.getBirth_place();
-                        tanggal_lahir = response.body().data.getBirth_date();
-                        religion = response.body().data.getReligion();
-                        kebutuhan_khusus = response.body().data.getSpecial_needs();
-                        kewarganegaraan = response.body().data.getCitizen_status();
-                        teleponrumah = response.body().data.getHome_phone();
-                        handphone = response.body().data.getMobile_phone();
-                        email = response.body().data.getEmail();
-                        skun = response.body().data.getSkhun();
-                        penerimaan_kps = response.body().data.getPenerima_kps();
-                        nomor_kps = response.body().data.getNo_kps();
-                        studentdetailId = response.body().getData().getStudentdetailid();
-                        dusun = response.body().getData().getDusun();
-                        rt = response.body().data.getRt();
-                        rw = response.body().data.getRw();
-                        kelurahan = response.body().data.getKelurahan();
-                        kecamatan = response.body().data.getKecamatan();
-                        kodepos = response.body().data.getPost_code();
-                        jenis_tinggal = response.body().data.getJenis_tinggal();
-                        transportasi = response.body().data.getTransportasi();
-                        alamat = response.body().data.getAddress();
-                        CurrentLatitude = Double.parseDouble(response.body().data.getLatitude());
-                        CurrentLongitude = Double.parseDouble(response.body().data.getLongitude());
-                        classroom_id = response.body().getData().getClassroom_id();
-                        picture = response.body().getData().getPicture();
+                        tingkatan_kelas     = response.body().data.getEdulevel_id();
+                        nama_lengkap        = response.body().data.getFullname();
+                        nis                 = response.body().data.getMember_code();
+                        nisn                = response.body().data.getNisn();
+                        nik                 = response.body().data.getNik();
+                        rombel              = response.body().data.getRombel();
+                        jenis_kelamin       = response.body().data.getGender();
+                        tempat_lahir        = response.body().data.getBirth_place();
+                        tanggal_lahir       = response.body().data.getBirth_date();
+                        religion            = response.body().data.getReligion();
+                        kebutuhan_khusus    = response.body().data.getSpecial_needs();
+                        kewarganegaraan     = response.body().data.getCitizen_status();
+                        teleponrumah        = response.body().data.getHome_phone();
+                        handphone           = response.body().data.getMobile_phone();
+                        email               = response.body().data.getEmail();
+                        skun                = response.body().data.getSkhun();
+                        penerimaan_kps      = response.body().data.getPenerima_kps();
+                        nomor_kps           = response.body().data.getNo_kps();
+                        studentdetailId     = response.body().getData().getStudentdetailid();
+                        dusun               = response.body().getData().getDusun();
+                        rt                  = response.body().data.getRt();
+                        rw                  = response.body().data.getRw();
+                        kelurahan           = response.body().data.getKelurahan();
+                        kecamatan           = response.body().data.getKecamatan();
+                        kodepos             = response.body().data.getPost_code();
+                        jenis_tinggal       = response.body().data.getJenis_tinggal();
+                        transportasi        = response.body().data.getTransportasi();
+                        alamat              = response.body().data.getAddress();
+                        CurrentLatitude     = Double.parseDouble(response.body().data.getLatitude());
+                        CurrentLongitude    = Double.parseDouble(response.body().data.getLongitude());
+                        classroom_id        = response.body().getData().getClassroom_id();
+                        picture             = response.body().getData().getPicture();
 
                         et_rt.setText(rt);
                         et_rw.setText(rw);
@@ -831,6 +823,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         et_trasnportasi.setText(transportasi);
                         et_alamat.setText(alamat);
                         et_dusun.setText(dusun);
+                        datePickerDialog.updateDate(Integer.parseInt(convertTahun(tanggal_lahir)),Integer.parseInt(convertBulan(tanggal_lahir))-1,Integer.parseInt(convertDate(tanggal_lahir)));
 
                         et_teleponrumah.setText(teleponrumah);
                         et_handphone.setText(handphone);
@@ -1032,18 +1025,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
                         }
                         rb_laki.setEnabled(false);
                         rb_wanita.setEnabled(false);
-//                    rb_laki.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            jenis_kelamin = getResources().getString(R.string.rb_laki);
-//                        }
-//                    });
-//                    rb_wanita.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            jenis_kelamin = getResources().getString(R.string.rb_wanita);
-//                        }
-//                    });
+
                         if (kewarganegaraan.equals("WNI")) {
                             rb_wni.setChecked(true);
                             rb_wna.setChecked(false);
@@ -1309,7 +1291,7 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
     public void update_member(){
         progressBar();
         showDialog();
-        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code.toLowerCase(), et_nama_lengkap.getText().toString(), jenis_kelamin, et_tempat_lahir.getText().toString(), et_tanggal.getText().toString(), kewarganegaraan,sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
+        Call<JSONResponse> postCall = mApiInterface.update_student_member_put(authorization, student_id, school_code.toLowerCase(), et_nama_lengkap.getText().toString(), jenis_kelamin, et_tempat_lahir.getText().toString(), converttanggal(et_tanggal.getText().toString()), kewarganegaraan,sp_agama.getSelectedItem().toString(),et_alamat.getText().toString(),et_handphone.getText().toString());
         postCall.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -1357,6 +1339,52 @@ public class EditProfileAnak extends AppCompatActivity implements OnMapReadyCall
 
         if (close.equals("ok")){
             dialogKps.closeDialog();
+        }
+    }
+
+    String convertDate(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertBulan(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("MM",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String convertTahun(String date) {
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("yyyy",Locale.getDefault());
+        try {
+            String e = newDateFormat.format(calendarDateFormat.parse(date));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    String converttanggal(String tahun){
+        SimpleDateFormat calendarDateFormat = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault());
+
+        SimpleDateFormat newDateFormat = new SimpleDateFormat("dd MMMM yyyy",Locale.getDefault());
+        try {
+            String e = calendarDateFormat.format(newDateFormat .parse(tahun));
+            return e;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }

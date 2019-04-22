@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#3cb0d6</color>
     <color name="colorAccent">#18ffff</color>
     <color name="birumuda">#4FC3FA</color>
+    <color name="background_color">#D2F0FC</color>
     <!--<color name="colorAccent">#000000</color>-->
     <color name="kes_typ">#8fcece</color>
+    <color name="kes_bulan"> #C41515</color>
     <color name="ic_logo_background">#FFFFFF</color>
     <color name="default_textColor">#808080</color>
     <color name="default_textHint">#afafaf</color>
@@ -39,6 +41,7 @@
     <color name="eighty_percent_transparency_white">#CCffffff</color>
     <color name="ninty_percent_transparency_white">#E6ffffff</color>
     <color name="ninty_five_percent_transparency_white">#F2ffffff</color>
+    <color name="birurapor">#43C1E8</color>
 
     <color name="sixty_percent_transparency_green">#99158F26</color>
     <color name="fifty_percent_transparency_primary">#8003A9F4</color>

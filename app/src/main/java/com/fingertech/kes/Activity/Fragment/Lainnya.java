@@ -39,27 +39,21 @@ public class Lainnya extends Fragment {
             Sanitasi        = bundle.getString("sanitasi");
         }
     }
-
     String Kepsek,Operator,Akreditasi,Kurikulum,Totalguru,Siswapria,Siswawanita,Rombel,Ruangkelas,Laboratorium,Perpustakaan,Sanitasi;
-    TextView kepsek,operator,akreditasi,kurikulum,totalguru,siswapria,siswawanita,rombel,ruangkelas,laboratorium,perpustakaan,sanitasi;
+    TextView kepsek,operator,akreditasi,kurikulum,totalguru,siswapria,siswawanita;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_lainnya, container, false);
 
-        kepsek          = (TextView)view.findViewById(R.id.kepala_sekolah);
-        operator        = (TextView)view.findViewById(R.id.operator_sekolah);
-        akreditasi      = (TextView)view.findViewById(R.id.Akreditas);
-        kurikulum       = (TextView)view.findViewById(R.id.kurikulum_sekolah);
-        totalguru       = (TextView)view.findViewById(R.id.total_guru);
-        siswapria       = (TextView)view.findViewById(R.id.total_pria);
-        siswawanita     = (TextView)view.findViewById(R.id.total_wanita);
-        rombel          = (TextView)view.findViewById(R.id.rombongan_belajar);
-        ruangkelas      = (TextView)view.findViewById(R.id.ruang_kelas);
-        laboratorium    = (TextView)view.findViewById(R.id.laboratorium);
-        perpustakaan    = (TextView)view.findViewById(R.id.perpustakaan);
-        sanitasi        = (TextView)view.findViewById(R.id.sanitasi);
+        kepsek          = view.findViewById(R.id.kepala_sekolah);
+        operator        = view.findViewById(R.id.operator_sekolah);
+        akreditasi      = view.findViewById(R.id.Akreditas);
+        kurikulum       = view.findViewById(R.id.kurikulum_sekolah);
+        totalguru       = view.findViewById(R.id.total_guru);
+        siswapria       = view.findViewById(R.id.total_pria);
+        siswawanita     = view.findViewById(R.id.total_wanita);
 
         kepsek.setText(Kepsek);
         operator.setText(Operator);
@@ -68,11 +62,6 @@ public class Lainnya extends Fragment {
         totalguru.setText(Totalguru);
         siswapria.setText(Siswapria);
         siswawanita.setText(Siswawanita);
-        rombel.setText(Rombel);
-        ruangkelas.setText(Ruangkelas);
-        laboratorium.setText(Laboratorium);
-        perpustakaan.setText(Perpustakaan);
-        sanitasi.setText(Sanitasi);
         return view;
     }
 

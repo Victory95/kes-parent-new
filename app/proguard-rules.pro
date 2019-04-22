@@ -23,3 +23,14 @@
 -keep class io.intercom.android.** { *; }
 -keep class com.intercom.** { *; }
 -keep class com.shockwave.**
+-keep class com.google.android.gms.maps.** { *; }
+-keep interface com.google.android.gms.maps.* { *; }
+
+-dontwarn retrofit2.**
+-keep class retrofit2.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}

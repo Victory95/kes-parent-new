@@ -5,8 +5,20 @@ public class ItemUjian {
     private String jam;
     private String tanggal;
     private String mapel;
-    private String type_id;
-    private String guru,nilai,deskripsi;
+    private String bulan;
+    private String guru;
+    private String nilai;
+    private String deskripsi;
+
+    public String getTanggalujian() {
+        return tanggalujian;
+    }
+
+    public void setTanggalujian(String tanggalujian) {
+        this.tanggalujian = tanggalujian;
+    }
+
+    private String tanggalujian;
 
     public String getGuru() {
         return guru;
@@ -36,6 +48,14 @@ public class ItemUjian {
         return jam;
     }
 
+    public String getBulan() {
+        return bulan;
+    }
+
+    public void setBulan(String bulan) {
+        this.bulan = bulan;
+    }
+
     public void setJam(String jam) {
         this.jam = jam;
     }
@@ -56,12 +76,7 @@ public class ItemUjian {
         this.mapel = mapel;
     }
 
-    public String getType_id() {
-        return type_id;
-    }
 
-    public void setType_id(String type_id) {
-        this.type_id = type_id;
-    }
+
 
 }

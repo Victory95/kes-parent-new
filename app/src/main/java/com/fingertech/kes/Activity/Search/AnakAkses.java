@@ -40,6 +40,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.fingertech.kes.Activity.Adapter.SearchAdapter;
 import com.fingertech.kes.Activity.CameraScanning;
@@ -72,14 +73,15 @@ public class AnakAkses extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     LinearLayout linearLayout;
     Button Kodeakses;
-    EditText search,et_nik;
+    EditText et_nik;
     String authorization;
     ImageView iv_camera;
     Integer status_nik = 0;
     String email, member_id, fullname, member_type,nama_anak, student_id,parent_nik, student_nik, school_id,school_name,school_code,sekolah_kode;
 
+    FloatingSearchView searchView;
     TextView tvnamajoin,tvkodejoin,tvinfo,tvnamaanak;
-    TextInputLayout tl_input_noira,til_search;
+    TextInputLayout tl_input_noira;
     public static final String my_shared_preferences = "my_shared_preferences";
     public static final String session_status = "session_status";
 
@@ -104,7 +106,6 @@ public class AnakAkses extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.anak_akses);
-        search          = findViewById(R.id.et_search);
         recyclerView    = findViewById(R.id.recycler_search);
         mApiInterface   = ApiClient.getClient().create(Auth.class);
         linearLayout    = findViewById(R.id.infof);
@@ -113,10 +114,10 @@ public class AnakAkses extends AppCompatActivity {
         iv_camera       = findViewById(R.id.iv_camera);
         et_nik          = findViewById(R.id.et_nik_niora_siswa);
         tl_input_noira  = findViewById(R.id.til_nik_niora_siswa);
-        til_search      = findViewById(R.id.til_search);
         tvinfo          = findViewById(R.id.tv_info_nama_anak);
         tvnamaanak      = findViewById(R.id.tv_nama_anak);
         toolbar         = findViewById(R.id.toolbar_anak);
+        searchView      = findViewById(R.id.floating_search_view);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -135,25 +136,20 @@ public class AnakAkses extends AppCompatActivity {
         parent_nik    = sharedpreferences.getString(TAG_PARENT_NIK,"parent_nik");
 
         Kodeakses.setOnClickListener(v -> submitForm());
-        search.addTextChangedListener(new TextWatcher() {
-
+        searchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                search_school_post(String.valueOf(s));
+            public void onSearchTextChanged(String oldQuery, String newQuery) {
+                search_school_post(newQuery);
                 recyclerView.setVisibility(View.VISIBLE);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
-
+        searchView.setOnClearSearchActionListener(new FloatingSearchView.OnClearSearchActionListener() {
+            @Override
+            public void onClearSearchClicked() {
+                search_school_post("");
+                recyclerView.setVisibility(View.GONE);
+            }
+        });
         //////// Camera scan nik
         iv_camera.setOnClickListener(v -> {
             Intent i = new Intent(AnakAkses.this, CameraScanning.class);
@@ -200,18 +196,17 @@ public class AnakAkses extends AppCompatActivity {
             return;
         }
         check_student_nik_post();
-
     }
 
     private boolean validatenamasekolah() {
-        if (search.getText().toString().trim().isEmpty()) {
-            til_search.setError(getResources().getString(R.string.validate_nama_kode_sekolah));
-            requestFocus(search);
-            return false;
-        }else {
-            til_search.setErrorEnabled(false);
-//            tvnamajoin.setVisibility(View.GONE);
-        }
+//        if (search.getText().toString().trim().isEmpty()) {
+//            til_search.setError(getResources().getString(R.string.validate_nama_kode_sekolah));
+//            requestFocus(search);
+//            return false;
+//        }else {
+//            til_search.setErrorEnabled(false);
+////            tvnamajoin.setVisibility(View.GONE);
+//        }
         return true;
     }
 
@@ -255,11 +250,11 @@ public class AnakAkses extends AppCompatActivity {
                         school_id           = response.body().getData().get(position).getSchool_id();
                         sekolah_kode        = sekolah_kode.toLowerCase();
 
-                        search.setText(school_name);
+                        searchView.setSearchText(school_name);
                         recyclerView.setVisibility(View.GONE);
                         hideKeyboard(AnakAkses.this);
                         check_school_kes_post();
-                        search.clearFocus();
+                        searchView.clearFocus();
                     });
 
                 } else {
@@ -335,7 +330,7 @@ public class AnakAkses extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), CSK_ERR_0001, Toast.LENGTH_LONG).show();
                     }
                     if(status == 0 && code.equals("CSK_ERR_0002")){
-//                        Toast.makeText(getApplicationContext(), CSK_ERR_0002, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), CSK_ERR_0002, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -348,47 +343,28 @@ public class AnakAkses extends AppCompatActivity {
     }
 
     public void getval_Recommend(){
-        String language = Locale.getDefault().getLanguage();
-        if (language.equals("en")) {
-            SpannableString ss = new SpannableString("The school hasn't joined KES. Recommend the school to join KES");
-
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    startActivity(new Intent(AnakAkses.this, RecommendSchool.class));
-                }
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
-                }
-            };
-
-            ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 32, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tvkodejoin.setText(ss);
-            tvkodejoin.setMovementMethod(LinkMovementMethod.getInstance());
-            tvkodejoin.setHighlightColor(Color.TRANSPARENT);
-        }
-        else if (language.equals("in")) {
-            SpannableString ss = new SpannableString("Sekolah belum bergabung di KES. Rekomendasikan sekolah untuk bergabung dengan KES");
-            ClickableSpan clickableSpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    startActivity(new Intent(AnakAkses.this, RecommendSchool.class));
-                }
-                @Override
-                public void updateDrawState(TextPaint ds) {
-                    super.updateDrawState(ds);
-                    ds.setUnderlineText(true);
-                }
-            };
-            ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.colorPrimary)), 32, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tvkodejoin.setText(ss);
-            tvkodejoin.setMovementMethod(LinkMovementMethod.getInstance());
-            tvkodejoin.setHighlightColor(Color.TRANSPARENT);
-        }
+        SpannableString ss = new SpannableString("Sekolah belum bergabung di KES. Rekomendasikan sekolah untuk bergabung dengan KES");
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent(AnakAkses.this,RecommendSchool.class);
+                intent.putExtra("school_code",sekolah_kode);
+                intent.putExtra("school_name",school_name);
+                intent.putExtra("school_id",school_id);
+                intent.putExtra("member_id",member_id);
+                startActivity(intent);
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(true);
+            }
+        };
+        ss.setSpan(clickableSpan, 32, 46, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.red_500)), 32, 46, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tvkodejoin.setText(ss);
+        tvkodejoin.setMovementMethod(LinkMovementMethod.getInstance());
+        tvkodejoin.setHighlightColor(Color.TRANSPARENT);
     }
 
     public void getval_InfoAksesAnak(){
@@ -531,7 +507,7 @@ public class AnakAkses extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), RCA_SCS_0001, Toast.LENGTH_LONG).show();
                     status_nik=0;
                     recyclerView.setVisibility(View.GONE);
-                    search.setText("");
+                    searchView.setSearchText("");
                     tvinfo.setText("_____");
                     et_nik.setText("");
                     SharedPreferences.Editor editor = sharedpreferences.edit();

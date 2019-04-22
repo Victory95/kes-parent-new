@@ -9,29 +9,23 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +37,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.HttpException;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -53,26 +46,16 @@ import com.fingertech.kes.Activity.Fragment.DataPelengkap;
 import com.fingertech.kes.Activity.Fragment.DataPeriodik;
 import com.fingertech.kes.Activity.Fragment.IdentitasFragment;
 import com.fingertech.kes.Activity.Fragment.Lainnya;
-import com.fingertech.kes.Activity.Maps.SearchingMAP;
-import com.fingertech.kes.Activity.Model.ClusterItemSekolah;
 import com.fingertech.kes.Activity.Model.FotoModel;
-import com.fingertech.kes.Activity.Search.AnakAkses;
-import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.Controller.Auth;
-import com.fingertech.kes.GalleryFoto;
 import com.fingertech.kes.R;
 import com.fingertech.kes.Rest.ApiClient;
 import com.fingertech.kes.Rest.JSONResponse;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.LatLng;
 import com.shashank.sony.fancytoastlib.FancyToast;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -341,8 +324,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                     if (status == 1 && code.equals("DS_SCS_0001")) {
                         JSONResponse.SchoolDetail source = resource.getSchool();
-                        schoolDetail = source.statusKes;
-
+                        schoolDetail        = response.body().getSchool().getStatusKes();
                         NPSN                = response.body().school.getData().getNpsn();
                         school_id           = response.body().getSchool().getData().getSchool_Id();
                         school_code         = response.body().getSchool().getData().getSchool_code();
@@ -461,6 +443,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                         dapat_picture();
                         if (schoolDetail == 0) {
+                            setLocked(foto_sekolah);
                             hint_detail.setVisibility(View.VISIBLE);
                             hint_detail.setOnClickListener(v -> {
                                 Intent intent = new Intent(DetailSekolah.this, RecommendSchool.class);
@@ -475,6 +458,7 @@ public class DetailSekolah extends AppCompatActivity {
                                 }
                             });
                         } else if (schoolDetail == 1) {
+                            setUnlocked(foto_sekolah);
                             hint_detail.setVisibility(View.GONE);
                         }
 
@@ -520,7 +504,7 @@ public class DetailSekolah extends AppCompatActivity {
 
                         if (status == 1 && code.equals("DS_SCS_0001")) {
                             JSONResponse.SchoolDetail source = resource.getSchool();
-                            schoolDetail = source.statusKes;
+                            schoolDetail        = response.body().getSchool().getStatusKes();
 
                             NPSN = response.body().school.getData().getNpsn();
                             NamaSekolah = response.body().school.getData().getSchool_name();
@@ -586,6 +570,7 @@ public class DetailSekolah extends AppCompatActivity {
             public void onResponse(Call<JSONResponse.Foto_sekolah> call, Response<JSONResponse.Foto_sekolah> response) {
                 Log.d("DetailSekolah",response.code()+"");
                 JSONResponse.Foto_sekolah resource = response.body();
+
                 status = resource.status;
                 if (status == 1) {
                     if (response.body().getData().size() == 0) {
@@ -598,54 +583,55 @@ public class DetailSekolah extends AppCompatActivity {
                         }
                     } else {
                         Picture = response.body().getData().get(0).getPic_url();
-                    }
-                    if (schoolDetail == 0) {
-                        if (Picture.equals("")) {
-                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
-                            setLocked(foto_sekolah);
-                        } else {
-                            setLocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this)
-                                    .load(Picture)
-                                    .listener(new RequestListener<Drawable>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                            foto_sekolah.setBackgroundResource(R.drawable.image_profill);
-                                            return false;
-                                        }
+                        if (schoolDetail == 0) {
+                            if (Picture.equals("")) {
+                                setLocked(foto_sekolah);
+                                Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                            } else {
+                                setLocked(foto_sekolah);
+                                Glide.with(DetailSekolah.this)
+                                        .load(Picture)
+                                        .listener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                setLocked(foto_sekolah);
+                                                foto_sekolah.setBackground(getResources().getDrawable(R.drawable.image_profill));
+                                                return true;
+                                            }
 
-                                        @Override
-                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                            return false;
-                                        }
-                                    })
-                                    .into(foto_sekolah);
-                            setLocked(foto_sekolah);
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                return false;
+                                            }
+                                        })
+                                        .into(foto_sekolah);
+                            }
+                        } else if (schoolDetail == 1) {
+                            if (Picture.equals("")) {
+                                setUnlocked(foto_sekolah);
+                                Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
+                            } else {
+                                setUnlocked(foto_sekolah);
+                                Glide.with(DetailSekolah.this)
+                                        .load(Picture)
+                                        .listener(new RequestListener<Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                setUnlocked(foto_sekolah);
+                                                Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
+                                                return false;
+                                            }
+
+                                            @Override
+                                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                return false;
+                                            }
+                                        })
+                                        .into(foto_sekolah);
+                            }
                         }
-                    } else if (schoolDetail == 1) {
-                        if (Picture.equals("")) {
-                            setUnlocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this).load(R.drawable.image_profill).into(foto_sekolah);
-                        } else {
-                            setUnlocked(foto_sekolah);
-                            Glide.with(DetailSekolah.this)
-                                    .load(Picture)
-                                    .listener(new RequestListener<Drawable>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-
-                                            Picasso.get().load(R.drawable.image_profill).into(foto_sekolah);
-                                            return false;
-                                        }
-
-                                        @Override
-                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                            return false;
-                                        }
-                                    })
-                                    .into(foto_sekolah);
-                        }
                     }
+
                 }else {
                     if (schoolDetail == 1){
                         setUnlocked(foto_sekolah);

@@ -39,6 +39,7 @@ import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.fingertech.kes.Activity.Adapter.CustomInfoWindowAdapter;
 import com.fingertech.kes.Activity.Adapter.InfoWindowAdapter;
 import com.fingertech.kes.Activity.CustomView.SnappyLinearLayoutManager;
+import com.fingertech.kes.Activity.MenuUtama;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import  com.rey.material.widget.Spinner;
 import com.akexorcist.googledirection.DirectionCallback;
@@ -81,6 +82,7 @@ import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 
 
 import java.io.IOException;
@@ -879,7 +881,12 @@ public class FullMap extends AppCompatActivity implements OnMapReadyCallback,
     public void dapat_sekolah(){
 
         if (TextUtils.isEmpty(jenjang)){
-            Toast.makeText(getApplicationContext(),"Silahkan pilih jenjang sekolah",Toast.LENGTH_SHORT).show();
+            new LovelyInfoDialog(FullMap.this)
+                    .setTopColorRes(R.color.colorPrimaryDark)
+                    .setIcon(R.drawable.ic_info_white)
+                    .setMessage("Silahkan Pilih jenjang Sekolah")
+                    .setConfirmButtonText("Ok")
+                    .show();
         }else {
             progressBar();
             showDialog();

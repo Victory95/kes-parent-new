@@ -4067,8 +4067,6 @@ public class JSONResponse{
 
     //// dapat jadwal pelajaran
     public class JadwalPelajaran{
-
-
         @SerializedName("code")
         public String code;
 
@@ -4122,9 +4120,9 @@ public class JSONResponse{
         public void setClass_agenda(List<AgendaData> class_agenda) {
             this.class_agenda = class_agenda;
         }
-
         @SerializedName("class_agenda")
         public List<AgendaData> class_agenda;
+
     }
     public class JadwalData{
 
@@ -4183,6 +4181,7 @@ public class JSONResponse{
             return dayStatus;
         }
     }
+
     public class AgendaData{
         @SerializedName("desc")
         private String desc;
@@ -4192,6 +4191,18 @@ public class JSONResponse{
         private String date;
         @SerializedName("content")
         private String content;
+        @SerializedName("colour")
+        private String colour;
+
+
+        public String getColour() {
+            return colour;
+        }
+
+        public void setColour(String colour) {
+            this.colour = colour;
+        }
+
 
         public String getContent() {
             return content;
@@ -4718,6 +4729,17 @@ public class JSONResponse{
 
         @SerializedName("courcesid")
         private String courcesid;
+
+        public String getClass_average_edu() {
+            return class_average_edu;
+        }
+
+        public void setClass_average_edu(String class_average_edu) {
+            this.class_average_edu = class_average_edu;
+        }
+
+        @SerializedName("class_average_edu")
+        private String class_average_edu;
 
         public void setMemberId(String memberId){
             this.memberId = memberId;
@@ -5567,6 +5589,17 @@ public class JSONResponse{
 
         @SerializedName("school_name")
         public String school_name;
+
+        @SerializedName("birth_date")
+        public String birth_date;
+
+        public String getBirth_date() {
+            return birth_date;
+        }
+
+        public void setBirth_date(String birth_date) {
+            this.birth_date = birth_date;
+        }
 
         public String getSchool_name() {
             return school_name;
@@ -8150,7 +8183,6 @@ public class JSONResponse{
             this.status = status;
         }
     }
-
     public class Data_Last_News{
         @SerializedName("newsid")
         public String newsid;
@@ -8219,5 +8251,355 @@ public class JSONResponse{
         }
 
 
+    }
+
+    /// lesson review
+    public class LessonReview{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public DataLesson data;
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public DataLesson getData() {
+            return data;
+        }
+
+        public void setData(DataLesson data) {
+            this.data = data;
+        }
+    }
+    public class DataLesson{
+        @SerializedName("classroom_name")
+        public String classroom_name;
+        @SerializedName("cources_name")
+        public String cources_name;
+
+        @SerializedName("materi")
+        public List<ListLesson> data;
+
+        public String getClassroom_name() {
+            return classroom_name;
+        }
+
+        public void setClassroom_name(String classroom_name) {
+            this.classroom_name = classroom_name;
+        }
+
+        public String getCources_name() {
+            return cources_name;
+        }
+
+        public void setCources_name(String cources_name) {
+            this.cources_name = cources_name;
+        }
+
+        public List<ListLesson> getData() {
+            return data;
+        }
+
+        public void setData(List<ListLesson> data) {
+            this.data = data;
+        }
+    }
+    public class ListLesson{
+        @SerializedName("reviewid")
+        public String reviewid;
+        @SerializedName("cources_id")
+        public String cources_id;
+        @SerializedName("review_date")
+        public String review_date;
+        @SerializedName("review_status")
+        public String review_status;
+        @SerializedName("datez")
+        public String datez;
+        @SerializedName("member_id")
+        public String member_id;
+        @SerializedName("classroom_id")
+        public String classroom_id;
+        @SerializedName("edulevel_id")
+        public String edulevel_id;
+        @SerializedName("review_desc")
+        public String review_desc;
+        @SerializedName("review_title")
+        public String review_title;
+        @SerializedName("review_materi")
+        public String review_materi;
+        @SerializedName("review_file")
+        public String review_file;
+        @SerializedName("courcesreligion_id")
+        public String courcesreligion_id;
+        @SerializedName("member_code")
+        public String member_code;
+        @SerializedName("fullname")
+        public String fullname;
+        @SerializedName("review_date_ok")
+        public String review_date_ok;
+
+        public String getReviewid() {
+            return reviewid;
+        }
+
+        public void setReviewid(String reviewid) {
+            this.reviewid = reviewid;
+        }
+
+        public String getCources_id() {
+            return cources_id;
+        }
+
+        public void setCources_id(String cources_id) {
+            this.cources_id = cources_id;
+        }
+
+        public String getReview_date() {
+            return review_date;
+        }
+
+        public void setReview_date(String review_date) {
+            this.review_date = review_date;
+        }
+
+        public String getReview_status() {
+            return review_status;
+        }
+
+        public void setReview_status(String review_status) {
+            this.review_status = review_status;
+        }
+
+        public String getDatez() {
+            return datez;
+        }
+
+        public void setDatez(String datez) {
+            this.datez = datez;
+        }
+
+        public String getMember_id() {
+            return member_id;
+        }
+
+        public void setMember_id(String member_id) {
+            this.member_id = member_id;
+        }
+
+        public String getClassroom_id() {
+            return classroom_id;
+        }
+
+        public void setClassroom_id(String classroom_id) {
+            this.classroom_id = classroom_id;
+        }
+
+        public String getEdulevel_id() {
+            return edulevel_id;
+        }
+
+        public void setEdulevel_id(String edulevel_id) {
+            this.edulevel_id = edulevel_id;
+        }
+
+        public String getReview_desc() {
+            return review_desc;
+        }
+
+        public void setReview_desc(String review_desc) {
+            this.review_desc = review_desc;
+        }
+
+        public String getReview_title() {
+            return review_title;
+        }
+
+        public void setReview_title(String review_title) {
+            this.review_title = review_title;
+        }
+
+        public String getReview_materi() {
+            return review_materi;
+        }
+
+        public void setReview_materi(String review_materi) {
+            this.review_materi = review_materi;
+        }
+
+        public String getReview_file() {
+            return review_file;
+        }
+
+        public void setReview_file(String review_file) {
+            this.review_file = review_file;
+        }
+
+        public String getCourcesreligion_id() {
+            return courcesreligion_id;
+        }
+
+        public void setCourcesreligion_id(String courcesreligion_id) {
+            this.courcesreligion_id = courcesreligion_id;
+        }
+
+        public String getMember_code() {
+            return member_code;
+        }
+
+        public void setMember_code(String member_code) {
+            this.member_code = member_code;
+        }
+
+        public String getFullname() {
+            return fullname;
+        }
+
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
+        }
+
+        public String getReview_date_ok() {
+            return review_date_ok;
+        }
+
+        public void setReview_date_ok(String review_date_ok) {
+            this.review_date_ok = review_date_ok;
+        }
+    }
+
+    ///Response Agenda
+    public class ListAgenda{
+        @SerializedName("status")
+        public int status;
+
+        @SerializedName("code")
+        public String code;
+
+        @SerializedName("data")
+        public List<DataAgenda> data;
+
+        @SerializedName("last_cources")
+        public List<JadwalData> class_schedule;
+
+        public List<JadwalData> getClass_schedule() {
+            return class_schedule;
+        }
+
+        public void setClass_schedule(List<JadwalData> class_schedule) {
+            this.class_schedule = class_schedule;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public List<DataAgenda> getData() {
+            return data;
+        }
+
+        public void setData(List<DataAgenda> data) {
+            this.data = data;
+        }
+    }
+    public class DataAgenda{
+        @SerializedName("agenda_desc")
+        public String agenda_desc;
+        @SerializedName("desc")
+        public String desc;
+        @SerializedName("type")
+        public String type;
+        @SerializedName("date")
+        public String date;
+        @SerializedName("day")
+        public String day;
+        @SerializedName("agenda_color")
+        public String agenda_color;
+        @SerializedName("agenda_time")
+        public String agenda_time;
+
+        public String getAgenda_desc() {
+            return agenda_desc;
+        }
+
+        public void setAgenda_desc(String agenda_desc) {
+            this.agenda_desc = agenda_desc;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public String getDay() {
+            return day;
+        }
+
+        public void setDay(String day) {
+            this.day = day;
+        }
+
+        public String getAgenda_color() {
+            return agenda_color;
+        }
+
+        public void setAgenda_color(String agenda_color) {
+            this.agenda_color = agenda_color;
+        }
+
+        public String getAgenda_time() {
+            return agenda_time;
+        }
+
+        public void setAgenda_time(String agenda_time) {
+            this.agenda_time = agenda_time;
+        }
     }
 }

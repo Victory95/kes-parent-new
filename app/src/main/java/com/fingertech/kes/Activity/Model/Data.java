@@ -127,7 +127,5 @@ public class Data {
         public void setSchool_code(String school_code) {
             this.school_code = school_code;
         }
-
-
     }
 }

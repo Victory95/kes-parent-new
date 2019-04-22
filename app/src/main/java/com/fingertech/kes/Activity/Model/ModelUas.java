@@ -5,6 +5,7 @@ public class ModelUas {
     private String tanggal;
     private String mapel;
     private String type_id;
+    private String bulan;
     private String guru,nilai,deskripsi;
 
     public String getGuru() {
@@ -38,6 +39,15 @@ public class ModelUas {
     public void setJam(String jam) {
         this.jam = jam;
     }
+
+    public String getBulan() {
+        return bulan;
+    }
+
+    public void setBulan(String bulan) {
+        this.bulan= bulan;
+    }
+
 
     public String getTanggal() {
         return tanggal;

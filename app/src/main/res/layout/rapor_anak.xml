@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical"
-        android:background="@drawable/ic_background_rapor">
+        android:background="@color/birurapor">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -254,7 +254,8 @@
             android:layout_margin="6.5dp"
             android:layout_gravity="center"
             android:textColor="@color/white"
-            android:layout_weight="2"/>
+            android:textSize="12sp"
+            android:layout_weight="2.5"/>
         <View
             android:layout_width="0.7dp"
             android:background="@color/black"
@@ -266,8 +267,9 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:layout_margin="6.5dp"
+            android:textSize="12sp"
             android:layout_gravity="center"
-            android:layout_weight="3"/>
+            android:layout_weight="3.2"/>
         <View
             android:layout_width="0.7dp"
             android:background="@color/black"
@@ -279,8 +281,9 @@
             android:textColor="@color/white"
             android:layout_gravity="center"
             android:layout_margin="6.5dp"
+            android:textSize="12sp"
             android:gravity="center"
-            android:layout_weight="3"/>
+            android:layout_weight="3.2"/>
         <View
             android:layout_width="0.7dp"
             android:background="@color/black"
@@ -293,7 +296,23 @@
             android:layout_gravity="center"
             android:textColor="@color/white"
             android:text="Rata-rata Kelas"
-            android:layout_weight="3"/>
+            android:textSize="12sp"
+            android:layout_weight="3.1"/>
+        <View
+            android:layout_width="0.7dp"
+            android:background="@color/black"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="6.5dp"
+            android:layout_weight="3.1"
+            android:gravity="center"
+            android:text="Rata-rata Angkatan"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

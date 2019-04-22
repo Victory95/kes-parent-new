@@ -575,68 +575,69 @@ public class ProfileParent extends AppCompatActivity {
             public void onResponse(retrofit2.Call<JSONResponse.GetProfile> call, final Response<JSONResponse.GetProfile> response) {
                 Log.i("KES", response.code() + "");
 
-                JSONResponse.GetProfile resource = response.body();
+                if (response.isSuccessful()) {
+                    JSONResponse.GetProfile resource = response.body();
 
-                status = resource.status;
+                    status = resource.status;
 
-                if (status == 1) {
-                    picture = response.body().getData().getPicture();
-                    nama    = response.body().getData().getFullname();
-                    email   = response.body().getData().getEmail();
-                    nohp    = response.body().getData().getNumber_Phone();
-                    jeniskelamin    = response.body().getData().getGender();
-                    agama           = response.body().getData().getReligion();
-                    member_type     = response.body().getData().getMember_Type();
-                    terakhirlogin   = response.body().getData().getLast_Login();
-                    tanggal_lahir   = response.body().getData().getBirth_Date();
+                    if (status == 1) {
+                        picture = response.body().getData().getPicture();
+                        nama = response.body().getData().getFullname();
+                        email = response.body().getData().getEmail();
+                        nohp = response.body().getData().getNumber_Phone();
+                        jeniskelamin = response.body().getData().getGender();
+                        agama = response.body().getData().getReligion();
+                        member_type = response.body().getData().getMember_Type();
+                        terakhirlogin = response.body().getData().getLast_Login();
+                        tanggal_lahir = response.body().getData().getBirth_Date();
 
-                    email_profile.setText(email);
-                    no_profile.setText(nohp);
-                    jenis_kelamin_profile.setText(jeniskelamin);
-                    tv_agama.setText(agama);
-                    if(member_type.equals("3")){
-                        member.setText("Sebagai Orangtua");
-                        jadi_parent.setVisibility(View.INVISIBLE);
-                    }else{
-                        member.setText("Sebagai User Biasa");
-                        jadi_parent.setVisibility(View.VISIBLE);
-                    }
-                    tanggallahir.setText(convertDate(tanggal_lahir));
-
-                    String imagefile = Base_url + picture;
-                    if (picture.equals("")){
-                        Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name="+nama+"&background=40bfe8&color=fff").into(image_profil);
-                    }
-                    Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
-                    last_login.setText(lastlogin);
-                    appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
-                        boolean isShow = true;
-                        int scrollRange = -1;
-
-                        @Override
-                        public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                            if (scrollRange == -1) {
-                                scrollRange = appBarLayout.getTotalScrollRange();
-                            }
-                            if (scrollRange + verticalOffset == 0) {
-                                collapsingToolbarLayout.setTitle(nama);
-                                cv_profile.setVisibility(View.GONE);
-                                isShow = true;
-                            } else if(isShow) {
-                                collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
-                                cv_profile.setVisibility(View.VISIBLE);
-                                getSupportActionBar().setTitle(nama);
-                                isShow = false;
-                            }
+                        email_profile.setText(email);
+                        no_profile.setText(nohp);
+                        jenis_kelamin_profile.setText(jeniskelamin);
+                        tv_agama.setText(agama);
+                        if (member_type.equals("3")) {
+                            member.setText("Sebagai Orangtua");
+                            jadi_parent.setVisibility(View.INVISIBLE);
+                        } else {
+                            member.setText("Sebagai User Biasa");
+                            jadi_parent.setVisibility(View.VISIBLE);
                         }
-                    });
-                } else{
-                    if (status == 0) {
-                        Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                        tanggallahir.setText(convertDate(tanggal_lahir));
+
+                        String imagefile = Base_url + picture;
+                        if (picture.equals("")) {
+                            Glide.with(ProfileParent.this).load("https://ui-avatars.com/api/?name=" + nama + "&background=40bfe8&color=fff").into(image_profil);
+                        }
+                        Glide.with(ProfileParent.this).load(imagefile).into(image_profil);
+                        last_login.setText(lastlogin);
+                        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+                            boolean isShow = true;
+                            int scrollRange = -1;
+
+                            @Override
+                            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                                if (scrollRange == -1) {
+                                    scrollRange = appBarLayout.getTotalScrollRange();
+                                }
+                                if (scrollRange + verticalOffset == 0) {
+                                    collapsingToolbarLayout.setTitle(nama);
+                                    cv_profile.setVisibility(View.GONE);
+                                    isShow = true;
+                                } else if (isShow) {
+                                    collapsingToolbarLayout.setTitle(nama);//carefull there should a space between double quote otherwise it wont work
+                                    cv_profile.setVisibility(View.VISIBLE);
+                                    getSupportActionBar().setTitle(nama);
+                                    isShow = false;
+                                }
+                            }
+                        });
+                    } else {
+                        if (status == 0) {
+                            Toast.makeText(getApplicationContext(), "Data Tidak Ditemukan", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
-
 
             }
 

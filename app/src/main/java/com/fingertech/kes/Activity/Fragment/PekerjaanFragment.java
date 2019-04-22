@@ -247,32 +247,32 @@ public class PekerjaanFragment extends Fragment implements OnMapReadyCallback,
         });
         mApiInterface = ApiClient.getClient().create(Auth.class);
 
-        sharedpreferences = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
-        authorization = sharedpreferences.getString(TAG_TOKEN, "token");
-        parent_id = sharedpreferences.getString(TAG_MEMBER_ID, "member_id");
-        student_id = sharedpreferences.getString(TAG_STUDENT_ID, "student_id");
-        student_nik = sharedpreferences.getString(TAG_STUDENT_NIK, "student_nik");
-        school_id = sharedpreferences.getString(TAG_SCHOOL_ID, "school_id");
-        fullname = sharedpreferences.getString(TAG_FULLNAME, "fullname");
-        email = sharedpreferences.getString(TAG_EMAIL, "email");
-        childrenname = sharedpreferences.getString(TAG_NAMA_ANAK, "childrenname");
-        school_name = sharedpreferences.getString(TAG_NAMA_SEKOLAH, "school_name");
-        school_code = sharedpreferences.getString(TAG_SCHOOL_CODE, "school_code");
-        parent_nik = sharedpreferences.getString(TAG_PARENT_NIK, "parent_nik");
+        sharedpreferences   = getActivity().getSharedPreferences(Masuk.my_shared_preferences, Context.MODE_PRIVATE);
+        authorization       = sharedpreferences.getString(TAG_TOKEN, "token");
+        parent_id           = sharedpreferences.getString(TAG_MEMBER_ID, "member_id");
+        student_id          = sharedpreferences.getString(TAG_STUDENT_ID, "student_id");
+        student_nik         = sharedpreferences.getString(TAG_STUDENT_NIK, "student_nik");
+        school_id           = sharedpreferences.getString(TAG_SCHOOL_ID, "school_id");
+        fullname            = sharedpreferences.getString(TAG_FULLNAME, "fullname");
+        email               = sharedpreferences.getString(TAG_EMAIL, "email");
+        childrenname        = sharedpreferences.getString(TAG_NAMA_ANAK, "childrenname");
+        school_name         = sharedpreferences.getString(TAG_NAMA_SEKOLAH, "school_name");
+        school_code         = sharedpreferences.getString(TAG_SCHOOL_CODE, "school_code");
+        parent_nik          = sharedpreferences.getString(TAG_PARENT_NIK, "parent_nik");
 
         sharedviewpager = getActivity().getSharedPreferences(my_shared_viewpager, Context.MODE_PRIVATE);
-        namaparent = sharedviewpager.getString(TAG_PARENT_NAME, "nama_parent");
-        emailparent = sharedviewpager.getString(TAG_EMAIL_PARENT, "email_parent");
-        nikparent = sharedviewpager.getString(TAG_NIK_PARENT, "nik_parent");
-        tempatlahir = sharedviewpager.getString(TAG_TEMPAT_LAHIR, "tempat_lahir");
-        tanggallahir = sharedviewpager.getString(TAG_TANGGAL_LAHIR, "tanggal_lahir");
-        hubungan = sharedviewpager.getString(TAG_HUBUNGAN, "hubungan");
+        namaparent      = sharedviewpager.getString(TAG_PARENT_NAME, "nama_parent");
+        emailparent     = sharedviewpager.getString(TAG_EMAIL_PARENT, "email_parent");
+        nikparent       = sharedviewpager.getString(TAG_NIK_PARENT, "nik_parent");
+        tempatlahir     = sharedviewpager.getString(TAG_TEMPAT_LAHIR, "tempat_lahir");
+        tanggallahir    = sharedviewpager.getString(TAG_TANGGAL_LAHIR, "tanggal_lahir");
+        hubungan        = sharedviewpager.getString(TAG_HUBUNGAN, "hubungan");
         kewarganegaraan = sharedviewpager.getString(TAG_KEWARGANEGARAAN, "type_warga");
-        nomorrumah = sharedviewpager.getString(TAG_NOMOR_RUMAH, "nomor_rumah");
-        nomorponsel = sharedviewpager.getString(TAG_NOMOR_PONSEL, "nomor_ponsel");
+        nomorrumah      = sharedviewpager.getString(TAG_NOMOR_RUMAH, "nomor_rumah");
+        nomorponsel     = sharedviewpager.getString(TAG_NOMOR_PONSEL, "nomor_ponsel");
         latitude_parent = sharedviewpager.getString(TAG_LATITUDE_RUMAH, "latitude_rumah");
         longitude_parent = sharedviewpager.getString(TAG_LONGITUDE_RUMAH, "longitude_rumah");
-        alamatrumah = sharedviewpager.getString(TAG_ALAMAT_RUMAH, "alamat_rumah");
+        alamatrumah     = sharedviewpager.getString(TAG_ALAMAT_RUMAH, "alamat_rumah");
 
 
         data_parent_student_get();

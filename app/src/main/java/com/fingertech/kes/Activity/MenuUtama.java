@@ -1,9 +1,9 @@
 package com.fingertech.kes.Activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,11 +12,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -43,7 +41,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -57,7 +54,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,8 +77,6 @@ import com.fingertech.kes.Activity.Adapter.ItemSekolahAdapter;
 import com.fingertech.kes.Activity.Adapter.NewsAdapter;
 import com.fingertech.kes.Activity.Adapter.PesanGuruAdapter;
 import com.fingertech.kes.Activity.Adapter.ProfileAdapter;
-import com.fingertech.kes.Activity.Anak.RaportAnak;
-import com.fingertech.kes.Activity.Anak.UjianJadwal;
 import com.fingertech.kes.Activity.Berita.DetailBerita;
 import com.fingertech.kes.Activity.Berita.FullBerita;
 import com.fingertech.kes.Activity.CustomView.MySupportMapFragment;
@@ -99,6 +93,7 @@ import com.fingertech.kes.Activity.Model.NewsModel;
 import com.fingertech.kes.Activity.Model.PesanModel;
 import com.fingertech.kes.Activity.Model.ProfileModel;
 import com.fingertech.kes.Activity.CustomView.SnappyRecycleView;
+import com.fingertech.kes.Activity.NextProject.TestKalender;
 import com.fingertech.kes.Activity.Pesan.Content_Pesan_Guru;
 import com.fingertech.kes.Activity.Search.AnakAkses;
 import com.fingertech.kes.Activity.Setting.Setting_Activity;
@@ -118,10 +113,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -133,12 +128,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.pepperonas.materialdialog.MaterialDialog;
 import com.pixelcan.inkpageindicator.InkPageIndicator;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialog;
 import com.shashank.sony.fancygifdialoglib.FancyGifDialogListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
-import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ViewListener;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
@@ -159,9 +152,6 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-import static com.fingertech.kes.Service.App.getContext;
 
 
 public class MenuUtama extends AppCompatActivity
@@ -271,6 +261,7 @@ public class MenuUtama extends AppCompatActivity
     DBHelper db;
     AlertDialog alert;
     SpinKitView spinKitView,spinKitViews;
+    List<JSONResponse.DataChildren> dataChildrenList ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -347,7 +338,6 @@ public class MenuUtama extends AppCompatActivity
         get_profile();
         checkInternetCon();
         Daftar_Berita();
-        setting_lokasi();
 
         tv_profile.setOnClickListener(v -> {
             Intent intent = new Intent(MenuUtama.this,ProfileParent.class);
@@ -485,20 +475,19 @@ public class MenuUtama extends AppCompatActivity
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         height = displayMetrics.heightPixels;
         width = displayMetrics.widthPixels;
-        setting_lokasi();
+
     }
 
     public void dapat_posisi(){
-        posisi= Integer.parseInt(db.getData());
+        if(db.getData()!=null) {
+            posisi = Integer.parseInt(db.getData());
+        }
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            double latitudes    = intent.getDoubleExtra("latitude",0.0);
-            double longitudes   = intent.getDoubleExtra("longitude",0.0);
-            kode_gps    = intent.getStringExtra("kode_gps");  //get the type of message from MyGcmListenerService 1 - lock or 0 -Unlock
+        kode_gps    = intent.getStringExtra("kode_gps");
             if (kode_gps!=null) {
                 if (kode_gps.equals("false")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MenuUtama.this);
@@ -693,8 +682,8 @@ public class MenuUtama extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_beranda) {
-            Intent intent = new Intent(MenuUtama.this, RaportAnak.class);
-            startActivity(intent);
+//            Intent intent = new Intent(MenuUtama.this, TestKalender.class);
+//            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_user) {
             Intent intent = new Intent(MenuUtama.this, ProfileParent.class);
@@ -705,47 +694,6 @@ public class MenuUtama extends AppCompatActivity
         } else if (id == R.id.nav_Pengaturan) {
             Intent intent = new Intent(MenuUtama.this, Setting_Activity.class);
             startActivity(intent);
-        } else if (id==R.id.nav_pesan){
-            if (member.equals("3")){
-                if (count.equals("0")){
-                    actionView.setVisibility(View.GONE);
-                    new LovelyInfoDialog(MenuUtama.this)
-                            .setTopColorRes(R.color.yellow_A400)
-                            .setIcon(R.drawable.ic_info_white)
-                            //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
-                            .setNotShowAgainOptionEnabled(0)
-                            .setNotShowAgainOptionChecked(false)
-                            .setTitle("Warning")
-                            .setMessage("Harap menambah data anak anda terlebih dahulu")
-                            .setConfirmButtonText("Ok")
-                            .show();
-                }else {
-                    SharedPreferences.Editor editor = sharedviewpager.edit();
-                    editor.putString("member_id", parent_id);
-                    editor.putString("school_code", school_code);
-                    editor.putString("authorization", authorization);
-                    editor.putString("fullname",fullname);
-                    editor.commit();
-                    Intent intent = new Intent(MenuUtama.this, Content_Pesan_Guru.class);
-                    intent.putExtra("authorization",authorization);
-                    intent.putExtra("school_code",school_code);
-                    intent.putExtra("parent_id",parent_id);
-                    intent.putExtra("fullname",fullname);
-                    startActivity(intent);
-                }
-            }else {
-                new LovelyInfoDialog(MenuUtama.this)
-                        .setTopColorRes(R.color.yellow_A400)
-                        .setIcon(R.drawable.ic_info_white)
-                        //This will add Don't show again checkbox to the dialog. You can pass any ID as argument
-                        .setNotShowAgainOptionEnabled(0)
-                        .setNotShowAgainOptionChecked(false)
-                        .setTitle("Warning")
-                        .setMessage("Harap merubah data anda terlebih dahulu menjadi orang tua")
-                        .setConfirmButtonText("Ok")
-                        .show();
-            }
-
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -855,8 +803,6 @@ public class MenuUtama extends AppCompatActivity
     }
 
     public void get_children(){
-//        progressBar();
-//        showDialog();
         show_dialog();
         Call<JSONResponse.ListChildren> call = mApiInterface.kes_list_children_get(authorization, parent_id);
         call.enqueue(new Callback<JSONResponse.ListChildren>() {
@@ -883,6 +829,12 @@ public class MenuUtama extends AppCompatActivity
                         if (response.body().getData() != null) {
                             profileModels = new ArrayList<ProfileModel>();
                             for (int i = 0; i < response.body().getData().size(); i++) {
+                                Collections.sort(response.body().getData(), new Comparator<JSONResponse.DataChildren>() {
+                                    @Override
+                                    public int compare(JSONResponse.DataChildren o1, JSONResponse.DataChildren o2) {
+                                        return (o2.getBirth_date().compareTo(o1.getBirth_date()));
+                                    }
+                                });
                                 student_id      = response.body().getData().get(i).getStudent_id();
                                 school_code     = response.body().getData().get(i).getSchool_code();
                                 nama_anak       = response.body().getData().get(i).getChildren_name();
@@ -903,7 +855,7 @@ public class MenuUtama extends AppCompatActivity
                             }
                             profileAdapter = new ProfileAdapter(profileModels);
                             profileAdapter.notifyDataSetChanged();
-                            if (posisi > response.body().getData().size()){
+                            if (posisi > response.body().getData().size()-1){
                                 db.updateName(String.valueOf(posisi),String.valueOf(0));
                                 posisi = 0;
                             }
@@ -1014,7 +966,6 @@ public class MenuUtama extends AppCompatActivity
             public void onFailure(retrofit2.Call<JSONResponse.GetProfile> call, Throwable t) {
                 Log.d("onFailure", t.toString());
                 spinKitViews.setVisibility(View.GONE);
-//                hideDialog();
             }
         });
 
@@ -1031,6 +982,7 @@ public class MenuUtama extends AppCompatActivity
         editor.putString("school_name", school_name);
         editor.putString("student_id", student_id);
         editor.putString("student_name",nama_anak);
+        editor.putString("fullname",fullname);
         editor.commit();
         bundle.putString("parent_nik", parent_nik);
         bundle.putString("student_id", student_id);
@@ -1040,6 +992,7 @@ public class MenuUtama extends AppCompatActivity
         bundle.putString("classroom_id", classroom_id);
         bundle.putString("school_name", school_name);
         bundle.putString("student_name",nama_anak);
+        bundle.putString("fullname",fullname);
         Fragment menuSatuFragment = new MenuSatuFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -1236,6 +1189,18 @@ public class MenuUtama extends AppCompatActivity
                 }else {
                     Log.d("Lokasi","Lokasi Anda");
                 }
+            }
+        });
+        mapG.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int zoom = (int)mapG.getCameraPosition().zoom;
+                CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(new
+                        LatLng(marker.getPosition().latitude + (double)90/Math.pow(2, zoom),
+                        marker.getPosition().longitude), zoom);
+                mapG.animateCamera(cu,500,null);
+                marker.showInfoWindow();
+                return true;
             }
         });
     }
@@ -1560,23 +1525,6 @@ public class MenuUtama extends AppCompatActivity
         return (int)(dp * scale + 0.5f);
     }
 
-//    private void showDialog() {
-//        if (!dialog.isShowing())
-//            dialog.show();
-//        dialog.setContentView(R.layout.progressbar);
-//    }
-//    private void hideDialog() {
-//        if (dialog.isShowing())
-//            dialog.dismiss();
-//        dialog.setContentView(R.layout.progressbar);
-//    }
-//    public void progressBar(){
-//        dialog = new ProgressDialog(MenuUtama.this);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        dialog.setIndeterminate(true);
-//        dialog.setCancelable(false);
-//    }
-
     private void Daftar_Berita(){
         mApi.latest_news_get()
                 .subscribeOn(Schedulers.io())
@@ -1654,6 +1602,7 @@ public class MenuUtama extends AppCompatActivity
             }
         }
     }
+
 
 
 }

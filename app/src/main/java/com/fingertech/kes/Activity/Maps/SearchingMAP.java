@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +49,7 @@ import com.fingertech.kes.Activity.Adapter.SearchMapAdapter;
 import com.fingertech.kes.Activity.DetailSekolah;
 import com.fingertech.kes.Activity.Model.InfoWindowData;
 import com.fingertech.kes.Activity.Model.SquareFloatButton;
-import com.fingertech.kes.Activity.Search.FilterActivity;
+import com.fingertech.kes.Activity.Search.BookmarkMap;
 import com.fingertech.kes.Activity.Model.ItemSekolah;
 import com.fingertech.kes.Activity.Search.LokasiAnda;
 import com.fingertech.kes.Controller.Auth;
@@ -200,7 +198,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
         discreteSlider.setVisibility(View.VISIBLE);
 
         bookmark.setOnClickListener(v -> {
-            Intent mIntent = new Intent(SearchingMAP.this,FilterActivity.class);
+            Intent mIntent = new Intent(SearchingMAP.this, BookmarkMap.class);
             startActivityForResult(mIntent,1);
         });
         setSupportActionBar(ToolBarAtas2);
@@ -681,8 +679,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void search_school_post(final String key){
-
-        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key);
+        Call<JSONResponse.School> postCall = mApiInterface.search_school_post(key.toLowerCase());
         postCall.enqueue(new Callback<JSONResponse.School>() {
             @Override
             public void onResponse(Call<JSONResponse.School> call, final Response<JSONResponse.School> response) {
@@ -697,8 +694,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                         searchMapAdapter = new SearchMapAdapter(arraylist, SearchingMAP.this);
                         recyclerView.setAdapter(searchMapAdapter);
                         searchMapAdapter.notifyDataSetChanged();
-                        searchMapAdapter.getFilter(key).filter(key);
-//                    searchMapAdapter.setFilter(arraylist,key);
+                        searchMapAdapter.getFilter(key.toLowerCase()).filter(key.toLowerCase());
                         searchMapAdapter.setOnItemClickListener((view, position) -> {
                             if (mmap != null) {
                                 mmap.clear();
@@ -778,6 +774,7 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
 
                     } else {
                         if (status == 0 && code.equals("SS_ERR_0001")) {
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error_resp_json), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -852,55 +849,66 @@ public class SearchingMAP extends AppCompatActivity implements OnMapReadyCallbac
                 indo.setAlamat(alamat);
                 indo.setSchooldetailid(schoolid);
 
-                if (jenjang.equals("sd") || jenjang.equals("BPK SD")){
+                switch (jenjang) {
+                    case "sd":
+                    case "BPK SD": {
 
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sd));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
 
-                }else if(jenjang.equals("smp") || jenjang.equals("BPK SMP")){
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        break;
+                    }
+                    case "smp":
+                    case "BPK SMP": {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_smp));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
 
-                }else if(jenjang.equals("smk")){
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
-                }else {
-                    final MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng1);
-                    markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
-                    //move map camera
-                    mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                    mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    m = mmap.addMarker(markerOptions);
-                    InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
-                    mmap.setInfoWindowAdapter(customInfoWindowAdapter);
-                    m.setTag(indo);
+                        break;
+                    }
+                    case "smk": {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
+                        break;
+                    }
+                    default: {
+                        final MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng1);
+                        markerOptions.icon(bitmapDescriptorFromVector(SearchingMAP.this, R.drawable.ic_sma));
+                        //move map camera
+                        mmap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                        mmap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        m = mmap.addMarker(markerOptions);
+                        InfoWindowAdapter customInfoWindowAdapter = new InfoWindowAdapter(SearchingMAP.this);
+                        mmap.setInfoWindowAdapter(customInfoWindowAdapter);
+                        m.setTag(indo);
+                        break;
+                    }
                 }
-                hideKeyboard(this);
+
                 recyclerView.setVisibility(View.GONE);
             }
         }else if (requestCode == 2){

@@ -72,7 +72,6 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.MyHold
             int endPos = StarPos + searchString.length();
             Spannable spanText = Spannable.Factory.getInstance().newSpannable(holder.address.getText());
             spanText.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorPrimary)), StarPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
             holder.address.setText(spanText, TextView.BufferType.SPANNABLE);
         }
     }
