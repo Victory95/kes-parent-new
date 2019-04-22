@@ -3,6 +3,7 @@ package com.fingertech.kes.Controller;
 import android.graphics.Bitmap;
 
 import com.fingertech.kes.Rest.JSONResponse;
+import com.google.gson.JsonElement;
 
 import java.io.File;
 import java.util.HashMap;
@@ -317,6 +318,14 @@ public interface Auth {
                                                  @Query("student_id") String student_id,
                                                  @Query("classroom_id") String classroom_id,
                                                  @Query("semester_id") String semester_id);
+
+    ///// Raport Anak
+    @GET("students/kes_rapor_score")
+    Call<JsonElement>kes_rapor_get(@Header("Authorization") String authorization,
+                                   @Query("school_code") String school_code,
+                                   @Query("student_id") String student_id,
+                                   @Query("classroom_id") String classroom_id,
+                                   @Query("semester_id") String semester_id);
 
     ////  Check Semester
     @GET("students/kes_check_semester")

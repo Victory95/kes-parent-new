@@ -36,6 +36,7 @@
     <PreferenceCategory android:title="Tentang">
 
         <Preference
+            android:key="versi"
             android:summary="1.0.20"
             android:title="Versi" />
 
